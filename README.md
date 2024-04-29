@@ -1,7 +1,12 @@
 "# nipts-pts-checker-web-ui"
+Download Node Js 
+https://nodejs.org/en/download
+Install Node Js (Call ior raise service desk ticket as may need amin privilages to install this)
 
-Install Node Js
-Install VS Code
+Download VS Code
+https://code.visualstudio.com/download
+Install VS Code (Call ior raise service desk ticket as may need amin privilages to install this)
+
 Try to install eslint & jest runner extion in visial studio code
 
 In project root
