@@ -1,0 +1,60 @@
+.app-c-published-dates {
+  direction: ltr;
+  line-height: 1.45em;
+  color: #0b0c0c;
+}
+.app-c-published-dates__toggle {
+  display: none;
+}
+.js-enabled .app-c-published-dates__toggle {
+  display: inline-block;
+}
+.app-c-published-dates__change-history {
+  margin: 20px 0;
+}
+.app-c-published-dates__list {
+  padding: 0;
+}
+.app-c-published-dates__change-item {
+  list-style-type: none;
+  margin-bottom: 10px;
+}
+.app-c-published-dates__change-date {
+  display: block;
+  font-family: "GDS Transport", arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 700;
+  font-size: 14px;
+  font-size: 0.875rem;
+  line-height: 1.1428571429;
+}
+@media print {
+  .app-c-published-dates__change-date {
+    font-family: sans-serif;
+  }
+}
+@media (min-width: 40.0625em) {
+  .app-c-published-dates__change-date {
+    font-size: 16px;
+    font-size: 1rem;
+    line-height: 1.25;
+  }
+}
+@media print {
+  .app-c-published-dates__change-date {
+    font-size: 14pt;
+    line-height: 1.2;
+  }
+}
+.app-c-published-dates__change-note {
+  white-space: pre-line;
+}
+.app-c-published-dates--history {
+  padding-top: 10px;
+  border-top: 1px solid #b1b4b6;
+}
+.js-enabled .app-c-published-dates .js-hidden {
+  display: none;
+  visibility: hidden;
+}

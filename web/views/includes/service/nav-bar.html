@@ -1,0 +1,130 @@
+<div class="login-nav">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item">
+      {{ data['name'] + " " + data['lastName'] if data['name'] else "Carlos
+      Bernardo Jr"}} |
+    </li>
+    <li class="login-nav__list-item">
+      <a
+        href="/checker/v1/service/document/"
+        {# ?pageState=sign #}
+        {# class="hmrc-account-menu__link" #}
+        class="govuk-link login-nav__link govuk-link--no-visited-state profile"
+      >
+        Lifelong pet travel documents
+      </a>|
+    </li>
+    <li class="login-nav__list-item">
+      <a
+        href="/checker/v1/service/details/"
+        class="govuk-link login-nav__link govuk-link--no-visited-state profile"
+      >
+        Manage Account</a
+      >|
+    </li>
+    <li class="login-nav__list-item">
+      <a
+        href="http://localhost:3002/signed-out?status=signedOut"
+        class="govuk-link login-nav__link govuk-link--no-visited-state"
+        >Sign out</a
+      >
+    </li>
+  </ul>
+</div>
+
+
+
+
+{# 
+
+
+<nav
+  id="secondary-nav"
+  class="hmrc-account-menu"
+  aria-label="Account"
+  data-module="hmrc-account-menu"
+>
+  <!-- LEFT ALIGNED ITEMS -->
+  
+  <a
+    href="/checker/v1/service/"
+    class="hmrc-account-menu__link hmrc-account-menu__link--home hmrc-account-menu__link--active"
+    id="menu.left.0"
+  >
+    <span class="hmrc-account-icon hmrc-account-icon--home">
+      Home
+    </span>
+  </a>
+  
+  <a
+    id="menu.name"
+    href="javascript: history.back();"
+    class="hmrc-account-menu__link hmrc-account-menu__link--menu js-hidden js-visible"
+    tabindex="-1"
+    aria-hidden="true"
+    aria-expanded="false"
+  >
+    Menu
+  </a>
+  <ul class="hmrc-account-menu__main">
+    <li class="hmrc-account-menu__link--back hidden" aria-hidden="false">
+      <a id="menu.back" href="#" tabindex="-1" class="hmrc-account-menu__link">
+        Back
+      </a>
+    </li>
+
+    <!-- RIGHT ALIGNED ITEMS -->
+    <li>
+      <a
+        href="/checker/v1/service/document/?pageState=sign"
+        class="hmrc-account-menu__link"
+        id="menu-right-0"
+      >
+        Lifelong pet travel documents
+      </a>
+    </li>
+
+    
+    <li>
+      <a
+        href="/checker/v1/service/authorise/?pageState=sign"
+        class="hmrc-account-menu__link"
+        id="menu-right-1"
+      >
+        Authorised travellers
+      </a>
+    </li>
+    
+
+    <li>
+      <a
+        href="/checker/v1/service/details/"
+        class="hmrc-account-menu__link"
+        id="menu-right-2"
+      >
+        Manage account
+      </a>
+    </li>
+
+    
+    <li>
+      <a
+        href="/checker/v1/service/account/"
+        class="hmrc-account-menu__link"
+        id="menu-right-3"
+      >
+        Account
+      </a>
+    </li>
+    
+
+    <li>
+      <a href="/checker/v1/" class="hmrc-account-menu__link" id="menu-right-4">
+        Sign out
+      </a>
+    </li>
+
+    <!-- RIGHT ALIGNED ITEMS -->
+  </ul>
+</nav>
+ #}

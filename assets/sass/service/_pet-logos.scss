@@ -1,0 +1,144 @@
+// .gem-c-layout-for-public {
+//   font-family: "GDS Transport", arial, sans-serif;
+// }
+.gem-c-organisation-logo {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.35;
+  margin: 0;
+  .gem-c-organisation-logo__container {
+    text-transform: none;
+    text-decoration: none;
+    display: block;
+    color: #0b0c0c;
+    height: auto;
+    width: auto;
+    direction: ltr;
+    &.gem-c-organisation-logo__crest {
+      border-left: 2px solid #0b0c0c;
+      padding-top: 23px;
+      padding-left: 6px;
+    }
+    &.gem-c-organisation-logo__crest--single-identity,
+    &.gem-c-organisation-logo__crest--eo,
+    &.gem-c-organisation-logo__crest--org {
+      background: url(/assets/images/org_crest_13px-02cd4dc76429840b335048d7ea971c06a2e01dee302feb05cec74fbaf927400a.png) no-repeat 5px 0;
+      // /assets/collections/govuk_publishing_components/crests/
+      background-size: auto 20px;
+    }
+    .gem-c-organisation-logo__name {
+      font-family: HelveticaNeue, "Helvetica Neue", Arial, Helvetica, sans-serif;
+    }
+  }
+  &.brand--department-for-environment-food-rural-affairs {
+    &.brand__border-color {
+      border-color: #00a33b;
+    }
+    .brand__border-color {
+      border-color: #00a33b;
+    }
+  }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (min-resolution: 192dpi),
+only screen and (min-resolution: 2dppx) {
+  .gem-c-organisation-logo {
+    .gem-c-organisation-logo__container {
+      &.gem-c-organisation-logo__crest--single-identity,
+      &.gem-c-organisation-logo__crest--eo,
+      &.gem-c-organisation-logo__crest--org {
+        background-image: url(/assets/images/org_crest_13px_x2-f412306c518f95598c202e3383932301f187c7e966d56e2e3f5112a4ecfcbde5.png);
+      }
+    }
+  }
+}
+
+@media (min-width: 40.0625em) {
+  .gem-c-organisation-logo {
+    font-size: 18px;
+    .gem-c-organisation-logo__container {
+      &.gem-c-organisation-logo__crest {
+        padding-top: 28px;
+        padding-left: 7px;
+      }
+      &.gem-c-organisation-logo__crest--single-identity,
+      &.gem-c-organisation-logo__crest--eo,
+      &.gem-c-organisation-logo__crest--org {
+        background: url(/assets/images/org_crest_18px-5863abda23ccb562f7ca4599038901db5a7f03eb277df5d86d51491033492b62.png) no-repeat 6px 0;
+        background-size: auto 26px;
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 40.0625em) and (-webkit-min-device-pixel-ratio: 2),
+only screen and (min-width: 40.0625em) and (min-resolution: 192dpi),
+only screen and (min-width: 40.0625em) and (min-resolution: 2dppx) {
+  .gem-c-organisation-logo {
+    .gem-c-organisation-logo__container {
+      &.gem-c-organisation-logo__crest--single-identity,
+      &.gem-c-organisation-logo__crest--eo,
+      &.gem-c-organisation-logo__crest--org {
+        background-image: url(/assets/images/org_crest_18px_x2-d759444376a83ad439650d64c8de4158658aa1b5034e5a6080e66ebaa9594b0d.png);
+      }
+    }
+  }
+}
+
+
+.pet-logo-print {
+  &.gem-c-organisation-logo {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.35;
+    margin: 0;
+    height: 50px;
+    margin-bottom: 30px;
+
+    .gem-c-organisation-logo__container {
+      text-transform: none;
+      text-decoration: none;
+      display: block;
+      color: #0b0c0c;
+      height: 100%;
+      width: auto;
+      direction: ltr;
+
+      &.gem-c-organisation-logo__crest {
+        border-left: 3px solid #0b0c0c;
+        padding-top: 0;
+        padding-left: 60px;
+      }
+
+      &.gem-c-organisation-logo__crest--single-identity,
+      &.gem-c-organisation-logo__crest--eo,
+      &.gem-c-organisation-logo__crest--org {
+        background: url(/assets/images/org_crest_18px_x2-d759444376a83ad439650d64c8de4158658aa1b5034e5a6080e66ebaa9594b0d.png) no-repeat 5px 5px;
+        background-size: auto 40px;
+      }
+
+      .gem-c-organisation-logo__name {
+        // font-family: HelveticaNeue, "Helvetica Neue", Arial, Helvetica, sans-serif;
+        font-family: GDS Transport, arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-weight: 500;
+        font-size: 19px;
+        font-size: 1.4rem;
+        line-height: 1.14286;
+        white-space: nowrap;
+      }
+    }
+
+    &.brand--department-for-environment-food-rural-affairs {
+      &.brand__border-color {
+        border-color: #008938;
+      }
+
+      .brand__border-color {
+        border-color: #008938;
+      }
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{# <h2 class="govuk-heading-m">C. Identification of Animal (pet)</h2> #}
+<div id="document-microchip-card" class="govuk-summary-card">
+  <div class="govuk-summary-card__title-wrapper">
+    <h2 class="govuk-summary-card__title">Microchip information</h2>
+  </div>
+  <div class="govuk-summary-card__content">
+    <dl class="govuk-summary-list">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Microchip number
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ data['microchipNumber'] if data['microchipNumber'] else "012345678912345"}}
+        </dd>
+        {% if data['pageState'] == "change" %}
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/checker/v1/create/microchip/">
+              Change<span class="govuk-visually-hidden"> microchip number</span>
+            </a>
+          </dd>
+        {% endif %}
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Implant location
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Under the skin
+        </dd>
+        {# {% if data['pageState'] == "change" %}
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/checker/v1/create/microchip/date">
+              Change<span class="govuk-visually-hidden"> implant location</span>
+            </a>
+          </dd>
+        {% endif %} #}
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Implant or scan date
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ data['microchipDate'] if data['microchipDate'] else "10/03/2020"}}
+        </dd>
+        {% if data['pageState'] == "change" %}
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="/checker/v1/create/microchip/date">
+              Change<span class="govuk-visually-hidden"> implant or scan date</span>
+            </a>
+          </dd>
+        {% endif %}
+      </div>
+    </dl>
+  </div>
+</div>

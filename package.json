@@ -1,0 +1,52 @@
+{
+  "name": "defra.pts.admin.web.new",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "start": "nodemon server.js",
+    "dev": "nodemon server.js & browser-sync start --proxy 'localhost:4000' --files '**/*'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/hapi": "^21.3.9",
+    "@hapi/inert": "^7.1.0",
+    "@hapi/joi": "^17.1.1",
+    "@hapi/vision": "^7.0.3",
+    "dotenv": "^16.4.5",
+    "govuk-frontend": "^5.3.1",
+    "govuk-prototype-kit": "^13.16.2",
+    "joi": "^17.13.0",
+    "nunjucks": "^3.2.4",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.24.4",
+    "babel-jest": "^29.7.0",
+    "browser-sync": "^3.0.2",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.0",
+    "sass": "^1.75.0"
+  },
+  "nodemonConfig": {
+    "ext": "js,html,css,.env"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    },
+    "testMatch": ["<rootDir>/__tests__/**/*.test.js"],
+     "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/models/.*",
+      "/server.js",
+      "/helper/configServer.js"
+    ]
+  },
+  
+  "type": "module"
+}

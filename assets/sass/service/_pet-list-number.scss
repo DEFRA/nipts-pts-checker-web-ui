@@ -1,0 +1,47 @@
+.gov-uk-circle {
+  display: inline-block;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  background: #0b0c0c;
+  color: #fff;
+  font-family: ntatabularnumbers, nta, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.gov-uk-circle-step {
+  min-width: 24px;
+  min-height: 24px;
+  line-height: 24px;
+}
+
+.gov-uk-number-list-align {
+  display: block;
+  margin-right: 10px;
+  margin-bottom: 20px;
+  float: left;
+  width: 30px;
+  height: 30px;
+  font-size: 1em;
+  line-height: 32px;
+}
+
+
+.pet-travel-list {
+  position: relative;
+  li {
+    clear: both;
+    margin-bottom: 20px;
+  }
+}
+
+time {
+  white-space: nowrap;
+}
+
+.govuk-text-adjacent-to-button {
+  line-height: 2;
+  vertical-align: middle;
+}

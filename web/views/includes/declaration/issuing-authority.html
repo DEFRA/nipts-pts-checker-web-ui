@@ -1,0 +1,55 @@
+<div id="document-authority-card" class="govuk-summary-card">
+  <div class="govuk-summary-card__title-wrapper">
+    <h2 class="govuk-summary-card__title">Issuing authority</h2>
+  </div>
+  <div class="govuk-summary-card__content">
+    <div class="govuk-summary-list__row">
+      <p class="govuk-body">
+        This document has been issued [by/on behalf of] the Animal and Plant Health Agency(APHA)] for the purposes of confirming non-commercial movement of the animal as described within from Great Britain to Northern Ireland. This document does not permit this animal to move internationally into the Republic of Ireland or the rest of the European Union.
+      </p>
+    </div>
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Name and address of competent authority
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <strong>Animal and Plant Health Agency</strong><br />
+          Pet Travel Section<br />
+          Eden Bridge House<br class="pet-br-print" />
+          Lowther Street<br class="pet-br-print" />
+          Carlisle<br class="pet-br-print" />
+          CA3 8DX
+        </dd>
+      </div>
+      {# <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          ISO and alphanumeric code
+          Pet Travel Document number
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {% if data['pageState'] !== "pending" %}
+            PET0123456789012345
+            GB826 ABC DEF
+          {% endif %}
+          {% if data['pageState'] == "pending" %}
+            Pending approval and signature
+          {% endif %}
+        </dd>
+      </div> #}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Signed on behalf of the competent authority (APHA)
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {% if data['pageState'] !== "pending" %}
+            John Smith (APHA) (Signed digitally)
+          {% endif %}
+          {% if data['pageState'] == "pending" %}
+            Pending approval and signature
+          {% endif %}
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>
