@@ -18,9 +18,11 @@ npm run start
 
 To run the project in development
 npm run dev
+Browse the URL :- http://localhost:4000/checker/home
 
 To Test
-npm run test
+npm test -- checkerMainService.test.js
+Please replace checkerMainService.test.js with the path to your test file.
 
 Test Coverage
 num run test:coverage
