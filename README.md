@@ -1,37 +1,38 @@
-"# nipts-pts-checker-web-ui"
-Download Node Js 
-https://nodejs.org/en/download
-Install Node Js (Call ior raise service desk ticket as may need amin privilages to install this)
+# nipts-pts-checker-web-ui
 
-Download VS Code
-https://code.visualstudio.com/download
-Install VS Code (Call ior raise service desk ticket as may need amin privilages to install this)
+## Setup
 
-Try to install eslint & jest runner extion in visial studio code
+1. Download and install Node.js from (https://nodejs.org/en/download). You may need admin privileges to install this, so please call or raise a service desk ticket if necessary.
 
-In project root
-Create .env files for project settings and include below setting to start
-or copy (env.sample.txt) and rename to .env
-Content of Env file
-PORT=4000
-HOST=localhost
+2. Download and install Visual Studio Code from (https://code.visualstudio.com/download). Again, you may need admin privileges to install this, so please call or raise a service desk ticket if necessary.
 
-Goto project path and run
-npm install
+3. Install the ESLint and Jest Runner extensions in Visual Studio Code.
 
-To run the project
-npm run start
+4. In the project root, create a `.env` file for project settings. You can start with the settings below, or copy `env.sample.txt` and rename it to `.env`.
 
-To run the project in development
-npm run dev
-Browse the URL :- http://localhost:4000/checker/home
+    ```
+    PORT=4000
+    HOST=localhost
+    ```
 
-To Test
-npm test -- checkerMainService.test.js
-Please replace checkerMainService.test.js with the path to your test file.
+5. Navigate to the project path and run `npm install`.
 
-Test Coverage
-num run test:coverage
+## Running the Project
+
+To start the project, use the command `npm run start`.
+
+For development, use `npm run dev`. You can then browse the application at http://localhost:4000/checker/home.
+
+## Testing
+
+To run tests, use `npm test -- checkerMainService.test.js`. Please replace `checkerMainService.test.js` with the path to your specific test file.
+
+For test coverage, use `npm run test:coverage`.
+
+## Project Structure
+
+The current project structure is as follows:
+
 
 Current Project structure
 
