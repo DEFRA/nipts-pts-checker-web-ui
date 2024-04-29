@@ -10,8 +10,9 @@ Install VS Code (Call ior raise service desk ticket as may need amin privilages 
 Try to install eslint & jest runner extion in visial studio code
 
 In project root
-include
-.env files for project settings and include below setting to start
+Create .env files for project settings and include below setting to start
+or copy (env.sample.txt) and rename to .env
+Content of Env file
 PORT=4000
 HOST=localhost
 
