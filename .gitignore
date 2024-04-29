@@ -67,3 +67,6 @@ typings/
 # IDE - VSCode
 .vscode
 *.sw*
+
+# package-lock.json
+package-lock.json
