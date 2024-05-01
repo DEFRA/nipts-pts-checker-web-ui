@@ -9,17 +9,18 @@ gulp.task('lint', function() {
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
 });
-
 // Test Task
 gulp.task('test', function() {
-    return gulp.src('./web/component/checker/home/*.test.js').pipe(jest.default({
+    return gulp.src("./__tests__/**/*.test.js").pipe(
+      jest.default({
         preprocessorIgnorePatterns: [
-            "<rootDir>/dist/", "<rootDir>/node_modules/"
+          "<rootDir>/dist/",
+          "<rootDir>/node_modules/",
         ],
-        automock: false
-    }));
+        automock: false,
+      })
+    );
 });
-
 // Watch Task
 gulp.task('watch', function() {
     gulp.watch(['./api/**/*.js', './helper/**/*.js', './web/**/*.js'], gulp.series('lint', 'test'));
