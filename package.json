@@ -28,6 +28,10 @@
     "@babel/preset-env": "^7.24.4",
     "babel-jest": "^29.7.0",
     "browser-sync": "^3.0.2",
+    "eslint": "^9.1.1",
+    "gulp": "^4.0.0",
+    "gulp-eslint": "^6.0.0",
+    "gulp-jest": "^4.0.4",
     "jest": "^29.7.0",
     "nodemon": "^3.1.0",
     "sass": "^1.75.0"
@@ -39,14 +43,15 @@
     "transform": {
       "^.+\\.js$": "babel-jest"
     },
-    "testMatch": ["<rootDir>/__tests__/**/*.test.js"],
-     "coveragePathIgnorePatterns": [
+    "testMatch": [
+      "<rootDir>/__tests__/**/*.test.js"
+    ],
+    "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/models/.*",
       "/server.js",
       "/helper/configServer.js"
     ]
   },
-  
   "type": "module"
 }
