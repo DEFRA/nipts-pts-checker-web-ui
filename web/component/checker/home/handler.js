@@ -1,7 +1,5 @@
 "use strict";
 
-import Joi from "joi";
-import Path from "path";
 import checkerMainService from "../../../../api/services/checkerMainService.js";
 
 const VIEW_PATH = "componentViews/checker/home/homeView";
