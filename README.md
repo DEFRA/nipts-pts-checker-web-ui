@@ -10,10 +10,10 @@
 
 4. In the project root, create a `.env` file for project settings. You can start with the settings below, or copy `env.sample.txt` and rename it to `.env`.
 
-    ```
-    PORT=4000
-    HOST=localhost
-    ```
+   ```
+   PORT=4000
+   HOST=localhost
+   ```
 
 5. Navigate to the project path and run `npm install`.
 
@@ -33,10 +33,10 @@ For test coverage, use `npm run test:coverage`.
 
 The current project structure is as follows:
 
-
 Current Project structure
 
 nipts-pts-checker-web-ui/
+├──src
 ├── api/ To call backend
 ├── assets/ For css, javascripts
 ├── node_modules/
