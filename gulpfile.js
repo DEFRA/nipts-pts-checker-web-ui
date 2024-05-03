@@ -4,13 +4,11 @@ import eslint from "gulp-eslint";
 import jest from "gulp-jest";
 const { src, dest, series } = gulp;
 
-
-
 function compileCss() {
   return src("src/web/assets/**/*.css")
     .pipe(dest("dist/src/web/assets"))
     .pipe(browserSync.create().stream());
-} 
+}
 
 function compileJs() {
   return src(["{,src/**/}*.js", "!gulpfile.js"])
@@ -29,11 +27,11 @@ function compileHtml() {
 }
 
 function moveConfig() {
-  return src(["package.json", ".env"]).pipe(dest("dist"));
+  return src(["package.json", ".env"], { allowEmpty: true }).pipe(dest("dist"));
 }
 
 function lint() {
- return src(["src/web/component/**/*.js", "src/api/**/*.js", "!gulpfile.js"])
+  return src(["src/web/component/**/*.js", "src/api/**/*.js", "!gulpfile.js"])
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failAfterError());
@@ -41,17 +39,16 @@ function lint() {
 
 //write test function under src/__tests__ folder to run all the test
 function test() {
-   return src("src/__tests__/**/*.test.js").pipe(
-     jest.default({
-       preprocessorIgnorePatterns: [
-         "<rootDir>/dist/",
-         "<rootDir>/node_modules/",
-       ],
-       automock: false,
-     })
-   );
+  return src("src/__tests__/**/*.test.js").pipe(
+    jest.default({
+      preprocessorIgnorePatterns: [
+        "<rootDir>/dist/",
+        "<rootDir>/node_modules/",
+      ],
+      automock: false,
+    })
+  );
 }
-
 
 function watchFiles() {
   browserSync.init({
@@ -65,12 +62,16 @@ function watchFiles() {
   gulp.watch("src/web/views/*.html", compileHtml);
   gulp.watch(["package.json", ".env"], moveConfig);
   gulp.watch(["{,src/**/}*.js", "!gulpfile.js"], lint);
-  gulp.watch("src/__tests__/**/*.test.js", test);  
-} 
+  gulp.watch("src/__tests__/**/*.test.js", test);
+}
 
 //export the above function as series can this be default
-export default series(compileCss, compileJs, compileHtml, moveConfig, lint, test, watchFiles);
-
-
-
-
+export default series(
+  compileCss,
+  compileJs,
+  compileHtml,
+  moveConfig,
+  lint,
+  test,
+  watchFiles
+);
