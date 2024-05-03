@@ -51,10 +51,10 @@ const setup = (server) => {
   // Add a route to serve static files from the 'assets' directory
   server.route({
     method: "GET",
-    path: "/assets/{param*}",
+    path: "/web/assets/{param*}",
     handler: {
       directory: {
-        path: "./assets", // Update the path to look for the file in the workspace
+        path: "./web/assets", // Update the path to look for the file in the workspace
         redirectToSlash: true,
         index: true,
       },

@@ -1,8 +1,8 @@
 import Hapi from "@hapi/hapi";
 import dotenv from "dotenv";
 
-import ConfigServer from "./configServer.js";
-import pluginList from "./helper/plugins.js";
+import ConfigServer from "./src/configServer.js";
+import pluginList from "./src/helper/plugins.js";
 
 // Load environment variables from .env file
 dotenv.config();
