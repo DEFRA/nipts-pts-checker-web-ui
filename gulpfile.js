@@ -1,29 +1,21 @@
 import gulp from "gulp";
-import * as browserSync from "browser-sync";
 import eslint from "gulp-eslint";
 import jest from "gulp-jest";
 const { src, dest, series } = gulp;
 
 function compileCss() {
   return src("src/web/assets/**/*.css")
-    .pipe(dest("dist/src/web/assets"))
-    .pipe(browserSync.create().stream());
+    .pipe(dest("dist/src/web/assets"));
 }
 
 function compileJs() {
   return src(["{,src/**/}*.js", "!gulpfile.js"])
-    .pipe(dest("dist"))
-    .on("end", function () {
-      browserSync.reload();
-    });
+    .pipe(dest("dist"));
 }
 
 function compileHtml() {
   return src("src/web/views/**/*.html")
-    .pipe(dest("dist/src/web/views"))
-    .on("end", function () {
-      browserSync.reload();
-    });
+    .pipe(dest("dist/src/web/views"));
 }
 
 function moveConfig() {
@@ -50,21 +42,6 @@ function test() {
   );
 }
 
-function watchFiles() {
-  browserSync.init({
-    server: {
-      baseDir: "./dist",
-    },
-  });
-
-  gulp.watch("src/web/assets/css/*.css", compileCss);
-  gulp.watch("src/**/*.js", compileJs);
-  gulp.watch("src/web/views/*.html", compileHtml);
-  gulp.watch(["package.json", ".env"], moveConfig);
-  gulp.watch(["{,src/**/}*.js", "!gulpfile.js"], lint);
-  gulp.watch("src/__tests__/**/*.test.js", test);
-}
-
 //export the above function as series can this be default
 export default series(
   compileCss,
@@ -72,6 +49,5 @@ export default series(
   compileHtml,
   moveConfig,
   lint,
-  test,
-  watchFiles
+  test
 );
