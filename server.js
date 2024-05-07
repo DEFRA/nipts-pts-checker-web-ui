@@ -9,8 +9,8 @@ dotenv.config();
 
 // Server configuration
 const serverConfig = {
-  port: process.env.PORT || 4000,
-  host: process.env.HOST || "localhost",
+  port: 4000,
+  host: "pet-test.azurewebsites.net",
 };
 
 // Create a server instance
