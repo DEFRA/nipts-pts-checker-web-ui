@@ -17,7 +17,7 @@ stages:
       - job: build_test
         displayName: "Build and test"
         pool:
-          vmImage: "Ubuntu-16.04"
+          vmImage: "Ubuntu-lastest"
         steps:
           - task: NodeTool@0
             inputs:
