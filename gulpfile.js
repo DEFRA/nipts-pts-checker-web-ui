@@ -48,6 +48,5 @@ export default series(
   compileJs,
   compileHtml,
   moveConfig,
-  lint,
-  test
+  lint
 );

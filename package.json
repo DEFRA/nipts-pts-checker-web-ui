@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "build": "gulp",
     "test:coverage": "jest --coverage",
     "start": "nodemon server.js",
     "dev": "nodemon server.js & browser-sync start --proxy 'localhost:4000' --files '**/*'"
