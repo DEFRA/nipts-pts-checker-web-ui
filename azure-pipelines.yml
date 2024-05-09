@@ -33,8 +33,8 @@ jobs:
   - script: |
       if [ "$(parameters.environment)" == "test" ]; then
         echo "##vso[task.setvariable variable=WebAppName;]pet-testing-test"
-        echo "##vso[task.setvariable variable=HOST;]1.1.1.1"
-        echo "##vso[task.setvariable variable=PORT;]4003"
+        echo "##vso[task.setvariable variable=HOST;]0.0.0.0"
+        echo "##vso[task.setvariable variable=PORT;]4002"
       fi
   - task: AzureCLI@2
     displayName: Set environment variables in App Service configuration

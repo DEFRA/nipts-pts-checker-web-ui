@@ -5,7 +5,7 @@ import Handler from "./handler.js";
 const Routes = [
   {
     method: "GET",
-    path: "/checker/home",
+    path: "/",
     config: Handler.index,
   }
 ];
