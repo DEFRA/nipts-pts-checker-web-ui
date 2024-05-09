@@ -36,6 +36,14 @@ jobs:
         echo "##vso[task.setvariable variable=HOST;]1.1.1.1"
         echo "##vso[task.setvariable variable=PORT;]4003"
       fi
+  - task: AzureCLI@2
+    displayName: Set environment variables in App Service configuration
+    inputs:
+      azureSubscription: 'AZD-TRD-DEV1'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az webapp config appsettings set --name $(WebAppName) --resource-group DEVPTSINFRG1001 --settings HOST=$(HOST) PORT=$(PORT)
   - task: CmdLine@2
     displayName: install libimagequant-dev
     inputs:
