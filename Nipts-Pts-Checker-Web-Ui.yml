@@ -1,0 +1,78 @@
+parameters:
+- name: environment
+  displayName: Environment
+  type: string
+  default: dev
+  values:
+  - dev
+  - test
+
+variables:
+  - name: WebAppName
+    value: ${{ if eq(parameters.environment, 'dev') }}:
+      'pet-testing'
+    ${{ if eq(parameters.environment, 'test') }}:
+      'pet-testing-test'
+  - name: HOST
+    value: ${{ if eq(parameters.environment, 'dev') }}:
+      '0.1.2.0'
+    ${{ if eq(parameters.environment, 'test') }}:
+      '1.1.1.1'
+- name: PORT
+    value: ${{ if eq(parameters.environment, 'dev') }}:
+      '4002'
+    ${{ if eq(parameters.environment, 'test') }}:
+      '4003'
+
+name: $(date:yyyyMMdd)$(rev:.r)
+resources:
+  repositories:
+  - repository: self
+    type: git
+    ref: refs/heads/main
+jobs:
+- job: Job_1
+  displayName: Agent Nipts-Pts-Checker-Web-Ui
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+  - checkout: self
+    clean: true
+    fetchTags: false
+  - task: CmdLine@2
+    displayName: install libimagequant-dev
+    inputs:
+      script: sudo apt install libimagequant-dev
+  - task: CmdLine@2
+    displayName: npm install pngquant-bin
+    inputs:
+      script: npm install pngquant-bin
+  - task: Npm@1
+    displayName: npm install
+    inputs:
+      verbose: false
+  - task: CmdLine@2
+    displayName: npm run build
+    inputs:
+      script: npm run build
+  - task: ArchiveFiles@2
+    displayName: Archive $(System.DefaultWorkingDirectory)
+    inputs:
+      rootFolderOrFile: $(System.DefaultWorkingDirectory)
+      includeRootFolder: false
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: drop'
+  - task: DownloadPipelineArtifact@2
+    displayName: Download Pipeline Artifact
+    inputs:
+      artifact: drop
+      path: $(System.DefaultWorkingDirectory)
+  - task: AzureRmWebAppDeployment@4
+    displayName: 'Azure App Service Deploy: $(WebAppName)'
+    inputs:
+      ConnectedServiceName: 90b91b91-6095-410c-8366-7abd492817d0
+      WebAppKind: webAppLinux
+      WebAppName: $(WebAppName)
+      RuntimeStack: NODE|18-lts
+      StartupCommand: npm run start
+...
