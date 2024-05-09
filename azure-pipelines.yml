@@ -9,20 +9,17 @@ parameters:
 
 variables:
   - name: WebAppName
-    value: ${{ if eq(parameters.environment, 'dev') }}:
-      'pet-testing'
-    ${{ if eq(parameters.environment, 'test') }}:
-      'pet-testing-test'
+    value: >-
+      ${{ if eq(parameters.environment, 'dev') }} 'pet-testing'
+      ${{ if eq(parameters.environment, 'test') }} 'pet-testing-test'
   - name: HOST
-    value: ${{ if eq(parameters.environment, 'dev') }}:
-      '0.1.2.0'
-    ${{ if eq(parameters.environment, 'test') }}:
-      '1.1.1.1'
-- name: PORT
-    value: ${{ if eq(parameters.environment, 'dev') }}:
-      '4002'
-    ${{ if eq(parameters.environment, 'test') }}:
-      '4003'
+    value: >-
+      ${{ if eq(parameters.environment, 'dev') }} '0.1.2.0'
+      ${{ if eq(parameters.environment, 'test') }} '1.1.1.1'
+  - name: PORT
+    value: >-
+      ${{ if eq(parameters.environment, 'dev') }} '4002'
+      ${{ if eq(parameters.environment, 'test') }} '4003'
 
 name: $(date:yyyyMMdd)$(rev:.r)
 resources:
