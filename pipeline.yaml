@@ -8,11 +8,12 @@ parameters:
   - name: deployToSecondary
     displayName: "Select Secondary Region"
     type: string
-    default: PRD
+    default: None
     values:
       - None
       - DEV
       - TST
+      - SND
       - PRE
       - PRD
 
@@ -35,4 +36,5 @@ extends:
     deployToSecondary: ${{ parameters.deployToSecondary}}
     appName: $(APIName)
     appProject: PTS
+    appInstanceNumber: $(nc-region-id)04
     
