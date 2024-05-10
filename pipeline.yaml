@@ -37,4 +37,8 @@ extends:
     appName: $(APIName)
     appProject: PTS
     appInstanceNumber: $(nc-region-id)04
+    appSettingsEnv: 
+      dev: >-
+        -PORT "4002"
+        -HOST "0.0.0.0"
     
