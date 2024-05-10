@@ -16,14 +16,7 @@ parameters:
       - PRE
       - PRD
 
-trigger:
-  batch: true
-  branches:
-    include:
-    - '*'
-  paths:
-    include:
-     - *
+
 
 resources:
   repositories:
