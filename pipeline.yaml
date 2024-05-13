@@ -24,8 +24,8 @@ resources:
     - repository: PipelineCommon
       name: DEFRA-TRD/Defra.TRD.Pipeline.Common
       type: git
-      ref: master
-      
+      #ref: master
+      ref: aj/pts-node-js
 variables:
   APIName: Defra.PTS.Dynamics.Functions
 
@@ -34,7 +34,6 @@ extends:
   parameters:
     forceDevDeploy: ${{ parameters.forceDevDeploy }}
     deployToSecondary: ${{ parameters.deployToSecondary}}
-    appName: $(APIName)
     appProject: PTS
     appInstanceNumber: $(nc-region-id)04
     appSettingsEnv: 
