@@ -25,7 +25,7 @@ resources:
       name: DEFRA-TRD/Defra.TRD.Pipeline.Common
       type: git
       #ref: master
-      ref: aj/pts-node-js
+      ref: AJ/pts-node-js
 variables:
   APIName: Defra.PTS.Dynamics.Functions
 
