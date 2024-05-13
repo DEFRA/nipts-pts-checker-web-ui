@@ -24,10 +24,7 @@ resources:
     - repository: PipelineCommon
       name: DEFRA-TRD/Defra.TRD.Pipeline.Common
       type: git
-      #ref: master
-      ref: AJ/pts-node-js
-variables:
-  APIName: Defra.PTS.Dynamics.Functions
+      ref: master
 
 extends:
   template: /templates/basic-npm-webapp-deploy-pipeline.yaml@PipelineCommon
