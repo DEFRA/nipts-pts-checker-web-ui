@@ -39,6 +39,18 @@ extends:
     appInstanceNumber: $(nc-region-id)04
     appSettingsEnv: 
       dev: >-
-        -PORT "4002"
+        -PORT "8080"
+        -HOST "0.0.0.0"
+      tst: >-
+        -PORT "8080"
+        -HOST "0.0.0.0"
+      snd: >-
+        -PORT "8080"
+        -HOST "0.0.0.0"
+      pre: >-
+        -PORT "8080"
+        -HOST "0.0.0.0"
+      prd: >-
+        -PORT "8080"
         -HOST "0.0.0.0"
     
