@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" class="govuk-template">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <meta name="theme-color" content="#0b0c0c">
+        <title>
+            {% block pageTitle %}
+                {{ model.ptsTitle }}:{{ model.ptsSubTitle }}
+                – GOV.UK
+            {% endblock %}
+        </title>
+
+        {% block stylesheets %}
+            <link href="/assets/css/checker.css" rel="stylesheet" type="text/css" media="all"/>
+            <link href="/assets/javascripts/autocomplete/accessible-autocomplete.min.css" rel="stylesheet" type="text/css" media="all"/>
+        {% endblock %}
+    </head>
+    <body class="govuk-template__body pts-checker-home">
+        <script>
+            document.body.className += ' js-enabled' + (
+            'noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : ''
+        );
+        </script>
+
+        <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
+
+        <div class="govuk-width-container">
+
+            <main class="govuk-main-wrapper" id="main-content" role="main"> {% block beforeContent %}{% endblock %}
+
+                <div class="pts-checker-splash">
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-full">
+                            <div class="govuk-grid-row pet-declaration-logos pts-checker-home-logos">
+                                <div class="govuk-grid-column-one-third" style="padding-top: 8px;">
+                                    {% include "../includes/defra-logo-white.html" %}
+                                </div>
+                                <div class="govuk-grid-column-one-third" style="padding-top: 8px; max-width: 280px;">
+                                    {% include "../includes/apha-logo-white.html" %}
+                                </div>
+                                <div class="govuk-grid-column-one-third">
+                                    {% include "../includes/daera-logo-white.html" %}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    {% block content %}Default Content
+                    {% endblock %}
+                </div>
+            </main>
+        </body>
+    </body>
+</html></div></body></html>
