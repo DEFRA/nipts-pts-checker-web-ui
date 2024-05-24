@@ -1,8 +1,8 @@
 "use strict";
 
-import checkerMainService from "../../../../api/services/checkerMainService.js";
+import appSettingsService from "../../../../api/services/appSettingsService.js";
 
-const VIEW_PATH = "componentViews/checker/home/homeView";
+const VIEW_PATH = "componentViews/checker/home/view";
 
 const Handler = {
   index: {
@@ -12,8 +12,10 @@ const Handler = {
       },
     },
     handler: async (request, h) => {
-      const checkerMainModelData = await checkerMainService.getCheckerMain();
-      return h.view(VIEW_PATH, { checkerMainModelData });
+      const appSettings = await appSettingsService.getAppSettings();
+      const model = { ...appSettings, loginUrl: "/Checker/CurrentSailing" };
+
+      return h.view(VIEW_PATH, { model: model });
     },
   },
 };

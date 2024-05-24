@@ -3,7 +3,6 @@ jest.mock("../../helper/plugins", () => ({
     { plugin: { pkg: { name: "@hapi/inert" }, register: () => {} } },
     { plugin: { pkg: { name: "@hapi/vision" }, register: () => {} } },
     { name: "Home", register: () => {} },
-    { name: "StartPage", register: () => {} },
   ],
   __esModule: true, 
 }));
@@ -16,7 +15,7 @@ describe("pluginList", () => {
   });
 
   test("should contain specific plugins", () => {
-    const expectedPlugins = ["@hapi/inert", "@hapi/vision", "Home", "StartPage"];
+    const expectedPlugins = ["@hapi/inert", "@hapi/vision", "Home"];
     const actualPlugins = pluginList
       .map((p) => {
         if (p.plugin && p.plugin.pkg && p.plugin.pkg.name) {
