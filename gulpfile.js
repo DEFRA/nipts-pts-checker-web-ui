@@ -1,21 +1,28 @@
 import gulp from "gulp";
 import eslint from "gulp-eslint";
 import jest from "gulp-jest";
+import sassModule from "gulp-sass";
+import dartCompiler from "sass";
 const { src, dest, series } = gulp;
 
+const sass = sassModule(dartCompiler);
+
+function compileSass() {
+  return src("app/sass/**/*.scss") // Gets all files ending with .scss in app/sass and children dirs
+    .pipe(sass().on("error", sass.logError)) // Passes it through a gulp-sass, log errors to console
+    .pipe(dest("dist/src/web/assets/css"));
+}
+
 function compileCss() {
-  return src("src/web/assets/**/*.css")
-    .pipe(dest("dist/src/web/assets"));
+  return src("src/web/assets/**/*.css").pipe(dest("dist/src/web/assets"));
 }
 
 function compileJs() {
-  return src(["{,src/**/}*.js", "!gulpfile.js"])
-    .pipe(dest("dist"));
+  return src(["{,src/**/}*.js", "!gulpfile.js"]).pipe(dest("dist"));
 }
 
 function compileHtml() {
-  return src("src/web/views/**/*.html")
-    .pipe(dest("dist/src/web/views"));
+  return src("src/web/views/**/*.html").pipe(dest("dist/src/web/views"));
 }
 
 function moveConfig() {
@@ -44,6 +51,7 @@ function test() {
 
 //export the above function as series can this be default
 export default series(
+  compileSass,
   compileCss,
   compileJs,
   compileHtml,
