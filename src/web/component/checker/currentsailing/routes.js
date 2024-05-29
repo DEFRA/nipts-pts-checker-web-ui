@@ -1,7 +1,6 @@
 "use strict";
 
 import Handler from "./handler.js";
-import Joi from '@hapi/joi';
 
 const Routes = [
   {
