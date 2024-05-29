@@ -26,6 +26,9 @@ resources:
       type: git
       ref: master
 
+variables:
+  APIName: DEFRA_nipts-pts-checker-web-ui
+
 extends:
   template: /templates/basic-npm-webapp-deploy-pipeline.yaml@PipelineCommon
   parameters:
@@ -49,4 +52,4 @@ extends:
       prd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-    
+    runSonarScan: true
