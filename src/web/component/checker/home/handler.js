@@ -15,7 +15,7 @@ const Handler = {
       const appSettings = await appSettingsService.getAppSettings();
       const model = { ...appSettings, loginUrl: "/Checker/CurrentSailing" };
 
-      return h.view(VIEW_PATH, { model: model });
+      return h.view(VIEW_PATH, { model });
     },
   },
 };
