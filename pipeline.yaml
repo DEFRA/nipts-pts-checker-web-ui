@@ -24,8 +24,7 @@ resources:
     - repository: PipelineCommon
       name: DEFRA-TRD/Defra.TRD.Pipeline.Common
       type: git
-      #ref: master
-      ref: AJ/add-sonar-npm-template
+      ref: master
 
 extends:
   template: /templates/basic-npm-webapp-deploy-pipeline.yaml@PipelineCommon
