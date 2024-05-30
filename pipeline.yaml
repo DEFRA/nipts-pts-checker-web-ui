@@ -28,6 +28,7 @@ resources:
 
 variables:
   APIName: DEFRA_nipts-pts-checker-web-ui
+  appName: DEFRA_nipts-pts-checker-web-ui
 
 extends:
   template: /templates/basic-npm-webapp-deploy-pipeline.yaml@PipelineCommon
