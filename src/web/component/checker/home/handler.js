@@ -13,7 +13,7 @@ const Handler = {
     },
     handler: async (request, h) => {
       const appSettings = await appSettingsService.getAppSettings();
-      const model = { ...appSettings, loginUrl: "/Checker/CurrentSailing" };
+      const model = { ...appSettings, loginUrl: "/checker/current-sailings" };
 
       return h.view(VIEW_PATH, { model: model });
     },
