@@ -34,7 +34,7 @@ extends:
     deployToSecondary: ${{ parameters.deployToSecondary}}
     appProject: PTS
     appInstanceNumber: $(nc-region-id)04
-    appName: Defra.PTS.checker.Web.UI
+    appName: nipts-pts-checker-web-ui
     appSettingsEnv: 
       dev: >-
         -PORT "8080"
