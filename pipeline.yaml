@@ -30,9 +30,11 @@ extends:
   template: /templates/basic-npm-webapp-deploy-pipeline.yaml@PipelineCommon
   parameters:
     forceDevDeploy: ${{ parameters.forceDevDeploy }}
+    runSonarScan: false
     deployToSecondary: ${{ parameters.deployToSecondary}}
     appProject: PTS
     appInstanceNumber: $(nc-region-id)04
+    appName: DEFRA_nipts-pts-checker-web-ui
     appSettingsEnv: 
       dev: >-
         -PORT "8080"
