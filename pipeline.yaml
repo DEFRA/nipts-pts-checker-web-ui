@@ -16,16 +16,6 @@ parameters:
       - SND
       - PRE
       - PRD
-  - name: runVulnerabilityScan
-    displayName: "Run Vulnerability Scan"
-    type: boolean
-    default: true
-  - name: skipOwaspScan
-    displayName: "Skip Owasp Scan"
-    type: boolean
-    default: false
-
-
 
 resources:
   repositories:
@@ -64,5 +54,5 @@ extends:
         -HOST "0.0.0.0"
     #runSonarScan: true
     #sonarExclusionPaths: 'src/web/assets/**'
-    runVulnerabilityScan: ${{ parameters.runVulnerabilityScan }}
-    skipOwaspScan: ${{ parameters.skipOwaspScan }}
+    runVulnerabilityScan: true
+    skipOwaspScan: false
