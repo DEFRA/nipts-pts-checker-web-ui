@@ -7,7 +7,7 @@ describe("Handler", () => {
     it("should call getAppSettings and return view", async () => {
       // Arrange
       const mockedData = {
-        loginUrl: "/Checker/CurrentSailing",
+        loginUrl: "/checker/current-sailings",
         ptsTitle: "Pet Travel Scheme",
         ptsSubTitle: "Check a pet from Great Britain to Northern Ireland",
       };

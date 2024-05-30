@@ -1,4 +1,4 @@
-import Handler from "../../../../../web/component/checker/currentsailing/handler.js";
+import { CurrentSailingHandlers } from "../../../../../web/component/checker/currentsailing/handler.js";
 import currentSailingMainService from "../../../../../api/services/currentSailingMainService.js";
 
 jest.mock("../../../../../api/services/currentSailingMainService.js");
@@ -30,11 +30,61 @@ describe('Handler', () => {
           })
         };
 
-        const response = await Handler.index.handler(request, h);
+        const response = await CurrentSailingHandlers.getCurrentSailings.index.handler(request, h);
 
         expect(response.viewPath).toBe("componentViews/checker/currentsailing/currentsailingView");
         expect(response.data).toEqual({ currentSailingMainModelData: mockData });
         expect(h.view).toHaveBeenCalledWith("componentViews/checker/currentsailing/currentsailingView", { currentSailingMainModelData: mockData });
       });
+  });
+});
+
+describe('submitCurrentSailingSlot', () => {
+  it('should set the CurrentSailingSlot and redirect to /dashboard', async () => {
+    const mockRequest = {
+      payload: { sailingSlot: 'testSlot' },
+      yar: {
+        set: jest.fn()
+      }
+    };
+    const mockResponseToolkit = {
+      redirect: jest.fn(() => ({ code: 302 }))
+    };
+
+    const response = await CurrentSailingHandlers.submitCurrentSailingSlot(mockRequest, mockResponseToolkit);
+
+    expect(mockRequest.yar.set).toHaveBeenCalledWith('CurrentSailingSlot', { sailingSlot: 'testSlot' });
+    expect(mockResponseToolkit.redirect).toHaveBeenCalledWith('/dashboard');
+    expect(response.code).toBe(302);
+  });
+});
+
+
+describe('getCurrentSailingSlot', () => {
+  it('should retrieve the CurrentSailingSlot from session', async () => {
+    const mockRequest = {
+      yar: {
+        get: jest.fn().mockReturnValue('testSlot')
+      }
+    };
+    const mockResponseToolkit = {
+      response: jest.fn((value) => ({
+        code: 200,
+        source: value
+      }))
+    };
+
+    const response = await CurrentSailingHandlers.getCurrentSailingSlot(mockRequest, mockResponseToolkit);
+
+    expect(mockRequest.yar.get).toHaveBeenCalledWith('CurrentSailingSlot');
+    expect(mockResponseToolkit.response).toHaveBeenCalledWith({
+      message: 'Retrieved Current sailing slot',
+      currentSailingSlot: 'testSlot'
+    });
+    expect(response.code).toBe(200);
+    expect(response.source).toEqual({
+      message: 'Retrieved Current sailing slot',
+      currentSailingSlot: 'testSlot'
+    });
   });
 });
