@@ -36,6 +36,7 @@ extends:
     deployToSecondary: ${{ parameters.deployToSecondary}}
     appProject: PTS
     appInstanceNumber: $(nc-region-id)04
+    appName: DEFRA_nipts-pts-checker-web-ui
     appSettingsEnv: 
       dev: >-
         -PORT "8080"
@@ -52,5 +53,5 @@ extends:
       prd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-    #runSonarScan: false
+    #runSonarScan: true
     #sonarExclusionPaths: 'src/web/assets/**'
