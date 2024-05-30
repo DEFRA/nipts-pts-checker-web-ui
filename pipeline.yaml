@@ -53,5 +53,5 @@ extends:
       prd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-    #runSonarScan: true
+    #runSonarScan: false
     #sonarExclusionPaths: 'src/web/assets/**'
