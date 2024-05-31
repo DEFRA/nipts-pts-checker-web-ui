@@ -1761,4 +1761,10 @@ html {
   margin: 0;
 }
 
+.pts-checker-time-select {
+  min-width: auto !important;
+  max-width: none !important;
+  width: 70px;
+}
+
 /*# sourceMappingURL=checker.css.map */
