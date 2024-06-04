@@ -1,0 +1,36 @@
+.pet-long-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+}
+.govuk-tag {
+  // white-space: nowrap;
+  max-width: 200px;
+}
+.govuk-table {
+  position: relative;
+  width: 99%;
+}
+.govuk-table * {
+  box-sizing: border-box;
+
+  th,
+  td {
+    min-width: 100px;
+  }
+}
+.moj-scrollable-pane {
+  overflow-x: auto;
+  background: linear-gradient(to right, white, white, rgba(255, 255, 255, 0) calc(var(0.75em)* 2)), radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0)), linear-gradient(to left, white, white, rgba(255, 255, 255, 0) calc(var(0.75em)* 2)), radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0)) 100%;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-attachment: local, scroll, local, scroll;
+  background-size: 100% 100%, .75em 100%, 100% 100%, .75em 100%;
+}
+@media (min-width: 40.0625em) {
+  .govuk-tabs__panel {
+    background: #ffffff;
+  }
+}
