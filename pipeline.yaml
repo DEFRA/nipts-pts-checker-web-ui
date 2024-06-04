@@ -35,8 +35,6 @@ extends:
     appProject: PTS
     appInstanceNumber: $(nc-region-id)04
     appName: DEFRA_nipts-pts-checker-web-ui
-    setupMiUser: 'true'
-    connectionStrings: '[{"name": "sql_db", "value": "Server=tcp:$(sqlServerName),1433;Database=pet-travel;Authentication=Active Directory Managed Identity;", "type": "SQLAzure", "slotSetting": false}]'    
     appSettingsEnv: 
       dev: >-
         -PORT "8080"
