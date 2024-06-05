@@ -1,21 +1,46 @@
 import currentSailingMainService from "../../../api/services/currentSailingMainService.js";
+import axios from "axios";
 import { CurrentSailingMainModel } from "../../../api/models/currentSailingMainModel.js";
 import  CurrentSailingModel  from "../../../constants/currentSailingConstant.js";
 
+jest.mock('axios'); // Mock the entire axios library
+
 describe('currentSailingMainService', () => {
-  it('getCurrentSailingMain should return a CurrentSailingMainModel with correct data', () => {
-    const model = currentSailingMainService.getCurrentSailingMain();
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-    expect(model).toBeInstanceOf(CurrentSailingMainModel);
-    const expectedData = CurrentSailingModel.currentSailingMainModelData;
+  it('fetches data successfully and returns CurrentSailingMainModel', async () => {
+    const mockData = [
+      { id: 1, routeName: 'Route 1' },
+      { id: 2, routeName: 'Route 2' },
+    ];
 
-    expect(model.pageHeading).toBe(expectedData.pageHeading);
-    expect(model.serviceName).toBe(expectedData.serviceName);
-    expect(model.routeSubHeading).toBe(expectedData.routeSubHeading);
-    expect(model.sailingRoutes).toEqual(expectedData.routes);
-    expect(model.sailingTimeSubHeading).toBe(expectedData.sailingTimeSubHeading);
-    expect(model.sailingHintText1).toBe(expectedData.sailingHintText1);
-    expect(model.sailingHintText2).toBe(expectedData.sailingHintText2);
-    expect(model.sailingTimes).toEqual(expectedData.sailingTimes);
+    // Mock axios response
+    axios.get.mockResolvedValue({ data: mockData });
+
+    const result = await currentSailingMainService.getCurrentSailingMain();
+
+    expect(axios.get).toHaveBeenCalledWith('https://devptswebaw1003.azurewebsites.net/api/sailing-routes');
+    expect(CurrentSailingModel.currentSailingMainModelData.routes).toEqual([
+        { id: '1', value: 'Route 1', label: 'Route 1' },
+        { id: '2', value: 'Route 2', label: 'Route 2' }
+    ]);
+    expect(result).toBeInstanceOf(CurrentSailingMainModel);
+  
+  });
+
+
+  it('handles errors correctly', async () => {
+    axios.get.mockRejectedValue(new Error('Network Error'));
+
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    const result = await currentSailingMainService.getCurrentSailingMain();
+
+    expect(console.error).toHaveBeenCalledWith('Error fetching data:', expect.any(Error));
+    expect(result).toBeUndefined();
+
+    consoleSpy.mockRestore();
   });
 });
