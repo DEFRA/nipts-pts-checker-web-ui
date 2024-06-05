@@ -39,23 +39,23 @@ extends:
       dev: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-        -BASE_API_URL "https://#{{ environment }}pts#{{ nc-function-web-lower }}#{{ nc-resource-webapp-lower }}1003.azurewebsites.net"
+        -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net"
       tst: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-        -BASE_API_URL "https://#{{ environment }}pts#{{ nc-function-web-lower }}#{{ nc-resource-webapp-lower }}1003.azurewebsites.net"
+        -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net"
       snd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-        -BASE_API_URL "https://#{{ environment }}pts#{{ nc-function-web-lower }}#{{ nc-resource-webapp-lower }}1003.azurewebsites.net"
+        -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net"
       pre: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-        -BASE_API_URL "https://#{{ environment }}pts#{{ nc-function-web-lower }}#{{ nc-resource-webapp-lower }}1003.azurewebsites.net"
+        -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net"
       prd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-        -BASE_API_URL "https://#{{ environment }}pts#{{ nc-function-web-lower }}#{{ nc-resource-webapp-lower }}1003.azurewebsites.net"
+        -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net"
     runSonarScan: true
     #runVulnerabilityScan: true
     #skipOwaspScan: false
