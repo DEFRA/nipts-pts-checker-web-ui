@@ -1,1 +1,152 @@
 // $green: #00a33b;
+.pts-checker-separator {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 2em;
+
+  &::after {
+    position: relative;
+    top: 0.6em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    background: $bgcolor;
+    color: #0b0c0c;
+    font-family: "GDS Transport", arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 1em;
+    line-height: 1.25;
+    margin-top: 0;
+    // margin-bottom: 15px;
+    content: "or";
+  }
+}
+
+.pts-checker-travel-details {
+  width: auto;
+
+  .govuk-summary-list__key {
+    width: 40%;
+  }
+}
+
+// .govuk-button {
+//   svg {
+//     padding: 1em;
+//     height: 8em;
+//     display: block;
+//     margin: 0 auto;
+//   }
+// }
+
+.govuk-summary-card {
+  background-color: #ffffff;
+}
+
+
+.govuk-button--inverse,
+.govuk-button--inverse:link,
+.govuk-button--inverse:visited,
+.govuk-button--inverse:active,
+.govuk-button--inverse:hover,
+.govuk-button--start {
+  color: $green;
+}
+
+.govuk-button--inverse {
+  background-color: #ffffff;
+  box-shadow: 0 2px 0 #0c5e1d;
+}
+
+.pts-checker-home-logos {
+  zoom: 0.8;
+}
+
+.pts-checker-splash {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.pts-checker-splash-button {}
+
+.govuk-back-link {
+  margin-top: 30px;
+}
+
+.govuk-radios__label,
+.govuk-checkboxes__label {
+  &::before {
+    background-color: white;
+  }
+}
+
+.autocomplete__input,
+.autocomplete__wrapper {
+  background-color: white;
+}
+
+/* MEDIA */
+@media (orientation: portrait) {
+  .pts-checker-header {
+    h1 {
+      // display: none;
+    }
+
+    .pts-checker-header-nav {
+      li {
+        svg {
+          margin-top: 0.4em;
+          height: 44px;
+          margin-bottom: 0;
+        }
+      }
+
+      span {
+        display: none;
+      }
+    }
+
+    .pet-declaration-logos {
+
+      .govuk-grid-column-one-half,
+      .govuk-grid-column-one-quarter {
+        &:first-child {
+          margin-bottom: 1em;
+          // display: none;
+        }
+      }
+    }
+  }
+
+  .pts-checker-splash-service {
+    // margin-top: 10em;
+    // margin-bottom: 10em;
+  }
+
+  .pts-checker-splash-button {
+    // margin-bottom: 3em;
+    // margin-top: 4em;
+  }
+}
+
+// .checker-message-success {
+//   background-color: $success;
+//   padding: 1.2em;
+//   padding-top: 1.7em;
+//   position: relative;
+//   // left: 0;
+//   // right: 0;
+//   .govuk-body {
+//     color: #ffffff;
+//     padding: 0;
+//     margin: 0;
+//   }
+// }
+
+.pts-checker-time-select {
+  min-width: auto !important;
+  max-width: none !important;
+  width: 70px;
+}

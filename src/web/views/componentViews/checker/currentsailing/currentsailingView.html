@@ -1,0 +1,81 @@
+{% extends "./layouts/checkerLayout.html" %}
+
+{% block pageTitle %} Current sailing - {{currentSailingMainModelData.serviceName}}– GOV.UK {% endblock %}
+
+{% block beforeContent %}
+  {# {{ super() }} #}
+  <a href="javascript: history.back();" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-0">
+  <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
+
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
+      {{ currentSailingMainModelData.pageHeading }}
+    </h1>
+
+    <form action="/checker/sailing-slot" method="POST">
+      <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                  <h2 class="govuk-fieldset__heading">{{ currentSailingMainModelData.routeSubHeading }}</h2>
+              </legend>
+              {% if currentSailingMainModelData.sailingRoutes.length > 0 %}
+              <div class="govuk-radios" data-module="govuk-radios">
+                  {% for route in currentSailingMainModelData.sailingRoutes %}
+                  <div class="govuk-radios__item">
+                      <input class="govuk-radios__input" id="{{ route.id }}" name="routeRadio" type="radio" value="{{ route.id }}">
+                      <label class="govuk-label govuk-radios__label" for="{{ route.id }}">
+                          {{ route.label }}
+                      </label>
+                  </div>
+                  {% endfor %}
+              </div>
+              {% else %}
+              <p>No routes available.</p>
+              {% endif %}
+          </fieldset>
+      </div>
+
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="sailingHour">
+          <b> {{ currentSailingMainModelData.sailingTimeSubHeading }} </b>
+        </label>
+        <div id="event-name-hint" class="govuk-hint">
+          {{ currentSailingMainModelData.sailingHintText1 }} <br /> {{ currentSailingMainModelData.sailingHintText2 }}
+        </div>
+        <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingHour" name="sailingHour">
+            {% for timeHour in currentSailingMainModelData.sailingTimes.slice(0, 25) %}
+              <option value="{{timeHour}}">{{ timeHour }}</option>
+            {% endfor %}
+        </select>
+        <span> : </span>
+        <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingMinutes" name="sailingMinutes">
+            {% for timeMinutes in currentSailingMainModelData.sailingTimes %}
+              <option value="{{timeMinutes}}">{{ timeMinutes }}</option>
+            {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="govuk-button" data-module="govuk-button">
+        Save and continue
+      </button>
+     
+    </form>
+    
+  </div>
+</div>
+<script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const navigation = document.querySelector('.pts-checker-navigation');
+        if (navigation) {
+          navigation.style.display = 'none';
+        }
+      });
+</script>
+
+{% endblock %}
+
+
+
+              

@@ -1,6 +1,6 @@
-import plugin from '../../../../../web/component/checker/home/index.js';
+import plugin from "../../../../../web/component/checker/home/index.js";
 
-describe('register function', () => {
+describe("register function", () => {
   let server;
 
   beforeEach(() => {
@@ -16,13 +16,13 @@ describe('register function', () => {
     expect(server.dependency).toHaveBeenCalledWith(["@hapi/vision"]);
   });
 
-  it('should call server.route with Routes', () => {
+  it("should call server.route with Routes", () => {
     plugin.register(server);
     expect(server.route).toHaveBeenCalled();
   });
 
-  it('should call server.log with "info" and "Plugin registered: checketHome"', () => {
+  it('should call server.log with "info" and "Plugin registered: Home"', () => {
     plugin.register(server);
-    expect(server.log).toHaveBeenCalledWith("info", "Plugin registered: checketHome");
+    expect(server.log).toHaveBeenCalledWith("info", "Plugin registered: Home");
   });
 });

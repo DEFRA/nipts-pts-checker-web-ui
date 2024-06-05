@@ -8,13 +8,14 @@ const { src, dest, series } = gulp;
 const sass = sassModule(dartCompiler);
 
 function compileSass() {
-  return src("app/sass/**/*.scss") // Gets all files ending with .scss in app/sass and children dirs
+  return src("src/web/assets/sass/**/*.scss") // Gets all files ending with .scss in app/sass and children dirs
     .pipe(sass().on("error", sass.logError)) // Passes it through a gulp-sass, log errors to console
     .pipe(dest("dist/src/web/assets/css"));
 }
 
+
 function compileCss() {
-  return src("src/web/assets/**/*.css").pipe(dest("dist/src/web/assets"));
+  return src("src/web/assets/**/*.css").pipe(dest("dist/src/web/public"));
 }
 
 function compileJs() {

@@ -7,7 +7,7 @@ function register(server) {
 
   server.route(Routes);
 
-  server.log("info", "Plugin registered: checketHome");
+  server.log("info", "Plugin registered: Home");
 }
 
 export default {

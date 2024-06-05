@@ -20,6 +20,8 @@
     "@hapi/inert": "^7.1.0",
     "@hapi/joi": "^17.1.1",
     "@hapi/vision": "^7.0.3",
+    "@hapi/yar": "^11.0.2",
+    "axios": "^1.7.2",
     "browser-sync": "^3.0.2",
     "del": "^7.1.0",
     "dotenv": "^16.4.5",
@@ -45,7 +47,7 @@
     "gulp-jest": "^4.0.4",
     "jest": "^29.7.0",
     "nodemon": "^3.1.0",
-    "sass": "^1.75.0"
+    "sass": "^1.77.4"
   },
   "nodemonConfig": {
     "ext": "js,html,css,scss,.env"
