@@ -1,7 +1,7 @@
 class CurrentSailingMainModel {
     constructor(data) {
       this.pageHeading = data.pageHeading;
-      this.serviceName = data.serviceName;
+      this.pageTitle = data.pageTitle;
       this.routeSubHeading = data.routeSubHeading;
       this.sailingRoutes = data.routes;
       this.sailingTimeSubHeading = data.sailingTimeSubHeading;

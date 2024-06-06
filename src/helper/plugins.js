@@ -3,6 +3,7 @@ import Vision from "@hapi/vision";
 import Yar from "@hapi/yar";
 import Home from "../web/component/checker/home/index.js";
 import CurrentSailing from "../web/component/checker/currentsailing/index.js";
+import DocumentSearch from "../web/component/checker/documentsearch/index.js";
 
 const pluginList = [
   {
@@ -26,6 +27,9 @@ const pluginList = [
   },
   {
     plugin: CurrentSailing,
+  },
+  {
+    plugin: DocumentSearch,
   },
 ];
 
