@@ -1,0 +1,137 @@
+{% extends "./layouts/checkerLayout.html" %}
+
+{% block pageTitle %} Current sailing - {{documentSearchMainModelData.pageTitle}}– GOV.UK {% endblock %}
+
+{% block beforeContent %}
+  {# {{ super() }} #}
+  <a href="javascript: history.back();" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-0">
+  <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
+
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
+      {{ documentSearchMainModelData.pageHeading }}
+    </h1>
+
+    <form action="/checker/document-search" method="POST">
+    <div class="govuk-grid-row govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+      <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">  
+          <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset" aria-describedby="documentSearch-hint">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                <h1 class="govuk-fieldset__heading">
+                  Find a document
+                </h1>
+              </legend>
+              {# <div id="documentSearch-hint" class="govuk-hint">
+                Select one option.
+              </div> #}
+              <div class="govuk-radios" data-module="govuk-radios">
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="documentSearch" name="documentSearch" type="radio" value="ptd" data-aria-controls="conditional-documentSearch" checked>
+                  <label class="govuk-label govuk-radios__label" for="documentSearch">
+                    Search by PTD number
+                  </label>
+                </div>
+                <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-documentSearch">
+                  <div class="govuk-form-group {% if data["error"] === "empty" %}govuk-form-group--error{% endif %}">
+                    {% if data["error"] === "empty" %}
+                    <p id="passport-issued-error" class="govuk-error-message">
+                      <span class="govuk-visually-hidden">Error:</span> Enter a PTD number
+                    </p>
+                    {% endif %}
+                    <div class="govuk-input__wrapper">
+                      <div class="govuk-input__prefix" aria-hidden="true">GB826</div>
+                      <input class="govuk-input govuk-input--width-10" id="ptdNumberSearch" name="ptdNumberSearch" type="text" spellcheck="false">
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="documentSearch-3" name="documentSearch" type="radio" value="application" data-aria-controls="conditional-documentSearch-3">
+                  <label class="govuk-label govuk-radios__label" for="documentSearch-3">
+                    Search by application number
+                  </label>
+                </div>
+                <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-documentSearch-3">
+                  <div class="govuk-form-group {% if data["error"] === "empty" %}govuk-form-group--error{% endif %}">
+                    {% if data["error"] === "empty" %}
+                    <p id="passport-issued-error" class="govuk-error-message">
+                      <span class="govuk-visually-hidden">Error:</span> Enter an application number
+                    </p>
+                    {% endif %}
+                    <input class="govuk-input govuk-input--width-10" id="applicationNumberSearch" name="applicationNumberSearch" type="text" spellcheck="false">
+                  </div>
+                </div>
+  
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="documentSearch-2" name="documentSearch" type="radio" value="microchip" data-aria-controls="conditional-documentSearch-2">
+                  <label class="govuk-label govuk-radios__label" for="documentSearch-2">
+                    Search by microchip number
+                  </label>
+                </div>
+                <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-documentSearch-2">
+                  <div class="govuk-form-group">
+                    {# <label class="govuk-label" for="microchipNumber">
+                      Microchip number
+                    </label> #}
+                    {% if data["error"] === "empty" %}
+                    <p id="passport-issued-error" class="govuk-error-message">
+                      <span class="govuk-visually-hidden">Error:</span> Enter a PTD or application number
+                    </p>
+                    {% endif %}
+                    <input class="govuk-input govuk-input--width-20" id="microchipNumber" name="microchipNumber" type="text" spellcheck="false">
+                  </div>
+                </div>
+                {# <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="documentSearch-3" name="documentSearch" type="radio" value="petowner" data-aria-controls="conditional-documentSearch-3">
+                  <label class="govuk-label govuk-radios__label" for="documentSearch-3">
+                    Pet owner contacts
+                  </label>
+                </div>
+                <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-documentSearch-3">
+                  <div class="govuk-form-group">
+                    <label class="govuk-label" for="ownerPhone">
+                      Pet owner phone
+                    </label>
+                    <input class="govuk-input govuk-input--width-20" id="ownerPhone" name="ownerPhone" type="text">
+                  </div>
+  
+                  <div class="govuk-form-group">
+                    <label class="govuk-label" for="ownerEmail">
+                      Pet owner email
+                    </label>
+                    <input class="govuk-input" id="ownerEmail" name="ownerEmail" type="text">
+                  </div>
+                </div> #}
+              </div>
+            </fieldset>
+          </div>
+        </div>
+    </div>
+  
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <button type="submit" class="govuk-button" data-module="govuk-button">
+          Search
+        </button>
+      </div>
+  
+      <div class="govuk-grid-column-one-half" style="text-align: right;">
+        <button type="button" class="govuk-button govuk-button--secondary govuk-button--inverse" data-module="govuk-button">
+          Clear search
+        </button>
+      </div>
+    </div>
+    </form>
+    
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+              
