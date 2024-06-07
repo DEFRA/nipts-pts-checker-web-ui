@@ -20,30 +20,22 @@
       <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">  
           <div class="govuk-form-group">
             <fieldset class="govuk-fieldset" aria-describedby="documentSearch-hint">
-              <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-                <h1 class="govuk-fieldset__heading">
-                  Find a document
-                </h1>
-              </legend>
-              {# <div id="documentSearch-hint" class="govuk-hint">
-                Select one option.
-              </div> #}
               <div class="govuk-radios" data-module="govuk-radios">
                 <div class="govuk-radios__item">
                   <input class="govuk-radios__input" id="documentSearch" name="documentSearch" type="radio" value="ptd" data-aria-controls="conditional-documentSearch" checked>
                   <label class="govuk-label govuk-radios__label" for="documentSearch">
-                    Search by PTD number
+                    {{documentSearchMainModelData.searchOptions[0].value}}
                   </label>
                 </div>
                 <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-documentSearch">
                   <div class="govuk-form-group {% if data["error"] === "empty" %}govuk-form-group--error{% endif %}">
                     {% if data["error"] === "empty" %}
                     <p id="passport-issued-error" class="govuk-error-message">
-                      <span class="govuk-visually-hidden">Error:</span> Enter a PTD number
+                      <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span> {{documentSearchMainModelData.searchOptions[0].error}}
                     </p>
                     {% endif %}
                     <div class="govuk-input__wrapper">
-                      <div class="govuk-input__prefix" aria-hidden="true">GB826</div>
+                      <div class="govuk-input__prefix" aria-hidden="true">{{documentSearchMainModelData.ptdSearchText}}</div>
                       <input class="govuk-input govuk-input--width-10" id="ptdNumberSearch" name="ptdNumberSearch" type="text" spellcheck="false">
                     </div>
                   </div>
@@ -52,14 +44,14 @@
                 <div class="govuk-radios__item">
                   <input class="govuk-radios__input" id="documentSearch-3" name="documentSearch" type="radio" value="application" data-aria-controls="conditional-documentSearch-3">
                   <label class="govuk-label govuk-radios__label" for="documentSearch-3">
-                    Search by application number
+                    {{documentSearchMainModelData.searchOptions[1].value}}
                   </label>
                 </div>
                 <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-documentSearch-3">
                   <div class="govuk-form-group {% if data["error"] === "empty" %}govuk-form-group--error{% endif %}">
                     {% if data["error"] === "empty" %}
                     <p id="passport-issued-error" class="govuk-error-message">
-                      <span class="govuk-visually-hidden">Error:</span> Enter an application number
+                      <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span> {{documentSearchMainModelData.searchOptions[1].error}}
                     </p>
                     {% endif %}
                     <input class="govuk-input govuk-input--width-10" id="applicationNumberSearch" name="applicationNumberSearch" type="text" spellcheck="false">
@@ -69,7 +61,7 @@
                 <div class="govuk-radios__item">
                   <input class="govuk-radios__input" id="documentSearch-2" name="documentSearch" type="radio" value="microchip" data-aria-controls="conditional-documentSearch-2">
                   <label class="govuk-label govuk-radios__label" for="documentSearch-2">
-                    Search by microchip number
+                    {{documentSearchMainModelData.searchOptions[2].value}}
                   </label>
                 </div>
                 <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-documentSearch-2">
@@ -79,33 +71,12 @@
                     </label> #}
                     {% if data["error"] === "empty" %}
                     <p id="passport-issued-error" class="govuk-error-message">
-                      <span class="govuk-visually-hidden">Error:</span> Enter a PTD or application number
+                      <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span>  {{documentSearchMainModelData.searchOptions[2].error}}
                     </p>
                     {% endif %}
                     <input class="govuk-input govuk-input--width-20" id="microchipNumber" name="microchipNumber" type="text" spellcheck="false">
                   </div>
                 </div>
-                {# <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="documentSearch-3" name="documentSearch" type="radio" value="petowner" data-aria-controls="conditional-documentSearch-3">
-                  <label class="govuk-label govuk-radios__label" for="documentSearch-3">
-                    Pet owner contacts
-                  </label>
-                </div>
-                <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-documentSearch-3">
-                  <div class="govuk-form-group">
-                    <label class="govuk-label" for="ownerPhone">
-                      Pet owner phone
-                    </label>
-                    <input class="govuk-input govuk-input--width-20" id="ownerPhone" name="ownerPhone" type="text">
-                  </div>
-  
-                  <div class="govuk-form-group">
-                    <label class="govuk-label" for="ownerEmail">
-                      Pet owner email
-                    </label>
-                    <input class="govuk-input" id="ownerEmail" name="ownerEmail" type="text">
-                  </div>
-                </div> #}
               </div>
             </fieldset>
           </div>
@@ -120,7 +91,7 @@
       </div>
   
       <div class="govuk-grid-column-one-half" style="text-align: right;">
-        <button type="button" class="govuk-button govuk-button--secondary govuk-button--inverse" data-module="govuk-button">
+        <button type="button" class="govuk-button govuk-button--secondary govuk-button--inverse" data-module="govuk-button" id="clearSearchButton">
           Clear search
         </button>
       </div>
@@ -130,8 +101,12 @@
   </div>
 </div>
 
+<script>
+  document.getElementById('clearSearchButton').addEventListener('click', () => {
+    document.getElementById('ptdNumberSearch').value = '';
+    document.getElementById('applicationNumberSearch').value = '';
+    document.getElementById('microchipNumber').value = '';
+  });
+</script>
+
 {% endblock %}
-
-
-
-              
