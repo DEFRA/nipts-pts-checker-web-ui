@@ -2,11 +2,14 @@
 const documentSearchMainModelData = {
     pageHeading: "Find a document",
     pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+    ptdSearchText: "GB826",
+    errorLabel: "Error:",
+    //searchOptions: ['Search by PTD number','Search by application number','Search by microchip number'],
     searchOptions: [
-      { id: '1', value: 'Search by PTD number', label: 'Search by PTD number' },
-      { id: '2', value: 'Search by application number', label: 'Search by application number' },
-      { id: '3', value: 'Search by microchip number', label: 'Search by microchip number' }
-    ],
+                { value: 'Search by PTD number', error: 'Enter a PTD number' },
+                { value: 'Search by application number', error: 'Enter an application number' },
+                { value: 'Search by microchip number', error: 'Enter a PTD or application number' }
+              ],
   };
 
   export default {
