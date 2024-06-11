@@ -1,0 +1,70 @@
+{% extends "./layouts/checkerLayout.html" %}
+
+{% block content %}
+<div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-4">
+    <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
+        <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
+          Welcome!
+        </h1>
+    </div>
+  </div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <div class="govuk-summary-card">
+            <div class="govuk-summary-card__title-wrapper">
+                <h2 class="govuk-summary-card__title">
+                    Current sailing
+                </h2>
+                <ul class="govuk-summary-card__actions">
+                    <li class="govuk-summary-card__action">
+                        <a class="govuk-link" href="/checker/current-sailings">Change<span class="govuk-visually-hidden">
+                                location</span></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="govuk-summary-card__content">
+                <dl class="govuk-summary-list pts-checker-travel-details">
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Route
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            {{currentSailingSlot.routeRadio}}
+                        </dd>
+                    </div>
+
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Date
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            {{currentSailingSlot.currentDate}}
+                        </dd>
+                    </div>
+
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Scheduled sailing time
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            {{currentSailingSlot.sailingHour}}:{{currentSailingSlot.sailingMinutes}}
+                        </dd>
+                    </div>
+
+                </dl>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const navigation = document.querySelector('.pts-checker-navigation');
+      if (navigation) {
+        navigation.style.display = 'none';
+      }
+    });
+</script>
+{% endblock %}

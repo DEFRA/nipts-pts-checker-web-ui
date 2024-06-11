@@ -40,7 +40,7 @@ describe('Handler', () => {
 });
 
 describe('submitCurrentSailingSlot', () => {
-  it('should set the CurrentSailingSlot and redirect to /dashboard', async () => {
+  it('should set the CurrentSailingSlot and redirect to /checker/dashboard', async () => {
     const mockRequest = {
       payload: { sailingSlot: 'testSlot' },
       yar: {
@@ -54,7 +54,7 @@ describe('submitCurrentSailingSlot', () => {
     const response = await CurrentSailingHandlers.submitCurrentSailingSlot(mockRequest, mockResponseToolkit);
 
     expect(mockRequest.yar.set).toHaveBeenCalledWith('CurrentSailingSlot', { sailingSlot: 'testSlot' });
-    expect(mockResponseToolkit.redirect).toHaveBeenCalledWith('/dashboard');
+    expect(mockResponseToolkit.redirect).toHaveBeenCalledWith('/checker/dashboard');
     expect(response.code).toBe(302);
   });
 });

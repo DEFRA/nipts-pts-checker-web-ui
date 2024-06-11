@@ -25,8 +25,8 @@
               <div class="govuk-radios" data-module="govuk-radios">
                   {% for route in currentSailingMainModelData.sailingRoutes %}
                   <div class="govuk-radios__item">
-                      <input class="govuk-radios__input" id="{{ route.id }}" name="routeRadio" type="radio" value="{{ route.id }}">
-                      <label class="govuk-label govuk-radios__label" for="{{ route.id }}">
+                      <input class="govuk-radios__input" id="{{ route.label }}" name="routeRadio" type="radio" value="{{ route.label }}">
+                      <label class="govuk-label govuk-radios__label" for="{{ route.label }}">
                           {{ route.label }}
                       </label>
                   </div>
