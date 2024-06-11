@@ -3,7 +3,7 @@ import { dirname } from 'path';
 import Vision from "@hapi/vision";
 import Nunjucks from "nunjucks";
 import Path from "path";
-import Joi from "@hapi/joi";
+import Joi from "joi";
 import data from "./web/helper/constants.js";
 
 const __filename = fileURLToPath(import.meta.url);
