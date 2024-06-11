@@ -8,7 +8,7 @@ describe('Handler', () => {
       it('should return view with currentSailingMainModelData', async () => {
         const mockData = {
           pageHeading: "Current sailing",
-          pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+          serviceName: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
           routeSubHeading: "Route",
           routes: [
             { id: '1', value: 'Birkenhead to Belfast (Stena)', label: 'Birkenhead to Belfast (Stena)' },
@@ -41,39 +41,21 @@ describe('Handler', () => {
 
 describe('submitCurrentSailingSlot', () => {
   it('should set the CurrentSailingSlot and redirect to /checker/dashboard', async () => {
-    // Mock request and response objects
-    const mockPayload = {
-      routeRadio: '1',
-      sailingHour: '12',
-      sailingMinutes: '30',
-    };
     const mockRequest = {
-      payload: mockPayload,
+      payload: { sailingSlot: 'testSlot' },
       yar: {
-        set: jest.fn(),
-      },
+        set: jest.fn()
+      }
     };
-
-    const mockCode = jest.fn(() => 200);
-    const mockResponse = {
-      code: mockCode,
-    };
-
     const mockResponseToolkit = {
-      response: jest.fn().mockReturnValue(mockResponse),
+      redirect: jest.fn(() => ({ code: 302 }))
     };
 
-    // Invoke the handler
-    const result = await CurrentSailingHandlers.submitCurrentSailingSlot(mockRequest, mockResponseToolkit);
-    
-    // Assertions
-    expect(mockRequest.yar.set).toHaveBeenCalledWith('CurrentSailingSlot', mockPayload);
-    expect(mockResponseToolkit.response).toHaveBeenCalledWith({
-      status: "success",
-      message: "Sailing slot submitted successfully",
-      redirectTo: '/checker/dashboard',
-    });
-    expect(mockCode).toHaveBeenCalledWith(200);
+    const response = await CurrentSailingHandlers.submitCurrentSailingSlot(mockRequest, mockResponseToolkit);
+
+    expect(mockRequest.yar.set).toHaveBeenCalledWith('CurrentSailingSlot', { sailingSlot: 'testSlot' });
+    expect(mockResponseToolkit.redirect).toHaveBeenCalledWith('/checker/dashboard');
+    expect(response.code).toBe(302);
   });
 });
 

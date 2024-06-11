@@ -24,11 +24,7 @@ const submitCurrentSailingSlot = async (request, h) => {
   const currentSailingSlot = request.payload;
   request.yar.set('CurrentSailingSlot', currentSailingSlot);
  
-  return h.response({ 
-    status: "success",
-    message: "Sailing slot submitted successfully",
-    redirectTo: '/checker/dashboard'
-  }).code(200);
+  return h.redirect('/checker/dashboard');
 };
 
 const getCurrentSailingSlot = async (request, h) => {
