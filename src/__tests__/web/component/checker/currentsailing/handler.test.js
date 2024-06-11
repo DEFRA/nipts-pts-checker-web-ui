@@ -8,7 +8,7 @@ describe('Handler', () => {
       it('should return view with currentSailingMainModelData', async () => {
         const mockData = {
           pageHeading: "Current sailing",
-          serviceName: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+          pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
           routeSubHeading: "Route",
           routes: [
             { id: '1', value: 'Birkenhead to Belfast (Stena)', label: 'Birkenhead to Belfast (Stena)' },

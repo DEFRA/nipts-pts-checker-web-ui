@@ -3,7 +3,7 @@ times.unshift(""); // Add an empty string at the beginning
 
 const currentSailingMainModelData = {
     pageHeading: "Current sailing",
-    serviceName: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+    pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
     routeSubHeading: "Route",
     routes: [
       { id: '1001', value: 'Birkenhead to Belfast (Stena)', label: 'Birkenhead to Belfast (Stena)' },
