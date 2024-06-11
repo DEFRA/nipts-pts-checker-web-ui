@@ -41,21 +41,39 @@ describe('Handler', () => {
 
 describe('submitCurrentSailingSlot', () => {
   it('should set the CurrentSailingSlot and redirect to /checker/dashboard', async () => {
+    // Mock request and response objects
+    const mockPayload = {
+      routeRadio: '1',
+      sailingHour: '12',
+      sailingMinutes: '30',
+    };
     const mockRequest = {
-      payload: { sailingSlot: 'testSlot' },
+      payload: mockPayload,
       yar: {
-        set: jest.fn()
-      }
+        set: jest.fn(),
+      },
     };
+
+    const mockCode = jest.fn(() => 200);
+    const mockResponse = {
+      code: mockCode,
+    };
+
     const mockResponseToolkit = {
-      redirect: jest.fn(() => ({ code: 302 }))
+      response: jest.fn().mockReturnValue(mockResponse),
     };
 
-    const response = await CurrentSailingHandlers.submitCurrentSailingSlot(mockRequest, mockResponseToolkit);
-
-    expect(mockRequest.yar.set).toHaveBeenCalledWith('CurrentSailingSlot', { sailingSlot: 'testSlot' });
-    expect(mockResponseToolkit.redirect).toHaveBeenCalledWith('/checker/dashboard');
-    expect(response.code).toBe(302);
+    // Invoke the handler
+    const result = await CurrentSailingHandlers.submitCurrentSailingSlot(mockRequest, mockResponseToolkit);
+    
+    // Assertions
+    expect(mockRequest.yar.set).toHaveBeenCalledWith('CurrentSailingSlot', mockPayload);
+    expect(mockResponseToolkit.response).toHaveBeenCalledWith({
+      status: "success",
+      message: "Sailing slot submitted successfully",
+      redirectTo: '/checker/dashboard',
+    });
+    expect(mockCode).toHaveBeenCalledWith(200);
   });
 });
 

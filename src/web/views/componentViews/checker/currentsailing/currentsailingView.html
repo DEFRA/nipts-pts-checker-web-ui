@@ -7,20 +7,28 @@
   <a href="javascript: history.back();" class="govuk-back-link">Back</a>
 {% endblock %}
 
+
 {% block content %}
+
+{% include "./errors/errorSummary.html" %}
+
 <div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-0">
   <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
-
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
       {{ currentSailingMainModelData.pageHeading }}
     </h1>
 
-    <form action="/checker/sailing-slot" method="POST">
-      <div class="govuk-form-group">
+    <form id="sailingForm" action="/checker/sailing-slot" method="POST">
+      <div id="routeradio-group" class="govuk-form-group">
           <fieldset class="govuk-fieldset">
               <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
                   <h2 class="govuk-fieldset__heading">{{ currentSailingMainModelData.routeSubHeading }}</h2>
               </legend>
+              <div id="routeradio-error" hidden>
+                <p class="govuk-error-message">
+                  <span class="govuk-visually-hidden">Error:</span> Select a route
+                </p>
+              </div>
               {% if currentSailingMainModelData.sailingRoutes.length > 0 %}
               <div class="govuk-radios" data-module="govuk-radios">
                   {% for route in currentSailingMainModelData.sailingRoutes %}
@@ -38,10 +46,15 @@
           </fieldset>
       </div>
 
-      <div class="govuk-form-group">
+      <div id="time-group" class="govuk-form-group">
         <label class="govuk-label" for="sailingHour">
           <b> {{ currentSailingMainModelData.sailingTimeSubHeading }} </b>
         </label>
+        <div id="time-error" hidden>
+          <p class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span>  Select the hours and minutes for a scheduled sailing time
+          </p>
+        </div>
         <div id="event-name-hint" class="govuk-hint">
           {{ currentSailingMainModelData.sailingHintText1 }} <br /> {{ currentSailingMainModelData.sailingHintText2 }}
         </div>
@@ -65,14 +78,7 @@
     
   </div>
 </div>
-<script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const navigation = document.querySelector('.pts-checker-navigation');
-        if (navigation) {
-          navigation.style.display = 'none';
-        }
-      });
-</script>
+<script src="../../../../assets/javascripts/currentSailing.js"></script>
 
 {% endblock %}
 
