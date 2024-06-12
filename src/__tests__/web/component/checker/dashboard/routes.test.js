@@ -4,7 +4,7 @@ import Routes from "../../../../../web/component/checker/dashboard/routes.js";
 describe("Routes", () => {
   it("should have a GET route for /checker/dashboard", () => {
     const route = Routes.find(
-      (route) => route.path === "/checker/dashboard" && route.method === "GET"
+      x => x.path === "/checker/dashboard" && x.method === "GET"
     );
 
     expect(route).toBeDefined();
