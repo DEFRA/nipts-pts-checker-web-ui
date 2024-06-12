@@ -63,6 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
                }
             });
             errorSummary.hidden = false;
+            
+            // Ensure the error summary is focusable and then focus it
+            errorSummaryInner.setAttribute('tabindex', '-1');
             errorSummaryInner.focus();
           }
       } catch (error) {
