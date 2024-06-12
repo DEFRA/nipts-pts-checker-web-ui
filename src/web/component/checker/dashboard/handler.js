@@ -11,7 +11,7 @@ const getDashboard = {
     },
     handler: async (request, h) => {
       const currentSailingSlot = request.yar.get('CurrentSailingSlot');   
-      currentSailingSlot.currentDate = new Date().toLocaleDateString();
+      currentSailingSlot.currentDate = new Date().toLocaleDateString('en-GB');
       return h.view(VIEW_PATH, { currentSailingSlot });
     },
   },

@@ -5,7 +5,7 @@ jest.mock("../../../../../api/services/currentSailingMainService.js");
 describe('Handler', () => {
     describe("index", () => {
         it('should return view with CurrentSailingSlot model', async () => {
-            const mockData = {sailingHour: '15', sailingMinutes: '15', currentDate: new Date().toLocaleDateString()};
+            const mockData = {sailingHour: '15', sailingMinutes: '15', currentDate: new Date().toLocaleDateString('en-GB')};
             const mockRequest = {                
                 yar: {
                     get: jest.fn().mockReturnValue( {sailingHour: '15', sailingMinutes: '15'})                    
