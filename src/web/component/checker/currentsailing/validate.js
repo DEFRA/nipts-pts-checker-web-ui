@@ -1,6 +1,7 @@
 "use strict";
 import Joi from "joi";
 import { CurrentSailingMainModelErrors } from "../../../../constants/currentSailingConstant.js";
+import { HttpStatusConstants } from "../../../../constants/httpMethod.js";
 
 const validateSailings = {
         payload: Joi.object({
@@ -19,12 +20,12 @@ const validateSailings = {
             'any.required': CurrentSailingMainModelErrors.timeError,
           }),
         }).options({ abortEarly: false }),
-        failAction: (request, h, error) => {
+        failAction: (_request, h, error) => {
           return h.response({
             status: "fail",
             message: CurrentSailingMainModelErrors.genericError,
             details: error.details,
-          }).code(400).takeover();
+          }).code(HttpStatusConstants[400]).takeover();
         }
   };
 
