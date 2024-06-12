@@ -25,7 +25,7 @@ const validateSailings = {
             status: "fail",
             message: CurrentSailingMainModelErrors.genericError,
             details: error.details,
-          }).code(HttpStatusConstants[400]).takeover();
+          }).code(HttpStatusConstants.BADREQUEST).takeover();
         }
   };
 

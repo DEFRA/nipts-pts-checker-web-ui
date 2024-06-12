@@ -6,7 +6,7 @@ const HttpMethodConstants = Object.freeze({
 });
 
 export const HttpStatusConstants = Object.freeze({
-  400: 400
+  BADREQUEST: 400
 });
 
 export default HttpMethodConstants;
