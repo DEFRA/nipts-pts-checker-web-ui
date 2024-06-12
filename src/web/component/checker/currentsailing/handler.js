@@ -13,6 +13,7 @@ const getCurrentSailings = {
     },
     handler: async (request, h) => {
       const currentSailingMainModelData = await currentSailingMainService.getCurrentSailingMain();
+      request.yar.set('SailingRoutes', currentSailingMainModelData.sailingRoutes);
       return h.view(VIEW_PATH, { currentSailingMainModelData });
     },
   },
@@ -21,7 +22,14 @@ const getCurrentSailings = {
 const submitCurrentSailingSlot = async (request, h) => {
   // Handle the form submission here
   // The form data is available in request.payload
-  const currentSailingSlot = request.payload;
+  const sailingRoutes = request.yar.get('SailingRoutes');   
+  const selectedRoute = sailingRoutes.find(x => x.id === request.payload.routeRadio);
+  const currentSailingSlot = {
+    sailingHour: request.payload.sailingHour,
+    sailingMinutes: request.payload.sailingMinutes,
+    selectedRoute
+  };
+  
   request.yar.set('CurrentSailingSlot', currentSailingSlot);
  
   return h.response({ 
@@ -30,6 +38,7 @@ const submitCurrentSailingSlot = async (request, h) => {
     redirectTo: '/checker/dashboard'
   }).code(200);
 };
+
 
 const getCurrentSailingSlot = async (request, h) => {
     const currentSailingSlot = request.yar.get('CurrentSailingSlot');

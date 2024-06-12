@@ -8,7 +8,7 @@ describe('Handler', () => {
       it('should return view with currentSailingMainModelData', async () => {
         const mockData = {
           pageHeading: "Current sailing",
-          pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+          serviceName: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
           routeSubHeading: "Route",
           routes: [
             { id: '1', value: 'Birkenhead to Belfast (Stena)', label: 'Birkenhead to Belfast (Stena)' },
@@ -23,7 +23,11 @@ describe('Handler', () => {
 
         currentSailingMainService.getCurrentSailingMain.mockResolvedValue(mockData);
 
-        const request = {};
+        const request = {
+          yar: {
+            set: jest.fn(),            
+          },
+        };
         const h = {
           view: jest.fn((viewPath, data) => {
             return { viewPath, data };
@@ -47,11 +51,27 @@ describe('submitCurrentSailingSlot', () => {
       sailingHour: '12',
       sailingMinutes: '30',
     };
+
+    const sailingRoutes = [
+      { 
+        id: '1', 
+        value: 'Birkenhead to Belfast (Stena)' 
+      },
+      { 
+        id: '2', 
+        value: 'Cairnryan to Larne (P&O)'         
+      },
+      { 
+        id: '3', 
+        value: 'Loch Ryan to Belfast (Stena)'         
+      },
+    ];
     
     const mockRequest = {
       payload: mockPayload,
       yar: {
         set: jest.fn(),
+        get: jest.fn().mockReturnValue(sailingRoutes),
       },
     };
 
@@ -59,6 +79,14 @@ describe('submitCurrentSailingSlot', () => {
     const mockResponse = {
       code: mockCode,
     };
+    const selectedSailingRoute = {
+      selectedRoute: {
+        id: '1', 
+        value: 'Birkenhead to Belfast (Stena)'
+      },
+      sailingHour: '12',
+      sailingMinutes: '30',
+    }
 
     const mockResponseToolkit = {
       response: jest.fn().mockReturnValue(mockResponse),
@@ -67,8 +95,8 @@ describe('submitCurrentSailingSlot', () => {
     // Invoke the handler
     const result = await CurrentSailingHandlers.submitCurrentSailingSlot(mockRequest, mockResponseToolkit);
     
-    // Assertions
-    expect(mockRequest.yar.set).toHaveBeenCalledWith('CurrentSailingSlot', mockPayload);
+    // Assertions    
+    expect(mockRequest.yar.set).toHaveBeenCalledWith('CurrentSailingSlot', selectedSailingRoute);
     expect(mockResponseToolkit.response).toHaveBeenCalledWith({
       status: "success",
       message: "Sailing slot submitted successfully",
