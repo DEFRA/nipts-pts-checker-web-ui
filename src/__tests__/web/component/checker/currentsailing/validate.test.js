@@ -23,9 +23,10 @@ describe('validateSailings', () => {
   });
 
   test('should fail validation with invalid route data', () => {
+    const errorCount = 3;
     const { error } = payload.validate(invalidData);
     expect(error).not.toBeUndefined();
-    expect(error.details).toHaveLength(3);
+    expect(error.details).toHaveLength(errorCount);
     expect(error.details.map(err => err.message)).toEqual(expect.arrayContaining([
         CurrentSailingMainModelErrors.routeError,
         CurrentSailingMainModelErrors.timeError,
@@ -34,6 +35,7 @@ describe('validateSailings', () => {
   });
 
   test('should fail validation with invalid sailing data', () => {
+    const errorCount = 2;
    const invalidSailingData = {
         routeRadio: 'someRoute',
         sailingHour: '',
@@ -42,7 +44,7 @@ describe('validateSailings', () => {
 
     const { error } = payload.validate(invalidSailingData);
     expect(error).not.toBeUndefined();
-    expect(error.details).toHaveLength(2);
+    expect(error.details).toHaveLength(errorCount);
     expect(error.details.map(err => err.message)).toEqual(expect.arrayContaining([
         CurrentSailingMainModelErrors.timeError,
         CurrentSailingMainModelErrors.timeError,
@@ -50,6 +52,7 @@ describe('validateSailings', () => {
   });
 
   test('should handle validation failure correctly', () => {
+    const statusCode = 400;
     const request = { payload: invalidData };
     const h = {
       response: jest.fn().mockReturnThis(),
@@ -72,7 +75,7 @@ describe('validateSailings', () => {
       message: CurrentSailingMainModelErrors.genericError,
       details: error.details,
     });
-    expect(h.code).toHaveBeenCalledWith(400);
+    expect(h.code).toHaveBeenCalledWith(statusCode);
     expect(h.takeover).toHaveBeenCalled();
   });
 });
