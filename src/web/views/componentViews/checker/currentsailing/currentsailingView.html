@@ -26,7 +26,7 @@
               </legend>
               <div id="routeradio-error" hidden>
                 <p class="govuk-error-message">
-                  <span class="govuk-visually-hidden">Error:</span> Select a route
+                  <span class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError }}</span> {{currentSailingMainModelData.currentSailingMainModelErrors.routeError}}
                 </p>
               </div>
               {% if currentSailingMainModelData.sailingRoutes.length > 0 %}
@@ -52,7 +52,7 @@
         </label>
         <div id="time-error" hidden>
           <p class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span>  Select the hours and minutes for a scheduled sailing time
+            <span class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError }}</span>  {{currentSailingMainModelData.currentSailingMainModelErrors.timeError}}
           </p>
         </div>
         <div id="event-name-hint" class="govuk-hint">
