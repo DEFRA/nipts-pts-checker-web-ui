@@ -5,4 +5,8 @@ const HttpMethodConstants = Object.freeze({
   DELETE: "DELETE",
 });
 
+export const HttpStatusConstants = Object.freeze({
+  BADREQUEST: 400
+});
+
 export default HttpMethodConstants;
