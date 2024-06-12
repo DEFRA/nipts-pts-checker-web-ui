@@ -23,7 +23,11 @@ describe('Handler', () => {
 
         currentSailingMainService.getCurrentSailingMain.mockResolvedValue(mockData);
 
-        const request = {};
+        const request = {
+          yar: {
+            set: jest.fn(),            
+          },
+        };
         const h = {
           view: jest.fn((viewPath, data) => {
             return { viewPath, data };
@@ -40,22 +44,65 @@ describe('Handler', () => {
 });
 
 describe('submitCurrentSailingSlot', () => {
-  it('should set the CurrentSailingSlot and redirect to /checker/dashboard', async () => {
+  it('should set the sailing slot in the session and return a success response', async () => {
+    // Mock request and response objects
+    const mockPayload = {
+      routeRadio: '1',
+      sailingHour: '12',
+      sailingMinutes: '30',
+    };
+
+    const sailingRoutes = [
+      { 
+        id: '1', 
+        value: 'Birkenhead to Belfast (Stena)' 
+      },
+      { 
+        id: '2', 
+        value: 'Cairnryan to Larne (P&O)'         
+      },
+      { 
+        id: '3', 
+        value: 'Loch Ryan to Belfast (Stena)'         
+      },
+    ];
+    
     const mockRequest = {
-      payload: { sailingSlot: 'testSlot' },
+      payload: mockPayload,
       yar: {
-        set: jest.fn()
-      }
+        set: jest.fn(),
+        get: jest.fn().mockReturnValue(sailingRoutes),
+      },
     };
+
+    const mockCode = jest.fn(() => 200);
+    const mockResponse = {
+      code: mockCode,
+    };
+    const selectedSailingRoute = {
+      selectedRoute: {
+        id: '1', 
+        value: 'Birkenhead to Belfast (Stena)'
+      },
+      sailingHour: '12',
+      sailingMinutes: '30',
+    }
+
     const mockResponseToolkit = {
-      redirect: jest.fn(() => ({ code: 302 }))
+      response: jest.fn().mockReturnValue(mockResponse),
     };
 
-    const response = await CurrentSailingHandlers.submitCurrentSailingSlot(mockRequest, mockResponseToolkit);
-
-    expect(mockRequest.yar.set).toHaveBeenCalledWith('CurrentSailingSlot', { sailingSlot: 'testSlot' });
-    expect(mockResponseToolkit.redirect).toHaveBeenCalledWith('/checker/dashboard');
-    expect(response.code).toBe(302);
+    // Invoke the handler
+    const result = await CurrentSailingHandlers.submitCurrentSailingSlot(mockRequest, mockResponseToolkit);
+    
+    // Assertions    
+    expect(mockRequest.yar.set).toHaveBeenCalledWith('CurrentSailingSlot', selectedSailingRoute);
+    expect(mockResponseToolkit.response).toHaveBeenCalledWith({
+      status: "success",
+      message: "Sailing slot submitted successfully",
+      redirectTo: '/checker/dashboard',
+    });
+    expect(mockCode).toHaveBeenCalledWith(200);
   });
 });
 
