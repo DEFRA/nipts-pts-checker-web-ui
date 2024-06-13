@@ -107,6 +107,11 @@
     document.getElementById('applicationNumberSearch').value = '';
     document.getElementById('microchipNumber').value = '';
     document.getElementById('documentSearch').checked = true;
+     
+    // Reset the class for "conditional-documentSearch"
+    document.getElementById('conditional-documentSearch').className = 'govuk-radios__conditional';
+    document.getElementById('conditional-documentSearch-3').className = 'govuk-radios__conditional govuk-radios__conditional--hidden';
+    document.getElementById('conditional-documentSearch-2').className = 'govuk-radios__conditional govuk-radios__conditional--hidden';
   });
 </script>
 
