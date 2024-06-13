@@ -1,14 +1,15 @@
 import { DashboardHandlers } from "../../../../../web/component/checker/dashboard/handler.js";
+import DashboardMainModel from "../../../../../constants/dashBoardConstant.js"
 
 jest.mock("../../../../../api/services/currentSailingMainService.js");
 
 describe('Handler', () => {
     describe("index", () => {
         it('should return view with CurrentSailingSlot model', async () => {
-            const mockData = {sailingHour: '15', sailingMinutes: '15', currentDate: new Date().toLocaleDateString('en-GB')};
+            const mockData = {sailingHour: '15', sailingMinutes: '15', currentDate: new Date().toLocaleDateString('en-GB'), pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle};
             const mockRequest = {                
                 yar: {
-                    get: jest.fn().mockReturnValue( {sailingHour: '15', sailingMinutes: '15'})                    
+                    get: jest.fn().mockReturnValue( {sailingHour: '15', sailingMinutes: '15', pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle})                    
                 }
             };
 
