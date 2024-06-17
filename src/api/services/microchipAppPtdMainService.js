@@ -39,7 +39,6 @@ const getMicrochipData = async (microchipNumber) => {
     if (!item.Application) {
       return { error: "Application not found" };
     }
-   
 
     // Convert application status to lowercase and trim for consistent comparison
     const applicationStatus = item.Application.Status.toLowerCase().trim();
@@ -47,32 +46,35 @@ const getMicrochipData = async (microchipNumber) => {
 
     const ptdNumber =
       documentState === "approved" || documentState === "revoked"
-        ? item?.TravelDocument?.TravelDocumentReferenceNumber
-        : item?.Application?.ReferenceNumber;
+        ? item.TravelDocument &&
+          item.TravelDocument.TravelDocumentReferenceNumber
+        : item.Application && item.Application.ReferenceNumber;
 
     const issuedDate =
       documentState === "approved" || documentState === "revoked"
-        ? item?.TravelDocument?.TravelDocumentDateOfIssue
-        : item?.Application?.DateOfApplication;
+        ? item.TravelDocument && item.TravelDocument.TravelDocumentDateOfIssue
+        : item.Application && item.Application.DateOfApplication;
 
     const transformedItem = new MicrochipAppPtdMainModel({
-      petId: item?.Pet?.PetId,
-      petName: item?.Pet?.PetName,
-      petSpecie: item?.Pet?.Species,
-      petBreed: item?.Pet?.BreedName,
+      petId: item.Pet ? item.Pet.PetId : undefined,
+      petName: item.Pet ? item.Pet.PetName : undefined,
+      petSpecie: item.Pet ? item.Pet.Species : undefined,
+      petBreed: item.Pet ? item.Pet.BreedName : undefined,
       documentState,
       ptdNumber,
       issuedDate,
-      microchipDate: item?.Pet?.MicrochippedDate,
-      petSex: item?.Pet?.Sex,
-      petDoB: item?.Pet?.DateOfBirth,
-      petColour: item?.Pet?.ColourName,
-      petFeaturesDetail: item?.Pet?.SignificantFeatures,
-      applicationId: item?.Application?.ApplicationId,
-      travelDocumentId: item?.TravelDocument
-        ? item?.TravelDocument?.TravelDocumentId
+      microchipDate: item.Pet ? item.Pet.MicrochippedDate : undefined,
+      petSex: item.Pet ? item.Pet.Sex : undefined,
+      petDoB: item.Pet ? item.Pet.DateOfBirth : undefined,
+      petColour: item.Pet ? item.Pet.ColourName : undefined,
+      petFeaturesDetail: item.Pet ? item.Pet.SignificantFeatures : undefined,
+      applicationId: item.Application
+        ? item.Application.ApplicationId
+        : undefined,
+      travelDocumentId: item.TravelDocument
+        ? item.TravelDocument.TravelDocumentId
         : null,
-      dateOfIssue: item?.TravelDocument ? item?.TravelDocument?.DateOfIssue : null,
+      dateOfIssue: item.TravelDocument ? item.TravelDocument.DateOfIssue : null,
     });
 
     return transformedItem;
