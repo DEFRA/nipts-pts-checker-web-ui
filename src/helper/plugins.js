@@ -5,6 +5,7 @@ import Home from "../web/component/checker/home/index.js";
 import CurrentSailing from "../web/component/checker/currentsailing/index.js";
 import Dashboard from "../web/component/checker/dashboard/index.js";
 import DocumentSearch from "../web/component/checker/documentsearch/index.js";
+import SearchResults from "../web/component/checker/searchresults/index.js";
 
 const pluginList = [
   {
@@ -18,10 +19,10 @@ const pluginList = [
     options: {
       storeBlank: false,
       cookieOptions: {
-        password: 'a_very_secure_password_that_is_at_least_32_characters_long',
-        isSecure: false // Set to true in production with HTTPS
-      }
-    }
+        password: "a_very_secure_password_that_is_at_least_32_characters_long",
+        isSecure: false, // Set to true in production with HTTPS
+      },
+    },
   },
   {
     plugin: Home,
@@ -34,6 +35,9 @@ const pluginList = [
   },
   {
     plugin: DocumentSearch,
+  },
+  {
+    plugin: SearchResults,
   },
 ];
 

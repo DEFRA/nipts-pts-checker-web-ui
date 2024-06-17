@@ -1,0 +1,55 @@
+{% extends "./layouts/checkerLayout.html" %}
+
+{% block beforeContent %}
+{{ super() }}
+<a href="javascript: history.back();" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+
+{% if data['error'] === 'submitted' %}
+<div class="govuk-grid-row govuk-!-static-margin-top-4">
+    <div class="govuk-grid-column-three-quarters">
+
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+            <div role="alert">
+                <h2 class="govuk-error-summary__title">
+                    There is a problem
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li>
+                            The information wasn't recorded, please try to submit again. If you close the application,
+                            the information will be lost. You can printscreen or save the information and submit it
+                            later.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endif %}
+
+
+<div class="govuk-grid-row govuk-!-static-margin-top-4">
+    <div class="govuk-grid-column-three-quarters">
+        {# <div class="govuk-grid-row pet-declaration-logos govuk-!-static-margin-bottom-4">
+            <div class="govuk-grid-column-one-quarter">
+                {% include "includes/defra-logo.html" %}
+            </div>
+            <div class="govuk-grid-column-one-quarter">
+                {% include "includes/apha-logo.html" %}
+            </div>
+        </div> #}
+
+        {% include "includes/status.html" %}
+
+       
+
+    </div>
+</div>
+
+
+{% endblock %}

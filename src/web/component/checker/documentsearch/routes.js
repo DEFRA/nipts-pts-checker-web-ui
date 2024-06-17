@@ -8,7 +8,14 @@ const Routes = [
     method: HttpMethod.GET,
     path: "/checker/document-search",
     config: DocumentSearchHandlers.getDocumentSearch.index,
-  }
+  },
+  {
+    method: HttpMethod.POST,
+    path: "/checker/document-search",
+    options: {
+      handler: DocumentSearchHandlers.submitSearch,
+    },
+  },
 ];
 
 export default Routes;
