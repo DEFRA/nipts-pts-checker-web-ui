@@ -11,8 +11,6 @@ function isPtdNumber(str) {
   return /^[a-fA-F0-9]+$/.test(str);
 }
 
-let validationErros = [];
-
 const validatePtdNumber = (ptdNumber) => {
   var result = {
     isValid: true,
