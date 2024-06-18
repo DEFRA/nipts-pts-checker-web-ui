@@ -74,7 +74,7 @@ const submitSearch = async (request, h) => {
       if (!validationResult.isValid) {
         return h.view(VIEW_PATH, {
           error: validationResult.error,
-          errorSummary: `There is a problem - ${validationResult.error}`,
+          errorSummary: `${validationResult.error}`,
           activeTab: "ptd",
           documentSearchMainModelData: await documentSearchMainService.getDocumentSearchMain(),
         });
@@ -91,7 +91,7 @@ const submitSearch = async (request, h) => {
         } else {
           return h.view(VIEW_PATH, {
             error: response.error,
-            errorSummary: `There is a problem - ${response.error}`,
+            errorSummary: `${response.error}`,
             activeTab: "ptd",
             documentSearchMainModelData: await documentSearchMainService.getDocumentSearchMain(),
           });
@@ -106,7 +106,7 @@ const submitSearch = async (request, h) => {
       if (!microchipNumber) {
         return h.view(VIEW_PATH, {
           error: "Enter a microchip number",
-          errorSummary: "There is a problem - Enter a microchip number",
+          errorSummary: "Enter a microchip number",
           activeTab: "microchip",
           documentSearchMainModelData: await documentSearchMainService.getDocumentSearchMain(),
         });
@@ -114,7 +114,7 @@ const submitSearch = async (request, h) => {
       if (!/^\d{15}$/.test(microchipNumber)) {
         return h.view(VIEW_PATH, {
           error: "Enter a 15-digit number",
-          errorSummary: "There is a problem - Enter a 15-digit number",
+          errorSummary: "Enter a 15-digit number",
           activeTab: "microchip",
           documentSearchMainModelData: await documentSearchMainService.getDocumentSearchMain(),
         });
@@ -130,7 +130,7 @@ const submitSearch = async (request, h) => {
         } else {
           return h.view(VIEW_PATH, {
             error: microchipAppPtdMainData.error,
-            errorSummary: `There is a problem - ${microchipAppPtdMainData.error}`,
+            errorSummary: `${microchipAppPtdMainData.error}`,
             activeTab: "microchip",
             documentSearchMainModelData: await documentSearchMainService.getDocumentSearchMain(),
           });

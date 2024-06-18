@@ -164,7 +164,7 @@ describe("DocumentSearchHandlers", () => {
         "componentViews/checker/documentsearch/documentSearchView",
         {
           error: "Enter a microchip number",
-          errorSummary: "There is a problem - Enter a microchip number",
+          errorSummary: "Enter a microchip number",
           activeTab: "microchip",
           documentSearchMainModelData: mockData,
         }
@@ -189,7 +189,7 @@ describe("DocumentSearchHandlers", () => {
         "componentViews/checker/documentsearch/documentSearchView",
         {
           error: "Enter a 15-digit number",
-          errorSummary: "There is a problem - Enter a 15-digit number",
+          errorSummary: "Enter a 15-digit number",
           activeTab: "microchip",
           documentSearchMainModelData: mockData,
         }
