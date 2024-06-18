@@ -18,7 +18,7 @@ const validatePtdNumber = (ptdNumber) => {
   };
 
   // Mandatory
-  if (!ptdNumber || ptdNumber.length == 0) {
+  if (!ptdNumber || ptdNumber.length === 0) {
     result.isValid = false;
     result.error = "Enter a PTD number";
     return result;

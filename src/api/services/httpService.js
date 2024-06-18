@@ -58,7 +58,7 @@ const successResponse = (response) => {
 
 /*========== badRequestResponse(r): Returns BadRequestResponse ==========*/
 const badRequestResponse = (response) => {
-  return new BadRequestResponse(response.data.title, response.data.errors);
+  return new BadRequestResponse(response.status, response.data.title, response.data.errors);
 };
 
 /*========== notFoundResponse(): Returns NotFoundResponse ==========*/
@@ -67,7 +67,7 @@ const notFoundResponse = (errorMessage) => {
     errorMessage = "Resource not found";
   }
 
-  return new NotFoundResponse(errorMessage);
+  return new NotFoundResponse(HttpStatusConstants.NOT_FOUND, errorMessage);
 };
 
 const serverErrorResponse = (errorMessage) => {
@@ -75,7 +75,7 @@ const serverErrorResponse = (errorMessage) => {
     errorMessage = "An error has occurred";
   }
 
-  return new ServerErrorResponse(errorMessage);
+  return new ServerErrorResponse(HttpStatusConstants.INTERNAL_SERVER_ERROR, errorMessage);
 };
 
 /*========== validateStatus(s): Resolve only if the status code is less than 500 ==========*/
@@ -86,10 +86,6 @@ const validateStatus = (status) => {
 const options = {
   headers: {
     "Content-Type": "application/json",
-  },
-  auth: {
-    username: "tbc",
-    password: "tbc",
   },
   validateStatus: function (status) {
     return validateStatus(status);
