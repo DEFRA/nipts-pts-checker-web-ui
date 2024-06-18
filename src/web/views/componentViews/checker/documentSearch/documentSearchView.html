@@ -21,7 +21,11 @@
         Error
       </h2>
       <div class="govuk-error-summary__body">
-        <p>{{ errorSummary }}</p>
+        <ul class="govuk-list govuk-error-summary__list">
+          <li>
+            <a href="#">{{ errorSummary }}</a>
+          </li>
+        </ul>
       </div>
     </div>
     {% endif %}
@@ -42,7 +46,7 @@
                 </div>
                 <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
                   id="conditional-documentSearch-1">
-                  <div class="govuk-form-group {% if error and activeTab != " microchip" %}govuk-form-group--error{%
+                  <div class="govuk-form-group {% if error and activeTab != "microchip" %}govuk-form-group--error{%
                     endif %}">
                     {% if error and activeTab != "microchip" %}
                     <p id="ptd-error" class="govuk-error-message">
@@ -68,7 +72,7 @@
                 </div>
                 <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
                   id="conditional-documentSearch-2">
-                  <div class="govuk-form-group {% if error and activeTab == " application" %}govuk-form-group--error{%
+                  <div class="govuk-form-group {% if error and activeTab == "application" %}govuk-form-group--error{%
                     endif %}">
                     {% if error and activeTab == "application" %}
                     <p id="application-error" class="govuk-error-message">
@@ -90,7 +94,7 @@
                 </div>
                 <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
                   id="conditional-documentSearch-3">
-                  <div class="govuk-form-group {% if error and activeTab == " microchip" %}govuk-form-group--error{%
+                  <div class="govuk-form-group {% if error and activeTab == "microchip" %}govuk-form-group--error{%
                     endif %}">
                     {% if error and activeTab == "microchip" %}
                     <p id="microchip-error" class="govuk-error-message">
