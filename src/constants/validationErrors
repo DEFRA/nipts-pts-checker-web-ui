@@ -1,0 +1,9 @@
+export const validationSummaryTitle = {
+  message: "There is a problem",
+};
+
+export const documentSearchValidation = {
+    ptdNumberRequired: "PTD Number is required",
+  };
+  
+  
