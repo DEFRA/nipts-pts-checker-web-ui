@@ -63,11 +63,19 @@ const badRequestResponse = (response) => {
 
 /*========== notFoundResponse(): Returns NotFoundResponse ==========*/
 const notFoundResponse = (errorMessage) => {
-  return new NotFoundResponse(errorMessage ? errorMessage : "Resource not found");
+  if (!errorMessage) {
+    errorMessage = "Resource not found";
+  }
+
+  return new NotFoundResponse(errorMessage);
 };
 
 const serverErrorResponse = (errorMessage) => {
-  return new ServerErrorResponse(errorMessage ? errorMessage : "An error has occurred");
+  if (!errorMessage) {
+    errorMessage = "An error has occurred";
+  }
+
+  return new ServerErrorResponse(errorMessage);
 };
 
 /*========== validateStatus(s): Resolve only if the status code is less than 500 ==========*/
@@ -85,7 +93,7 @@ const options = {
   },
   validateStatus: function (status) {
     return validateStatus(status);
-  }
+  },
 };
 
 /*========== getSync(url): GET API Call (Sync) ==========*/
