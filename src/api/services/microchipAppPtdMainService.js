@@ -4,7 +4,7 @@ import axios from "axios";
 
 dotenv.config();
 
-const baseUrl = process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";;
+const baseUrl = process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
 
 if (!baseUrl) {
   throw new Error("BASE_API_URL is not set in environment variables.");

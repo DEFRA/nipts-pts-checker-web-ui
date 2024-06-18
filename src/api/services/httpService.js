@@ -37,7 +37,7 @@ const statusBasedResponse = (response) => {
       result = badRequestResponse(response);
       break;
     case HttpStatusConstants.NOT_FOUND:
-      result = notFoundResponse(response);
+      result = notFoundResponse();
       break;
     case HttpStatusConstants.INTERNAL_SERVER_ERROR:
       result = serverErrorResponse(response);
@@ -61,8 +61,8 @@ const badRequestResponse = (response) => {
   return new BadRequestResponse(response.data.title, response.data.errors);
 };
 
-/*========== notFoundResponse(r): Returns NotFoundResponse ==========*/
-const notFoundResponse = (response) => {
+/*========== notFoundResponse(): Returns NotFoundResponse ==========*/
+const notFoundResponse = () => {
   return new NotFoundResponse("Resource not found");
 };
 
