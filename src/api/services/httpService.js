@@ -11,7 +11,7 @@ import { HttpStatusConstants } from "../../constants/httpMethod.js";
 const errorResponseWithErrorLogging = (error) => {
   console.log("handleError: error.toJSON()", error.toJSON());
 
-  let errorMessage = "Unknown error";
+  let errorMessage;
 
   if (error.response) {
     // The request was made and the server responded with a status code that falls out of the range of 2xx
@@ -58,7 +58,11 @@ const successResponse = (response) => {
 
 /*========== badRequestResponse(r): Returns BadRequestResponse ==========*/
 const badRequestResponse = (response) => {
-  return new BadRequestResponse(response.data.title, response.data.errors);
+  return new BadRequestResponse(
+    response.status,
+    response.data.title,
+    response.data.errors
+  );
 };
 
 /*========== notFoundResponse(): Returns NotFoundResponse ==========*/
@@ -67,7 +71,7 @@ const notFoundResponse = (errorMessage) => {
     errorMessage = "Resource not found";
   }
 
-  return new NotFoundResponse(errorMessage);
+  return new NotFoundResponse(HttpStatusConstants.NOT_FOUND, errorMessage);
 };
 
 const serverErrorResponse = (errorMessage) => {
@@ -75,7 +79,10 @@ const serverErrorResponse = (errorMessage) => {
     errorMessage = "An error has occurred";
   }
 
-  return new ServerErrorResponse(errorMessage);
+  return new ServerErrorResponse(
+    HttpStatusConstants.INTERNAL_SERVER_ERROR,
+    errorMessage
+  );
 };
 
 /*========== validateStatus(s): Resolve only if the status code is less than 500 ==========*/
@@ -86,10 +93,6 @@ const validateStatus = (status) => {
 const options = {
   headers: {
     "Content-Type": "application/json",
-  },
-  auth: {
-    username: "tbc",
-    password: "tbc",
   },
   validateStatus: function (status) {
     return validateStatus(status);

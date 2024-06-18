@@ -1,35 +1,28 @@
-import { HttpStatusConstants } from "../../constants/httpMethod.js";
-
 class OkResponse {
   constructor(status, data) {
-    if (status) {
-      this.status = status;
-    } else {
-      status = HttpStatusConstants.OK;
-    }
-
+    this.status = status;
     this.data = data;
   }
 }
 
 class BadRequestResponse {
-  constructor(error, validationErrors) {
-    this.status = HttpStatusConstants.BAD_REQUEST;
+  constructor(status, error, validationErrors) {
+    this.status = status;
     this.error = error;
     this.validationErrors = validationErrors;
   }
 }
 
 class NotFoundResponse {
-  constructor(error) {
-    this.status = HttpStatusConstants.NOT_FOUND;
+  constructor(status, error) {
+    this.status = status;
     this.error = error;
   }
 }
 
 class ServerErrorResponse {
-  constructor(error) {
-    this.status = HttpStatusConstants.INTERNAL_SERVER_ERROR;
+  constructor(status, error) {
+    this.status = status;
     this.error = error;
   }
 }
