@@ -37,7 +37,7 @@ const statusBasedResponse = (response) => {
       result = badRequestResponse(response);
       break;
     case HttpStatusConstants.NOT_FOUND:
-      result = notFoundResponse(response);
+      result = notFoundResponse("Resource not found");
       break;
     case HttpStatusConstants.INTERNAL_SERVER_ERROR:
       result = serverErrorResponse(response);
@@ -61,13 +61,21 @@ const badRequestResponse = (response) => {
   return new BadRequestResponse(response.data.title, response.data.errors);
 };
 
-/*========== notFoundResponse(r): Returns NotFoundResponse ==========*/
-const notFoundResponse = (response) => {
-  return new NotFoundResponse("Resource not found");
+/*========== notFoundResponse(): Returns NotFoundResponse ==========*/
+const notFoundResponse = (errorMessage) => {
+  if (!errorMessage) {
+    errorMessage = "Resource not found";
+  }
+
+  return new NotFoundResponse(errorMessage);
 };
 
 const serverErrorResponse = (errorMessage) => {
-  return new ServerErrorResponse(errorMessage ?? "An error has occurred");
+  if (!errorMessage) {
+    errorMessage = "An error has occurred";
+  }
+
+  return new ServerErrorResponse(errorMessage);
 };
 
 /*========== validateStatus(s): Resolve only if the status code is less than 500 ==========*/

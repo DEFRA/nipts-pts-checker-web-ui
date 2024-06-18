@@ -2,7 +2,12 @@ import { HttpStatusConstants } from "../../constants/httpMethod.js";
 
 class OkResponse {
   constructor(status, data) {
-    this.status = status ?? HttpStatusConstants.OK;
+    if (status) {
+      this.status = status;
+    } else {
+      status = HttpStatusConstants.OK;
+    }
+
     this.data = data;
   }
 }

@@ -66,8 +66,6 @@ const submitSearch = async (request, h) => {
   try {
     const { documentSearch, microchipNumber } = request.payload;
 
-    let redirectUrl = "/checker/dashboard";
-
     // Search by PTD Number
     if (request.payload.documentSearch === "ptd") {
       const validationResult = validatePtdNumber(
@@ -87,12 +85,10 @@ const submitSearch = async (request, h) => {
       if (response.data) {
         request.yar.set("ptdNumber", microchipNumber);
         request.yar.set("ptdData", response.data);
-      }
-      else {
-        if (response.status === 404)   {
+      } else {
+        if (response.status === 404) {
           return h.redirect("/application-not-found");
-        }
-        else {
+        } else {
           return h.view(VIEW_PATH, {
             error: response.error,
             errorSummary: `There is a problem - ${response.error}`,

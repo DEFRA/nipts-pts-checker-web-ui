@@ -13,5 +13,5 @@ const getDocumentSearchMain = () => {
 };
 
 export default {
-    getDocumentSearchMain,
-};
+    getDocumentSearchMain
+}
