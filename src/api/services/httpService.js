@@ -67,7 +67,7 @@ const notFoundResponse = (response) => {
 };
 
 const serverErrorResponse = (errorMessage) => {
-  return new ServerErrorResponse(errorMessage ?? "An error has occurred");
+  return new ServerErrorResponse(errorMessage ? errorMessage : "An error has occurred");
 };
 
 /*========== validateStatus(s): Resolve only if the status code is less than 500 ==========*/
@@ -85,7 +85,7 @@ const options = {
   },
   validateStatus: function (status) {
     return validateStatus(status);
-  },
+  }
 };
 
 /*========== getSync(url): GET API Call (Sync) ==========*/

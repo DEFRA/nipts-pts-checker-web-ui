@@ -66,8 +66,6 @@ const submitSearch = async (request, h) => {
   try {
     const { documentSearch, microchipNumber } = request.payload;
 
-    let redirectUrl = "/checker/dashboard";
-
     // Search by PTD Number
     if (request.payload.documentSearch === "ptd") {
       const validationResult = validatePtdNumber(

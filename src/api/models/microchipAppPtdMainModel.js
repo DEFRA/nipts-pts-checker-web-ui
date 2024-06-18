@@ -19,4 +19,4 @@ class MicrochipAppPtdMainModel {
   }
 }
 
-export { MicrochipAppPtdMainModel };
+export { MicrochipAppPtdMainModel }
