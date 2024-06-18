@@ -1,8 +1,7 @@
 "use strict";
 
-import  { DocumentSearchHandlers } from "./handler.js";
-import  HttpMethod  from "../../../../constants/httpMethod.js";
-import  { documentSearchValidation } from "./validate.js";
+import { DocumentSearchHandlers } from "./handler.js";
+import HttpMethod from "../../../../constants/httpMethod.js";
 
 const Routes = [
   {

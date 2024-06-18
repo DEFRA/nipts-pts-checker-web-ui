@@ -12,20 +12,6 @@ const getApplicationByPTDNumber = async (ptdNumber) => {
   return await httpService.postAsync(url, request);
 };
 
-const getApplicationByReferenceNumber = async (applicationNumber) => {
-  const request = { applicationNumber: applicationNumber };
-  const url = buildApiUrl("Checker/checkApplicationNumber");
-  return await httpService.postAsync(url, request);
-};
-
-const getApplicationsByMicrochipNumber = async (microchipNumber) => {
-  const request = { microchipNumber: microchipNumber };
-  const url = buildApiUrl("Checker/checkMicrochipNumber");
-  return await httpService.postAsync(url, request);
-};
-
 export default {
   getApplicationByPTDNumber,
-  getApplicationByReferenceNumber,
-  getApplicationsByMicrochipNumber,
 };
