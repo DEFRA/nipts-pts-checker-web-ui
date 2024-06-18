@@ -1,5 +1,3 @@
-import { HttpStatusConstants } from "../../constants/httpMethod.js";
-
 class OkResponse {
   constructor(status, data) {
     this.status = status;

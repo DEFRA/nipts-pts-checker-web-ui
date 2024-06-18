@@ -11,7 +11,7 @@ import { HttpStatusConstants } from "../../constants/httpMethod.js";
 const errorResponseWithErrorLogging = (error) => {
   console.log("handleError: error.toJSON()", error.toJSON());
 
-  let errorMessage = "Unknown error";
+  let errorMessage;
 
   if (error.response) {
     // The request was made and the server responded with a status code that falls out of the range of 2xx
