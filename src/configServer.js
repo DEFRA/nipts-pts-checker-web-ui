@@ -1,5 +1,5 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 import Vision from "@hapi/vision";
 import Nunjucks from "nunjucks";
 import Path from "path";
@@ -12,19 +12,23 @@ const __dirname = dirname(__filename);
 const setup = (server) => {
   // View configuration
   const viewsPath = Path.resolve(__dirname, "./web/views");
+  const includesPath = Path.resolve(viewsPath, "includes");
 
   server.views({
     engines: {
       html: {
         compile: (src, options) => {
           const template = Nunjucks.compile(src, options.environment);
-          return (context) => {
-            return template.render(context);
-          };
+          return (context) => template.render(context);
         },
         prepare: (options, next) => {
           options.compileOptions.environment = Nunjucks.configure(
-            ["node_modules/govuk-frontend/dist", options.path, viewsPath],
+            [
+              "node_modules/govuk-frontend/dist",
+              options.path,
+              viewsPath,
+              includesPath,
+            ],
             { watch: false }
           );
           return next();
@@ -33,8 +37,8 @@ const setup = (server) => {
     },
     relativeTo: __dirname,
     path: viewsPath,
-    partialsPath: Path.resolve(viewsPath, "partials"),
-    context: { data }, 
+    partialsPath: includesPath,
+    context: { data },
   });
 
   server.route({

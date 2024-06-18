@@ -12,12 +12,11 @@ const Routes = [
   },
   {
     method: HttpMethod.POST,
-    path: '/checker/document-search',
+    path: "/checker/document-search",
     options: {
-      validate: documentSearchValidation.validateDocumentSearch,
-      handler: DocumentSearchHandlers.submitDocumentSearch
-    }
-  }
+      handler: DocumentSearchHandlers.submitSearch,
+    },
+  },
 ];
 
 export default Routes;
