@@ -58,7 +58,11 @@ const successResponse = (response) => {
 
 /*========== badRequestResponse(r): Returns BadRequestResponse ==========*/
 const badRequestResponse = (response) => {
-  return new BadRequestResponse(response.status, response.data.title, response.data.errors);
+  return new BadRequestResponse(
+    response.status,
+    response.data.title,
+    response.data.errors
+  );
 };
 
 /*========== notFoundResponse(): Returns NotFoundResponse ==========*/
@@ -75,7 +79,10 @@ const serverErrorResponse = (errorMessage) => {
     errorMessage = "An error has occurred";
   }
 
-  return new ServerErrorResponse(HttpStatusConstants.INTERNAL_SERVER_ERROR, errorMessage);
+  return new ServerErrorResponse(
+    HttpStatusConstants.INTERNAL_SERVER_ERROR,
+    errorMessage
+  );
 };
 
 /*========== validateStatus(s): Resolve only if the status code is less than 500 ==========*/
