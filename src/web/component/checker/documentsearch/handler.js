@@ -11,6 +11,11 @@ function isPtdNumber(str) {
   return /^[a-fA-F0-9]+$/.test(str);
 }
 
+function isApplicationNumber(str) {
+  // A-Z, 0-9
+  return /^[a-zA-Z0-9]+$/.test(str);
+}
+
 const validatePtdNumber = (ptdNumber) => {
   var result = {
     isValid: true,
@@ -35,6 +40,37 @@ const validatePtdNumber = (ptdNumber) => {
     result.isValid = false;
     result.error =
       "Enter 6 characters after 'GB826', using only letters and numbers";
+    return result;
+  }
+
+  return result;
+};
+
+const validateApplicationNumber = (applicationNumber) => {
+
+  var result = {
+    isValid: true,
+    error: null,
+  };
+
+  // Mandatory
+  if (!applicationNumber || applicationNumber.length === 0) {
+    result.isValid = false;
+    result.error = "Enter an application number";
+    return result;
+  }
+
+  // More or less than 20 characters
+  if (applicationNumber.length >= 20) {
+    result.isValid = false;
+    result.error = "Enter a valid application number, which are 20 characters or less in length";
+    return result;
+  }
+
+  if (!isApplicationNumber(applicationNumber)) {
+    result.isValid = false;
+    result.error =
+      "Enter an application number, using only letters and numbers";
     return result;
   }
 
@@ -119,6 +155,60 @@ const submitSearch = async (request, h) => {
 
       return h.redirect("/checker/search-results");
     }
+
+       // Search by Application Number
+    if (request.payload.documentSearch === "application") {
+      const validationResult = validateApplicationNumber(
+        request.payload.applicationNumberSearch
+      );
+
+      if (!validationResult.isValid) {
+        return h.view(VIEW_PATH, {
+          error: validationResult.error,
+          errorSummary: `${validationResult.error}`,
+          activeTab: "application",
+          documentSearchMainModelData: await documentSearchMainService.getDocumentSearchMain(),
+        });
+      }
+      
+      const response = await apiService.getApplicationByApplicationNumber(request.payload.applicationNumberSearch);
+
+      if (response.data) {
+        request.yar.set("applicationNumber", microchipNumber);
+
+        let statusName = response.data.status.toLowerCase();
+        if (statusName === 'authorised') {
+          statusName = 'approved';
+        }
+        else if (statusName === 'awaiting verification') {
+          statusName = 'awaiting';
+        }
+        else if (statusName === 'rejected') {
+          statusName = 'revoked';
+        }
+
+        const resultData = { 
+          documentState: statusName,  
+          applicationNumber: response.data.applicationNumber 
+        };
+
+        request.yar.set("data", resultData);
+      
+      } else {
+        if (response.status === 404) {
+          return h.redirect("/application-not-found");
+        } else {
+          return h.view(VIEW_PATH, {
+            error: response.error,
+            errorSummary: `${response.error}`,
+            activeTab: "application",
+            documentSearchMainModelData: await documentSearchMainService.getDocumentSearchMain(),
+          });
+        }
+      }
+
+      return h.redirect("/checker/search-results");
+    } 
 
     // Search by Microchip Number
     if (documentSearch === "microchip") {
