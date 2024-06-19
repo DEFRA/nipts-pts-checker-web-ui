@@ -8,27 +8,27 @@ describe("getMicrochipData", () => {
     const mock = new MockAdapter(axios);
     const microchipNumber = "123456789012345";
     const apiResponse = {
-      Pet: {
-        PetId: "715bb304-1ca8-46ba-552d-08dc28c44b63",
-        PetName: "fido",
-        Species: "Dog",
-        BreedName: "Bulldog",
-        ColourName: "White, cream or sand",
-        Sex: "Male",
-        DateOfBirth: "2021-01-01T00:00:00",
-        MicrochippedDate: "2021-02-01T00:00:00",
-        SignificantFeatures: "None",
+      pet: {
+        petId: "715bb304-1ca8-46ba-552d-08dc28c44b63",
+        petName: "fido",
+        species: "Dog",
+        breedName: "Bulldog",
+        colourName: "White, cream or sand",
+        sex: "Male",
+        dateOfBirth: "2021-01-01T00:00:00",
+        microchippedDate: "2021-02-01T00:00:00",
+        significantFeatures: "None",
       },
-      Application: {
-        ApplicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
-        ReferenceNumber: "SZWPFXEG",
-        DateOfApplication: "2024-02-09T11:31:29.7165377",
-        Status: "AWAITING VERIFICATION",
+      application: {
+        applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
+        referenceNumber: "SZWPFXEG",
+        dateOfApplication: "2024-02-09T11:31:29.7165377",
+        status: "AWAITING VERIFICATION",
       },
-      TravelDocument: {
-        TravelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
-        TravelDocumentReferenceNumber: "GB826J40C050",
-        TravelDocumentDateOfIssue: "2024-06-12T10:26:52.0391239",
+      travelDocument: {
+        travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
+        travelDocumentReferenceNumber: "GB826J40C050",
+        travelDocumentDateOfIssue: "2024-06-12T10:26:52.0391239",
       },
     };
 
@@ -81,8 +81,6 @@ describe("getMicrochipData", () => {
     expect(data).toEqual(expectedError);
   });
 
- 
-
   it("should handle unexpected errors gracefully", async () => {
     const mock = new MockAdapter(axios);
     const microchipNumber = "123456789012345";
@@ -105,27 +103,27 @@ describe("getMicrochipData", () => {
     const mock = new MockAdapter(axios);
     const microchipNumber = "123456789012345";
     const apiResponse = {
-      Pet: {
-        PetId: "715bb304-1ca8-46ba-552d-08dc28c44b63",
-        PetName: "fido",
-        Species: "Dog",
-        BreedName: "Bulldog",
-        ColourName: "White, cream or sand",
-        Sex: "Male",
-        DateOfBirth: "2021-01-01T00:00:00",
-        MicrochippedDate: "2021-02-01T00:00:00",
-        SignificantFeatures: "None",
+      pet: {
+        petId: "715bb304-1ca8-46ba-552d-08dc28c44b63",
+        petName: "fido",
+        species: "Dog",
+        breedName: "Bulldog",
+        colourName: "White, cream or sand",
+        sex: "Male",
+        dateOfBirth: "2021-01-01T00:00:00",
+        microchippedDate: "2021-02-01T00:00:00",
+        significantFeatures: "None",
       },
-      Application: {
-        ApplicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
-        ReferenceNumber: "SZWPFXEG",
-        DateOfApplication: "2024-02-09T11:31:29.7165377",
-        Status: "REVOKED",
+      application: {
+        applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
+        referenceNumber: "SZWPFXEG",
+        dateOfApplication: "2024-02-09T11:31:29.7165377",
+        status: "REVOKED",
       },
-      TravelDocument: {
-        TravelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
-        TravelDocumentReferenceNumber: "GB826J40C050",
-        TravelDocumentDateOfIssue: "2024-06-12T10:26:52.0391239",
+      travelDocument: {
+        travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
+        travelDocumentReferenceNumber: "GB826J40C050",
+        travelDocumentDateOfIssue: "2024-06-12T10:26:52.0391239",
       },
     };
 
