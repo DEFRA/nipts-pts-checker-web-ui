@@ -82,9 +82,28 @@ const submitSearch = async (request, h) => {
 
       const ptdNumber = `GB826${request.payload.ptdNumberSearch}`;
       const response = await apiService.getApplicationByPTDNumber(ptdNumber);
+
       if (response.data) {
         request.yar.set("ptdNumber", microchipNumber);
-        request.yar.set("ptdData", response.data);
+
+        var statusName = response.data.status.toLowerCase();
+        if (statusName === 'authorised') {
+          statusName = 'approved';
+        }
+        else if (statusName === 'awaiting verification') {
+          statusName = 'awaiting';
+        }
+        if (statusName === 'rejected') {
+          statusName = 'revoked';
+        }
+
+        const resultData = { 
+          documentState: statusName,  
+          ptdNumber: response.data.ptdNumber 
+        };
+
+        request.yar.set("data", resultData);
+      
       } else {
         if (response.status === 404) {
           return h.redirect("/application-not-found");
