@@ -33,49 +33,49 @@ const getMicrochipData = async (microchipNumber) => {
     }
 
     // Ensure the item structure is as expected
-    if (!item.Pet) {
+    if (!item.pet) {
       return { error: "Pet not found" };
     }
 
-    if (!item.Application) {
+    if (!item.application) {
       return { error: "Application not found" };
     }
 
     // Convert application status to lowercase and trim for consistent comparison
-    const applicationStatus = item.Application.Status.toLowerCase().trim();
+    const applicationStatus = item.application.status.toLowerCase().trim();
     const documentState = statusMapping[applicationStatus] || applicationStatus;
 
     const ptdNumber =
       documentState === "approved" || documentState === "revoked"
-        ? item.TravelDocument &&
-          item.TravelDocument.TravelDocumentReferenceNumber
-        : item.Application && item.Application.ReferenceNumber;
+        ? item.travelDocument &&
+          item.travelDocument.travelDocumentReferenceNumber
+        : item.application && item.application.referenceNumber;
 
     const issuedDate =
       documentState === "approved" || documentState === "revoked"
-        ? item.TravelDocument && item.TravelDocument.TravelDocumentDateOfIssue
-        : item.Application && item.Application.DateOfApplication;
+        ? item.travelDocument && item.travelDocument.travelDocumentDateOfIssue
+        : item.application && item.application.dateOfApplication;
 
     const transformedItem = new MicrochipAppPtdMainModel({
-      petId: item.Pet ? item.Pet.PetId : undefined,
-      petName: item.Pet ? item.Pet.PetName : undefined,
-      petSpecie: item.Pet ? item.Pet.Species : undefined,
-      petBreed: item.Pet ? item.Pet.BreedName : undefined,
+      petId: item.pet ? item.pet.petId : undefined,
+      petName: item.pet ? item.pet.petName : undefined,
+      petSpecie: item.pet ? item.pet.species : undefined,
+      petBreed: item.pet ? item.pet.breedName : undefined,
       documentState,
       ptdNumber,
       issuedDate,
-      microchipDate: item.Pet ? item.Pet.MicrochippedDate : undefined,
-      petSex: item.Pet ? item.Pet.Sex : undefined,
-      petDoB: item.Pet ? item.Pet.DateOfBirth : undefined,
-      petColour: item.Pet ? item.Pet.ColourName : undefined,
-      petFeaturesDetail: item.Pet ? item.Pet.SignificantFeatures : undefined,
-      applicationId: item.Application
-        ? item.Application.ApplicationId
+      microchipDate: item.pet ? item.pet.microchippedDate : undefined,
+      petSex: item.pet ? item.pet.sex : undefined,
+      petDoB: item.pet ? item.pet.dateOfBirth : undefined,
+      petColour: item.pet ? item.pet.colourName : undefined,
+      petFeaturesDetail: item.pet ? item.pet.significantFeatures : undefined,
+      applicationId: item.application
+        ? item.application.applicationId
         : undefined,
-      travelDocumentId: item.TravelDocument
-        ? item.TravelDocument.TravelDocumentId
+      travelDocumentId: item.travelDocument
+        ? item.travelDocument.travelDocumentId
         : null,
-      dateOfIssue: item.TravelDocument ? item.TravelDocument.DateOfIssue : null,
+      dateOfIssue: item.travelDocument ? item.travelDocument.dateOfIssue : null,
     });
 
     return transformedItem;
