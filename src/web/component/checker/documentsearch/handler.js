@@ -86,14 +86,14 @@ const submitSearch = async (request, h) => {
       if (response.data) {
         request.yar.set("ptdNumber", microchipNumber);
 
-        var statusName = response.data.status.toLowerCase();
+        let statusName = response.data.status.toLowerCase();
         if (statusName === 'authorised') {
           statusName = 'approved';
         }
         else if (statusName === 'awaiting verification') {
           statusName = 'awaiting';
         }
-        if (statusName === 'rejected') {
+        else if (statusName === 'rejected') {
           statusName = 'revoked';
         }
 
