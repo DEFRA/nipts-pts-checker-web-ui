@@ -5,81 +5,11 @@ import apiService from "../../../../api/services/apiService.js";
 import microchipApi from "../../../../api/services/microchipAppPtdMainService.js";
 import {
   validatePtdNumber,
+  validateApplicationNumber,
   validateMicrochipNumber,
 } from "./validate.js";
 
 const VIEW_PATH = "componentViews/checker/documentsearch/documentSearchView";
-
-function isPtdNumber(str) {
-  // A-F, 0-9
-  return /^[a-fA-F0-9]+$/.test(str);
-}
-
-function isApplicationNumber(str) {
-  // A-Z, 0-9
-  return /^[a-zA-Z0-9]+$/.test(str);
-}
-
-const validatePtdNumber = (ptdNumber) => {
-  var result = {
-    isValid: true,
-    error: null,
-  };
-
-  // Mandatory
-  if (!ptdNumber || ptdNumber.length === 0) {
-    result.isValid = false;
-    result.error = "Enter a PTD number";
-    return result;
-  }
-
-  // More or less than 6 characters
-  if (ptdNumber.length !== 6) {
-    result.isValid = false;
-    result.error = "Enter 6 characters after 'GB826'";
-    return result;
-  }
-
-  if (!isPtdNumber(ptdNumber)) {
-    result.isValid = false;
-    result.error =
-      "Enter 6 characters after 'GB826', using only letters and numbers";
-    return result;
-  }
-
-  return result;
-};
-
-const validateApplicationNumber = (applicationNumber) => {
-
-  var result = {
-    isValid: true,
-    error: null,
-  };
-
-  // Mandatory
-  if (!applicationNumber || applicationNumber.length === 0) {
-    result.isValid = false;
-    result.error = "Enter an application number";
-    return result;
-  }
-
-  // More or less than 20 characters
-  if (applicationNumber.length >= 20) {
-    result.isValid = false;
-    result.error = "Enter a valid application number, which are 20 characters or less in length";
-    return result;
-  }
-
-  if (!isApplicationNumber(applicationNumber)) {
-    result.isValid = false;
-    result.error =
-      "Enter an application number, using only letters and numbers";
-    return result;
-  }
-
-  return result;
-};
 
 const getDocumentSearch = {
   index: {

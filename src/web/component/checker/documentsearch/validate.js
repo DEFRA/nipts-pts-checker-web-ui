@@ -3,12 +3,18 @@ function isPtdNumber(str) {
   return /^[a-fA-F0-9]+$/.test(str);
 }
 
+function isApplicationNumber(str) {
+  // A-Z, 0-9
+  return /^[a-zA-Z0-9]+$/.test(str);
+}
+
+
 const validatePtdNumber = (ptdNumber) => {
   const result = {
     isValid: true,
     error: null,
   };
-
+  
   // Mandatory
   if (!ptdNumber || ptdNumber.length === 0) {
     result.isValid = false;
@@ -32,6 +38,38 @@ const validatePtdNumber = (ptdNumber) => {
 
   return result;
 };
+
+const validateApplicationNumber = (applicationNumber) => {
+
+  var result = {
+    isValid: true,
+    error: null,
+  };
+
+  // Mandatory
+  if (!applicationNumber || applicationNumber.length === 0) {
+    result.isValid = false;
+    result.error = "Enter an application number";
+    return result;
+  }
+
+  // More or less than 20 characters
+  if (applicationNumber.length >= 20) {
+    result.isValid = false;
+    result.error = "Enter a valid application number, which are 20 characters or less in length";
+    return result;
+  }
+
+  if (!isApplicationNumber(applicationNumber)) {
+    result.isValid = false;
+    result.error =
+      "Enter an application number, using only letters and numbers";
+    return result;
+  }
+
+  return result;
+};
+
 
 const validateMicrochipNumber = (microchipNumber) => {
   const result = {
