@@ -7,6 +7,7 @@ import apiService from "../../../../../api/services/apiService.js";
 import {
   validatePtdNumber,
   validateMicrochipNumber,
+  validateApplicationNumber,
 } from "../../../../../web/component/checker/documentsearch/validate.js";
 
 jest.mock("../../../../../api/services/documentSearchMainService.js");
@@ -286,6 +287,65 @@ describe("DocumentSearchHandlers", () => {
 
       validatePtdNumber.mockReturnValue({ isValid: true, error: null });
       apiService.getApplicationByPTDNumber.mockResolvedValue({ status: 404 });
+      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
+        mockData
+      );
+
+      const response = await DocumentSearchHandlers.submitSearch(request, h);
+
+      expect(h.redirect).toHaveBeenCalledWith("/application-not-found");
+    });
+
+    it("should handle application search with valid number", async () => {
+      const request = {
+        payload: {
+          documentSearch: "application",
+          applicationNumberSearch: "ELK7I8N4",
+        },
+        yar: {
+          set: jest.fn(),
+        },
+      };
+      const h = {
+        redirect: jest.fn().mockReturnValue({}),
+        view: jest.fn().mockReturnValue({}),
+      };
+
+      validateApplicationNumber.mockReturnValue({ isValid: true, error: null });
+      apiService.getApplicationByApplicationNumber.mockResolvedValue({
+        data: { status: "authorised", applicationNumber: "ELK7I8N4" },
+      });
+      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
+        mockData
+      );
+
+      const response = await DocumentSearchHandlers.submitSearch(request, h);
+
+      expect(apiService.getApplicationByApplicationNumber).toHaveBeenCalledWith(
+        "ELK7I8N4"
+      );
+      
+      expect(request.yar.set).toHaveBeenCalledWith("data", {
+        documentState: "approved",
+        applicationNumber: "ELK7I8N4",
+      });
+      expect(h.redirect).toHaveBeenCalledWith("/checker/search-results");
+    });
+
+    it("should handle application search with application data not found", async () => {
+      const request = {
+        payload: {
+          documentSearch: "application",
+          ptdNumberSearch: "ELK7I8N4",
+        },
+      };
+      const h = {
+        redirect: jest.fn().mockReturnValue({}),
+        view: jest.fn().mockReturnValue({}),
+      };
+
+      validateApplicationNumber.mockReturnValue({ isValid: true, error: null });
+      apiService.getApplicationByApplicationNumber.mockResolvedValue({ status: 404 });
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
         mockData
       );

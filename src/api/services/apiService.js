@@ -8,10 +8,17 @@ const buildApiUrl = (endpoint) => {
 
 const getApplicationByPTDNumber = async (ptdNumber) => {
   const request = { ptdNumber: ptdNumber };
-  const url = buildApiUrl("Checker/CheckPTDNumber");
+  const url = buildApiUrl("/api/Checker/CheckPTDNumber");
+  return await httpService.postAsync(url, request);
+};
+
+const getApplicationByApplicationNumber = async (applicationNumber) => {
+  const request = { applicationNumber: applicationNumber };
+  const url = buildApiUrl("/api/Checker/checkApplicationNumber");
   return await httpService.postAsync(url, request);
 };
 
 export default {
   getApplicationByPTDNumber,
+  getApplicationByApplicationNumber
 };
