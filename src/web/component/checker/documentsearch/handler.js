@@ -3,6 +3,10 @@
 import documentSearchMainService from "../../../../api/services/documentSearchMainService.js";
 import apiService from "../../../../api/services/apiService.js";
 import microchipApi from "../../../../api/services/microchipAppPtdMainService.js";
+import {
+  validatePtdNumber,
+  validateMicrochipNumber,
+} from "./validate.js";
 
 const VIEW_PATH = "componentViews/checker/documentsearch/documentSearchView";
 
@@ -86,10 +90,10 @@ const getDocumentSearch = {
     },
     handler: async (_request, h) => {
       try {
-        const documentSearchMainModelData = await documentSearchMainService.getDocumentSearchMain();
+        const documentSearchMainModelData =
+          await documentSearchMainService.getDocumentSearchMain();
         return h.view(VIEW_PATH, { documentSearchMainModelData });
-      } catch (error) {
-        console.error("Error fetching document search data:", error);
+      } catch (error) {        
         return h.view(VIEW_PATH, {
           error: "Failed to fetch document search data",
         });
@@ -103,16 +107,17 @@ const submitSearch = async (request, h) => {
     const { documentSearch, microchipNumber } = request.payload;
 
     // Search by PTD Number
-    if (request.payload.documentSearch === "ptd") {
+    if (documentSearch === "ptd") {
       const validationResult = validatePtdNumber(
         request.payload.ptdNumberSearch
       );
       if (!validationResult.isValid) {
         return h.view(VIEW_PATH, {
           error: validationResult.error,
-          errorSummary: `${validationResult.error}`,
+          errorSummary: validationResult.error,
           activeTab: "ptd",
-          documentSearchMainModelData: await documentSearchMainService.getDocumentSearchMain(),
+          documentSearchMainModelData:
+            await documentSearchMainService.getDocumentSearchMain(),
         });
       }
 
@@ -123,19 +128,69 @@ const submitSearch = async (request, h) => {
         request.yar.set("ptdNumber", microchipNumber);
 
         let statusName = response.data.status.toLowerCase();
-        if (statusName === 'authorised') {
-          statusName = 'approved';
+        if (statusName === "authorised") {
+          statusName = "approved";
+        } else if (statusName === "awaiting verification") {
+          statusName = "awaiting";
+        } else if (statusName === "rejected") {
+          statusName = "revoked";
         }
-        else if (statusName === 'awaiting verification') {
-          statusName = 'awaiting';
+
+        const resultData = {
+          documentState: statusName,
+          ptdNumber: response.data.ptdNumber,
+        };
+
+        request.yar.set("data", resultData);
+      } else {
+        if (response.status === 404) {
+          return h.redirect("/application-not-found");
+        } else {
+          return h.view(VIEW_PATH, {
+            error: response.error,
+            errorSummary: response.error,
+            activeTab: "ptd",
+            documentSearchMainModelData:
+              await documentSearchMainService.getDocumentSearchMain(),
+          });
         }
-        else if (statusName === 'rejected') {
-          statusName = 'revoked';
+      }
+
+      return h.redirect("/checker/search-results");
+    }
+
+       // Search by Application Number
+    if (request.payload.documentSearch === "application") {
+      const validationResult = validateApplicationNumber(
+        request.payload.applicationNumberSearch
+      );
+
+      if (!validationResult.isValid) {
+        return h.view(VIEW_PATH, {
+          error: validationResult.error,
+          errorSummary: `${validationResult.error}`,
+          activeTab: "application",
+          documentSearchMainModelData: await documentSearchMainService.getDocumentSearchMain(),
+        });
+      }
+      
+      const response = await apiService.getApplicationByApplicationNumber(request.payload.applicationNumberSearch);
+
+      if (response.data) {
+        request.yar.set("applicationNumber", microchipNumber);
+
+        let statusName = response.data.status.toLowerCase();
+        if (statusName === "authorised") {
+          statusName = "approved";
+        } else if (statusName === "awaiting verification") {
+          statusName = "awaiting";
+        } else if (statusName === "rejected") {
+          statusName = "revoked";
         }
 
         const resultData = { 
           documentState: statusName,  
-          ptdNumber: response.data.ptdNumber 
+          applicationNumber: response.data.applicationNumber 
         };
 
         request.yar.set("data", resultData);
@@ -148,7 +203,61 @@ const submitSearch = async (request, h) => {
             error: response.error,
             errorSummary: `${response.error}`,
             activeTab: "ptd",
-            documentSearchMainModelData: await documentSearchMainService.getDocumentSearchMain(),
+            documentSearchMainModelData:
+              await documentSearchMainService.getDocumentSearchMain(),
+          });
+        }
+      }
+
+      return h.redirect("/checker/search-results");
+    }
+
+       // Search by Application Number
+    if (request.payload.documentSearch === "application") {
+      const validationResult = validateApplicationNumber(
+        request.payload.applicationNumberSearch
+      );
+
+      if (!validationResult.isValid) {
+        return h.view(VIEW_PATH, {
+          error: validationResult.error,
+          errorSummary: `${validationResult.error}`,
+          activeTab: "application",
+          documentSearchMainModelData: await documentSearchMainService.getDocumentSearchMain(),
+        });
+      }
+      
+      const response = await apiService.getApplicationByApplicationNumber(request.payload.applicationNumberSearch);
+
+      if (response.data) {
+        request.yar.set("applicationNumber", microchipNumber);
+
+        let statusName = response.data.status.toLowerCase();
+        if (statusName === "authorised") {
+          statusName = "approved";
+        } else if (statusName === "awaiting verification") {
+          statusName = "awaiting";
+        } else if (statusName === "rejected") {
+          statusName = "revoked";
+        }
+
+        const resultData = { 
+          documentState: statusName,  
+          applicationNumber: response.data.applicationNumber 
+        };
+
+        request.yar.set("data", resultData);
+      
+      } else {
+        if (response.status === 404) {
+          return h.redirect("/application-not-found");
+        } else {
+          return h.view(VIEW_PATH, {
+            error: response.error,
+            errorSummary: response.error,
+            activeTab: "ptd",
+            documentSearchMainModelData:
+              await documentSearchMainService.getDocumentSearchMain(),
           });
         }
       }
@@ -188,7 +297,7 @@ const submitSearch = async (request, h) => {
         }
 
         const resultData = { 
-          documentState: statusName,  
+          documentState: statusName,
           applicationNumber: response.data.applicationNumber 
         };
 
@@ -212,20 +321,14 @@ const submitSearch = async (request, h) => {
 
     // Search by Microchip Number
     if (documentSearch === "microchip") {
-      if (!microchipNumber) {
+      const validationResult = validateMicrochipNumber(microchipNumber);
+      if (!validationResult.isValid) {
         return h.view(VIEW_PATH, {
-          error: "Enter a microchip number",
-          errorSummary: "Enter a microchip number",
+          error: validationResult.error,
+          errorSummary: validationResult.error,
           activeTab: "microchip",
-          documentSearchMainModelData: await documentSearchMainService.getDocumentSearchMain(),
-        });
-      }
-      if (!/^\d{15}$/.test(microchipNumber)) {
-        return h.view(VIEW_PATH, {
-          error: "Enter a 15-digit number",
-          errorSummary: "Enter a 15-digit number",
-          activeTab: "microchip",
-          documentSearchMainModelData: await documentSearchMainService.getDocumentSearchMain(),
+          documentSearchMainModelData:
+            await documentSearchMainService.getDocumentSearchMain(),
         });
       }
 
@@ -239,9 +342,10 @@ const submitSearch = async (request, h) => {
         } else {
           return h.view(VIEW_PATH, {
             error: microchipAppPtdMainData.error,
-            errorSummary: `${microchipAppPtdMainData.error}`,
+            errorSummary: microchipAppPtdMainData.error,
             activeTab: "microchip",
-            documentSearchMainModelData: await documentSearchMainService.getDocumentSearchMain(),
+            documentSearchMainModelData:
+              await documentSearchMainService.getDocumentSearchMain(),
           });
         }
       }
@@ -253,12 +357,12 @@ const submitSearch = async (request, h) => {
     }
 
     return h.redirect("/checker/search-results");
-  } catch (error) {
-    console.error("Error processing search:", error);
+  } catch (error) {    
     return h.view(VIEW_PATH, {
       error: "An error occurred while processing your request",
       errorSummary: "An unexpected error occurred",
-      documentSearchMainModelData: await documentSearchMainService.getDocumentSearchMain(),
+      documentSearchMainModelData:
+        await documentSearchMainService.getDocumentSearchMain(),
     });
   }
 };

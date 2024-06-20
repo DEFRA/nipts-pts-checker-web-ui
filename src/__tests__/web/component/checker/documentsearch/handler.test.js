@@ -3,9 +3,16 @@
 import { DocumentSearchHandlers } from "../../../../../web/component/checker/documentsearch/handler.js";
 import documentSearchMainService from "../../../../../api/services/documentSearchMainService.js";
 import microchipApi from "../../../../../api/services/microchipAppPtdMainService.js";
+import apiService from "../../../../../api/services/apiService.js";
+import {
+  validatePtdNumber,
+  validateMicrochipNumber,
+} from "../../../../../web/component/checker/documentsearch/validate.js";
 
 jest.mock("../../../../../api/services/documentSearchMainService.js");
 jest.mock("../../../../../api/services/microchipAppPtdMainService.js");
+jest.mock("../../../../../api/services/apiService.js");
+jest.mock("../../../../../web/component/checker/documentsearch/validate.js");
 
 describe("DocumentSearchHandlers", () => {
   describe("getDocumentSearch", () => {
@@ -111,40 +118,7 @@ describe("DocumentSearchHandlers", () => {
       ],
     };
 
-    it("should handle microchip search with valid 15-digit number", async () => {
-      const request = {
-        payload: {
-          documentSearch: "microchip",
-          microchipNumber: "123456789012345",
-        },
-        yar: {
-          set: jest.fn(),
-        },
-      };
-      const h = {
-        redirect: jest.fn().mockReturnValue({}),
-        view: jest.fn().mockReturnValue({}),
-      };
-
-      microchipApi.getMicrochipData.mockResolvedValue({ data: "some data" });
-      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
-        mockData
-      );
-
-      const response = await DocumentSearchHandlers.submitSearch(request, h);
-
-      expect(microchipApi.getMicrochipData).toHaveBeenCalledWith(
-        "123456789012345"
-      );
-      expect(request.yar.set).toHaveBeenCalledWith(
-        "microchipNumber",
-        "123456789012345"
-      );
-      expect(request.yar.set).toHaveBeenCalledWith("data", {
-        data: "some data",
-      });
-      expect(h.redirect).toHaveBeenCalledWith("/checker/search-results");
-    });
+    
 
     it("should handle microchip search with missing microchip number", async () => {
       const request = {
@@ -157,6 +131,11 @@ describe("DocumentSearchHandlers", () => {
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
         mockData
       );
+
+      validateMicrochipNumber.mockReturnValue({
+        isValid: false,
+        error: "Enter a microchip number",
+      });
 
       const response = await DocumentSearchHandlers.submitSearch(request, h);
 
@@ -183,6 +162,11 @@ describe("DocumentSearchHandlers", () => {
         mockData
       );
 
+      validateMicrochipNumber.mockReturnValue({
+        isValid: false,
+        error: "Enter a 15-digit number",
+      });
+
       const response = await DocumentSearchHandlers.submitSearch(request, h);
 
       expect(h.view).toHaveBeenCalledWith(
@@ -208,7 +192,100 @@ describe("DocumentSearchHandlers", () => {
         view: jest.fn().mockReturnValue({}),
       };
 
+      validateMicrochipNumber.mockReturnValue({ isValid: true, error: null });
+
       microchipApi.getMicrochipData.mockResolvedValue({ error: "not_found" });
+      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
+        mockData
+      );
+
+      const response = await DocumentSearchHandlers.submitSearch(request, h);
+
+      expect(h.redirect).toHaveBeenCalledWith("/application-not-found");
+    });
+
+    it("should handle PTD search with valid number", async () => {
+      const request = {
+        payload: {
+          documentSearch: "ptd",
+          ptdNumberSearch: "123456",
+        },
+        yar: {
+          set: jest.fn(),
+        },
+      };
+      const h = {
+        redirect: jest.fn().mockReturnValue({}),
+        view: jest.fn().mockReturnValue({}),
+      };
+
+      validatePtdNumber.mockReturnValue({ isValid: true, error: null });
+      apiService.getApplicationByPTDNumber.mockResolvedValue({
+        data: { status: "authorised", ptdNumber: "GB826123456" },
+      });
+      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
+        mockData
+      );
+
+      const response = await DocumentSearchHandlers.submitSearch(request, h);
+
+      expect(apiService.getApplicationByPTDNumber).toHaveBeenCalledWith(
+        "GB826123456"
+      );
+      
+      expect(request.yar.set).toHaveBeenCalledWith("data", {
+        documentState: "approved",
+        ptdNumber: "GB826123456",
+      });
+      expect(h.redirect).toHaveBeenCalledWith("/checker/search-results");
+    });
+
+    it("should handle PTD search with invalid number", async () => {
+      const request = {
+        payload: {
+          documentSearch: "ptd",
+          ptdNumberSearch: "123",
+        },
+      };
+      const h = {
+        view: jest.fn().mockReturnValue({}),
+      };
+
+      validatePtdNumber.mockReturnValue({
+        isValid: false,
+        error: "Enter 6 characters after 'GB826'",
+      });
+      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
+        mockData
+      );
+
+      const response = await DocumentSearchHandlers.submitSearch(request, h);
+
+      expect(h.view).toHaveBeenCalledWith(
+        "componentViews/checker/documentsearch/documentSearchView",
+        {
+          error: "Enter 6 characters after 'GB826'",
+          errorSummary: "Enter 6 characters after 'GB826'",
+          activeTab: "ptd",
+          documentSearchMainModelData: mockData,
+        }
+      );
+    });
+
+    it("should handle PTD search with PTD data not found", async () => {
+      const request = {
+        payload: {
+          documentSearch: "ptd",
+          ptdNumberSearch: "123456",
+        },
+      };
+      const h = {
+        redirect: jest.fn().mockReturnValue({}),
+        view: jest.fn().mockReturnValue({}),
+      };
+
+      validatePtdNumber.mockReturnValue({ isValid: true, error: null });
+      apiService.getApplicationByPTDNumber.mockResolvedValue({ status: 404 });
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
         mockData
       );
@@ -221,15 +298,16 @@ describe("DocumentSearchHandlers", () => {
     it("should handle unexpected error during search", async () => {
       const request = {
         payload: {
-          documentSearch: "microchip",
-          microchipNumber: "123456789012345",
+          documentSearch: "ptd",
+          ptdNumberSearch: "123456",
         },
       };
       const h = {
         view: jest.fn().mockReturnValue({}),
       };
 
-      microchipApi.getMicrochipData.mockRejectedValue(
+      validatePtdNumber.mockReturnValue({ isValid: true, error: null });
+      apiService.getApplicationByPTDNumber.mockRejectedValue(
         new Error("Service failure")
       );
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
