@@ -2,7 +2,7 @@ import httpService from "./httpService.js";
 
 const buildApiUrl = (endpoint) => {
   const baseUrl =
-  process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
+    process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
   return `${baseUrl}/${endpoint}`;
 };
 
