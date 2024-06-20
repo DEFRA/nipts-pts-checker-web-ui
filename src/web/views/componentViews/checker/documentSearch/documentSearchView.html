@@ -9,24 +9,8 @@
 {% block content %}
 <div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-0">
   <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
-
-
-
-    {% if errorSummary %}
-    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1"
-      data-module="govuk-error-summary">
-      <h2 class="govuk-error-summary__title" id="error-summary-title">
-        There is a problem
-      </h2>
-      <div class="govuk-error-summary__body">
-        <ul class="govuk-list govuk-error-summary__list">
-          <li>
-            <a href="#">{{ errorSummary }}</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-    {% endif %}
+    
+    {% include "./errors/displayErrorSummary.html" %}
 
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
       {{ documentSearchMainModelData.pageHeading }}
@@ -48,7 +32,7 @@
                 </div>
                 <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
                   id="conditional-documentSearch-1">
-                  <div class="govuk-form-group {% if error and activeTab != "microchip" %}govuk-form-group--error{%
+                  <div class="govuk-form-group {% if error and activeTab != " microchip" %}govuk-form-group--error{%
                     endif %}">
                     {% if error and activeTab != "microchip" %}
                     <p id="ptd-error" class="govuk-error-message">
@@ -74,7 +58,7 @@
                 </div>
                 <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
                   id="conditional-documentSearch-2">
-                  <div class="govuk-form-group {% if error and activeTab == "application" %}govuk-form-group--error{%
+                  <div class="govuk-form-group {% if error and activeTab == " application" %}govuk-form-group--error{%
                     endif %}">
                     {% if error and activeTab == "application" %}
                     <p id="application-error" class="govuk-error-message">
@@ -96,7 +80,7 @@
                 </div>
                 <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
                   id="conditional-documentSearch-3">
-                  <div class="govuk-form-group {% if error and activeTab == "microchip" %}govuk-form-group--error{%
+                  <div class="govuk-form-group {% if error and activeTab == " microchip" %}govuk-form-group--error{%
                     endif %}">
                     {% if error and activeTab == "microchip" %}
                     <p id="microchip-error" class="govuk-error-message">
@@ -120,7 +104,8 @@
           </button>
         </div>
         <div class="govuk-grid-column-one-half" style="text-align: right;">
-          <button type="button" class="govuk-button govuk-button--secondary govuk-button--inverse" id="clearSearchButton">
+          <button type="button" class="govuk-button govuk-button--secondary govuk-button--inverse"
+            id="clearSearchButton">
             Clear search
           </button>
         </div>
