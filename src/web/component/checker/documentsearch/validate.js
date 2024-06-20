@@ -94,4 +94,4 @@ const validateMicrochipNumber = (microchipNumber) => {
   return result;
 };
 
-export { validatePtdNumber, validateMicrochipNumber };
+export { validatePtdNumber, validateApplicationNumber, validateMicrochipNumber };
