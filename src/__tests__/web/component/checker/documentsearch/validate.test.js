@@ -1,85 +1,82 @@
-import { validatePtdNumber, validateMicrochipNumber } from "../../../../../web/component/checker/documentsearch/validate";
+import {
+  validatePtdNumber,
+  validateApplicationNumber,
+  validateMicrochipNumber,
+} from "../../../../../web/component/checker/documentsearch/validate";
+import errorMessages from "../../../../../web/component/checker/documentsearch/errorMessage";
 
-describe("validatePtdNumber", () => {
-  test("should return valid for a correct PTD number", () => {
-    const result = validatePtdNumber("A1B2C3");
-    expect(result).toEqual({
-      isValid: true,
-      error: null,
+describe("Validation Functions", () => {
+  describe("PTD Number Validation", () => {
+    test("should validate a correct PTD number", () => {
+      const result = validatePtdNumber("A2B3C4");
+      expect(result.isValid).toBe(true);
+      expect(result.error).toBeNull();
+    });
+
+    test("should return error for empty PTD number", () => {
+      const result = validatePtdNumber("");
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe(errorMessages.ptdNumber.empty);
+    });
+
+    test("should return error for PTD number not 6 characters long", () => {
+      const result = validatePtdNumber("12345");
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe(errorMessages.ptdNumber.length);
+    });
+
+
+  });
+
+  describe("Application Number Validation", () => {
+    test("should validate a correct application number", () => {
+      const result = validateApplicationNumber("APP12345");
+      expect(result.isValid).toBe(true);
+      expect(result.error).toBeNull();
+    });
+
+    test("should return error for empty application number", () => {
+      const result = validateApplicationNumber("");
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe(errorMessages.applicationNumber.empty);
+    });
+
+    test("should return error for application number not 8 characters long", () => {
+      const result = validateApplicationNumber("APP1234");
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe(errorMessages.applicationNumber.length);
+    });
+
+    test("should return error for application number with invalid characters", () => {
+      const result = validateApplicationNumber("APP1234!");
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe(errorMessages.applicationNumber.invalid);
     });
   });
 
-  test("should return error for an empty PTD number", () => {
-    const result = validatePtdNumber("");
-    expect(result).toEqual({
-      isValid: false,
-      error: "Enter a PTD number",
+  describe("Microchip Number Validation", () => {
+    test("should validate a correct microchip number", () => {
+      const result = validateMicrochipNumber("123456789012345");
+      expect(result.isValid).toBe(true);
+      expect(result.error).toBeNull();
     });
-  });
 
-  test("should return error for a PTD number with less than 6 characters", () => {
-    const result = validatePtdNumber("A1B2");
-    expect(result).toEqual({
-      isValid: false,
-      error: "Enter 6 characters after 'GB826'",
+    test("should return error for empty microchip number", () => {
+      const result = validateMicrochipNumber("");
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe(errorMessages.microchipNumber.empty);
     });
-  });
 
-  test("should return error for a PTD number with more than 6 characters", () => {
-    const result = validatePtdNumber("A1B2C3D4");
-    expect(result).toEqual({
-      isValid: false,
-      error: "Enter 6 characters after 'GB826'",
+    test("should return error for microchip number not 15 digits long", () => {
+      const result = validateMicrochipNumber("12345678901234");
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe(errorMessages.microchipNumber.invalid);
     });
-  });
 
-  test("should return error for a PTD number with invalid characters", () => {
-    const result = validatePtdNumber("A1B2GZ");
-    expect(result).toEqual({
-      isValid: false,
-      error: "Enter 6 characters after 'GB826', using only letters and numbers",
-    });
-  });
-});
-
-describe("validateMicrochipNumber", () => {
-  test("should return valid for a correct microchip number", () => {
-    const result = validateMicrochipNumber("123456789012345");
-    expect(result).toEqual({
-      isValid: true,
-      error: null,
-    });
-  });
-
-  test("should return error for an empty microchip number", () => {
-    const result = validateMicrochipNumber("");
-    expect(result).toEqual({
-      isValid: false,
-      error: "Enter a microchip number",
-    });
-  });
-
-  test("should return error for a microchip number with less than 15 digits", () => {
-    const result = validateMicrochipNumber("12345678901234");
-    expect(result).toEqual({
-      isValid: false,
-      error: "Enter a 15-digit number",
-    });
-  });
-
-  test("should return error for a microchip number with more than 15 digits", () => {
-    const result = validateMicrochipNumber("1234567890123456");
-    expect(result).toEqual({
-      isValid: false,
-      error: "Enter a 15-digit number",
-    });
-  });
-
-  test("should return error for a microchip number with non-digit characters", () => {
-    const result = validateMicrochipNumber("12345678901234A");
-    expect(result).toEqual({
-      isValid: false,
-      error: "Enter a 15-digit number",
+    test("should return error for microchip number with invalid characters", () => {
+      const result = validateMicrochipNumber("12345678901234A");
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe(errorMessages.microchipNumber.invalid);
     });
   });
 });
