@@ -1,5 +1,5 @@
 import Joi from "joi";
-import errorMessages from "./errorMessage.js"; // Assuming error messages are in a separate file
+import errorMessages from "./errorMessage.js";
 
 const ptdNumberSchema = Joi.string()
   .required()
@@ -7,7 +7,7 @@ const ptdNumberSchema = Joi.string()
     "any.required": errorMessages.ptdNumber.empty,
     "string.empty": errorMessages.ptdNumber.empty,
   })
-  .pattern(/^[a-fA-F0-9]+$/) // Only hexadecimal digits and numbers
+  .pattern(/^[a-fA-F0-9]+$/)
   .length(6)
   .messages({
     "string.pattern.base": errorMessages.ptdNumber.invalid,
@@ -16,7 +16,7 @@ const ptdNumberSchema = Joi.string()
 
 const applicationNumberSchema = Joi.string()
   .length(8)
-  .pattern(/^[a-zA-Z0-9]+$/) // Alphanumeric
+  .pattern(/^[a-zA-Z0-9]+$/)
   .required()
   .messages({
     "any.required": errorMessages.applicationNumber.empty,
@@ -27,7 +27,7 @@ const applicationNumberSchema = Joi.string()
 
 const microchipNumberSchema = Joi.string()
   .length(15)
-  .pattern(/^\d{15}$/) // Only digits
+  .pattern(/^\d{15}$/)
   .required()
   .messages({
     "any.required": errorMessages.microchipNumber.empty,
@@ -40,7 +40,7 @@ const validatePtdNumber = (ptdNumber) => {
   const { error } = ptdNumberSchema.validate(ptdNumber);
   return {
     isValid: !error,
-    error: error ? error.details[0].message : null, // Access the first error message
+    error: error ? error.details[0].message : null,
   };
 };
 
