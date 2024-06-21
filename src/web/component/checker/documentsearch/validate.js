@@ -53,10 +53,10 @@ const validateApplicationNumber = (applicationNumber) => {
     return result;
   }
 
-  // More or less than 20 characters
-  if (applicationNumber.length >= 20) {
+  // More or less than 8 characters
+  if (applicationNumber.length >= 8) {
     result.isValid = false;
-    result.error = "Enter a valid application number, which are 20 characters or less in length";
+    result.error = "Enter 8 characters";
     return result;
   }
 
