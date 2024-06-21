@@ -25,7 +25,11 @@ describe("Validation Functions", () => {
       expect(result.error).toBe(errorMessages.ptdNumber.length);
     });
 
-
+    test("should return error for PTD number with invalid characters", () => {
+      const result = validatePtdNumber("#A2B3C4!#");
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe(errorMessages.ptdNumber.invalid);
+    });
   });
 
   describe("Application Number Validation", () => {
