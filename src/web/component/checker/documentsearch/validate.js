@@ -54,7 +54,7 @@ const validateApplicationNumber = (applicationNumber) => {
   }
 
   // More or less than 8 characters
-  if (applicationNumber.length >= 8) {
+  if (applicationNumber.length !== 8) {
     result.isValid = false;
     result.error = "Enter 8 characters";
     return result;
