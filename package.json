@@ -36,6 +36,7 @@
     "gulp-stylelint": "^13.0.0",
     "gulp-uglify": "^3.0.2",
     "joi": "^17.13.1",
+    "moment": "^2.30.1",
     "nunjucks": "^3.2.4",
     "path": "^0.12.7"
   },

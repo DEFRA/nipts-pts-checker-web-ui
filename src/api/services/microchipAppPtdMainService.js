@@ -1,6 +1,7 @@
 import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js";
 import dotenv from "dotenv";
 import axios from "axios";
+import moment from "moment";
 
 dotenv.config();
 
@@ -17,6 +18,12 @@ const statusMapping = {
   "awaiting verification": "awaiting",
   rejected: "rejected",
   revoked: "revoked",
+};
+
+
+const formatDate = (dateRaw) => {
+  const date = dateRaw ? new Date(dateRaw) : null;
+  return date ? moment(date).format('DD/MM/YYYY') : undefined;
 };
 
 const getMicrochipData = async (microchipNumber) => {
@@ -50,11 +57,32 @@ const getMicrochipData = async (microchipNumber) => {
         ? item.travelDocument &&
           item.travelDocument.travelDocumentReferenceNumber
         : item.application && item.application.referenceNumber;
+   
 
-    const issuedDate =
-      documentState === "approved" || documentState === "revoked"
-        ? item.travelDocument && item.travelDocument.travelDocumentDateOfIssue
-        : item.application && item.application.dateOfApplication;
+    let issuedDateRaw;
+
+    switch (documentState) {
+      case "approved":
+        issuedDateRaw = item.application && item.application.dateAuthorised;
+        break;
+      case "revoked":
+        issuedDateRaw = item.application && item.application.dateRevoked;
+        break;
+      case "rejected":
+        issuedDateRaw = item.application && item.application.dateRejected;
+        break;
+      default:
+        issuedDateRaw = item.application && item.application.dateOfApplication;
+        break;
+    }
+   
+   const formattedIssuedDate = formatDate(issuedDateRaw);
+
+   const microchippedDateRaw = item.pet ? item.pet.microchippedDate : undefined;
+   const formattedMicrochippedDate = formatDate(microchippedDateRaw);
+
+   const dateOfBirthRaw = item.pet ? item.pet.dateOfBirth : undefined;
+   const formattedDateOfBirth = formatDate(dateOfBirthRaw);
 
     const transformedItem = new MicrochipAppPtdMainModel({
       petId: item.pet ? item.pet.petId : undefined,
@@ -63,10 +91,12 @@ const getMicrochipData = async (microchipNumber) => {
       petBreed: item.pet ? item.pet.breedName : undefined,
       documentState,
       ptdNumber,
-      issuedDate,
-      microchipDate: item.pet ? item.pet.microchippedDate : undefined,
+      issuedDate: formattedIssuedDate ? formattedIssuedDate : undefined,
+      microchipDate: formattedMicrochippedDate
+        ? formattedMicrochippedDate
+        : undefined,
       petSex: item.pet ? item.pet.sex : undefined,
-      petDoB: item.pet ? item.pet.dateOfBirth : undefined,
+      petDoB: formattedDateOfBirth ? formattedDateOfBirth : undefined,
       petColour: item.pet ? item.pet.colourName : undefined,
       petFeaturesDetail: item.pet ? item.pet.significantFeatures : undefined,
       applicationId: item.application

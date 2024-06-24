@@ -3,6 +3,7 @@ class MicrochipAppPtdMainModel {
     this.documentState = data.documentState;
     this.ptdNumber = data.ptdNumber;
     this.issuedDate = data.issuedDate;
+    this.microchipNumber = data.microchipNumber;
     this.microchipDate = data.microchipDate;    
     this.petName = data.petName;
     this.petSpecie = data.petSpecie;
