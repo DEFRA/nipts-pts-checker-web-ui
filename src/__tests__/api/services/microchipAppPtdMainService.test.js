@@ -46,10 +46,11 @@ describe("getMicrochipData", () => {
       petBreed: "Bulldog",
       documentState: "awaiting",
       ptdNumber: "SZWPFXEG",
-      issuedDate: "2024-02-09T11:31:29.7165377",
-      microchipDate: "2021-02-01T00:00:00",
+      issuedDate: "09/02/2024", // Formatted date
+      microchipNumber,
+      microchipDate: "01/02/2021", // Formatted date
       petSex: "Male",
-      petDoB: "2021-01-01T00:00:00",
+      petDoB: "01/01/2021", // Formatted date
       petColour: "White, cream or sand",
       petFeaturesDetail: "None",
       applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
@@ -119,6 +120,7 @@ describe("getMicrochipData", () => {
         referenceNumber: "SZWPFXEG",
         dateOfApplication: "2024-02-09T11:31:29.7165377",
         status: "REVOKED",
+        dateRevoked: "2024-03-10T00:00:00", // Added for revoked status
       },
       travelDocument: {
         travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
@@ -141,10 +143,11 @@ describe("getMicrochipData", () => {
       petBreed: "Bulldog",
       documentState: "revoked",
       ptdNumber: "GB826J40C050",
-      issuedDate: "2024-06-12T10:26:52.0391239",
-      microchipDate: "2021-02-01T00:00:00",
+      issuedDate: "10/03/2024", // Formatted date
+      microchipNumber,
+      microchipDate: "01/02/2021", // Formatted date
       petSex: "Male",
-      petDoB: "2021-01-01T00:00:00",
+      petDoB: "01/01/2021", // Formatted date
       petColour: "White, cream or sand",
       petFeaturesDetail: "None",
       applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",

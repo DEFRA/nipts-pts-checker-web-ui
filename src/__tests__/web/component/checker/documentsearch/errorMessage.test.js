@@ -14,8 +14,8 @@ describe("errorMessages", () => {
   test("should contain the correct error messages for application number", () => {
     expect(errorMessages.applicationNumber).toEqual({
       empty: "Enter an application number",
-      length: "Enter 8 characters",
-      invalid: "Enter an application number, using only letters and numbers",
+      length: "Enter 8 characters, using only letters and numbers",
+      invalid: "Enter 8 characters, using only letters and numbers",
     });
   });
 
