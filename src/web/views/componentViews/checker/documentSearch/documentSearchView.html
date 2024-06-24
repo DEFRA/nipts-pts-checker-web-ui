@@ -26,7 +26,7 @@
               <div class="govuk-radios" data-module="govuk-radios">
                 <div class="govuk-radios__item">
                   <input class="govuk-radios__input" id="documentSearch-1" name="documentSearch" type="radio"
-                    value="ptd" data-aria-controls="conditional-documentSearch-1" {% if activeTab !="microchip"
+                    value="ptd" data-aria-controls="conditional-documentSearch-1" {% if activeTab =="ptd"
                     %}checked{% endif %}>
                   <label class="govuk-label govuk-radios__label" for="documentSearch-1">
                     {{documentSearchMainModelData.searchOptions[0].value}}
@@ -34,9 +34,9 @@
                 </div>
                 <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
                   id="conditional-documentSearch-1">
-                  <div class="govuk-form-group {% if error and activeTab != " microchip" %}govuk-form-group--error{%
+                  <div class="govuk-form-group {% if error and activeTab == "ptd" %}govuk-form-group--error{%
                     endif %}">
-                    {% if error and activeTab != "microchip" %}
+                    {% if error and activeTab == "ptd" %}
                     <p id="ptd-error" class="govuk-error-message">
                       <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span> {{error}}
                     </p>
@@ -60,7 +60,7 @@
                 </div>
                 <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
                   id="conditional-documentSearch-2">
-                  <div class="govuk-form-group {% if error and activeTab == " application" %}govuk-form-group--error{%
+                  <div class="govuk-form-group {% if error and activeTab == "application" %}govuk-form-group--error{%
                     endif %}">
                     {% if error and activeTab == "application" %}
                     <p id="application-error" class="govuk-error-message">
@@ -82,7 +82,7 @@
                 </div>
                 <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
                   id="conditional-documentSearch-3">
-                  <div class="govuk-form-group {% if error and activeTab == " microchip" %}govuk-form-group--error{%
+                  <div class="govuk-form-group {% if error and activeTab == "microchip" %}govuk-form-group--error{%
                     endif %}">
                     {% if error and activeTab == "microchip" %}
                     <p id="microchip-error" class="govuk-error-message">
