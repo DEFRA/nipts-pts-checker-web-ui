@@ -92,6 +92,7 @@ const getMicrochipData = async (microchipNumber) => {
       documentState,
       ptdNumber,
       issuedDate: formattedIssuedDate ? formattedIssuedDate : undefined,
+      microchipNumber,
       microchipDate: formattedMicrochippedDate
         ? formattedMicrochippedDate
         : undefined,
