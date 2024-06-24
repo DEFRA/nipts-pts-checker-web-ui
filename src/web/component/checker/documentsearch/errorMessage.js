@@ -6,8 +6,8 @@ const errorMessages = {
   },
   applicationNumber: {
     empty: "Enter an application number",
-    length: "Enter 8 characters",
-    invalid: "Enter an application number, using only letters and numbers",
+    length: "Enter 8 characters, using only letters and numbers",
+    invalid: "Enter 8 characters, using only letters and numbers",
   },
   microchipNumber: {
     empty: "Enter a microchip number",
