@@ -5,10 +5,12 @@ import axios from "axios";
 
 dotenv.config();
 
-const baseUrl = process.env.BASE_API_URL; // Default to dev url
+const baseUrl =
+  process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
+  
 const getCurrentSailingMain = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/api/sailing-routes`);
+    const response = await axios.get(`${baseUrl}/sailing-routes`);
 
     CurrentSailingModel.currentSailingMainModelData.routes = response.data.map(route => ({
       id: String(route.id), // Convert id to a string

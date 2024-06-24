@@ -29,7 +29,7 @@ const formatDate = (dateRaw) => {
 const getMicrochipData = async (microchipNumber) => {
   try {
     const response = await axios.post(
-      `${baseUrl}/api/Checker/checkMicrochipNumber`,
+      `${baseUrl}/Checker/checkMicrochipNumber`,
       { microchipNumber }
     );
 

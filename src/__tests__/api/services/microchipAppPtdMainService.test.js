@@ -34,7 +34,7 @@ describe("getMicrochipData", () => {
 
     // Mock the POST request to the API
     mock
-      .onPost(`${process.env.BASE_API_URL}/api/Checker/checkMicrochipNumber`, {
+      .onPost(`${process.env.BASE_API_URL}/Checker/checkMicrochipNumber`, {
         microchipNumber,
       })
       .reply(200, apiResponse);
@@ -70,7 +70,7 @@ describe("getMicrochipData", () => {
 
     // Mock the POST request to the API
     mock
-      .onPost(`${process.env.BASE_API_URL}/api/Checker/checkMicrochipNumber`, {
+      .onPost(`${process.env.BASE_API_URL}/Checker/checkMicrochipNumber`, {
         microchipNumber,
       })
       .reply(200, apiResponse);
@@ -88,7 +88,7 @@ describe("getMicrochipData", () => {
 
     // Mock the POST request to the API
     mock
-      .onPost(`${process.env.BASE_API_URL}/api/Checker/checkMicrochipNumber`, {
+      .onPost(`${process.env.BASE_API_URL}/Checker/checkMicrochipNumber`, {
         microchipNumber,
       })
       .reply(500, {});
@@ -131,7 +131,7 @@ describe("getMicrochipData", () => {
 
     // Mock the POST request to the API
     mock
-      .onPost(`${process.env.BASE_API_URL}/api/Checker/checkMicrochipNumber`, {
+      .onPost(`${process.env.BASE_API_URL}/Checker/checkMicrochipNumber`, {
         microchipNumber,
       })
       .reply(200, apiResponse);
