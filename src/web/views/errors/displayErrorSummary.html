@@ -1,4 +1,4 @@
-{% if errorSummary %}
+{% if errorSummary and formSubmitted %}
 <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1"
     data-module="govuk-error-summary">
     <h2 class="govuk-error-summary__title" id="error-summary-title">
@@ -6,10 +6,37 @@
     </h2>
     <div class="govuk-error-summary__body">
         <ul class="govuk-list govuk-error-summary__list">
+            {% for error in errorSummary %}
             <li>
-                <a href="#">{{ errorSummary }}</a>
+                <a href="#{{ error.fieldId }}">{{ error.message }}</a>
             </li>
+            {% endfor %}
         </ul>
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.govuk-error-summary a').forEach(link => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
+            const targetId = event.target.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+
+            if (targetElement) {
+                if (targetElement.type === 'radio' || targetElement.type === 'checkbox') {
+                    targetElement.checked = true;
+
+                    // Ensure the conditional content is shown
+                    const ariaControls = targetElement.getAttribute('data-aria-controls');
+                    if (ariaControls) {
+                        document.getElementById(ariaControls).classList.remove('govuk-radios__conditional--hidden');
+                    }
+                }
+
+                targetElement.focus();
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    });
+</script>
 {% endif %}

@@ -119,8 +119,6 @@ describe("DocumentSearchHandlers", () => {
       ],
     };
 
-    
-
     it("should handle microchip search with missing microchip number", async () => {
       const request = {
         payload: { documentSearch: "microchip" },
@@ -144,8 +142,11 @@ describe("DocumentSearchHandlers", () => {
         "componentViews/checker/documentsearch/documentSearchView",
         {
           error: "Enter a microchip number",
-          errorSummary: "Enter a microchip number",
+          errorSummary: [
+            { fieldId: "microchipNumber", message: "Enter a microchip number" },
+          ],
           activeTab: "microchip",
+          formSubmitted: true,
           documentSearchMainModelData: mockData,
         }
       );
@@ -174,8 +175,11 @@ describe("DocumentSearchHandlers", () => {
         "componentViews/checker/documentsearch/documentSearchView",
         {
           error: "Enter a 15-digit number",
-          errorSummary: "Enter a 15-digit number",
+          errorSummary: [
+            { fieldId: "microchipNumber", message: "Enter a 15-digit number" },
+          ],
           activeTab: "microchip",
+          formSubmitted: true,
           documentSearchMainModelData: mockData,
         }
       );
@@ -233,7 +237,7 @@ describe("DocumentSearchHandlers", () => {
       expect(apiService.getApplicationByPTDNumber).toHaveBeenCalledWith(
         "GB826123456"
       );
-      
+
       expect(request.yar.set).toHaveBeenCalledWith("data", {
         documentState: "approved",
         ptdNumber: "GB826123456",
@@ -266,8 +270,14 @@ describe("DocumentSearchHandlers", () => {
         "componentViews/checker/documentsearch/documentSearchView",
         {
           error: "Enter 6 characters after 'GB826'",
-          errorSummary: "Enter 6 characters after 'GB826'",
+          errorSummary: [
+            {
+              fieldId: "ptdNumberSearch",
+              message: "Enter 6 characters after 'GB826'",
+            },
+          ],
           activeTab: "ptd",
+          formSubmitted: true,
           documentSearchMainModelData: mockData,
         }
       );
@@ -324,7 +334,7 @@ describe("DocumentSearchHandlers", () => {
       expect(apiService.getApplicationByApplicationNumber).toHaveBeenCalledWith(
         "ELK7I8N4"
       );
-      
+
       expect(request.yar.set).toHaveBeenCalledWith("data", {
         documentState: "approved",
         applicationNumber: "ELK7I8N4",
@@ -336,7 +346,7 @@ describe("DocumentSearchHandlers", () => {
       const request = {
         payload: {
           documentSearch: "application",
-          ptdNumberSearch: "ELK7I8N4",
+          applicationNumberSearch: "ELK7I8N4",
         },
       };
       const h = {
@@ -345,7 +355,9 @@ describe("DocumentSearchHandlers", () => {
       };
 
       validateApplicationNumber.mockReturnValue({ isValid: true, error: null });
-      apiService.getApplicationByApplicationNumber.mockResolvedValue({ status: 404 });
+      apiService.getApplicationByApplicationNumber.mockResolvedValue({
+        status: 404,
+      });
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
         mockData
       );
@@ -380,7 +392,10 @@ describe("DocumentSearchHandlers", () => {
         "componentViews/checker/documentsearch/documentSearchView",
         {
           error: "An error occurred while processing your request",
-          errorSummary: "An unexpected error occurred",
+          errorSummary: [
+            { fieldId: "general", message: "An unexpected error occurred" },
+          ],
+          formSubmitted: true,
           documentSearchMainModelData: mockData,
         }
       );
