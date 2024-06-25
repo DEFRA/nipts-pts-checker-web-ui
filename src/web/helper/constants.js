@@ -1,9 +1,13 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 const today = new Date();
 const dd = String(today.getDate()).padStart(2, "0");
 const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
 const yyyy = today.getFullYear();
 
 const formattedToday = `${dd}/${mm}/${yyyy}`;
+const idmLink = process.env.ACCOUNT_MANAGEMENT_URL || "https://your-account.cpdev.cui.defra.gov.uk/management/account-management";
 
 export default {
   registrationLink: "/v1/registration-idm2/postcode",
@@ -22,4 +26,5 @@ export default {
   checkerSubtitleHome: "Check a pet from <br/> Great Britain to Northern Ireland",
   checkerShortTitle: "Check a pet from GB to NI",
   currentDate: formattedToday,
+  accountManagementLink:  idmLink,
 };
