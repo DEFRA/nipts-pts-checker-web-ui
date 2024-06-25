@@ -5,6 +5,7 @@ class DocumentSearchMainModel {
       this.ptdSearchText = data.ptdSearchText;
       this.errorLabel = data.errorLabel;
       this.searchOptions = data.searchOptions;
+      this.searchText = data.searchText;
     }
   }
   
