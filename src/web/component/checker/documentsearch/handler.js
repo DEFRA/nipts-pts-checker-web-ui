@@ -55,34 +55,19 @@ const submitSearch = async (request, h) => {
       }
 
       const ptdNumber = `GB826${request.payload.ptdNumberSearch}`;
-      const response = await apiService.getApplicationByPTDNumber(ptdNumber);
+      const responseData = await apiService.getApplicationByPTDNumber(ptdNumber);
 
-      if (response.data) {
-        request.yar.set("ptdNumber", microchipNumber);
-
-        let statusName = response.data.status.toLowerCase();
-        if (statusName === "authorised") {
-          statusName = "approved";
-        } else if (statusName === "awaiting verification") {
-          statusName = "awaiting";
-        } else if (statusName === "rejected") {
-          statusName = "revoked";
-        }
-
-        const resultData = {
-          documentState: statusName,
-          ptdNumber: response.data.ptdNumber,
-        };
-
-        request.yar.set("data", resultData);
-      } else {
-        if (response.status === 404) {
+      if (responseData.error) {
+        if (responseData.error === "not_found") {
           return h.redirect("/application-not-found");
         } else {
           return h.view(VIEW_PATH, {
-            error: response.error,
+            error: responseData.error,
             errorSummary: [
-              { fieldId: "ptdNumberSearch", message: response.error },
+              {
+                fieldId: "microchipNumber",
+                message: responseData.error,
+              },
             ],
             activeTab: "ptd",
             formSubmitted: true,
@@ -91,6 +76,9 @@ const submitSearch = async (request, h) => {
           });
         }
       }
+
+      request.yar.set("ptdNumber", ptdNumber);
+      request.yar.set("data", responseData);
 
       return h.redirect("/checker/search-results");
     }
@@ -117,36 +105,17 @@ const submitSearch = async (request, h) => {
         });
       }
 
-      const response = await apiService.getApplicationByApplicationNumber(
-        request.payload.applicationNumberSearch
-      );
+      const applicationNumber = request.payload.applicationNumberSearch;
+      const responseData = await apiService.getApplicationByApplicationNumber(applicationNumber);
 
-      if (response.data) {
-        request.yar.set("applicationNumber", microchipNumber);
-
-        let statusName = response.data.status.toLowerCase();
-        if (statusName === "authorised") {
-          statusName = "approved";
-        } else if (statusName === "awaiting verification") {
-          statusName = "awaiting";
-        } else if (statusName === "rejected") {
-          statusName = "revoked";
-        }
-
-        const resultData = {
-          documentState: statusName,
-          applicationNumber: response.data.applicationNumber,
-        };
-
-        request.yar.set("data", resultData);
-      } else {
-        if (response.status === 404) {
+      if (responseData.error) {
+        if (responseData.error === "not_found") {
           return h.redirect("/application-not-found");
         } else {
           return h.view(VIEW_PATH, {
-            error: response.error,
+            error: responseData.error,
             errorSummary: [
-              { fieldId: "applicationNumberSearch", message: response.error },
+              { fieldId: "applicationNumberSearch", message: responseData.error },
             ],
             activeTab: "application",
             formSubmitted: true,
@@ -155,6 +124,8 @@ const submitSearch = async (request, h) => {
           });
         }
       }
+      request.yar.set("applicationNumber", applicationNumber);
+      request.yar.set("data", responseData);
 
       return h.redirect("/checker/search-results");
     }
