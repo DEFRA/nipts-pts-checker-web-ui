@@ -33,7 +33,7 @@ const getDocumentSearch = {
 };
 
 const submitSearch = async (request, h) => {
-  const searchText = "";
+  let searchText = "";
   try {
     const { documentSearch, microchipNumber } = request.payload;
 
