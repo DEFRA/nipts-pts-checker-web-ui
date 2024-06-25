@@ -71,7 +71,8 @@
                     </p>
                     {% endif %}
                     <input class="govuk-input govuk-input--width-10" id="applicationNumberSearch"
-                      name="applicationNumberSearch" type="text" spellcheck="false" >
+                      name="applicationNumberSearch" type="text" spellcheck="false" {% if activeTab=="application"
+                      %}value={{documentSearchMainModelData.searchText}} {% endif %}>
                   </div>
                 </div>
 
@@ -93,7 +94,8 @@
                     </p>
                     {% endif %}
                     <input class="govuk-input govuk-input--width-20" id="microchipNumber" name="microchipNumber"
-                      type="text" spellcheck="false">
+                      type="text" spellcheck="false" {% if activeTab=="microchip"
+                      %}value={{documentSearchMainModelData.searchText}} {% endif %}>
                   </div>
                 </div>
               </div>
