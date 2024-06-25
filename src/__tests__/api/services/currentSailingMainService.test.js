@@ -4,7 +4,8 @@ import { CurrentSailingMainModel } from "../../../api/models/currentSailingMainM
 import  CurrentSailingModel  from "../../../constants/currentSailingConstant.js";
 
 jest.mock('axios'); // Mock the entire axios library
-
+const baseUrl =
+  process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
 describe('currentSailingMainService', () => {
   afterEach(() => {
     jest.clearAllMocks();
@@ -21,7 +22,7 @@ describe('currentSailingMainService', () => {
 
     const result = await currentSailingMainService.getCurrentSailingMain();
 
-    expect(axios.get).toHaveBeenCalledWith('https://devptswebaw1003.azurewebsites.net/api/sailing-routes');
+    expect(axios.get).toHaveBeenCalledWith(`${baseUrl}/sailing-routes`);
     expect(CurrentSailingModel.currentSailingMainModelData.routes).toEqual([
         { id: '1', value: 'Route 1', label: 'Route 1' },
         { id: '2', value: 'Route 2', label: 'Route 2' }
