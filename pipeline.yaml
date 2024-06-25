@@ -40,22 +40,27 @@ extends:
         -PORT "8080"
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net/api"
+        -ACCOUNT_MANAGEMENT_URL = "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
       tst: >-
         -PORT "8080"
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net/api"
+        -ACCOUNT_MANAGEMENT_URL = "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
       snd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net/api"
+        -ACCOUNT_MANAGEMENT_URL = "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
       pre: >-
         -PORT "8080"
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net/api"
+        -ACCOUNT_MANAGEMENT_URL = "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
       prd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net/api"
+        -ACCOUNT_MANAGEMENT_URL = "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
     runSonarScan: true
     #runVulnerabilityScan: true
     #skipOwaspScan: false
