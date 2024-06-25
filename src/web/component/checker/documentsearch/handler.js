@@ -33,11 +33,13 @@ const getDocumentSearch = {
 };
 
 const submitSearch = async (request, h) => {
+  var searchText = "";
   try {
     const { documentSearch, microchipNumber } = request.payload;
 
     // Search by PTD Number
     if (documentSearch === "ptd") {
+      searchText = request.payload.ptdNumberSearch;
       const validationResult = validatePtdNumber(
         request.payload.ptdNumberSearch
       );
@@ -50,7 +52,7 @@ const submitSearch = async (request, h) => {
           activeTab: "ptd",
           formSubmitted: true,
           documentSearchMainModelData:
-            await documentSearchMainService.getDocumentSearchMain(),
+            await documentSearchMainService.getDocumentSearchMain(searchText),
         });
       }
 
@@ -87,7 +89,7 @@ const submitSearch = async (request, h) => {
             activeTab: "ptd",
             formSubmitted: true,
             documentSearchMainModelData:
-              await documentSearchMainService.getDocumentSearchMain(),
+              await documentSearchMainService.getDocumentSearchMain(searchText),
           });
         }
       }
@@ -97,6 +99,8 @@ const submitSearch = async (request, h) => {
 
     // Search by Application Number
     if (documentSearch === "application") {
+      searchText = request.payload.applicationNumberSearch;
+
       const validationResult = validateApplicationNumber(
         request.payload.applicationNumberSearch
       );
@@ -113,7 +117,7 @@ const submitSearch = async (request, h) => {
           activeTab: "application",
           formSubmitted: true,
           documentSearchMainModelData:
-            await documentSearchMainService.getDocumentSearchMain(),
+            await documentSearchMainService.getDocumentSearchMain(searchText),
         });
       }
 
@@ -151,7 +155,7 @@ const submitSearch = async (request, h) => {
             activeTab: "application",
             formSubmitted: true,
             documentSearchMainModelData:
-              await documentSearchMainService.getDocumentSearchMain(),
+              await documentSearchMainService.getDocumentSearchMain(searchText),
           });
         }
       }
@@ -161,6 +165,8 @@ const submitSearch = async (request, h) => {
 
     // Search by Microchip Number
     if (documentSearch === "microchip") {
+      searchText = microchipNumber;
+
       const validationResult = validateMicrochipNumber(microchipNumber);
       if (!validationResult.isValid) {
         return h.view(VIEW_PATH, {
@@ -171,7 +177,7 @@ const submitSearch = async (request, h) => {
           activeTab: "microchip",
           formSubmitted: true,
           documentSearchMainModelData:
-            await documentSearchMainService.getDocumentSearchMain(),
+            await documentSearchMainService.getDocumentSearchMain(searchText),
         });
       }
 
@@ -194,7 +200,7 @@ const submitSearch = async (request, h) => {
             activeTab: "microchip",
             formSubmitted: true,
             documentSearchMainModelData:
-              await documentSearchMainService.getDocumentSearchMain(),
+              await documentSearchMainService.getDocumentSearchMain(searchText),
           });
         }
       }
@@ -214,7 +220,7 @@ const submitSearch = async (request, h) => {
       ],
       formSubmitted: true,
       documentSearchMainModelData:
-        await documentSearchMainService.getDocumentSearchMain(),
+        await documentSearchMainService.getDocumentSearchMain(searchText),
     });
   }
 };
