@@ -131,6 +131,16 @@
     document.getElementById('conditional-documentSearch-1').className = 'govuk-radios__conditional';
     document.getElementById('conditional-documentSearch-2').className = 'govuk-radios__conditional govuk-radios__conditional--hidden';
     document.getElementById('conditional-documentSearch-3').className = 'govuk-radios__conditional govuk-radios__conditional--hidden';
+
+    document.getElementById('errorSummary').hidden = true;
+
+    document.getElementById("ptd-form-group").classList.remove("govuk-form-group--error");
+    document.getElementById("application-form-group").classList.remove("govuk-form-group--error");
+    document.getElementById("microchip-form-group").classList.remove("govuk-form-group--error");
+
+    document.getElementById('ptd-error').remove();
+    document.getElementById('application-error').remove();
+    document.getElementById('microchip-error').remove();
   });
 
   window.addEventListener('load', () => {
