@@ -2,6 +2,7 @@
 
 import Routes from "../../../../../web/component/checker/searchresults/routes.js";
 import searchResultsPlugin from "../../../../../web/component/checker/searchresults/index.js";
+import { SearchResultsHandlers } from "../../../../../web/component/checker/searchresults/handler.js";
 
 describe("searchResultsPlugin", () => {
   const server = {
@@ -38,6 +39,20 @@ describe("Routes", () => {
     );
 
     expect(route).toBeDefined();
+    expect(route.config).toEqual(
+      SearchResultsHandlers.getSearchResultsHandler.index
+    );
   });
 
+  it("should have a POST route for /checker/search-results", () => {
+    const route = Routes.find(
+      (route) =>
+        route.path === "/checker/search-results" && route.method === "POST"
+    );
+
+    expect(route).toBeDefined();
+    expect(route.options.handler).toEqual(
+      SearchResultsHandlers.saveAndContinueHandler
+    );
+  });
 });

@@ -2,7 +2,7 @@
 
 const VIEW_PATH = "componentViews/checker/searchresults/searchResultsView";
 
-const getMicrochipDataHandler = {
+const getSearchResultsHandler = {
   index: {
     plugins: {
       "hapi-auth-cookie": {
@@ -17,6 +17,27 @@ const getMicrochipDataHandler = {
   },
 };
 
-export const MicrochipHandlers = {
-  getMicrochipDataHandler,
+const saveAndContinueHandler = async (request, h) => {
+  try {
+    const { checklist } = request.payload;    
+    if (checklist === "pass") {
+      
+      return h.redirect("/checker/document-search");
+    }
+
+    return h.redirect("/checker/reports");
+  } catch (error) {
+    return h.view(VIEW_PATH, {
+      error: "An error occurred while processing your request",
+      errorSummary: [
+        { fieldId: "general", message: "An unexpected error occurred" },
+      ],
+    });
+  }
+};
+
+
+export const SearchResultsHandlers = {
+  getSearchResultsHandler,
+  saveAndContinueHandler,
 };

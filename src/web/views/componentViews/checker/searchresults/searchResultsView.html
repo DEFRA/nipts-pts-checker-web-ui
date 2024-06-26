@@ -234,7 +234,69 @@
 </div>
 
 
+<form action="/checker/search-results">
+  <div class="govuk-form-group">
+    <fieldset class="govuk-fieldset" aria-describedby="contact-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">
+          Checks
+        </h1>
+      </legend>
+   
+      <p class="govuk-body">Check:</p>
+      <ul class="govuk-list govuk-list--bullet govuk-list--spaced">
+        <li>
+          PTD presented and valid 
+        </li>
+        <li>
+          visual check of pet matches PTD 
+        </li>
+        <li>
+          microchip number matches PTD
+        </li>
+        <li>
+          no risks identified
+        </li>
+      </ul>
 
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="contact" name="checklist" type="radio" value="pass">
+          {# data-aria-controls="conditional-checklist-1" #}
+          <label class="govuk-label govuk-radios__label" for="contact">
+            Pass
+          </label>
+          <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
+            Passes all checks.
+          </div>
+        </div>
+        {# <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-checklist-1">
+          
+
+        </div> #}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="contact-2" name="checklist" type="radio" value="fail">
+          {# data-aria-controls="conditional-contact-2" #}
+          <label class="govuk-label govuk-radios__label" for="contact-2">
+            Fail
+          </label>
+          <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
+            Fails at least one check.
+          </div>
+        </div>
+
+      </div>
+    </fieldset>
+  </div>
+
+
+  <div class="govuk-grid-row govuk-!-static-margin-top-4">
+    <div class="govuk-grid-column-one-half">
+     
+    </div>
+  </div>
+</form>
+<div style="height: 2rem;"></div>
 
 {% endblock %}
 

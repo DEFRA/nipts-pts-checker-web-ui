@@ -1,9 +1,9 @@
 "use strict";
 
-import { MicrochipHandlers } from "../../../../../web/component/checker/searchresults/handler.js";
+import { SearchResultsHandlers } from "../../../../../web/component/checker/searchresults/handler.js";
 
-describe("MicrochipHandlers", () => {
-  describe("getMicrochipDataHandler", () => {
+describe("SearchResultsHandlers", () => {
+  describe("getSearchResultsHandler", () => {
     it("should return view with microchipNumber and data from session", async () => {
       const mockMicrochipNumber = "123456789012345";
       const mockData = { some: "data" };
@@ -24,7 +24,7 @@ describe("MicrochipHandlers", () => {
       };
 
       const response =
-        await MicrochipHandlers.getMicrochipDataHandler.index.handler(
+        await SearchResultsHandlers.getSearchResultsHandler.index.handler(
           request,
           h
         );
@@ -46,5 +46,47 @@ describe("MicrochipHandlers", () => {
         data: mockData,
       });
     });
+  });
+
+  describe("saveAndContinueHandler", () => {
+    it("should redirect to document search if checklist is 'pass'", async () => {
+      const request = {
+        payload: { checklist: "pass" },
+      };
+
+      const h = {
+        redirect: jest.fn((url) => {
+          return { redirectedTo: url };
+        }),
+      };
+
+      const response = await SearchResultsHandlers.saveAndContinueHandler(
+        request,
+        h
+      );
+
+      expect(response.redirectedTo).toBe("/checker/document-search");
+    });
+
+    it("should redirect to reports if checklist is not 'pass'", async () => {
+      const request = {
+        payload: { checklist: "fail" },
+      };
+
+      const h = {
+        redirect: jest.fn((url) => {
+          return { redirectedTo: url };
+        }),
+      };
+
+      const response = await SearchResultsHandlers.saveAndContinueHandler(
+        request,
+        h
+      );
+
+      expect(response.redirectedTo).toBe("/checker/reports");
+    });
+
+
   });
 });
