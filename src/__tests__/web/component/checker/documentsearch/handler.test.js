@@ -208,7 +208,8 @@ describe("DocumentSearchHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentNotFoundView",
         {
-          searchValue: request.payload.microchipNumber
+          pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+          searchValue: request.payload.microchipNumber,
         }
       );
     });
@@ -307,7 +308,8 @@ describe("DocumentSearchHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentNotFoundView",
         {
-          searchValue: "GB826" + request.payload.ptdNumberSearch
+          pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+          searchValue: "GB826" + request.payload.ptdNumberSearch,
         }
       );
     });
@@ -370,7 +372,8 @@ describe("DocumentSearchHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentNotFoundView",
         {
-          searchValue: request.payload.applicationNumberSearch
+          pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+          searchValue: request.payload.applicationNumberSearch,
         }
       );
     });
