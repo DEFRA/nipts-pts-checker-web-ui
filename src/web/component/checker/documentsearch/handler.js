@@ -8,8 +8,10 @@ import {
   validateApplicationNumber,
   validateMicrochipNumber,
 } from "./validate.js";
+import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
 
 const VIEW_PATH = "componentViews/checker/documentsearch/documentSearchView";
+const NOT_FOUND_VIEW_PATH = "componentViews/checker/documentsearch/documentNotFoundView";
 
 const getDocumentSearch = {
   index: {
@@ -61,7 +63,10 @@ const submitSearch = async (request, h) => {
 
       if (responseData.error) {
         if (responseData.error === "not_found") {
-          return h.redirect("/application-not-found");
+          return h.view(NOT_FOUND_VIEW_PATH, {
+            searchValue: ptdNumber,
+            pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle
+          });
         } else {
           return h.view(VIEW_PATH, {
             error: responseData.error,
@@ -114,7 +119,10 @@ const submitSearch = async (request, h) => {
 
       if (responseData.error) {
         if (responseData.error === "not_found") {
-          return h.redirect("/application-not-found");
+          return h.view(NOT_FOUND_VIEW_PATH, {
+            searchValue: applicationNumber,
+            pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle
+          });
         } else {
           return h.view(VIEW_PATH, {
             error: responseData.error,
@@ -158,7 +166,10 @@ const submitSearch = async (request, h) => {
 
       if (microchipAppPtdMainData.error) {
         if (microchipAppPtdMainData.error === "not_found") {
-          return h.redirect("/application-not-found");
+          return h.view(NOT_FOUND_VIEW_PATH, {
+            searchValue: microchipNumber,
+            pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
+          });
         } else {
           return h.view(VIEW_PATH, {
             error: microchipAppPtdMainData.error,
