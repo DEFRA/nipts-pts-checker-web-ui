@@ -1,0 +1,21 @@
+{% extends "./layouts/checkerLayout.html" %}
+
+{% block pageTitle %} Find a document - {{documentSearchMainModelData.pageTitle}} – GOV.UK {% endblock %}
+
+{% block beforeContent %}
+<a href="javascript: history.back();" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-0">
+    <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">       
+        <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
+            Document not found
+        </h1>
+        <p class="govuk-body">{{searchValue}} has not been found.</p>
+        <p class="govuk-body">
+            <a href="/checker/document-search" class="govuk-link">Go back to search</a>.
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -205,8 +205,12 @@ describe("DocumentSearchHandlers", () => {
       );
 
       const response = await DocumentSearchHandlers.submitSearch(request, h);
-
-      expect(h.redirect).toHaveBeenCalledWith("/application-not-found");
+      expect(h.view).toHaveBeenCalledWith(
+        "componentViews/checker/documentsearch/documentNotFoundView",
+        {
+          searchValue: request.payload.microchipNumber
+        }
+      );
     });
 
     it("should handle PTD search with valid number", async () => {
@@ -300,7 +304,12 @@ describe("DocumentSearchHandlers", () => {
 
       const response = await DocumentSearchHandlers.submitSearch(request, h);
 
-      expect(h.redirect).toHaveBeenCalledWith("/application-not-found");
+      expect(h.view).toHaveBeenCalledWith(
+        "componentViews/checker/documentsearch/documentNotFoundView",
+        {
+          searchValue: "GB826" + request.payload.ptdNumberSearch
+        }
+      );
     });
 
     it("should handle application search with valid number", async () => {
@@ -358,7 +367,12 @@ describe("DocumentSearchHandlers", () => {
 
       const response = await DocumentSearchHandlers.submitSearch(request, h);
 
-      expect(h.redirect).toHaveBeenCalledWith("/application-not-found");
+      expect(h.view).toHaveBeenCalledWith(
+        "componentViews/checker/documentsearch/documentNotFoundView",
+        {
+          searchValue: request.payload.applicationNumberSearch
+        }
+      );
     });
 
     it("should handle unexpected error during search", async () => {

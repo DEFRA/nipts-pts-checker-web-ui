@@ -1,3 +1,4 @@
+import { HttpStatusCode } from "axios";
 import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js";
 import httpService from "./httpService.js";
 import moment from "moment";
@@ -37,6 +38,11 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad) => {
   const url = buildApiUrl("Checker/checkPTDNumber");
   var response =  await httpService.postAsync(url, request);
 
+  if(response.status == HttpStatusCode.NotFound)
+  {
+    throw new Error(response.error);
+  }
+
   const item = response.data;
 
     if (!item || typeof item !== "object") {
@@ -121,14 +127,15 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad) => {
       console.error("Error fetching data:", error.message);
   
       // Check for specific error message and return a structured error
-      if (error.response && error.response.data && error.response.data.error) {
+      if (error && error.message) 
+      {
         if (
-          error.response.data.error === "Application not found" ||
-          error.response.data.error === "Pet not found"
+          error.message === "Application not found" ||
+          error.message === "Pet not found"
         ) {
           return { error: "not_found" };
         } else {
-          return { error: error.response.data.error };
+          return { error: error.message };
         }
       }
   
@@ -142,6 +149,11 @@ const getApplicationByApplicationNumber = async (applicationNumber) => {
   const url = buildApiUrl("Checker/checkApplicationNumber");
   var response =  await httpService.postAsync(url, request);
 
+  if(response.status == HttpStatusCode.NotFound)
+  {
+    throw new Error(response.error);
+  }
+
   const item = response.data;
 
     if (!item || typeof item !== "object") {
@@ -224,19 +236,19 @@ const getApplicationByApplicationNumber = async (applicationNumber) => {
       return transformedItem;
     } catch (error) {
       console.error("Error fetching data:", error.message);
-  
-      // Check for specific error message and return a structured error
-      if (error.response && error.response.data && error.response.data.error) {
+
+      if (error && error.message) 
+      {
         if (
-          error.response.data.error === "Application not found" ||
-          error.response.data.error === "Pet not found"
+          error.message === "Application not found" ||
+          error.message === "Pet not found"
         ) {
           return { error: "not_found" };
         } else {
-          return { error: error.response.data.error };
+          return { error: error.message };
         }
       }
-  
+
       return { error: "Unexpected error occurred" };
     }
 };
