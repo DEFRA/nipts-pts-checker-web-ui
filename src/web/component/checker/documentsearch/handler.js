@@ -125,9 +125,9 @@ const submitSearch = async (request, h) => {
           });
         } else {
           return h.view(VIEW_PATH, {
-            error: "An error occurred while processing your request.",
+            error: "An error occurred while processing your request",
             errorSummary: [
-              { fieldId: "applicationNumberSearch", message: "An error occurred while processing your request."},
+              { fieldId: "general", message: "An error occurred while processing your request" },
             ],
             activeTab: "application",
             formSubmitted: true,
