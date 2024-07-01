@@ -1,6 +1,8 @@
 "use strict";
+import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
 
 const VIEW_PATH = "componentViews/checker/searchresults/searchResultsView";
+
 
 const getSearchResultsHandler = {
   index: {
@@ -12,7 +14,8 @@ const getSearchResultsHandler = {
     handler: async (request, h) => {
       const microchipNumber = request.yar.get("microchipNumber");
       const data = request.yar.get("data");
-      return h.view(VIEW_PATH, { microchipNumber, data });
+      const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
+      return h.view(VIEW_PATH, { microchipNumber, data, pageTitle });
     },
   },
 };
