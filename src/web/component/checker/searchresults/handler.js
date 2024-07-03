@@ -13,9 +13,9 @@ const getSearchResultsHandler = {
     },
     handler: async (request, h) => {
       const microchipNumber = request.yar.get("microchipNumber");
-      const data = request.yar.get("data");
+      const response = request.yar.get("data");
       const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
-      return h.view(VIEW_PATH, { microchipNumber, data, pageTitle });
+      return h.view(VIEW_PATH, { microchipNumber, response, pageTitle });
     },
   },
 };

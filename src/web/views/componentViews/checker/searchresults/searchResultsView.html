@@ -6,17 +6,17 @@
 {{ super() }}
 <a href="javascript: history.back();" class="govuk-back-link">Back</a>
 {% endblock %}
-{% set ptdNumber = data.ptdNumber %}
-{% set issuedDate = data.issuedDate %}
-{% set microchipNumber = data.microchipNumber %}
-{% set microchipDate = data.microchipDate %}
-{% set petName = data.petName %}
-{% set petSpecie = data.petSpecie %}
-{% set petBreed = data.petBreed %}
-{% set petSex = data.petSex %}
-{% set petDoB = data.petDoB %}
-{% set petColour = data.petColour %}
-{% set petFeaturesDetail = data.petFeaturesDetail %}
+{% set ptdNumber = response.ptdNumber %}
+{% set issuedDate = response.issuedDate %}
+{% set microchipNumber = response.microchipNumber %}
+{% set microchipDate = response.microchipDate %}
+{% set petName = response.petName %}
+{% set petSpecie = response.petSpecie %}
+{% set petBreed = response.petBreed %}
+{% set petSex = response.petSex %}
+{% set petDoB = response.petDoB %}
+{% set petColour = response.petColour %}
+{% set petFeaturesDetail = response.petFeaturesDetail %}
 {% block content %}
 
 {% if data['error'] === 'submitted' %}
