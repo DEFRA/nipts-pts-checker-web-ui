@@ -41,6 +41,7 @@ extends:
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net/api"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
+        -CP_ENV azure
         -DEFRA_ID_TENANT "TBC"
         -DEFRA_ID_POLICY "TBC"
         -DEFRA_ID_REDIRECT_URI "https://$(environment)ptsptswebaw1004.azurewebsites.net/signin-oidc"
@@ -54,6 +55,7 @@ extends:
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net/api"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
+        -CP_ENV azure
         -DEFRA_ID_TENANT "TBC"
         -DEFRA_ID_POLICY "TBC"
         -DEFRA_ID_REDIRECT_URI "https://$(environment)ptsptswebaw1004.azurewebsites.net/signin-oidc"
@@ -67,6 +69,7 @@ extends:
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net/api"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
+        -CP_ENV azure
         -DEFRA_ID_TENANT "TBC"
         -DEFRA_ID_POLICY "TBC"
         -DEFRA_ID_REDIRECT_URI "https://$(environment)ptsptswebaw1004.azurewebsites.net/signin-oidc"
@@ -80,6 +83,7 @@ extends:
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net/api"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
+        -CP_ENV azure
         -DEFRA_ID_TENANT "TBC"
         -DEFRA_ID_POLICY "TBC"
         -DEFRA_ID_REDIRECT_URI "https://$(environment)ptsptswebaw1004.azurewebsites.net/signin-oidc"
@@ -93,6 +97,7 @@ extends:
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net/api"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
+        -CP_ENV azure
         -DEFRA_ID_TENANT "TBC"
         -DEFRA_ID_POLICY "TBC"
         -DEFRA_ID_REDIRECT_URI "https://$(environment)ptsptswebaw1004.azurewebsites.net/signin-oidc"
