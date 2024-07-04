@@ -1,13 +1,16 @@
 "use strict";
 
-import Handler from "./handler.js";
+import { HomeHandlers } from "./handler.js";
 import HttpMethod from "../../../../constants/httpMethod.js";
 
 const Routes = [
   {
     method: HttpMethod.GET,
     path: "/",
-    config: Handler.index,
+    options: {
+      auth: false,
+      handler: HomeHandlers.getHome,
+    },
   },
 ];
 

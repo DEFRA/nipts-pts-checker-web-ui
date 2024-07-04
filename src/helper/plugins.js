@@ -1,11 +1,18 @@
-import Inert from "@hapi/inert";
+import Inert, { plugin } from "@hapi/inert";
 import Vision from "@hapi/vision";
+import Cookie from "@hapi/cookie";
 import Yar from "@hapi/yar";
 import Home from "../web/component/checker/home/index.js";
 import CurrentSailing from "../web/component/checker/currentsailing/index.js";
 import Dashboard from "../web/component/checker/dashboard/index.js";
 import DocumentSearch from "../web/component/checker/documentsearch/index.js";
 import SearchResults from "../web/component/checker/searchresults/index.js";
+import SignIn from "../web/component/checker/SignIn/index.js";
+import SignOut from "../web/component/checker/SignOut/index.js";
+import CookiesPlugin from "../plugins/cookies-plugin.js";
+import AuthPlugin from "../plugins/auth-plugin.js";
+import SessionPlugin from "../plugins/session.js";
+import config from "../config/index.js";
 
 const pluginList = [
   {
@@ -14,6 +21,29 @@ const pluginList = [
   {
     plugin: Vision,
   },
+  {
+    plugin: Cookie,
+  },
+  {
+    plugin: Yar,
+    options: {
+      name: config.cookie.cookieNameSession,
+      maxCookieSize: 1024,
+      storeBlank: true,
+      cache: {
+        cache: config.cache.name,
+        expiresIn: config.cache.expiresIn,
+      },
+      cookieOptions: {
+        isHttpOnly: true,
+        isSameSite: config.cookie.isSameSite,
+        isSecure: config.cookie.isSecure,
+        password: config.cookie.password,
+        ttl: config.cache.expiresIn,
+      },
+    },
+  },
+  /*
   {
     plugin: Yar,
     options: {
@@ -24,6 +54,7 @@ const pluginList = [
       },
     },
   },
+  */
   {
     plugin: Home,
   },
@@ -38,6 +69,16 @@ const pluginList = [
   },
   {
     plugin: SearchResults,
+  },
+  {
+    plugin: AuthPlugin,
+  },
+  { plugin: CookiesPlugin },
+  {
+    plugin: SignIn,
+  },
+  {
+    plugin: SignOut,
   },
 ];
 

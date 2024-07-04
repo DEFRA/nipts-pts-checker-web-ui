@@ -11,7 +11,7 @@
 4. In the project root, create a `.env` file for project settings. You can start with the settings below, or copy `env.sample.txt` and rename it to `.env`.
 
    ```
-   PORT=4000
+   PORT=5000
    HOST=localhost
    ```
 

@@ -3,28 +3,17 @@ import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
 
 const VIEW_PATH = "componentViews/checker/searchresults/searchResultsView";
 
-
-const getSearchResultsHandler = {
-  index: {
-    plugins: {
-      "hapi-auth-cookie": {
-        redirectTo: false,
-      },
-    },
-    handler: async (request, h) => {
-      const microchipNumber = request.yar.get("microchipNumber");
-      const data = request.yar.get("data");
-      const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
-      return h.view(VIEW_PATH, { microchipNumber, data, pageTitle });
-    },
-  },
+const getSearchResultsHandler = async (request, h) => {
+  const microchipNumber = request.yar.get("microchipNumber");
+  const data = request.yar.get("data");
+  const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
+  return h.view(VIEW_PATH, { microchipNumber, data, pageTitle });
 };
 
 const saveAndContinueHandler = async (request, h) => {
   try {
-    const { checklist } = request.payload;    
+    const { checklist } = request.payload;
     if (checklist === "pass") {
-      
       return h.redirect("/checker/document-search");
     }
 
@@ -38,7 +27,6 @@ const saveAndContinueHandler = async (request, h) => {
     });
   }
 };
-
 
 export const SearchResultsHandlers = {
   getSearchResultsHandler,

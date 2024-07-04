@@ -1,23 +1,21 @@
 "use strict";
 
 import appSettingsService from "../../../../api/services/appSettingsService.js";
+import requestAuthorizationCodeUrl from "../../../../auth/auth-code-grant/request-authorization-code-url.js";
+import session from "../../../../session/index.js";
 
 const VIEW_PATH = "componentViews/checker/home/view";
 
-const Handler = {
-  index: {
-    plugins: {
-      "hapi-auth-cookie": {
-        redirectTo: false,
-      },
-    },
-    handler: async (request, h) => {
-      const appSettings = await appSettingsService.getAppSettings();
-      const model = { ...appSettings, loginUrl: "/checker/current-sailings" };
+const getHome = async (request, h) => {
 
-      return h.view(VIEW_PATH, { model });
-    },
-  },
+  const appSettings = await appSettingsService.getAppSettings();
+  const loginUrl = requestAuthorizationCodeUrl(session, request);
+
+  const model = { ...appSettings, loginUrl: loginUrl };
+
+  return h.view(VIEW_PATH, { model });
 };
 
-export default Handler;
+export const HomeHandlers = {
+  getHome,
+};

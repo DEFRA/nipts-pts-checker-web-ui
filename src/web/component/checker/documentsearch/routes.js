@@ -7,7 +7,9 @@ const Routes = [
   {
     method: HttpMethod.GET,
     path: "/checker/document-search",
-    config: DocumentSearchHandlers.getDocumentSearch.index,
+    options: {
+      handler: DocumentSearchHandlers.getDocumentSearch,
+    },
   },
   {
     method: HttpMethod.POST,
