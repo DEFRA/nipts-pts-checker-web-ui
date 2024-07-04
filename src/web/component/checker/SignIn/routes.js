@@ -23,11 +23,8 @@ const Routes = [
           console.log(
             `Validation error caught during DEFRA ID redirect - ${err.message}.`
           );
-          const loginSource = request?.query?.state
-            ? JSON.parse(
-                Buffer.from(request.query.state, "base64").toString("ascii")
-              ).source
-            : undefined;
+
+          const loginSource = "PTSCompliancePortal";
 
           const vm = {
             backLink: auth.requestAuthorizationCodeUrl(
@@ -59,11 +56,7 @@ const Routes = [
 
         logout(request);
 
-        const loginSource = request?.query?.state
-          ? JSON.parse(
-              Buffer.from(request.query.state, "base64").toString("ascii")
-            ).source
-          : undefined;
+        const loginSource = "PTSCompliancePortal";
 
         const vm = {
           backLink: auth.requestAuthorizationCodeUrl(
