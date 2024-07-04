@@ -6,7 +6,9 @@ import ConfigServer from "./src/configServer.js";
 import pluginList from "./src/helper/plugins.js";
 
 // Load environment variables from .env file
-dotenv.config();
+if (process.env.CP_ENV === "local" && !process.env.DEFRA_ID_CLIENT_ID) {
+  dotenv.config({ path: "./.env.local", override: true });
+}
 
 // Server configuration
 const serverConfig = {
@@ -22,11 +24,21 @@ const serverConfig = {
   host: process.env.HOST || "localhost",
   routes: {
     cors: {
-        origin: ['*'],
-        headers: ["Accept", 'Authorization', 'Content-Type', 'If-None-Match', 'Accept-language'],
-        additionalHeaders: ['cache-control', 'x-requested-with', 'Access-Control-Allow-Origin']
-    }
-}
+      origin: ["*"],
+      headers: [
+        "Accept",
+        "Authorization",
+        "Content-Type",
+        "If-None-Match",
+        "Accept-language",
+      ],
+      additionalHeaders: [
+        "cache-control",
+        "x-requested-with",
+        "Access-Control-Allow-Origin",
+      ],
+    },
+  },
 };
 
 // Create a server instance
@@ -52,14 +64,6 @@ const init = async () => {
     if (config.isDev) {
       await server.register(require("blipp"));
     }
-
-    server.ext("onPreResponse", (request, h) => {
-      const response = request.response;
-      
-      //response.output.payload.isAuthenticated = request.auth.isAuthenticated;
-
-      return h.continue;
-    });
 
     // Start the server
     await server.start();

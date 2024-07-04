@@ -1,4 +1,12 @@
 import Joi from "joi";
+import dotenv from "dotenv";
+
+// Load environment variables from .env file
+dotenv.config();
+
+if (process.env.CP_ENV === "local" && !process.env.DEFRA_ID_CLIENT_ID) {
+  dotenv.config({ path: './.env.local', override: true});
+}
 
 const authSchema = Joi.object({
   defraId: {
@@ -9,7 +17,7 @@ const authSchema = Joi.object({
     tenantName: Joi.string(),
     clientId: Joi.string(),
     clientSecret: Joi.string(),
-    jwtIssuerId: Joi.string().optional(),
+    jwtIssuerId: Joi.string().allow(null, ""),
     serviceId: Joi.string(),
     scope: Joi.string(),
     signOutUrl: Joi.string(),
@@ -25,7 +33,7 @@ const authConfig = {
     tenantName: process.env.DEFRA_ID_TENANT,
     clientId: process.env.DEFRA_ID_CLIENT_ID,
     clientSecret: process.env.DEFRA_ID_CLIENT_SECRET,
-    jwtIssuerId: process.env.DEFRA_ID_JWT_ISSUER_ID,
+    jwtIssuerId: process.env.DEFRA_ID_JWT_ISSUER_ID || "",
     serviceId: process.env.DEFRA_ID_SERVICE_ID,
     scope: `openid ${process.env.DEFRA_ID_CLIENT_ID} offline_access`,
     signOutUrl: process.env.DEFRA_ID_SIGNOUT_URI,
