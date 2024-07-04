@@ -24,18 +24,16 @@ const Routes = [
             `Validation error caught during DEFRA ID redirect - ${err.message}.`
           );
 
-          const loginSource = "PTSCompliancePortal";
-
           const vm = {
             backLink: auth.requestAuthorizationCodeUrl(
               session,
               request,
-              loginSource
+              "PTSCompliancePortal"
             ),
           };
           return h
             .view(VIEW_PATH, vm)
-            .code(HHttpStatusConstants.BAD_REQUEST)
+            .code(HttpStatusConstants.BAD_REQUEST)
             .takeover();
         },
       },
@@ -56,13 +54,11 @@ const Routes = [
 
         logout(request);
 
-        const loginSource = "PTSCompliancePortal";
-
         const vm = {
           backLink: auth.requestAuthorizationCodeUrl(
             session,
             request,
-            loginSource
+            "PTSCompliancePortal"
           ),
         };
 
