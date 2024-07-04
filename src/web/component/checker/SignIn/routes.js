@@ -32,7 +32,7 @@ const Routes = [
             ),
           };
           return h
-            .view(VIEW_PATH, vm)
+            .view("componentViews/checker/SignIn/view", vm)
             .code(HttpStatusConstants.BAD_REQUEST)
             .takeover();
         },
