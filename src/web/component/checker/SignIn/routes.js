@@ -2,12 +2,9 @@
 import Joi from "joi";
 import HttpMethod from "../../../../constants/httpMethod.js";
 import HttpStatusConstants from "../../../../constants/httpMethod.js";
-
 import auth from "../../../../auth/index.js";
 import session from "../../../../session/index.js";
 import logout from "../../../../lib/logout.js";
-
-const VIEW_PATH = "componentViews/checker/SignIn/view";
 
 const Routes = [
   {
@@ -48,7 +45,6 @@ const Routes = [
       handler: async (request, h) => {
         console.log("SignIn callback");
         try {
-          //await crumbCache.generateNewCrumb(request, h);
           await auth.authenticate(request, session);
           console.log("authenticated, now redirecting to dashboard");
           return h.redirect("/checker/dashboard");
@@ -78,7 +74,7 @@ const Routes = [
         };
 
         return h
-          .view(VIEW_PATH, vm)
+          .view("componentViews/checker/SignIn/view", vm)
           .code(HttpStatusConstants.BAD_REQUEST)
           .takeover();
       },
