@@ -22,9 +22,9 @@
 
     <form action="/checker/document-search" method="POST">
       <div class="govuk-grid-row govuk-!-margin-bottom-0 govuk-!-margin-top-4">
-        <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
+        <div class="govuk-grid-column-full govuk-!-margin-top-0">
           <div class="govuk-form-group">
-            <fieldset class="govuk-fieldset" aria-describedby="documentSearch-hint">
+            <fieldset class="govuk-fieldset">
               <div class="govuk-radios" data-module="govuk-radios">
                 <div class="govuk-radios__item">
                   <input class="govuk-radios__input" id="documentSearch-1" name="documentSearch" type="radio"
@@ -47,7 +47,7 @@
                       <div class="govuk-input__prefix" aria-hidden="true">{{documentSearchMainModelData.ptdSearchText}}
                       </div>
                       <input class="govuk-input govuk-input--width-10" id="ptdNumberSearch" name="ptdNumberSearch"
-                        type="text" spellcheck="false" {% if activeTab=="ptd"
+                        type="text" spellcheck="false" aria-label="ptdNumberSearch" {% if activeTab=="ptd"
                         %}value={{documentSearchMainModelData.searchText}} {% endif %}>
                     </div>
                   </div>
@@ -71,7 +71,7 @@
                     </p>
                     {% endif %}
                     <input class="govuk-input govuk-input--width-10" id="applicationNumberSearch"
-                      name="applicationNumberSearch" type="text" spellcheck="false" {% if activeTab=="application"
+                      name="applicationNumberSearch" type="text" spellcheck="false" aria-label="applicationNumberSearch" {% if activeTab=="application"
                       %}value={{documentSearchMainModelData.searchText}} {% endif %}>
                   </div>
                 </div>
@@ -94,7 +94,7 @@
                     </p>
                     {% endif %}
                     <input class="govuk-input govuk-input--width-20" id="microchipNumber" name="microchipNumber"
-                      type="text" spellcheck="false" {% if activeTab=="microchip"
+                      type="text" spellcheck="false" aria-label="microchipNumber" {% if activeTab=="microchip"
                       %}value={{documentSearchMainModelData.searchText}} {% endif %}>
                   </div>
                 </div>

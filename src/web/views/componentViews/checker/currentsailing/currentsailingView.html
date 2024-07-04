@@ -33,10 +33,17 @@
               <div class="govuk-radios" data-module="govuk-radios">
                   {% for route in currentSailingMainModelData.sailingRoutes %}
                   <div class="govuk-radios__item">
-                      <input class="govuk-radios__input" id="{{ route.id }}" name="routeRadio" type="radio" value="{{ route.id }}">
-                      <label class="govuk-label govuk-radios__label" for="{{ route.id }}">
+                      {% if  route.id  == 1 %}
+                        <input class="govuk-radios__input" id="routeRadio" name="routeRadio" type="radio" value="{{ route.id }}">
+                        <label class="govuk-label govuk-radios__label" for="routeRadio">
                           {{ route.label }}
                       </label>
+                      {% else %}
+                        <input class="govuk-radios__input" id="routeRadio-{{ route.id }}" name="routeRadio" type="radio" value="{{ route.id }}">
+                        <label class="govuk-label govuk-radios__label" for="routeRadio-{{ route.id }}">
+                          {{ route.label }}
+                        </label>
+                      {% endif %}
                   </div>
                   {% endfor %}
               </div>
@@ -64,7 +71,7 @@
             {% endfor %}
         </select>
         <span> : </span>
-        <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingMinutes" name="sailingMinutes">
+        <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingMinutes" name="sailingMinutes" aria-label="sailingMinutes">
             {% for timeMinutes in currentSailingMainModelData.sailingTimes %}
               <option value="{{timeMinutes}}">{{ timeMinutes }}</option>
             {% endfor %}

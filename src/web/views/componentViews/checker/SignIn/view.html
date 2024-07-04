@@ -1,0 +1,18 @@
+{% extends "./layouts/checkerLayout.html" %}
+
+{% block pageTitle %}Login failed - Pet Travel Scheme
+{% endblock %}
+
+{% block beforeContent %}
+  {{ super() }}
+  <a href="{{backLink}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">Login failed</h1>
+      <p>Please try again.</p>
+    </div>
+  </div>
+{% endblock %}
