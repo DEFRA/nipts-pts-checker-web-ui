@@ -35,16 +35,21 @@ describe("SearchResultsHandlers", () => {
         "componentViews/checker/searchresults/searchResultsView",
         {
           microchipNumber: mockMicrochipNumber,
-          data: mockData,
+          pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+          response: mockData,
         }
       );
       expect(response.viewPath).toBe(
         "componentViews/checker/searchresults/searchResultsView"
       );
+
       expect(response.data).toEqual({
-        microchipNumber: mockMicrochipNumber,
-        data: mockData,
-      });
+           "microchipNumber": "123456789012345",
+            "pageTitle": "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+            "response": {
+                "some": "data",
+              }
+        });
     });
   });
 
@@ -84,7 +89,7 @@ describe("SearchResultsHandlers", () => {
         h
       );
 
-      expect(response.redirectedTo).toBe("/checker/reports");
+      expect(response.redirectedTo).toBe("/checker/non-compliance");
     });
 
 

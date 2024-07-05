@@ -44,10 +44,10 @@ describe("Routes", () => {
     );
   });
 
-  it("should have a POST route for /checker/search-results", () => {
+  it("should have a POST route for /checker/non-compliance", () => {
     const route = Routes.find(
       (route) =>
-        route.path === "/checker/search-results" && route.method === "POST"
+        route.path === "/checker/non-compliance" && route.method === "POST"
     );
 
     expect(route).toBeDefined();

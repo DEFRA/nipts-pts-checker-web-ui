@@ -13,7 +13,7 @@ const Routes = [
   },
   {
     method: HttpMethod.POST,
-    path: "/checker/search-results",
+    path: "/checker/non-compliance",
     options: {
       handler: SearchResultsHandlers.saveAndContinueHandler,
     },

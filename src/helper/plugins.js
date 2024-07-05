@@ -7,12 +7,14 @@ import CurrentSailing from "../web/component/checker/currentsailing/index.js";
 import Dashboard from "../web/component/checker/dashboard/index.js";
 import DocumentSearch from "../web/component/checker/documentsearch/index.js";
 import SearchResults from "../web/component/checker/searchresults/index.js";
+import NonCompliance from "../web/component/checker/noncompliance/index.js";
 import SignIn from "../web/component/checker/SignIn/index.js";
 import SignOut from "../web/component/checker/SignOut/index.js";
 import CookiesPlugin from "../plugins/cookies-plugin.js";
 import AuthPlugin from "../plugins/auth-plugin.js";
 import SessionPlugin from "../plugins/session.js";
 import config from "../config/index.js";
+
 
 const pluginList = [
   {
@@ -69,6 +71,9 @@ const pluginList = [
   },
   {
     plugin: SearchResults,
+  },
+  {
+    plugin: NonCompliance,
   },
   {
     plugin: AuthPlugin,
