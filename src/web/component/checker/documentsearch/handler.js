@@ -13,14 +13,7 @@ import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
 const VIEW_PATH = "componentViews/checker/documentsearch/documentSearchView";
 const NOT_FOUND_VIEW_PATH = "componentViews/checker/documentsearch/documentNotFoundView";
 
-const getDocumentSearch = {
-  index: {
-    plugins: {
-      "hapi-auth-cookie": {
-        redirectTo: false,
-      },
-    },
-    handler: async (_request, h) => {
+const getDocumentSearch = async (_request, h) => {
       try {
         const documentSearchMainModelData =
           await documentSearchMainService.getDocumentSearchMain();
@@ -30,9 +23,8 @@ const getDocumentSearch = {
           error: "Failed to fetch document search data",
         });
       }
-    },
-  },
-};
+    };
+
 
 const submitSearch = async (request, h) => {
   let searchText = "";

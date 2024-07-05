@@ -1,13 +1,15 @@
 "use strict";
 
 import { SearchResultsHandlers } from "./handler.js";
-import  HttpMethod  from "../../../../constants/httpMethod.js";
+import HttpMethod from "../../../../constants/httpMethod.js";
 
 const Routes = [
   {
     method: HttpMethod.GET,
     path: "/checker/search-results",
-    config: SearchResultsHandlers.getSearchResultsHandler.index,
+    options: {
+      handler: SearchResultsHandlers.getSearchResultsHandler,
+    },
   },
   {
     method: HttpMethod.POST,
