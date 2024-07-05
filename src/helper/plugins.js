@@ -78,7 +78,9 @@ const pluginList = [
   {
     plugin: AuthPlugin,
   },
-  { plugin: CookiesPlugin },
+  { 
+      plugin: CookiesPlugin,
+  },
   {
     plugin: SignIn,
   },

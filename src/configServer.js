@@ -4,7 +4,7 @@ import Vision from "@hapi/vision";
 import Nunjucks from "nunjucks";
 import Path from "path";
 import Joi from "joi";
-import data from "./web/helper/constants.js";
+import headerData from "./web/helper/constants.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -38,7 +38,7 @@ const setup = (server) => {
     relativeTo: __dirname,
     path: viewsPath,
     partialsPath: includesPath,
-    context: { data },
+    context: { headerData },
   });
 
   server.route({

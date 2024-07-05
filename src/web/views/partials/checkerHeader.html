@@ -19,15 +19,15 @@
       </div> #}
       <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l" style="color: #ffffff; margin-bottom: 0; white-space: nowrap;">
-          {# {{ data['checkerTitle'] }}: #}
-          {{ data['checkerShortTitle'] }}
+          {# {{ headerData['checkerTitle'] }}: #}
+          {{ headerData['checkerShortTitle'] }}
         </h1>
       </div>
       <div class="govuk-grid-column-one-third">
         <ul class="pts-checker-header-nav">
           <li>
-            <a href="{{ data['accountManagementLink'] }}">
-              {% if data['section'] !== "account" %}
+            <a href="{{ headerData['accountManagementLink'] }}">
+              {% if headerData['section'] !== "account" %}
               <svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.58 118.12">
                 <g id="Layer_1-2" data-name="Layer 1">
                   <path class="pts-checker-nav-icon"

@@ -4,6 +4,7 @@ import config from "./src/config/index.js";
 import catboxMemory from "@hapi/catbox-memory";
 import ConfigServer from "./src/configServer.js";
 import pluginList from "./src/helper/plugins.js";
+import blip from "blipp"
 
 // Load environment variables from .env file
 if (process.env.CP_ENV === "local" && !process.env.DEFRA_ID_CLIENT_ID) {
@@ -62,7 +63,7 @@ const init = async () => {
     ConfigServer.setup(server);
 
     if (config.isDev) {
-      await server.register(require("blipp"));
+      await server.register(blip);
     }
 
     // Start the server
