@@ -42,10 +42,10 @@ const Routes = [
         try {
           await auth.authenticate(request, session);
           console.log("authenticated, now redirecting to dashboard");
-          return h.redirect("/checker/dashboard");
+          return h.redirect("/checker/current-sailings");
         } catch (err) {
           if (err.name) {
-            return h.redirect("/checker/dashboard");
+            return h.redirect("/checker/current-sailings");
           }
           console.error(
             `Received error with name ${err.name} and message ${err.message}.`
