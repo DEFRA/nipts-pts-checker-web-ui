@@ -4,7 +4,7 @@
 
 {% block beforeContent %}
 {{ super() }}
-<a href="javascript: history.back();" class="govuk-back-link">Back</a>
+<a href="/checker/document-search" class="govuk-back-link">Back</a>
 {% endblock %}
 {% set ptdNumber = response.ptdNumber %}
 {% set issuedDate = response.issuedDate %}
