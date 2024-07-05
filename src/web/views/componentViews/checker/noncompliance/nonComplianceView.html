@@ -1,0 +1,53 @@
+{% extends "./layouts/checkerLayout.html" %}
+{% block pageTitle %} Report non-compliance - {{ model.ptsTitle }}:{{ model.ptsSubTitle }}– GOV.UK {% endblock %}
+
+{% block beforeContent %}
+  <a href="javascript: history.back();" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row govuk-!-margin-bottom-0 govuk-!-margin-top-0">
+    <div class="govuk-grid-column-full govuk-!-margin-top-0">
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
+        Report non-compliance
+      </h1>
+    </div>
+</div>
+
+
+<div class="govuk-grid-row govuk-!-static-margin-top-6">
+    <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-l govuk-!-static-margin-bottom-2">Reasons</h2>
+    </div>
+</div>
+<hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
+<div class="govuk-grid-row govuk-!-static-margin-top-6">
+    <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-l govuk-!-static-margin-bottom-2">Sailing details</h2>
+    </div>
+</div>
+<hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
+<div class="govuk-grid-row govuk-!-static-margin-top-6">
+    <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-l govuk-!-static-margin-bottom-2">Passenger details</h2>
+    </div>
+</div>
+<hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
+<div class="govuk-grid-row govuk-!-static-margin-top-6">
+    <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-l govuk-!-static-margin-bottom-2">Any relevant comments</h2>
+    </div>
+</div>
+<hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
+<div class="govuk-grid-row govuk-!-static-margin-top-6">
+    <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-l govuk-!-static-margin-bottom-2">Outcome</h2>
+    </div>
+</div>
+
+<hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+{% endblock %}

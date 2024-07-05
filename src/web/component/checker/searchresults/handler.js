@@ -28,7 +28,7 @@ const saveAndContinueHandler = async (request, h) => {
       return h.redirect("/checker/document-search");
     }
 
-    return h.redirect("/checker/reports");
+    return h.redirect("/checker/non-compliance");
   } catch (error) {
     return h.view(VIEW_PATH, {
       error: "An error occurred while processing your request",
