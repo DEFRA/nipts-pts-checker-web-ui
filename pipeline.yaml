@@ -41,26 +41,46 @@ extends:
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net/api"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
+        -CP_ENV azure
+        -DEFRA_ID_REDIRECT_URI "https://$(environment)ptswebaw1004.azurewebsites.net/signin-oidc"
       tst: >-
         -PORT "8080"
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net/api"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
+        -CP_ENV azure
+        -DEFRA_ID_REDIRECT_URI "https://$(environment)ptswebaw1004.azurewebsites.net/signin-oidc"
       snd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net/api"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
+        -CP_ENV azure
+        -DEFRA_ID_REDIRECT_URI "https://$(environment)ptswebaw1004.azurewebsites.net/signin-oidc"
       pre: >-
         -PORT "8080"
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net/api"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
+        -CP_ENV azure
+        -DEFRA_ID_REDIRECT_URI "https://$(environment)ptswebaw1004.azurewebsites.net/signin-oidc"
       prd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net/api"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
+        -CP_ENV azure
+        -DEFRA_ID_REDIRECT_URI "https://$(environment)ptswebaw1004.azurewebsites.net/signin-oidc"
     runSonarScan: true
     #runVulnerabilityScan: true
     #skipOwaspScan: false
+
+    #TODO - Following app settings need to be added for all environments
+    #DEFRA_ID_TENANT "TBC"
+    #DEFRA_ID_POLICY "TBC"
+    #DEFRA_ID_REDIRECT_URI "https://$(environment)ptswebaw1004.azurewebsites.net/signin-oidc"
+    #DEFRA_ID_CLIENT_ID "TBC"
+    #DEFRA_ID_CLIENT_SECRET "TBC"
+    #DEFRA_ID_JWT_ISSUER_ID ""
+    #DEFRA_ID_SERVICE_ID "TBC"
+    #DEFRA_ID_SIGNOUT_URI "TBC"

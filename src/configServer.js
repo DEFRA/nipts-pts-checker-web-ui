@@ -44,11 +44,14 @@ const setup = (server) => {
   server.route({
     method: "GET",
     path: "/{param*}",
-    handler: {
-      directory: {
-        path: Path.join(__dirname, "./web"),
+    options: {
+      auth: false,
+      handler: {
+        directory: {
+          path: Path.join(__dirname, "./web"),
+        },
       },
-    },
+    }
   });
 
   // Configure validator
@@ -58,13 +61,16 @@ const setup = (server) => {
   server.route({
     method: "GET",
     path: "/web/assets/{param*}",
-    handler: {
-      directory: {
-        path: "./web/assets", // Update the path to look for the file in the workspace
-        redirectToSlash: true,
-        index: true,
+    options: {
+      auth: false,
+      handler: {
+        directory: {
+          path: "./web/assets", // Update the path to look for the file in the workspace
+          redirectToSlash: true,
+          index: true,
+        },
       },
-    },
+    }
   });
 };
 
