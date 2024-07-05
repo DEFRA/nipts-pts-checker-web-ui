@@ -54,9 +54,9 @@
       </div>
 
       <div id="time-group" class="govuk-form-group">
-        <label class="govuk-label" for="sailingHour">
+        <div class="govuk-label">
           <b> {{ currentSailingMainModelData.sailingTimeSubHeading }} </b>
-        </label>
+        </div>
         <div id="time-error" hidden>
           <p class="govuk-error-message">
             <span class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError }}</span>  {{currentSailingMainModelData.currentSailingMainModelErrors.timeError}}
@@ -70,7 +70,7 @@
               <option value="{{timeHour}}">{{ timeHour }}</option>
             {% endfor %}
         </select>
-        <span> : </span>
+        <span aria-disabled="true"> : </span>
         <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingMinutes" name="sailingMinutes" aria-label="sailingMinutes">
             {% for timeMinutes in currentSailingMainModelData.sailingTimes %}
               <option value="{{timeMinutes}}">{{ timeMinutes }}</option>
