@@ -44,7 +44,7 @@ extends:
         -CP_ENV azure
         -DEFRA_ID_TENANT "TBC"
         -DEFRA_ID_POLICY "TBC"
-        -DEFRA_ID_REDIRECT_URI "https://$(environment)ptsptswebaw1004.azurewebsites.net/signin-oidc"
+        -DEFRA_ID_REDIRECT_URI "https://$(environment)ptswebaw1004.azurewebsites.net/signin-oidc"
         -DEFRA_ID_CLIENT_ID "TBC"
         -DEFRA_ID_CLIENT_SECRET "TBC"
         -DEFRA_ID_JWT_ISSUER_ID ""
@@ -58,7 +58,7 @@ extends:
         -CP_ENV azure
         -DEFRA_ID_TENANT "TBC"
         -DEFRA_ID_POLICY "TBC"
-        -DEFRA_ID_REDIRECT_URI "https://$(environment)ptsptswebaw1004.azurewebsites.net/signin-oidc"
+        -DEFRA_ID_REDIRECT_URI "https://$(environment)ptswebaw1004.azurewebsites.net/signin-oidc"
         -DEFRA_ID_CLIENT_ID "TBC"
         -DEFRA_ID_CLIENT_SECRET "TBC"
         -DEFRA_ID_JWT_ISSUER_ID ""
@@ -72,7 +72,7 @@ extends:
         -CP_ENV azure
         -DEFRA_ID_TENANT "TBC"
         -DEFRA_ID_POLICY "TBC"
-        -DEFRA_ID_REDIRECT_URI "https://$(environment)ptsptswebaw1004.azurewebsites.net/signin-oidc"
+        -DEFRA_ID_REDIRECT_URI "https://$(environment)ptswebaw1004.azurewebsites.net/signin-oidc"
         -DEFRA_ID_CLIENT_ID "TBC"
         -DEFRA_ID_CLIENT_SECRET "TBC"
         -DEFRA_ID_JWT_ISSUER_ID ""
@@ -86,7 +86,7 @@ extends:
         -CP_ENV azure
         -DEFRA_ID_TENANT "TBC"
         -DEFRA_ID_POLICY "TBC"
-        -DEFRA_ID_REDIRECT_URI "https://$(environment)ptsptswebaw1004.azurewebsites.net/signin-oidc"
+        -DEFRA_ID_REDIRECT_URI "https://$(environment)ptswebaw1004.azurewebsites.net/signin-oidc"
         -DEFRA_ID_CLIENT_ID "TBC"
         -DEFRA_ID_CLIENT_SECRET "TBC"
         -DEFRA_ID_JWT_ISSUER_ID ""
@@ -100,7 +100,7 @@ extends:
         -CP_ENV azure
         -DEFRA_ID_TENANT "TBC"
         -DEFRA_ID_POLICY "TBC"
-        -DEFRA_ID_REDIRECT_URI "https://$(environment)ptsptswebaw1004.azurewebsites.net/signin-oidc"
+        -DEFRA_ID_REDIRECT_URI "https://$(environment)ptswebaw1004.azurewebsites.net/signin-oidc"
         -DEFRA_ID_CLIENT_ID "TBC"
         -DEFRA_ID_CLIENT_SECRET "TBC"
         -DEFRA_ID_JWT_ISSUER_ID ""
