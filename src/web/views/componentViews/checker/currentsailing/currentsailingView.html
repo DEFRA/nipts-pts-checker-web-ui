@@ -65,7 +65,7 @@
         <div id="event-name-hint" class="govuk-hint">
           {{ currentSailingMainModelData.sailingHintText1 }} <br /> {{ currentSailingMainModelData.sailingHintText2 }}
         </div>
-        <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingHour" name="sailingHour">
+        <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingHour" name="sailingHour" aria-label="sailingHour">
             {% for timeHour in currentSailingMainModelData.sailingTimes.slice(0, 25) %}
               <option value="{{timeHour}}">{{ timeHour }}</option>
             {% endfor %}
