@@ -34,12 +34,12 @@
                   {% for route in currentSailingMainModelData.sailingRoutes %}
                   <div class="govuk-radios__item">
                       {% if  route.id  == 1 %}
-                        <input class="govuk-radios__input" id="routeRadio" name="routeRadio" type="radio" value="{{ route.id }}">
+                        <input class="govuk-radios__input" id="routeRadio" name="routeRadio" type="radio" value="{{ route.id }}" tabindex="0">
                         <label class="govuk-label govuk-radios__label" for="routeRadio">
                           {{ route.label }}
                       </label>
                       {% else %}
-                        <input class="govuk-radios__input" id="routeRadio-{{ route.id }}" name="routeRadio" type="radio" value="{{ route.id }}">
+                        <input class="govuk-radios__input" id="routeRadio-{{ route.id }}" name="routeRadio" type="radio" value="{{ route.id }}" tabindex="0">
                         <label class="govuk-label govuk-radios__label" for="routeRadio-{{ route.id }}">
                           {{ route.label }}
                         </label>
@@ -63,15 +63,15 @@
           </p>
         </div>
         <div id="event-name-hint" class="govuk-hint">
-          {{ currentSailingMainModelData.sailingHintText1 }} <br /> {{ currentSailingMainModelData.sailingHintText2 }}
+          {{ currentSailingMainModelData.sailingHintText1 }} <br> {{ currentSailingMainModelData.sailingHintText2 }}
         </div>
-        <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingHour" name="sailingHour" aria-label="sailingHour">
+        <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingHour" name="sailingHour" tabindex="0"  aria-label="sailingHour">
             {% for timeHour in currentSailingMainModelData.sailingTimes.slice(0, 25) %}
               <option value="{{timeHour}}">{{ timeHour }}</option>
             {% endfor %}
         </select>
         <span aria-disabled="true"> : </span>
-        <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingMinutes" name="sailingMinutes" aria-label="sailingMinutes">
+        <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingMinutes" name="sailingMinutes" tabindex="0" aria-label="sailingMinutes">
             {% for timeMinutes in currentSailingMainModelData.sailingTimes %}
               <option value="{{timeMinutes}}">{{ timeMinutes }}</option>
             {% endfor %}
