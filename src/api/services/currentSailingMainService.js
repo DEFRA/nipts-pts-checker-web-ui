@@ -1,7 +1,7 @@
 import { CurrentSailingMainModel } from "../models/currentSailingMainModel.js";
 import CurrentSailingModel from "../../constants/currentSailingConstant.js";
 import dotenv from "dotenv";
-import axios from "axios";
+import httpService from "./httpService.js";
 
 dotenv.config();
 
@@ -10,7 +10,7 @@ const baseUrl =
   
 const getCurrentSailingMain = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/sailing-routes`);
+    const response = await httpService.getAsync(`${baseUrl}/sailing-routes`);
 
     CurrentSailingModel.currentSailingMainModelData.routes = response.data.map(route => ({
       id: String(route.id), // Convert id to a string

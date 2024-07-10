@@ -6,6 +6,10 @@ import {
   ServerErrorResponse,
 } from "../models/apiResponse.js";
 import { HttpStatusConstants } from "../../constants/httpMethod.js";
+import dotenv from "dotenv";
+
+// Load environment variables from .env file
+dotenv.config();
 
 /*========== errorResponseWithErrorLogging(e): Logs error and returns ServerErrorResponse ==========*/
 const errorResponseWithErrorLogging = (error) => {
@@ -90,9 +94,13 @@ const validateStatus = (status) => {
   return status < HttpStatusConstants.INTERNAL_SERVER_ERROR;
 };
 
+// Read the subscription key from environment variables
+const subscriptionKey = process.env.OCP_APIM_SUBSCRIPTION_KEY;
+
 const options = {
   headers: {
     "Content-Type": "application/json",
+    "Ocp-Apim-Subscription-Key": subscriptionKey,
   },
   validateStatus: function (status) {
     return validateStatus(status);

@@ -1,6 +1,6 @@
 import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js";
 import dotenv from "dotenv";
-import axios from "axios";
+import httpService from "./httpService.js";
 import moment from "moment";
 
 dotenv.config();
@@ -28,7 +28,7 @@ const formatDate = (dateRaw) => {
 
 const getMicrochipData = async (microchipNumber) => {
   try {
-    const response = await axios.post(
+    const response = await httpService.postAsync(
       `${baseUrl}/Checker/checkMicrochipNumber`,
       { microchipNumber }
     );

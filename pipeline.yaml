@@ -1,4 +1,4 @@
-name: 'V1-B$(Date:yyyyMMdd)-$(BuildID)'
+name: "V1-B$(Date:yyyyMMdd)-$(BuildID)"
 
 parameters:
   - name: forceDevDeploy
@@ -35,11 +35,12 @@ extends:
     appProject: PTS
     appInstanceNumber: $(nc-region-id)04
     appName: DEFRA_nipts-pts-checker-web-ui
-    appSettingsEnv: 
+    appSettingsEnv:
       dev: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-        -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net/api"
+        -BASE_API_URL "https://dev-internal-gateway.trade.azure.defra.cloud/pts-pet-checker/v1/api/"
+        -OCP_APIM_SUBSCRIPTION_KEY "3e9a5ea1359347869b60ee03d857cdac"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
         -CP_ENV azure
         -DEFRA_ID_REDIRECT_URI "https://$(environment)ptswebaw1004.azurewebsites.net/signin-oidc"
