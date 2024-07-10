@@ -70,7 +70,7 @@
               <option value="{{timeHour}}">{{ timeHour }}</option>
             {% endfor %}
         </select>
-        <span aria-disabled="true" role="text">:</span>
+        <span aria-disabled="true" role="none"> : </span>
         <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingMinutes" name="sailingMinutes" tabindex="0" aria-label="sailingMinutes">
             {% for timeMinutes in currentSailingMainModelData.sailingTimes %}
               <option value="{{timeMinutes}}">{{ timeMinutes }}</option>
