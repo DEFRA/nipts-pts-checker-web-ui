@@ -1,5 +1,5 @@
 import appSettingsService from "../../../../../api/services/appSettingsService.js";
-import Handler from "../../../../../web/component/checker/noncompliance/handler.js";
+import { NonComplianceHandlers } from "../../../../../web/component/checker/noncompliance/handler.js";
 
 jest.mock("../../../../../api/services/appSettingsService.js");
 describe("Handler", () => {
@@ -17,7 +17,7 @@ describe("Handler", () => {
       const request = {};
 
       // Act
-      await Handler.index.handler(request, h);
+      await NonComplianceHandlers.getNonComplianceHandler(request, h);
 
       // Assert
       expect(appSettingsService.getAppSettings).toHaveBeenCalled();
