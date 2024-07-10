@@ -30,7 +30,7 @@
                   <li list-style-type: none;>
                 <div class="govuk-radios__item">
                   <input class="govuk-radios__input" id="documentSearch-1" name="documentSearch" type="radio"
-                    value="ptd" data-aria-controls="conditional-documentSearch-1" {% if activeTab =="ptd"
+                    value="ptd" data-aria-controls="conditional-documentSearch-1" aria-label="SearchByPtdNumber" {% if activeTab =="ptd"
                     %}checked{% endif %} checked>
                   <label class="govuk-label govuk-radios__label" for="documentSearch-1">
                     {{documentSearchMainModelData.searchOptions[0].value}}
