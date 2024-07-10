@@ -49,7 +49,7 @@ describe("DocumentSearchHandlers", () => {
       };
 
       const response =
-        await DocumentSearchHandlers.getDocumentSearch.index.handler(
+        await DocumentSearchHandlers.getDocumentSearch(
           request,
           h
         );
@@ -79,7 +79,7 @@ describe("DocumentSearchHandlers", () => {
       };
 
       const response =
-        await DocumentSearchHandlers.getDocumentSearch.index.handler(
+        await DocumentSearchHandlers.getDocumentSearch(
           request,
           h
         );

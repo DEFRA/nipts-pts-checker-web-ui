@@ -34,7 +34,7 @@ describe('Handler', () => {
           })
         };
 
-        const response = await CurrentSailingHandlers.getCurrentSailings.index.handler(request, h);
+        const response = await CurrentSailingHandlers.getCurrentSailings(request, h);
 
         expect(response.viewPath).toBe("componentViews/checker/currentsailing/currentsailingView");
         expect(response.data).toEqual({ currentSailingMainModelData: mockData });

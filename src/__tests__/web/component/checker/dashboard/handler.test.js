@@ -19,7 +19,7 @@ describe('Handler', () => {
                 })
             };
 
-            const response = await DashboardHandlers.getDashboard.index.handler(mockRequest, h);
+            const response = await DashboardHandlers.getDashboard(mockRequest, h);
 
             expect(response.viewPath).toBe("componentViews/checker/dashboard/dashboardView");            
             expect(h.view).toHaveBeenCalledWith("componentViews/checker/dashboard/dashboardView", { currentSailingSlot: mockData });

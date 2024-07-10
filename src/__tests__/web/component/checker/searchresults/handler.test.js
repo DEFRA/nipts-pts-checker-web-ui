@@ -24,7 +24,7 @@ describe("SearchResultsHandlers", () => {
       };
 
       const response =
-        await SearchResultsHandlers.getSearchResultsHandler.index.handler(
+        await SearchResultsHandlers.getSearchResultsHandler(
           request,
           h
         );
@@ -36,7 +36,7 @@ describe("SearchResultsHandlers", () => {
         {
           microchipNumber: mockMicrochipNumber,
           pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
-          response: mockData,
+          data: mockData,
         }
       );
       expect(response.viewPath).toBe(
@@ -44,11 +44,9 @@ describe("SearchResultsHandlers", () => {
       );
 
       expect(response.data).toEqual({
-           "microchipNumber": "123456789012345",
-            "pageTitle": "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
-            "response": {
-                "some": "data",
-              }
+          data: mockData,
+          microchipNumber: "123456789012345",
+          pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
         });
     });
   });
