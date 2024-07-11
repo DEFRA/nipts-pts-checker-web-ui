@@ -9,8 +9,16 @@ const baseUrl =
   process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
 
 describe("currentSailingMainService", () => {
-  afterEach(() => {
+  let request;
+
+  beforeEach(() => {
     jest.clearAllMocks();
+    request = {
+      // Mock request object
+      headers: {
+        authorization: "Bearer mockToken",
+      },
+    };
   });
 
   it("fetches data successfully and returns CurrentSailingMainModel", async () => {
@@ -22,10 +30,13 @@ describe("currentSailingMainService", () => {
     // Mock axios response
     httpService.getAsync.mockResolvedValue({ data: mockData });
 
-    const result = await currentSailingMainService.getCurrentSailingMain();
+    const result = await currentSailingMainService.getCurrentSailingMain(
+      request
+    );
 
     expect(httpService.getAsync).toHaveBeenCalledWith(
-      `${baseUrl}/sailing-routes`
+      `${baseUrl}/sailing-routes`,
+      request
     );
     expect(CurrentSailingModel.currentSailingMainModelData.routes).toEqual([
       { id: "1", value: "Route 1", label: "Route 1" },
@@ -41,7 +52,9 @@ describe("currentSailingMainService", () => {
       .spyOn(console, "error")
       .mockImplementation(() => {});
 
-    const result = await currentSailingMainService.getCurrentSailingMain();
+    const result = await currentSailingMainService.getCurrentSailingMain(
+      request
+    );
 
     expect(console.error).toHaveBeenCalledWith(
       "Error fetching data:",

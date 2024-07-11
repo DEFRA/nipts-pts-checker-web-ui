@@ -48,11 +48,10 @@ describe("DocumentSearchHandlers", () => {
         }),
       };
 
-      const response =
-        await DocumentSearchHandlers.getDocumentSearch(
-          request,
-          h
-        );
+      const response = await DocumentSearchHandlers.getDocumentSearch(
+        request,
+        h
+      );
 
       expect(response.viewPath).toBe(
         "componentViews/checker/documentsearch/documentSearchView"
@@ -78,11 +77,10 @@ describe("DocumentSearchHandlers", () => {
         }),
       };
 
-      const response =
-        await DocumentSearchHandlers.getDocumentSearch(
-          request,
-          h
-        );
+      const response = await DocumentSearchHandlers.getDocumentSearch(
+        request,
+        h
+      );
 
       expect(response.viewPath).toBe(
         "componentViews/checker/documentsearch/documentSearchView"
@@ -208,7 +206,8 @@ describe("DocumentSearchHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentNotFoundView",
         {
-          pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+          pageTitle:
+            "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
           searchValue: request.payload.microchipNumber,
         }
       );
@@ -240,10 +239,17 @@ describe("DocumentSearchHandlers", () => {
       const response = await DocumentSearchHandlers.submitSearch(request, h);
 
       expect(apiService.getApplicationByPTDNumber).toHaveBeenCalledWith(
+        "GB826123456",
+        request 
+      );
+      expect(request.yar.set).toHaveBeenNthCalledWith(
+        1,
+        "ptdNumber",
         "GB826123456"
       );
-      expect(request.yar.set).toHaveBeenNthCalledWith(1, "ptdNumber", "GB826123456");
-      expect(request.yar.set).toHaveBeenNthCalledWith(2, "data", { "data": { status: "authorised", ptdNumber: "GB826123456"}});
+      expect(request.yar.set).toHaveBeenNthCalledWith(2, "data", {
+        data: { status: "authorised", ptdNumber: "GB826123456" },
+      });
       expect(h.redirect).toHaveBeenCalledWith("/checker/search-results");
     });
 
@@ -298,7 +304,9 @@ describe("DocumentSearchHandlers", () => {
       };
 
       validatePtdNumber.mockReturnValue({ isValid: true, error: null });
-      apiService.getApplicationByPTDNumber.mockResolvedValue({ error: "not_found" });
+      apiService.getApplicationByPTDNumber.mockResolvedValue({
+        error: "not_found",
+      });
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
         mockData
       );
@@ -308,7 +316,8 @@ describe("DocumentSearchHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentNotFoundView",
         {
-          pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+          pageTitle:
+            "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
           searchValue: "GB826" + request.payload.ptdNumberSearch,
         }
       );
@@ -331,7 +340,11 @@ describe("DocumentSearchHandlers", () => {
 
       validateApplicationNumber.mockReturnValue({ isValid: true, error: null });
       apiService.getApplicationByApplicationNumber.mockResolvedValue({
-        data: { status: "authorised", applicationNumber: "ELK7I8N4", documentState: "approved" },
+        data: {
+          status: "authorised",
+          applicationNumber: "ELK7I8N4",
+          documentState: "approved",
+        },
       });
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
         mockData
@@ -340,11 +353,22 @@ describe("DocumentSearchHandlers", () => {
       const response = await DocumentSearchHandlers.submitSearch(request, h);
 
       expect(apiService.getApplicationByApplicationNumber).toHaveBeenCalledWith(
-        "ELK7I8N4"
+        "ELK7I8N4",
+        request 
       );
 
-      expect(request.yar.set).toHaveBeenNthCalledWith(1, "applicationNumber", "ELK7I8N4");
-      expect(request.yar.set).toHaveBeenNthCalledWith(2, "data", { "data": {  applicationNumber: "ELK7I8N4", documentState: "approved",  status: "authorised",}});
+      expect(request.yar.set).toHaveBeenNthCalledWith(
+        1,
+        "applicationNumber",
+        "ELK7I8N4"
+      );
+      expect(request.yar.set).toHaveBeenNthCalledWith(2, "data", {
+        data: {
+          applicationNumber: "ELK7I8N4",
+          documentState: "approved",
+          status: "authorised",
+        },
+      });
 
       expect(h.redirect).toHaveBeenCalledWith("/checker/search-results");
     });
@@ -362,7 +386,9 @@ describe("DocumentSearchHandlers", () => {
       };
 
       validateApplicationNumber.mockReturnValue({ isValid: true, error: null });
-      apiService.getApplicationByApplicationNumber.mockResolvedValue({ error: "not_found" });
+      apiService.getApplicationByApplicationNumber.mockResolvedValue({
+        error: "not_found",
+      });
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
         mockData
       );
@@ -372,7 +398,8 @@ describe("DocumentSearchHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentNotFoundView",
         {
-          pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+          pageTitle:
+            "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
           searchValue: request.payload.applicationNumberSearch,
         }
       );
