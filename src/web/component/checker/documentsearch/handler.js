@@ -51,7 +51,10 @@ const submitSearch = async (request, h) => {
       }
 
       const ptdNumber = `GB826${request.payload.ptdNumberSearch}`;
-      const responseData = await apiService.getApplicationByPTDNumber(ptdNumber);
+      const responseData = await apiService.getApplicationByPTDNumber(
+        ptdNumber,
+        request
+      );
 
       if (responseData.error) {
         if (responseData.error === "not_found") {
@@ -107,7 +110,10 @@ const submitSearch = async (request, h) => {
       }
 
       const applicationNumber = request.payload.applicationNumberSearch;
-      const responseData = await apiService.getApplicationByApplicationNumber(applicationNumber);
+      const responseData = await apiService.getApplicationByApplicationNumber(
+        applicationNumber,
+        request
+      );
 
       if (responseData.error) {
         if (responseData.error === "not_found") {
@@ -153,7 +159,8 @@ const submitSearch = async (request, h) => {
       }
 
       const microchipAppPtdMainData = await microchipApi.getMicrochipData(
-        microchipNumber
+        microchipNumber,
+        request
       );
 
       if (microchipAppPtdMainData.error) {

@@ -33,11 +33,11 @@ const formatDate = (dateRaw) => {
   return date ? moment(date).format("DD/MM/YYYY") : undefined;
 };
 
-const getApplicationByPTDNumber = async (ptdNumberFromPayLoad) => {
+const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
   try {
-    const request = { ptdNumber: ptdNumberFromPayLoad };
+    const data = { ptdNumber: ptdNumberFromPayLoad };
     const url = buildApiUrl("Checker/checkPTDNumber");
-    var response = await httpService.postAsync(url, request);
+    var response = await httpService.postAsync(url, data, request);
 
     if (response.status == HttpStatusCode.NotFound) {
       throw new Error(response.error);
@@ -144,11 +144,14 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad) => {
   }
 };
 
-const getApplicationByApplicationNumber = async (applicationNumber) => {
+const getApplicationByApplicationNumber = async (
+  applicationNumber,
+  request
+) => {
   try {
-    const request = { applicationNumber: applicationNumber };
+    const data = { applicationNumber: applicationNumber };
     const url = buildApiUrl("Checker/checkApplicationNumber");
-    var response = await httpService.postAsync(url, request);
+    var response = await httpService.postAsync(url, data, request);
 
     if (response.status == HttpStatusCode.NotFound) {
       throw new Error(response.error);

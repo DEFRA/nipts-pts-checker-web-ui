@@ -26,11 +26,12 @@ const formatDate = (dateRaw) => {
   return date ? moment(date).format('DD/MM/YYYY') : undefined;
 };
 
-const getMicrochipData = async (microchipNumber) => {
+const getMicrochipData = async (microchipNumber, request) => {
   try {
     const response = await httpService.postAsync(
       `${baseUrl}/Checker/checkMicrochipNumber`,
-      { microchipNumber }
+      { microchipNumber },
+      request
     );
 
     const item = response.data;
@@ -57,7 +58,6 @@ const getMicrochipData = async (microchipNumber) => {
         ? item.travelDocument &&
           item.travelDocument.travelDocumentReferenceNumber
         : item.application && item.application.referenceNumber;
-   
 
     let issuedDateRaw;
 
@@ -75,14 +75,16 @@ const getMicrochipData = async (microchipNumber) => {
         issuedDateRaw = item.application && item.application.dateOfApplication;
         break;
     }
-   
-   const formattedIssuedDate = formatDate(issuedDateRaw);
 
-   const microchippedDateRaw = item.pet ? item.pet.microchippedDate : undefined;
-   const formattedMicrochippedDate = formatDate(microchippedDateRaw);
+    const formattedIssuedDate = formatDate(issuedDateRaw);
 
-   const dateOfBirthRaw = item.pet ? item.pet.dateOfBirth : undefined;
-   const formattedDateOfBirth = formatDate(dateOfBirthRaw);
+    const microchippedDateRaw = item.pet
+      ? item.pet.microchippedDate
+      : undefined;
+    const formattedMicrochippedDate = formatDate(microchippedDateRaw);
+
+    const dateOfBirthRaw = item.pet ? item.pet.dateOfBirth : undefined;
+    const formattedDateOfBirth = formatDate(dateOfBirthRaw);
 
     const transformedItem = new MicrochipAppPtdMainModel({
       petId: item.pet ? item.pet.petId : undefined,
