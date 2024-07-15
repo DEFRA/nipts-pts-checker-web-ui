@@ -1,4 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 import { HttpStatusCode } from "axios";
 import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js";
 import httpService from "./httpService.js";
