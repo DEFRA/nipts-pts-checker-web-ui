@@ -26,12 +26,11 @@ const formatDate = (dateRaw) => {
   return date ? moment(date).format('DD/MM/YYYY') : undefined;
 };
 
-const getMicrochipData = async (microchipNumber, request) => {
+const getMicrochipData = async (microchipNumber) => {
   try {
     const response = await httpService.postAsync(
       `${baseUrl}/Checker/checkMicrochipNumber`,
-      { microchipNumber },
-      request
+      { microchipNumber }
     );
 
     const item = response.data;

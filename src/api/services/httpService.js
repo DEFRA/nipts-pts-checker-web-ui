@@ -6,12 +6,6 @@ import {
   ServerErrorResponse,
 } from "../models/apiResponse.js";
 import { HttpStatusConstants } from "../../constants/httpMethod.js";
-import session from "../../session/index.js";
-import sessionKeys from "../../session/keys.js";
-import dotenv from "dotenv";
-
-// Load environment variables from .env file
-dotenv.config();
 
 /*========== errorResponseWithErrorLogging(e): Logs error and returns ServerErrorResponse ==========*/
 const errorResponseWithErrorLogging = (error) => {
@@ -20,9 +14,11 @@ const errorResponseWithErrorLogging = (error) => {
   let errorMessage;
 
   if (error.response) {
+    // The request was made and the server responded with a status code that falls out of the range of 2xx
     console.log(error.response);
     errorMessage = "An error has occurred";
   } else if (error.request) {
+    // The request was made but no response was received, `error.request` is an instance of XMLHttpRequest in the browser and an instance of http.ClientRequest in node.js
     errorMessage = "No response received";
     console.log(error.request);
   } else {
@@ -94,26 +90,21 @@ const validateStatus = (status) => {
   return status < HttpStatusConstants.INTERNAL_SERVER_ERROR;
 };
 
-const createOptions = (request) => {
-  const subscriptionKey = process.env.OCP_APIM_SUBSCRIPTION_KEY;
-  const token = session.getToken(request, sessionKeys.tokens.accessToken);
-
-  return {
-    headers: {
-      "Content-Type": "application/json",
-      "Ocp-Apim-Subscription-Key": subscriptionKey,
-      Authorization: `Bearer ${token}`,
-    },
-    validateStatus,
-    mode: "no-cors", // Add no-cors mode
-  };
+const options = {
+  headers: {
+    "Content-Type": "application/json",
+    "Ocp-Apim-Subscription-Key": process.env.OCP_APIM_SUBSCRIPTION_KEY,
+  },
+  validateStatus: function (status) {
+    return validateStatus(status);
+  },
 };
 
 /*========== getSync(url): GET API Call (Sync) ==========*/
-const getSync = (url, request) => {
+const getSync = (url) => {
   console.log("getSync (url)", url);
   axios
-    .get(url, createOptions(request))
+    .get(url, options)
     .then(function (response) {
       return statusBasedResponse(response);
     })
@@ -123,10 +114,10 @@ const getSync = (url, request) => {
 };
 
 /*========== postSync(url, data): POST API Call (Sync) ==========*/
-const postSync = (url, data, request) => {
+const postSync = (url, data) => {
   console.log("postSync (url, data)", url, data);
   axios
-    .post(url, data, createOptions(request))
+    .post(url, data, options)
     .then(function (response) {
       return statusBasedResponse(response);
     })
@@ -136,43 +127,43 @@ const postSync = (url, data, request) => {
 };
 
 /*========== getAsync(url): GET API Call (Async) ==========*/
-const getAsync = async (url, request) => {
+const getAsync = async (url) => {
   try {
     console.log("getAsync (url)", url);
-    const response = await axios.get(url, createOptions(request));
+    const response = await axios.get(url, options);
     return statusBasedResponse(response);
   } catch (error) {
     return errorResponseWithErrorLogging(error);
   }
 };
 
-/*========== postAsync(url, data, request): POST API Call (Async) ==========*/
-const postAsync = async (url, data, request) => {
+/*========== postAsync(url, data): POST API Call (Async) ==========*/
+const postAsync = async (url, data) => {
   try {
     console.log("postAsync (url, data)", url, data);
-    const response = await axios.post(url, data, createOptions(request));
+    const response = await axios.post(url, data, options);
     return statusBasedResponse(response);
   } catch (error) {
     return errorResponseWithErrorLogging(error);
   }
 };
 
-/*========== putAsync(url, data, request): PUT API Call (Async) ==========*/
-const putAsync = async (url, data, request) => {
+/*========== putAsync(url, data): PUT API Call (Async) ==========*/
+const putAsync = async (url, data) => {
   try {
     console.log("putAsync (url, data)", url, data);
-    const response = await axios.put(url, data, createOptions(request));
+    const response = await axios.put(url, data, options);
     return statusBasedResponse(response);
   } catch (error) {
     return errorResponseWithErrorLogging(error);
   }
 };
 
-/*========== deleteAsync(url, request): DELETE API Call (Async) ==========*/
-const deleteAsync = async (url, request) => {
+/*========== deleteAsync(url): DELETE API Call (Async) ==========*/
+const deleteAsync = async (url) => {
   try {
     console.log("deleteAsync (url)", url);
-    const response = await axios.delete(url, createOptions(request));
+    const response = await axios.delete(url, options);
     return statusBasedResponse(response);
   } catch (error) {
     return errorResponseWithErrorLogging(error);

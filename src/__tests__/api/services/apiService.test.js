@@ -10,16 +10,8 @@ const baseUrl =
   process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
 
 describe("apiService", () => {
-  let request;
-
   beforeEach(() => {
     jest.clearAllMocks();
-    request = {
-      // Mock request object
-      headers: {
-        authorization: "Bearer mockToken",
-      },
-    };
   });
 
   describe("getApplicationByPTDNumber", () => {
@@ -59,14 +51,11 @@ describe("apiService", () => {
         format: () => "01/01/2022",
       }));
 
-      const result = await apiService.getApplicationByPTDNumber(
-        "123456",
-        request
-      );
+      const result = await apiService.getApplicationByPTDNumber("123456");
+
       expect(httpService.postAsync).toHaveBeenCalledWith(
         `${baseUrl}/Checker/checkPTDNumber`,
-        { ptdNumber: "123456" },
-        request
+        { ptdNumber: "123456" }
       );
 
       const expectedInstance = new MicrochipAppPtdMainModel({
@@ -97,14 +86,11 @@ describe("apiService", () => {
         error: "Application not found",
       });
 
-      const result = await apiService.getApplicationByPTDNumber(
-        "123459",
-        request
-      );
+      const result = await apiService.getApplicationByPTDNumber("123459");
+
       expect(httpService.postAsync).toHaveBeenCalledWith(
         `${baseUrl}/Checker/checkPTDNumber`,
-        { ptdNumber: "123459" },
-        request
+        { ptdNumber: "123459" }
       );
       expect(result).toEqual({ error: "not_found" });
     });
@@ -121,20 +107,16 @@ describe("apiService", () => {
         data: mockResponse.data,
       });
 
-      const result = await apiService.getApplicationByPTDNumber(
-        "123456",
-        request
-      );
+      const result = await apiService.getApplicationByPTDNumber("123456");
+
       expect(result).toEqual({ error: "Application not found" });
     });
 
     it("should return unexpected error when an exception occurs", async () => {
       httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
 
-      const result = await apiService.getApplicationByPTDNumber(
-        "123456",
-        request
-      );
+      const result = await apiService.getApplicationByPTDNumber("123456");
+
       expect(result).toEqual({ error: "Unexpected error" });
     });
   });
@@ -177,13 +159,12 @@ describe("apiService", () => {
       }));
 
       const result = await apiService.getApplicationByApplicationNumber(
-        "app123",
-        request
+        "app123"
       );
+
       expect(httpService.postAsync).toHaveBeenCalledWith(
         `${baseUrl}/Checker/checkApplicationNumber`,
-        { applicationNumber: "app123" },
-        request
+        { applicationNumber: "app123" }
       );
 
       const expectedInstance = new MicrochipAppPtdMainModel({
@@ -215,8 +196,12 @@ describe("apiService", () => {
       });
 
       const result = await apiService.getApplicationByApplicationNumber(
-        "app123",
-        request
+        "app123"
+      );
+
+      expect(httpService.postAsync).toHaveBeenCalledWith(
+        `${baseUrl}/Checker/checkApplicationNumber`,
+        { applicationNumber: "app123" }
       );
       expect(result).toEqual({ error: "not_found" });
     });
@@ -234,9 +219,9 @@ describe("apiService", () => {
       });
 
       const result = await apiService.getApplicationByApplicationNumber(
-        "app123",
-        request
+        "app123"
       );
+
       expect(result).toEqual({ error: "Application not found" });
     });
 
@@ -244,9 +229,9 @@ describe("apiService", () => {
       httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
 
       const result = await apiService.getApplicationByApplicationNumber(
-        "app123",
-        request
+        "app123"
       );
+
       expect(result).toEqual({ error: "Unexpected error" });
     });
   });

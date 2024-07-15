@@ -8,12 +8,10 @@ dotenv.config();
 const baseUrl =
   process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
 
-const getCurrentSailingMain = async (request) => {
-  // Accept the request parameter here
+const getCurrentSailingMain = async () => {
   try {
     const response = await httpService.getAsync(
-      `${baseUrl}/sailing-routes`,
-      request
+      `${baseUrl}/sailing-routes`
     ); 
 
     CurrentSailingModel.currentSailingMainModelData.routes = response.data.map(
