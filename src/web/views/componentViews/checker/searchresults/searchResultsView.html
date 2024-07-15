@@ -6,6 +6,7 @@
 {{ super() }}
 <a href="/checker/document-search" class="govuk-back-link">Back</a>
 {% endblock %}
+
 {% set ptdNumber = data.ptdNumber %}
 {% set issuedDate = data.issuedDate %}
 {% set microchipNumber = data.microchipNumber %}
@@ -17,290 +18,279 @@
 {% set petDoB = data.petDoB %}
 {% set petColour = data.petColour %}
 {% set petFeaturesDetail = data.petFeaturesDetail %}
+
 {% block content %}
+<div class="govuk-grid-row govuk-!-margin-bottom-9 govuk-!-margin-top-4">
+    {% include "./errors/errorSummary.html" %}
+    <div class="govuk-grid-row govuk-!-static-margin-top-4">
+        <div class="govuk-grid-column-three-quarters">
+            {# <div class="govuk-grid-row pet-declaration-logos govuk-!-static-margin-bottom-4">
+                <div class="govuk-grid-column-one-quarter">
+                    {% include "../../includes/defra-logo.html" %}
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    {% include "../../includes/apha-logo.html" %}
+                </div>
+            </div> #}
 
-{% if data['error'] === 'submitted' %}
-<div class="govuk-grid-row govuk-!-static-margin-top-4">
-    <div class="govuk-grid-column-three-quarters">
+            {% include "includes/status.html" %}
 
-        <div class="govuk-error-summary" data-module="govuk-error-summary">
-            <div role="alert">
-                <h2 class="govuk-error-summary__title">
-                    There is a problem
-                </h2>
-                <div class="govuk-error-summary__body">
-                    <ul class="govuk-list govuk-error-summary__list">
-                        <li>
-                            The information wasn't recorded, please try to submit again. If you close the application,
-                            the information will be lost. You can printscreen or save the information and submit it
-                            later.
-                        </li>
-                    </ul>
+            {% if data['documentState'] !== "awaiting" and data['documentState'] !== "rejected" %}
+            <h1 id="documents" class="govuk-heading-l govuk-!-margin-bottom-6">
+                Lifelong pet travel document and declaration
+            </h1>
+            {% endif %}
+
+            {% if data['documentState'] === "awaiting" or data['documentState'] === "rejected" %}
+            <h1 id="documents" class="govuk-heading-l govuk-!-margin-bottom-6">
+                Your application summary
+            </h1>
+            {% endif %}
+
+            {% if data['documentState'] !== "awaiting" and data['documentState'] !== "rejected" %}
+            <div id="document-issued-card" class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                    <h2 class="govuk-summary-card__title">Issued</h2>
+                </div>
+
+                <div class="govuk-summary-card__content">
+                    <dl class="govuk-summary-list">
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                PTD number
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {{ ptdNumber }}
+                            </dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Date
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {{ issuedDate }}
+                            </dd>
+                        </div>
+                    </dl>
                 </div>
             </div>
+            {% endif %}
+
+            {% if data['documentState'] === "awaiting" or data['documentState'] === "rejected" %}
+            <div id="document-issued-card" class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                    <h2 class="govuk-summary-card__title">Application</h2>
+                </div>
+
+                <div class="govuk-summary-card__content">
+                    <dl class="govuk-summary-list">
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Reference number
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {{ ptdNumber }}
+                            </dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Date
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {{ issuedDate }}
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+            {% endif %}
+
+
+            <div id="document-microchip-card" class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                    <h2 class="govuk-summary-card__title">Microchip information</h2>
+                </div>
+                <div class="govuk-summary-card__content">
+                    <dl class="govuk-summary-list">
+
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Microchip number
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {{ microchipNumber }}
+                            </dd>
+                        </div>
+
+                        {# <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Implant location
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                Under the skin
+                            </dd>
+                        </div> #}
+
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Implant or scan date
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {{ microchipDate }}
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+
+            <div id="document-pet-card" class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                    <h2 class="govuk-summary-card__title">Pet details</h2>
+                </div>
+                <div class="govuk-summary-card__content">
+                    <dl class="govuk-summary-list">
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Pet name
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {{ petName }}
+                            </dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Species
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {{ petSpecie }}
+                            </dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Breed
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {{ petBreed }}
+                            </dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Sex
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {{ petSex }}
+                            </dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Date of birth
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {{ petDoB }}
+                            </dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Colour
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {{ petColour }}
+                            </dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Significant features
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {{ petFeaturesDetail }}
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <form id="searchResultForm" action="/checker/non-compliance" method="POST">
+        <div id="searchradio-group" class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading">
+                        Checks
+                    </h1>
+                </legend>
+
+                <p class="govuk-body">Check:</p>
+                <ul class="govuk-list govuk-list--bullet govuk-list--spaced">
+                    <li>
+                        PTD presented and valid
+                    </li>
+                    <li>
+                        visual check of pet matches PTD
+                    </li>
+                    <li>
+                        microchip number matches PTD
+                    </li>
+                    <li>
+                        no risks identified
+                    </li>
+                </ul>
+                {% if data['documentState'] !== 'rejected' and data['documentState'] !== 'revoked' %}
+                <div>
+                    <div id="radio-check-error" hidden>
+                        <p class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> Select an option
+                        </p>
+                    </div>
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="checklist" name="checklist" type="radio"
+                                value="pass">
+                            {# data-aria-controls="conditional-checklist-1" #}
+                            <label class="govuk-label govuk-radios__label" for="checklist">
+                                Pass
+                            </label>
+                            <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
+                                Passes all checks.
+                            </div>
+                        </div>
+                        {# <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                            id="conditional-checklist-1">
+
+
+                        </div> #}
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="contact-2" name="checklist" type="radio"
+                                value="fail">
+                            {# data-aria-controls="conditional-contact-2" #}
+                            <label class="govuk-label govuk-radios__label" for="contact-2">
+                                Fail
+                            </label>
+                            <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
+                                Fails at least one check.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </fieldset>
         </div>
 
-    </div>
+        <!-- Hidden input to indicate if radio buttons are present -->
+        <input type="hidden" id="radioButtonsPresent" name="radioButtonsPresent" value="{% if data['documentState'] !== 'rejected' and data['documentState'] !== 'revoked' %}true{% else %}false{% endif %}">
+
+        <div class="govuk-grid-row govuk-!-static-margin-top-4">
+            <div class="govuk-grid-column-one-half">
+                <button type="submit" class="govuk-button" data-module="govuk-button">
+                    Save and continue
+                </button>
+            </div>
+        </div>
+    </form>
+    <div style="height: 2rem;"></div>
+
 </div>
-{% endif %}
-
-
-<div class="govuk-grid-row govuk-!-static-margin-top-4">
-    <div class="govuk-grid-column-three-quarters">
-        {# <div class="govuk-grid-row pet-declaration-logos govuk-!-static-margin-bottom-4">
-            <div class="govuk-grid-column-one-quarter">
-                {% include "../../includes/defra-logo.html" %}
-            </div>
-            <div class="govuk-grid-column-one-quarter">
-                {% include "../../includes/apha-logo.html" %}
-            </div>
-        </div> #}
-
-        {% include "includes/status.html" %}
-
-        {% if data['documentState'] !== "awaiting" and data['documentState'] !== "rejected" %}
-        <h1 id="documents" class="govuk-heading-l govuk-!-margin-bottom-6">
-            Lifelong pet travel document and declaration
-        </h1>
-        {% endif %}
-
-        {% if data['documentState'] === "awaiting" or data['documentState'] === "rejected" %}
-        <h1 id="documents" class="govuk-heading-l govuk-!-margin-bottom-6">
-            Your application summary
-        </h1>
-        {% endif %}
-
-        {% if data['documentState'] !== "awaiting" and data['documentState'] !== "rejected" %}
-        <div id="document-issued-card" class="govuk-summary-card">
-            <div class="govuk-summary-card__title-wrapper">
-                <h2 class="govuk-summary-card__title">Issued</h2>
-            </div>
-
-            <div class="govuk-summary-card__content">
-                <dl class="govuk-summary-list">
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            PTD number
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            {{ ptdNumber }}
-                        </dd>
-                    </div>
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Date
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            {{ issuedDate }}
-                        </dd>
-                    </div>
-                </dl>
-            </div>
-        </div>
-        {% endif %}
-
-        {% if data['documentState'] === "awaiting" or data['documentState'] === "rejected" %}
-        <div id="document-issued-card" class="govuk-summary-card">
-            <div class="govuk-summary-card__title-wrapper">
-                <h2 class="govuk-summary-card__title">Application</h2>
-            </div>
-
-            <div class="govuk-summary-card__content">
-                <dl class="govuk-summary-list">
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Reference number
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            {{ ptdNumber }}
-                        </dd>
-                    </div>
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Date
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            {{ issuedDate }}
-                        </dd>
-                    </div>
-                </dl>
-            </div>
-        </div>
-        {% endif %}
-
-
-        <div id="document-microchip-card" class="govuk-summary-card">
-            <div class="govuk-summary-card__title-wrapper">
-                <h2 class="govuk-summary-card__title">Microchip information</h2>
-            </div>
-            <div class="govuk-summary-card__content">
-                <dl class="govuk-summary-list">
-
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Microchip number
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            {{ microchipNumber }}
-                        </dd>
-                    </div>
-
-                    {# <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Implant location
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            Under the skin
-                        </dd>
-                    </div> #}
-
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Implant or scan date
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            {{ microchipDate }}
-                        </dd>
-                    </div>
-                </dl>
-            </div>
-        </div>
-
-        <div id="document-pet-card" class="govuk-summary-card">
-            <div class="govuk-summary-card__title-wrapper">
-                <h2 class="govuk-summary-card__title">Pet details</h2>
-            </div>
-            <div class="govuk-summary-card__content">
-                <dl class="govuk-summary-list">
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Pet name
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            {{ petName }}
-                        </dd>
-                    </div>
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Species
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            {{ petSpecie }}
-                        </dd>
-                    </div>
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Breed
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            {{ petBreed }}
-                        </dd>
-                    </div>
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Sex
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            {{ petSex }}
-                        </dd>
-                    </div>
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Date of birth
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            {{ petDoB }}
-                        </dd>
-                    </div>
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Colour
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            {{ petColour }}
-                        </dd>
-                    </div>
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Significant features
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            {{ petFeaturesDetail }}
-                        </dd>
-                    </div>
-                </dl>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-
-<form action="/checker/non-compliance" method="POST">
-  <div class="govuk-form-group">
-    <fieldset class="govuk-fieldset">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-        <h1 class="govuk-fieldset__heading">
-          Checks
-        </h1>
-      </legend>
-   
-      <p class="govuk-body">Check:</p>
-      <ul class="govuk-list govuk-list--bullet govuk-list--spaced">
-        <li>
-          PTD presented and valid 
-        </li>
-        <li>
-          visual check of pet matches PTD 
-        </li>
-        <li>
-          microchip number matches PTD
-        </li>
-        <li>
-          no risks identified
-        </li>
-      </ul>
-
-      <div class="govuk-radios" data-module="govuk-radios">
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="contact" name="checklist" type="radio" value="pass">
-          {# data-aria-controls="conditional-checklist-1" #}
-          <label class="govuk-label govuk-radios__label" for="contact">
-            Pass
-          </label>
-          <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
-            Passes all checks.
-          </div>
-        </div>
-        {# <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-checklist-1">
-          
-
-        </div> #}
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="contact-2" name="checklist" type="radio" value="fail">
-          {# data-aria-controls="conditional-contact-2" #}
-          <label class="govuk-label govuk-radios__label" for="contact-2">
-            Fail
-          </label>
-          <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
-            Fails at least one check.
-          </div>
-        </div>
-
-      </div>
-    </fieldset>
-  </div>
-
-
-  <div class="govuk-grid-row govuk-!-static-margin-top-4">
-    <div class="govuk-grid-column-one-half">
-        <button type="submit" class="govuk-button" data-module="govuk-button">
-            Save and continue
-          </button>
-    </div>
-  </div>
-</form>
-<div style="height: 2rem;"></div>
-
+<script src="../../../../assets/javascripts/searchResult.js"></script>
 {% endblock %}
-
