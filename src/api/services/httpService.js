@@ -105,6 +105,7 @@ const createOptions = (request) => {
       Authorization: `Bearer ${token}`,
     },
     validateStatus,
+    mode: "no-cors", // Add no-cors mode
   };
 };
 
