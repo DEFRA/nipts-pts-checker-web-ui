@@ -3,6 +3,9 @@
 import Routes from "../../../../../web/component/checker/searchresults/routes.js";
 import searchResultsPlugin from "../../../../../web/component/checker/searchresults/index.js";
 import { SearchResultsHandlers } from "../../../../../web/component/checker/searchresults/handler.js";
+import {
+  validatePassOrFail
+ } from "../../../../../web/component/checker/searchresults/validate.js";
 
 describe("searchResultsPlugin", () => {
   const server = {
@@ -53,6 +56,9 @@ describe("Routes", () => {
     expect(route).toBeDefined();
     expect(route.options.handler).toEqual(
       SearchResultsHandlers.saveAndContinueHandler
+    );
+    expect(route.options.validate).toEqual(
+      validatePassOrFail
     );
   });
 });

@@ -256,7 +256,43 @@ const getApplicationByApplicationNumber = async (
   }
 };
 
+const recordCheckOutCome = async (checkOutcome) => {
+  try {
+    const request = checkOutcome;
+    const url = buildApiUrl("Checker/CheckOutcome");
+    var response =  await httpService.postAsync(url, request);
+
+    if(response.status == HttpStatusCode.NotFound)
+    {
+      throw new Error(response.error);
+    }
+
+   const item = response.data;
+    if (!item || typeof item !== "object") {
+      throw new Error("Unexpected response structure");
+    }
+
+    return item.checkSummaryId;
+    } catch (error) {
+      console.error("Error fetching data:", error.message);
+  
+      // Check for specific error message and return a structured error
+      if (error && error.message) 
+      {
+          if (
+            error.message === "Application not found"
+          ) {
+            return { error: "not_found" };
+          } else {
+            return { error: error.message };
+          }
+      }  
+      return { error: "Unexpected error occurred" };
+    }
+};
+
 export default {
   getApplicationByPTDNumber,
   getApplicationByApplicationNumber,
+  recordCheckOutCome,
 };

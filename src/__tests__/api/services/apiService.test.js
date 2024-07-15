@@ -1,9 +1,11 @@
 import apiService from "../../../api/services/apiService.js";
 import httpService from "../../../api/services/httpService.js";
+import { HttpStatusCode } from "axios";
 import moment from "moment";
 import { MicrochipAppPtdMainModel } from "../../../api/models/microchipAppPtdMainModel.js";
 
 jest.mock("../../../api/services/httpService.js");
+jest.mock('axios');
 jest.mock("moment");
 
 const baseUrl =
@@ -233,6 +235,32 @@ describe("apiService", () => {
       );
 
       expect(result).toEqual({ error: "Unexpected error" });
+    });
+  });
+
+  describe('recordCheckOutCome', () => {
+    it('should return the check summary id on success', async () => {
+      const checkOutcome = { applicationId: 'app1', checkOutcome: 'pass' };
+      const mockResponse = {
+        status: HttpStatusCode.OK,
+        data: { checkSummaryId: 'summary1' },
+      };
+
+      httpService.postAsync.mockResolvedValue({ status: 200, data: mockResponse.data });
+
+      const result = await apiService.recordCheckOutCome(checkOutcome);
+
+      expect(result).toBe('summary1');
+    });
+
+    it('should handle errors properly', async () => {
+      const checkOutcome = { applicationId: 'app1', checkOutcome: 'pass' };
+      const mockError = new Error('Test error');
+      httpService.postAsync.mockResolvedValue(mockError);
+
+      const result = await apiService.recordCheckOutCome(checkOutcome);
+
+      expect(result).toEqual({ error: 'Unexpected response structure' });
     });
   });
 });
