@@ -4,7 +4,7 @@ import config from "./src/config/index.js";
 import catboxMemory from "@hapi/catbox-memory";
 import ConfigServer from "./src/configServer.js";
 import pluginList from "./src/helper/plugins.js";
-import blip from "blipp"
+import blip from "blipp";
 
 // Load environment variables from .env file
 if (process.env.CP_ENV === "local" && !process.env.DEFRA_ID_CLIENT_ID) {
@@ -25,19 +25,10 @@ const serverConfig = {
   host: process.env.HOST || "localhost",
   routes: {
     cors: {
-      origin: ["*"],
-      headers: [
-        "Accept",
-        "Authorization",
-        "Content-Type",
-        "If-None-Match",
-        "Accept-language",
-      ],
-      additionalHeaders: [
-        "cache-control",
-        "x-requested-with",
-        "Access-Control-Allow-Origin",
-      ],
+      origin: ["*"], // Allow all origins
+      additionalHeaders: ["*"], // Allow all headers
+      additionalExposedHeaders: ["*"], // Expose all headers
+      credentials: true, // Allow credentials (cookies, etc.)
     },
   },
 };
