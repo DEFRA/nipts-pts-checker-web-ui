@@ -6,7 +6,7 @@ const VIEW_PATH = "componentViews/checker/currentsailing/currentsailingView";
 
 const getCurrentSailings = async (request, h) => {
   const currentSailingMainModelData =
-    (await currentSailingMainService.getCurrentSailingMain()) || {};
+    (await currentSailingMainService.getCurrentSailingMain(request)) || {};
   request.yar.set("SailingRoutes", currentSailingMainModelData.sailingRoutes);
   return h.view(VIEW_PATH, { currentSailingMainModelData });
 };

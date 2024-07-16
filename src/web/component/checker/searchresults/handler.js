@@ -46,7 +46,10 @@ const saveAndContinueHandler = async (request, h) => {
       sailingTime: dateTimeString
     };
 
-    const responseData = await apiService.recordCheckOutCome(checkOutcome);
+    const responseData = await apiService.recordCheckOutCome(
+      checkOutcome,
+      request
+    );
     if (responseData.error) 
     {
       const microchipNumber = request.yar.get("microchipNumber");
