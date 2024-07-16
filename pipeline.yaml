@@ -44,11 +44,12 @@ extends:
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
         -CP_ENV azure
         -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
-        
+
       tst: >-
         -PORT "8080"
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
+        -OCP_APIM_SUBSCRIPTION_KEY "285f8ed3d3e740df866e672d0e018072"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
         -CP_ENV azure
         -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
@@ -56,6 +57,7 @@ extends:
         -PORT "8080"
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
+        -OCP_APIM_SUBSCRIPTION_KEY "TBC"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
         -CP_ENV azure
         -DEFRA_ID_TENANT "TBC"
@@ -70,6 +72,7 @@ extends:
         -PORT "8080"
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
+        -OCP_APIM_SUBSCRIPTION_KEY "TBC"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
         -CP_ENV azure
         -DEFRA_ID_TENANT "TBC"
@@ -84,6 +87,7 @@ extends:
         -PORT "8080"
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
+        -OCP_APIM_SUBSCRIPTION_KEY "TBC"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
         -CP_ENV azure
         -DEFRA_ID_TENANT "TBC"
