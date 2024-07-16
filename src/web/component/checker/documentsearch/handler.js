@@ -11,20 +11,20 @@ import {
 import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
 
 const VIEW_PATH = "componentViews/checker/documentsearch/documentSearchView";
-const NOT_FOUND_VIEW_PATH = "componentViews/checker/documentsearch/documentNotFoundView";
+const NOT_FOUND_VIEW_PATH =
+  "componentViews/checker/documentsearch/documentNotFoundView";
 
 const getDocumentSearch = async (_request, h) => {
-      try {
-        const documentSearchMainModelData =
-          await documentSearchMainService.getDocumentSearchMain();
-        return h.view(VIEW_PATH, { documentSearchMainModelData });
-      } catch (error) {
-        return h.view(VIEW_PATH, {
-          error: "Failed to fetch document search data",
-        });
-      }
-    };
-
+  try {
+    const documentSearchMainModelData =
+      await documentSearchMainService.getDocumentSearchMain();
+    return h.view(VIEW_PATH, { documentSearchMainModelData });
+  } catch (error) {
+    return h.view(VIEW_PATH, {
+      error: "Failed to fetch document search data",
+    });
+  }
+};
 
 const submitSearch = async (request, h) => {
   let searchText = "";
@@ -52,14 +52,15 @@ const submitSearch = async (request, h) => {
 
       const ptdNumber = `GB826${request.payload.ptdNumberSearch}`;
       const responseData = await apiService.getApplicationByPTDNumber(
-        ptdNumber
+        ptdNumber,
+        request
       );
 
       if (responseData.error) {
         if (responseData.error === "not_found") {
           return h.view(NOT_FOUND_VIEW_PATH, {
             searchValue: ptdNumber,
-            pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle
+            pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
           });
         } else {
           return h.view(VIEW_PATH, {
@@ -110,20 +111,24 @@ const submitSearch = async (request, h) => {
 
       const applicationNumber = request.payload.applicationNumberSearch;
       const responseData = await apiService.getApplicationByApplicationNumber(
-        applicationNumber
+        applicationNumber,
+        request
       );
 
       if (responseData.error) {
         if (responseData.error === "not_found") {
           return h.view(NOT_FOUND_VIEW_PATH, {
             searchValue: applicationNumber,
-            pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle
+            pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
           });
         } else {
           return h.view(VIEW_PATH, {
             error: "An error occurred while processing your request",
             errorSummary: [
-              { fieldId: "general", message: "An error occurred while processing your request" },
+              {
+                fieldId: "general",
+                message: "An error occurred while processing your request",
+              },
             ],
             activeTab: "application",
             formSubmitted: true,
@@ -157,7 +162,8 @@ const submitSearch = async (request, h) => {
       }
 
       const microchipAppPtdMainData = await microchipApi.getMicrochipData(
-        microchipNumber
+        microchipNumber,
+        request
       );
 
       if (microchipAppPtdMainData.error) {

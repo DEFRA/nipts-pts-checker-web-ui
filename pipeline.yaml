@@ -58,6 +58,13 @@ extends:
         -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api/"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
         -CP_ENV azure
+        -DEFRA_ID_TENANT "TBC"
+        -DEFRA_ID_POLICY "TBC"
+        -DEFRA_ID_CLIENT_ID "TBC"
+        -DEFRA_ID_CLIENT_SECRET "TBC"
+        -DEFRA_ID_JWT_ISSUER_ID ""
+        -DEFRA_ID_SERVICE_ID "TBC"
+        -DEFRA_ID_SIGNOUT_URI "TBC"
         -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
       pre: >-
         -PORT "8080"
@@ -65,6 +72,13 @@ extends:
         -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api/"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
         -CP_ENV azure
+        -DEFRA_ID_TENANT "TBC"
+        -DEFRA_ID_POLICY "TBC"
+        -DEFRA_ID_CLIENT_ID "TBC"
+        -DEFRA_ID_CLIENT_SECRET "TBC"
+        -DEFRA_ID_JWT_ISSUER_ID ""
+        -DEFRA_ID_SERVICE_ID "TBC"
+        -DEFRA_ID_SIGNOUT_URI "TBC"
         -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
       prd: >-
         -PORT "8080"
@@ -72,6 +86,13 @@ extends:
         -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api/"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
         -CP_ENV azure
+        -DEFRA_ID_TENANT "TBC"
+        -DEFRA_ID_POLICY "TBC"
+        -DEFRA_ID_CLIENT_ID "TBC"
+        -DEFRA_ID_CLIENT_SECRET "TBC"
+        -DEFRA_ID_JWT_ISSUER_ID ""
+        -DEFRA_ID_SERVICE_ID "TBC"
+        -DEFRA_ID_SIGNOUT_URI "TBC"
         -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
     runSonarScan: true
     #runVulnerabilityScan: true

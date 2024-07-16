@@ -20,17 +20,17 @@ const statusMapping = {
   revoked: "revoked",
 };
 
-
 const formatDate = (dateRaw) => {
   const date = dateRaw ? new Date(dateRaw) : null;
-  return date ? moment(date).format('DD/MM/YYYY') : undefined;
+  return date ? moment(date).format("DD/MM/YYYY") : undefined;
 };
 
-const getMicrochipData = async (microchipNumber) => {
+const getMicrochipData = async (microchipNumber, request) => {
   try {
     const response = await httpService.postAsync(
       `${baseUrl}/Checker/checkMicrochipNumber`,
-      { microchipNumber }
+      { microchipNumber },
+      request
     );
 
     const item = response.data;

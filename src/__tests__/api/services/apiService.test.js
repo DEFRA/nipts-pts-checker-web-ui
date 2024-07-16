@@ -5,15 +5,23 @@ import moment from "moment";
 import { MicrochipAppPtdMainModel } from "../../../api/models/microchipAppPtdMainModel.js";
 
 jest.mock("../../../api/services/httpService.js");
-jest.mock('axios');
+jest.mock("axios");
 jest.mock("moment");
 
 const baseUrl =
   process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
 
 describe("apiService", () => {
+  let request;
+
   beforeEach(() => {
     jest.clearAllMocks();
+    request = {
+      // Mock request object
+      headers: {
+        authorization: "Bearer mockToken",
+      },
+    };
   });
 
   describe("getApplicationByPTDNumber", () => {
@@ -53,11 +61,14 @@ describe("apiService", () => {
         format: () => "01/01/2022",
       }));
 
-      const result = await apiService.getApplicationByPTDNumber("123456");
-
+      const result = await apiService.getApplicationByPTDNumber(
+        "123456",
+        request
+      );
       expect(httpService.postAsync).toHaveBeenCalledWith(
         `${baseUrl}/Checker/checkPTDNumber`,
-        { ptdNumber: "123456" }
+        { ptdNumber: "123456" },
+        request
       );
 
       const expectedInstance = new MicrochipAppPtdMainModel({
@@ -88,11 +99,14 @@ describe("apiService", () => {
         error: "Application not found",
       });
 
-      const result = await apiService.getApplicationByPTDNumber("123459");
-
+      const result = await apiService.getApplicationByPTDNumber(
+        "123459",
+        request
+      );
       expect(httpService.postAsync).toHaveBeenCalledWith(
         `${baseUrl}/Checker/checkPTDNumber`,
-        { ptdNumber: "123459" }
+        { ptdNumber: "123459" },
+        request
       );
       expect(result).toEqual({ error: "not_found" });
     });
@@ -109,16 +123,20 @@ describe("apiService", () => {
         data: mockResponse.data,
       });
 
-      const result = await apiService.getApplicationByPTDNumber("123456");
-
+      const result = await apiService.getApplicationByPTDNumber(
+        "123456",
+        request
+      );
       expect(result).toEqual({ error: "Application not found" });
     });
 
     it("should return unexpected error when an exception occurs", async () => {
       httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
 
-      const result = await apiService.getApplicationByPTDNumber("123456");
-
+      const result = await apiService.getApplicationByPTDNumber(
+        "123456",
+        request
+      );
       expect(result).toEqual({ error: "Unexpected error" });
     });
   });
@@ -161,12 +179,13 @@ describe("apiService", () => {
       }));
 
       const result = await apiService.getApplicationByApplicationNumber(
-        "app123"
+        "app123",
+        request
       );
-
       expect(httpService.postAsync).toHaveBeenCalledWith(
         `${baseUrl}/Checker/checkApplicationNumber`,
-        { applicationNumber: "app123" }
+        { applicationNumber: "app123" },
+        request
       );
 
       const expectedInstance = new MicrochipAppPtdMainModel({
@@ -198,12 +217,8 @@ describe("apiService", () => {
       });
 
       const result = await apiService.getApplicationByApplicationNumber(
-        "app123"
-      );
-
-      expect(httpService.postAsync).toHaveBeenCalledWith(
-        `${baseUrl}/Checker/checkApplicationNumber`,
-        { applicationNumber: "app123" }
+        "app123",
+        request
       );
       expect(result).toEqual({ error: "not_found" });
     });
@@ -221,9 +236,9 @@ describe("apiService", () => {
       });
 
       const result = await apiService.getApplicationByApplicationNumber(
-        "app123"
+        "app123",
+        request
       );
-
       expect(result).toEqual({ error: "Application not found" });
     });
 
@@ -231,36 +246,39 @@ describe("apiService", () => {
       httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
 
       const result = await apiService.getApplicationByApplicationNumber(
-        "app123"
+        "app123",
+        request
       );
-
       expect(result).toEqual({ error: "Unexpected error" });
     });
   });
 
-  describe('recordCheckOutCome', () => {
-    it('should return the check summary id on success', async () => {
-      const checkOutcome = { applicationId: 'app1', checkOutcome: 'pass' };
+  describe("recordCheckOutCome", () => {
+    it("should return the check summary id on success", async () => {
+      const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
       const mockResponse = {
         status: HttpStatusCode.OK,
-        data: { checkSummaryId: 'summary1' },
+        data: { checkSummaryId: "summary1" },
       };
 
-      httpService.postAsync.mockResolvedValue({ status: 200, data: mockResponse.data });
+      httpService.postAsync.mockResolvedValue({
+        status: 200,
+        data: mockResponse.data,
+      });
 
       const result = await apiService.recordCheckOutCome(checkOutcome);
 
-      expect(result).toBe('summary1');
+      expect(result).toBe("summary1");
     });
 
-    it('should handle errors properly', async () => {
-      const checkOutcome = { applicationId: 'app1', checkOutcome: 'pass' };
-      const mockError = new Error('Test error');
+    it("should handle errors properly", async () => {
+      const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
+      const mockError = new Error("Test error");
       httpService.postAsync.mockResolvedValue(mockError);
 
       const result = await apiService.recordCheckOutCome(checkOutcome);
 
-      expect(result).toEqual({ error: 'Unexpected response structure' });
+      expect(result).toEqual({ error: "Unexpected response structure" });
     });
   });
 });

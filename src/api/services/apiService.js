@@ -1,3 +1,4 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 import { HttpStatusCode } from "axios";
 import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js";
 import httpService from "./httpService.js";
@@ -32,11 +33,11 @@ const formatDate = (dateRaw) => {
   return date ? moment(date).format("DD/MM/YYYY") : undefined;
 };
 
-const getApplicationByPTDNumber = async (ptdNumberFromPayLoad) => {
+const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
   try {
     const data = { ptdNumber: ptdNumberFromPayLoad };
     const url = buildApiUrl("Checker/checkPTDNumber");
-    var response = await httpService.postAsync(url, data);
+    var response = await httpService.postAsync(url, data, request);
 
     if (response.status == HttpStatusCode.NotFound) {
       throw new Error(response.error);
@@ -144,12 +145,13 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad) => {
 };
 
 const getApplicationByApplicationNumber = async (
-  applicationNumber
+  applicationNumber,
+  request
 ) => {
   try {
     const data = { applicationNumber: applicationNumber };
     const url = buildApiUrl("Checker/checkApplicationNumber");
-    var response = await httpService.postAsync(url, data);
+    var response = await httpService.postAsync(url, data, request);
 
     if (response.status == HttpStatusCode.NotFound) {
       throw new Error(response.error);
@@ -255,43 +257,39 @@ const getApplicationByApplicationNumber = async (
   }
 };
 
-const recordCheckOutCome = async (checkOutcome) => {
+const recordCheckOutCome = async (checkOutcome, request) => {
   try {
-    const request = checkOutcome;
+    const data = checkOutcome;
     const url = buildApiUrl("Checker/CheckOutcome");
-    var response =  await httpService.postAsync(url, request);
+    var response = await httpService.postAsync(url, data, request);
 
-    if(response.status == HttpStatusCode.NotFound)
-    {
+    if (response.status == HttpStatusCode.NotFound) {
       throw new Error(response.error);
     }
 
-   const item = response.data;
+    const item = response.data;
     if (!item || typeof item !== "object") {
       throw new Error("Unexpected response structure");
     }
 
     return item.checkSummaryId;
-    } catch (error) {
-      console.error("Error fetching data:", error.message);
-  
-      // Check for specific error message and return a structured error
-      if (error && error.message) 
-      {
-          if (
-            error.message === "Application not found"
-          ) {
-            return { error: "not_found" };
-          } else {
-            return { error: error.message };
-          }
-      }  
-      return { error: "Unexpected error occurred" };
+  } catch (error) {
+    console.error("Error fetching data:", error.message);
+
+    // Check for specific error message and return a structured error
+    if (error && error.message) {
+      if (error.message === "Application not found") {
+        return { error: "not_found" };
+      } else {
+        return { error: error.message };
+      }
     }
+    return { error: "Unexpected error occurred" };
+  }
 };
 
 export default {
   getApplicationByPTDNumber,
   getApplicationByApplicationNumber,
-  recordCheckOutCome,
+  recordCheckOutCome
 };
