@@ -2,9 +2,7 @@
 
 import { SearchResultsHandlers } from "./handler.js";
 import HttpMethod from "../../../../constants/httpMethod.js";
-import {
- validatePassOrFail
-} from "./validate.js";
+import { validatePassOrFail } from "./validate.js";
 
 const Routes = [
   {
