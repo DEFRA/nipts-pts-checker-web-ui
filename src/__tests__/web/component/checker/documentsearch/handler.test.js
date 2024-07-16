@@ -230,8 +230,7 @@ describe("DocumentSearchHandlers", () => {
 
       validatePtdNumber.mockReturnValue({ isValid: true, error: null });
       apiService.getApplicationByPTDNumber.mockResolvedValue({
-        status: "authorised",
-        ptdNumber: "GB826123456",
+        data: { status: "authorised", ptdNumber: "GB826123456" },
       });
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
         mockData
@@ -240,7 +239,8 @@ describe("DocumentSearchHandlers", () => {
       const response = await DocumentSearchHandlers.submitSearch(request, h);
 
       expect(apiService.getApplicationByPTDNumber).toHaveBeenCalledWith(
-        "GB826123456"
+        "GB826123456",
+        request
       );
       expect(request.yar.set).toHaveBeenNthCalledWith(
         1,
@@ -248,8 +248,7 @@ describe("DocumentSearchHandlers", () => {
         "GB826123456"
       );
       expect(request.yar.set).toHaveBeenNthCalledWith(2, "data", {
-        status: "authorised",
-        ptdNumber: "GB826123456",
+        data: { status: "authorised", ptdNumber: "GB826123456" },
       });
       expect(h.redirect).toHaveBeenCalledWith("/checker/search-results");
     });
@@ -341,9 +340,11 @@ describe("DocumentSearchHandlers", () => {
 
       validateApplicationNumber.mockReturnValue({ isValid: true, error: null });
       apiService.getApplicationByApplicationNumber.mockResolvedValue({
-        status: "authorised",
-        applicationNumber: "ELK7I8N4",
-        documentState: "approved",
+        data: {
+          status: "authorised",
+          applicationNumber: "ELK7I8N4",
+          documentState: "approved",
+        },
       });
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
         mockData
@@ -352,7 +353,8 @@ describe("DocumentSearchHandlers", () => {
       const response = await DocumentSearchHandlers.submitSearch(request, h);
 
       expect(apiService.getApplicationByApplicationNumber).toHaveBeenCalledWith(
-        "ELK7I8N4"
+        "ELK7I8N4",
+        request
       );
 
       expect(request.yar.set).toHaveBeenNthCalledWith(
@@ -361,9 +363,11 @@ describe("DocumentSearchHandlers", () => {
         "ELK7I8N4"
       );
       expect(request.yar.set).toHaveBeenNthCalledWith(2, "data", {
-        status: "authorised",
-        applicationNumber: "ELK7I8N4",
-        documentState: "approved",
+        data: {
+          applicationNumber: "ELK7I8N4",
+          documentState: "approved",
+          status: "authorised",
+        },
       });
 
       expect(h.redirect).toHaveBeenCalledWith("/checker/search-results");
