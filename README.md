@@ -11,7 +11,7 @@
 4. In the project root, create a `.env` file for project settings. You can start with the settings below, or copy `env.sample.txt` and rename it to `.env`.
 
    ```
-   PORT=4000
+   PORT=5000
    HOST=localhost
    ```
 
@@ -38,7 +38,7 @@ Current Project structure
 nipts-pts-checker-web-ui/
 ├──src
 ├── api/ To call backend
-├── assets/ For css, javascripts
+├── public/assets/ For css, javascripts
 ├── node_modules/
 ├── helper/plugin.js --- Include all UI component here for web pages
 ├── web/

@@ -23,14 +23,18 @@ describe('Handler', () => {
 
         currentSailingMainService.getCurrentSailingMain.mockResolvedValue(mockData);
 
-        const request = {};
+        const request = {
+          yar: {
+            set: jest.fn(),            
+          },
+        };
         const h = {
           view: jest.fn((viewPath, data) => {
             return { viewPath, data };
           })
         };
 
-        const response = await CurrentSailingHandlers.getCurrentSailings.index.handler(request, h);
+        const response = await CurrentSailingHandlers.getCurrentSailings(request, h);
 
         expect(response.viewPath).toBe("componentViews/checker/currentsailing/currentsailingView");
         expect(response.data).toEqual({ currentSailingMainModelData: mockData });
@@ -40,24 +44,52 @@ describe('Handler', () => {
 });
 
 describe('submitCurrentSailingSlot', () => {
-  it('should set the CurrentSailingSlot and redirect to /dashboard', async () => {
+  it('should set the sailing slot in the session and redirect to the dashboard', async () => {
+    // Mock payload
+    const mockPayload = {
+      routeRadio: '1',
+      sailingHour: '12',
+      sailingMinutes: '30',
+    };
+
+    // Mock sailing routes stored in session
+    const sailingRoutes = [
+      { id: '1', value: 'Birkenhead to Belfast (Stena)' },
+      { id: '2', value: 'Cairnryan to Larne (P&O)' },
+      { id: '3', value: 'Loch Ryan to Belfast (Stena)' },
+    ];
+
+    // Mock request object
     const mockRequest = {
-      payload: { sailingSlot: 'testSlot' },
+      payload: mockPayload,
       yar: {
-        set: jest.fn()
-      }
+        set: jest.fn(),
+        get: jest.fn().mockReturnValue(sailingRoutes),
+      },
     };
+
+    // Mock response toolkit
+    const mockRedirect = jest.fn();
     const mockResponseToolkit = {
-      redirect: jest.fn(() => ({ code: 302 }))
+      redirect: mockRedirect,
     };
 
-    const response = await CurrentSailingHandlers.submitCurrentSailingSlot(mockRequest, mockResponseToolkit);
+    // Expected sailing slot to be set in session
+    const expectedSailingSlot = {
+      sailingHour: mockPayload.sailingHour,
+      sailingMinutes: mockPayload.sailingMinutes,
+      selectedRoute: { id: '1', value: 'Birkenhead to Belfast (Stena)' },
+    };
 
-    expect(mockRequest.yar.set).toHaveBeenCalledWith('CurrentSailingSlot', { sailingSlot: 'testSlot' });
-    expect(mockResponseToolkit.redirect).toHaveBeenCalledWith('/dashboard');
-    expect(response.code).toBe(302);
+    // Invoke the handler
+    await CurrentSailingHandlers.submitCurrentSailingSlot(mockRequest, mockResponseToolkit);
+
+    // Assertions
+    expect(mockRequest.yar.set).toHaveBeenCalledWith('CurrentSailingSlot', expectedSailingSlot);
+    expect(mockRedirect).toHaveBeenCalledWith('/checker/dashboard');
   });
 });
+
 
 
 describe('getCurrentSailingSlot', () => {

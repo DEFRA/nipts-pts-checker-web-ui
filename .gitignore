@@ -60,6 +60,7 @@ typings/
 
 # dotenv environment variables file
 .env
+.env.local
 
 # next.js build output
 .next
@@ -76,3 +77,4 @@ package-lock.json
 
 # Dist
 /dist
+/.env.localonly

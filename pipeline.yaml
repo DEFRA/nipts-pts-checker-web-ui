@@ -1,4 +1,4 @@
-name: 'V1-B$(Date:yyyyMMdd)-$(BuildID)'
+name: "V1-B$(Date:yyyyMMdd)-$(BuildID)"
 
 parameters:
   - name: forceDevDeploy
@@ -35,27 +35,79 @@ extends:
     appProject: PTS
     appInstanceNumber: $(nc-region-id)04
     appName: DEFRA_nipts-pts-checker-web-ui
-    appSettingsEnv: 
+    appSettingsEnv:
       dev: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-        -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net"
+        -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
+        -OCP_APIM_SUBSCRIPTION_KEY "3e9a5ea1359347869b60ee03d857cdac"
+        -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
+        -CP_ENV azure
+        -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
+
       tst: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-        -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net"
+        -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
+        -OCP_APIM_SUBSCRIPTION_KEY "285f8ed3d3e740df866e672d0e018072"
+        -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
+        -CP_ENV azure
+        -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
       snd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-        -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net"
+        -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
+        -OCP_APIM_SUBSCRIPTION_KEY "TBC"
+        -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
+        -CP_ENV azure
+        -DEFRA_ID_TENANT "TBC"
+        -DEFRA_ID_POLICY "TBC"
+        -DEFRA_ID_CLIENT_ID "TBC"
+        -DEFRA_ID_CLIENT_SECRET "TBC"
+        -DEFRA_ID_JWT_ISSUER_ID ""
+        -DEFRA_ID_SERVICE_ID "TBC"
+        -DEFRA_ID_SIGNOUT_URI "TBC"
+        -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
       pre: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-        -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net"
+        -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
+        -OCP_APIM_SUBSCRIPTION_KEY "TBC"
+        -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
+        -CP_ENV azure
+        -DEFRA_ID_TENANT "TBC"
+        -DEFRA_ID_POLICY "TBC"
+        -DEFRA_ID_CLIENT_ID "TBC"
+        -DEFRA_ID_CLIENT_SECRET "TBC"
+        -DEFRA_ID_JWT_ISSUER_ID ""
+        -DEFRA_ID_SERVICE_ID "TBC"
+        -DEFRA_ID_SIGNOUT_URI "TBC"
+        -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
       prd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-        -BASE_API_URL "https://$(environment)pts$(nc-function-web-lower)$(nc-resource-webapp-lower)1003.azurewebsites.net"
+        -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
+        -OCP_APIM_SUBSCRIPTION_KEY "TBC"
+        -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
+        -CP_ENV azure
+        -DEFRA_ID_TENANT "TBC"
+        -DEFRA_ID_POLICY "TBC"
+        -DEFRA_ID_CLIENT_ID "TBC"
+        -DEFRA_ID_CLIENT_SECRET "TBC"
+        -DEFRA_ID_JWT_ISSUER_ID ""
+        -DEFRA_ID_SERVICE_ID "TBC"
+        -DEFRA_ID_SIGNOUT_URI "TBC"
+        -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
     runSonarScan: true
     #runVulnerabilityScan: true
     #skipOwaspScan: false
+
+    #TODO - Following app settings need to be added for all environments
+    #DEFRA_ID_TENANT "TBC"
+    #DEFRA_ID_POLICY "TBC"
+    #DEFRA_ID_REDIRECT_URI "https://$(environment)ptswebaw1004.azurewebsites.net/signin-oidc"
+    #DEFRA_ID_CLIENT_ID "TBC"
+    #DEFRA_ID_CLIENT_SECRET "TBC"
+    #DEFRA_ID_JWT_ISSUER_ID ""
+    #DEFRA_ID_SERVICE_ID "TBC"
+    #DEFRA_ID_SIGNOUT_URI "TBC"

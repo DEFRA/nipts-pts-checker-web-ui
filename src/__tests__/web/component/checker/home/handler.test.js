@@ -1,31 +1,42 @@
 import appSettingsService from "../../../../../api/services/appSettingsService.js";
-import Handler from "../../../../../web/component/checker/home/handler.js";
+import { HomeHandlers } from "../../../../../web/component/checker/home/handler.js";
+import requestAuthorizationCodeUrl from "../../../../../auth/auth-code-grant/request-authorization-code-url.js";
 
 jest.mock("../../../../../api/services/appSettingsService.js");
-describe("Handler", () => {
-  describe("index", () => {
+jest.mock("../../../../../auth/auth-code-grant/request-authorization-code-url.js");
+
+describe("HomeHandlers", () => {
+  describe("getHome", () => {
     it("should call getAppSettings and return view", async () => {
       // Arrange
       const mockedData = {
-        loginUrl: "/checker/current-sailings",
         ptsTitle: "Pet Travel Scheme",
         ptsSubTitle: "Check a pet from Great Britain to Northern Ireland",
       };
+      const mockLoginUrl = "/auth/login";
 
       appSettingsService.getAppSettings.mockResolvedValue(mockedData);
+      requestAuthorizationCodeUrl.mockReturnValue(mockLoginUrl);
+
       const mockView = jest.fn();
       const h = { view: mockView };
-      const request = {};
+            // Mock request object with yar
+            const request = {
+              yar: {
+                get: jest.fn(),
+                set: jest.fn(),
+              },
+            };
 
       // Act
-      await Handler.index.handler(request, h);
+      await HomeHandlers.getHome(request, h);
 
       // Assert
       expect(appSettingsService.getAppSettings).toHaveBeenCalled();
       expect(mockView).toHaveBeenCalledWith(
         "componentViews/checker/home/view",
         {
-          model: mockedData,
+          model: { ...mockedData, loginUrl: mockLoginUrl },
         }
       );
     });

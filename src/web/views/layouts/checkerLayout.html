@@ -1,4 +1,5 @@
-
+<!DOCTYPE html>
+<html lang="en" class="govuk-template">
 
     <head>
         <title>
@@ -8,13 +9,16 @@
         </title>
         
         {% block stylesheets %}
+        <!-- <link href="/assets/govuk-frontend/dist/govuk/govuk-frontend.min.css" rel="stylesheet" type="text/css" media="all" /> -->
         <link href="/assets/css/application.css" rel="stylesheet" type="text/css" media="all" />
         <link href="/assets/css/checker.css" rel="stylesheet" type="text/css" media="all" />
         <link href="/assets/javascripts/autocomplete/accessible-autocomplete.min.css" rel="stylesheet" type="text/css"
             media="all" />
         {% endblock %}
+
+        <script type="module" src="/assets/govuk-frontend/dist/govuk/govuk-frontend.min.js"></script>
     </head>
-    
+    <body class="govuk-frontend-supported">
     {% include "../partials/checkerHeader.html" %}
 
     {% set mainClasses = "pts-checker govuk-!-margin-bottom-9 govuk-!-padding-top-4" %}
@@ -26,4 +30,13 @@
             {% block content %}Default Content{% endblock %}
         </div>
     </div>
+   
     {% include "../partials/checkerFooter.html" %}
+</body>
+    {% block scripts %}
+    <script type="module">
+        import { initAll } from '/assets/govuk-frontend/dist/govuk/govuk-frontend.min.js'
+        initAll()
+    </script> 
+    {% endblock %}
+</html>

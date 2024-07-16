@@ -8,7 +8,7 @@ describe("Routes", () => {
     );
 
     expect(route).toBeDefined();
-    expect(route.config.handler).toBeDefined();
+    expect(route.options.handler).toBeDefined();
   });
 
 
@@ -19,6 +19,7 @@ describe("Routes", () => {
 
     expect(route).toBeDefined();
     expect(route.options.handler).toBeDefined();
+    expect(route.options.validate).toBeDefined();
   });
 
 

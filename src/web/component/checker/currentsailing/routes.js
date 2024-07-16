@@ -1,27 +1,33 @@
 "use strict";
 
-import  { CurrentSailingHandlers } from "./handler.js";
-import  HttpMethod  from "../../../../constants/httpMethod.js";
+import { CurrentSailingHandlers } from "./handler.js";
+import HttpMethod from "../../../../constants/httpMethod.js";
+import { CurrentSailingValidation } from "./validate.js";
 
 const Routes = [
   {
     method: HttpMethod.GET,
     path: "/checker/current-sailings",
-    config: CurrentSailingHandlers.getCurrentSailings.index,
+    options: {
+      handler: CurrentSailingHandlers.getCurrentSailings,
+    },
   },
   {
     method: HttpMethod.POST,
-    path: '/checker/sailing-slot',
+    path: "/checker/sailing-slot",
     options: {
-      handler: CurrentSailingHandlers.submitCurrentSailingSlot
-    }
+      auth: false,
+      validate: CurrentSailingValidation.validateSailings,
+      handler: CurrentSailingHandlers.submitCurrentSailingSlot,
+    },
   },
   {
     method: HttpMethod.GET,
-    path: '/checker/sailing-slot',
+    path: "/checker/sailing-slot",
     options: {
-      handler: CurrentSailingHandlers.getCurrentSailingSlot
-    }
+      auth: false,
+      handler: CurrentSailingHandlers.getCurrentSailingSlot,
+    },
   },
 ];
 
