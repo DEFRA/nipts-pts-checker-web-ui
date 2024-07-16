@@ -3,10 +3,9 @@
 {% block pageTitle %} Current sailing - {{currentSailingMainModelData.pageTitle}}– GOV.UK {% endblock %}
 
 {% block beforeContent %}
-  {# {{ super() }} #}
-  <a href="javascript: history.back();" class="govuk-back-link">Back</a>
+{# {{ super() }} #}
+<a href="javascript: history.back();" class="govuk-back-link">Back</a>
 {% endblock %}
-
 
 {% block content %}
 
@@ -20,37 +19,40 @@
 
     <form id="sailingForm" action="/checker/sailing-slot" method="POST">
       <div id="routeradio-group" class="govuk-form-group">
-          <fieldset class="govuk-fieldset">
-              <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                  <h2 class="govuk-fieldset__heading">{{ currentSailingMainModelData.routeSubHeading }}</h2>
-              </legend>
-              <div id="routeradio-error" hidden>
-                <p class="govuk-error-message">
-                  <span class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError }}</span> {{currentSailingMainModelData.currentSailingMainModelErrors.routeError}}
-                </p>
-              </div>
-              {% if currentSailingMainModelData.sailingRoutes.length > 0 %}
-              <div class="govuk-radios" data-module="govuk-radios">
-                  {% for route in currentSailingMainModelData.sailingRoutes %}
-                  <div class="govuk-radios__item">
-                      {% if  route.id  == 1 %}
-                        <input class="govuk-radios__input" id="routeRadio" name="routeRadio" type="radio" value="{{ route.id }}" tabindex="0">
-                        <label class="govuk-label govuk-radios__label" for="routeRadio">
-                          {{ route.label }}
-                      </label>
-                      {% else %}
-                        <input class="govuk-radios__input" id="routeRadio-{{ route.id }}" name="routeRadio" type="radio" value="{{ route.id }}" tabindex="0">
-                        <label class="govuk-label govuk-radios__label" for="routeRadio-{{ route.id }}">
-                          {{ route.label }}
-                        </label>
-                      {% endif %}
-                  </div>
-                  {% endfor %}
-              </div>
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+            <h2 class="govuk-fieldset__heading">{{ currentSailingMainModelData.routeSubHeading }}</h2>
+          </legend>
+          <div id="routeradio-error" hidden>
+            <p class="govuk-error-message">
+              <span class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError
+                }}</span> {{currentSailingMainModelData.currentSailingMainModelErrors.routeError}}
+            </p>
+          </div>
+          {% if currentSailingMainModelData.sailingRoutes.length > 0 %}
+          <div class="govuk-radios" data-module="govuk-radios">
+            {% for route in currentSailingMainModelData.sailingRoutes %}
+            <div class="govuk-radios__item">
+              {% if route.id == 1 %}
+              <input class="govuk-radios__input" id="routeRadio" name="routeRadio" type="radio" value="{{ route.id }}"
+                tabindex="0">
+              <label class="govuk-label govuk-radios__label" for="routeRadio">
+                {{ route.label }}
+              </label>
               {% else %}
-              <p>No routes available.</p>
+              <input class="govuk-radios__input" id="routeRadio-{{ route.id }}" name="routeRadio" type="radio"
+                value="{{ route.id }}" tabindex="0">
+              <label class="govuk-label govuk-radios__label" for="routeRadio-{{ route.id }}">
+                {{ route.label }}
+              </label>
               {% endif %}
-          </fieldset>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <p>No routes available.</p>
+          {% endif %}
+        </fieldset>
       </div>
 
       <div id="time-group" class="govuk-form-group">
@@ -59,36 +61,35 @@
         </div>
         <div id="time-error" hidden>
           <p class="govuk-error-message">
-            <span class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError }}</span>  {{currentSailingMainModelData.currentSailingMainModelErrors.timeError}}
+            <span class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError
+              }}</span> {{currentSailingMainModelData.currentSailingMainModelErrors.timeError}}
           </p>
         </div>
         <div id="event-name-hint" class="govuk-hint">
           {{ currentSailingMainModelData.sailingHintText1 }} <br> {{ currentSailingMainModelData.sailingHintText2 }}
         </div>
-        <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingHour" name="sailingHour" tabindex="0"  aria-label="sailingHour">
-            {% for timeHour in currentSailingMainModelData.sailingTimes.slice(0, 25) %}
-              <option value="{{timeHour}}">{{ timeHour }}</option>
-            {% endfor %}
+        <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingHour" name="sailingHour"
+          tabindex="0" aria-label="sailingHour">
+          {% for timeHour in currentSailingMainModelData.sailingTimes.slice(0, 25) %}
+          <option value="{{timeHour}}">{{ timeHour }}</option>
+          {% endfor %}
         </select>
         <span role="presentation">:</span>
-        <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingMinutes" name="sailingMinutes" tabindex="0" aria-label="sailingMinutes">
-            {% for timeMinutes in currentSailingMainModelData.sailingTimes %}
-              <option value="{{timeMinutes}}">{{ timeMinutes }}</option>
-            {% endfor %}
+        <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingMinutes"
+          name="sailingMinutes" tabindex="0" aria-label="sailingMinutes">
+          {% for timeMinutes in currentSailingMainModelData.sailingTimes %}
+          <option value="{{timeMinutes}}">{{ timeMinutes }}</option>
+          {% endfor %}
         </select>
       </div>
       <button type="submit" class="govuk-button" data-module="govuk-button">
         Save and continue
       </button>
-     
+
     </form>
-    
+
   </div>
 </div>
 <script src="../../../../assets/javascripts/currentSailing.js"></script>
 
 {% endblock %}
-
-
-
-              

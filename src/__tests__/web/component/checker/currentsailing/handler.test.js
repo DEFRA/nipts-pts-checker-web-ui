@@ -44,29 +44,22 @@ describe('Handler', () => {
 });
 
 describe('submitCurrentSailingSlot', () => {
-  it('should set the sailing slot in the session and return a success response', async () => {
-    // Mock request and response objects
+  it('should set the sailing slot in the session and redirect to the dashboard', async () => {
+    // Mock payload
     const mockPayload = {
       routeRadio: '1',
       sailingHour: '12',
       sailingMinutes: '30',
     };
 
+    // Mock sailing routes stored in session
     const sailingRoutes = [
-      { 
-        id: '1', 
-        value: 'Birkenhead to Belfast (Stena)' 
-      },
-      { 
-        id: '2', 
-        value: 'Cairnryan to Larne (P&O)'         
-      },
-      { 
-        id: '3', 
-        value: 'Loch Ryan to Belfast (Stena)'         
-      },
+      { id: '1', value: 'Birkenhead to Belfast (Stena)' },
+      { id: '2', value: 'Cairnryan to Larne (P&O)' },
+      { id: '3', value: 'Loch Ryan to Belfast (Stena)' },
     ];
-    
+
+    // Mock request object
     const mockRequest = {
       payload: mockPayload,
       yar: {
@@ -75,36 +68,28 @@ describe('submitCurrentSailingSlot', () => {
       },
     };
 
-    const mockCode = jest.fn(() => 200);
-    const mockResponse = {
-      code: mockCode,
-    };
-    const selectedSailingRoute = {
-      selectedRoute: {
-        id: '1', 
-        value: 'Birkenhead to Belfast (Stena)'
-      },
-      sailingHour: '12',
-      sailingMinutes: '30',
-    }
-
+    // Mock response toolkit
+    const mockRedirect = jest.fn();
     const mockResponseToolkit = {
-      response: jest.fn().mockReturnValue(mockResponse),
+      redirect: mockRedirect,
+    };
+
+    // Expected sailing slot to be set in session
+    const expectedSailingSlot = {
+      sailingHour: mockPayload.sailingHour,
+      sailingMinutes: mockPayload.sailingMinutes,
+      selectedRoute: { id: '1', value: 'Birkenhead to Belfast (Stena)' },
     };
 
     // Invoke the handler
-    const result = await CurrentSailingHandlers.submitCurrentSailingSlot(mockRequest, mockResponseToolkit);
-    
-    // Assertions    
-    expect(mockRequest.yar.set).toHaveBeenCalledWith('CurrentSailingSlot', selectedSailingRoute);
-    expect(mockResponseToolkit.response).toHaveBeenCalledWith({
-      status: "success",
-      message: "Sailing slot submitted successfully",
-      redirectTo: '/checker/dashboard',
-    });
-    expect(mockCode).toHaveBeenCalledWith(200);
+    await CurrentSailingHandlers.submitCurrentSailingSlot(mockRequest, mockResponseToolkit);
+
+    // Assertions
+    expect(mockRequest.yar.set).toHaveBeenCalledWith('CurrentSailingSlot', expectedSailingSlot);
+    expect(mockRedirect).toHaveBeenCalledWith('/checker/dashboard');
   });
 });
+
 
 
 describe('getCurrentSailingSlot', () => {

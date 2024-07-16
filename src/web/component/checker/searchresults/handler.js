@@ -70,18 +70,20 @@ const saveAndContinueHandler = async (request, h) => {
 
 
     if (checklist === CheckOutcomeConstants.Pass) {
-      return h.response({
-        status: 'success',
-        message: 'Check pass',
-        redirectTo: '/checker/document-search',
-      }).code(200);
+      // return h.response({
+      //   status: 'success',
+      //   message: 'Check pass',
+      //   redirectTo: '/checker/document-search',
+      // }).code(200);
+      return h.redirect("/checker/document-search");
     }
 
-    return h.response({
-      status: 'success',
-      message: 'Check fail',
-      redirectTo: '/checker/non-compliance',
-    }).code(200);
+    // return h.response({
+    //   status: 'success',
+    //   message: 'Check fail',
+    //   redirectTo: '/checker/non-compliance',
+    // }).code(200);
+    return h.redirect("/checker/non-compliance");
 
   } catch (error) {
     return h.view(VIEW_PATH, {
