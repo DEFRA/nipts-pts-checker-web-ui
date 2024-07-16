@@ -13,7 +13,7 @@ const submitCurrentSailingSlot = async (request, h) => {
   // Handle the form submission here
   const sailingRoutes = request.yar.get("SailingRoutes");
   const selectedRoute = sailingRoutes.find(
-    (x) => x.id === parseInt(request.payload.routeRadio)
+    (x) => x.id === request.payload.routeRadio
   );
 
   const currentSailingSlot = {
