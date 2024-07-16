@@ -39,7 +39,7 @@ extends:
       dev: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-        -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api/"
+        -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
         -OCP_APIM_SUBSCRIPTION_KEY "3e9a5ea1359347869b60ee03d857cdac"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
         -CP_ENV azure
@@ -48,14 +48,14 @@ extends:
       tst: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-        -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api/"
+        -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
         -CP_ENV azure
         -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
       snd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-        -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api/"
+        -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
         -CP_ENV azure
         -DEFRA_ID_TENANT "TBC"
@@ -69,7 +69,7 @@ extends:
       pre: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-        -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api/"
+        -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
         -CP_ENV azure
         -DEFRA_ID_TENANT "TBC"
@@ -83,7 +83,7 @@ extends:
       prd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
-        -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api/"
+        -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
         -CP_ENV azure
         -DEFRA_ID_TENANT "TBC"
