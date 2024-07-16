@@ -1,5 +1,3 @@
-"use strict";
-
 import currentSailingMainService from "../../../../api/services/currentSailingMainService.js";
 
 const VIEW_PATH = "componentViews/checker/currentsailing/currentsailingView";
@@ -13,11 +11,11 @@ const getCurrentSailings = async (request, h) => {
 
 const submitCurrentSailingSlot = async (request, h) => {
   // Handle the form submission here
-  // The form data is available in request.payload
   const sailingRoutes = request.yar.get("SailingRoutes");
   const selectedRoute = sailingRoutes.find(
-    (x) => x.id === request.payload.routeRadio
+    (x) => x.id === parseInt(request.payload.routeRadio)
   );
+
   const currentSailingSlot = {
     sailingHour: request.payload.sailingHour,
     sailingMinutes: request.payload.sailingMinutes,
@@ -26,13 +24,10 @@ const submitCurrentSailingSlot = async (request, h) => {
 
   request.yar.set("CurrentSailingSlot", currentSailingSlot);
 
-  return h
-    .response({
-      status: "success",
-      message: "Sailing slot submitted successfully",
-      redirectTo: "/checker/dashboard",
-    })
-    .code(200);
+  // Perform necessary validations and actions here
+
+  // If successful, redirect to the dashboard
+  return h.redirect("/checker/dashboard");
 };
 
 const getCurrentSailingSlot = async (request, h) => {
