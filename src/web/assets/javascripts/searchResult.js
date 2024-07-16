@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
       function validateForm(data) {
         const errors = [];
     
-        if (!data.checklist) {
+        if (data.radioButtonsPresent === "true" && !data.checklist) {
           errors.push({
             message: "Select an option",
             context: { key: "checklist" },
