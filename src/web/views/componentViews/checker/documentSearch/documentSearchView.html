@@ -54,7 +54,7 @@
                     <div class="govuk-input__wrapper">
                       <div class="govuk-input__prefix" aria-hidden="true">{{documentSearchMainModelData.ptdSearchText}}
                       </div>
-                      <input class="govuk-input govuk-input--width-10" id="ptdNumberSearch" name="ptdNumberSearch"
+                      <input class="govuk-input govuk-input--width-10" id="ptdNumberSearch" aria-label="PtdNumber Input" name="ptdNumberSearch"
                         type="text" spellcheck="false" {% if activeTab=="ptd"
                         %}value={{documentSearchMainModelData.searchText}} {% endif %}>
                     </div>
@@ -80,7 +80,7 @@
                     </p>
                     {% endif %}
                     <input class="govuk-input govuk-input--width-10" id="applicationNumberSearch"
-                      name="applicationNumberSearch" type="text" spellcheck="false" {% if activeTab=="application"
+                      name="applicationNumberSearch" type="text" spellcheck="false" aria-label="ApplicationNumber Input" {% if activeTab=="application"
                       %}value={{documentSearchMainModelData.searchText}} {% endif %}>
                   </div>
                 </div>
@@ -104,7 +104,7 @@
                     </p>
                     {% endif %}
                     <input class="govuk-input govuk-input--width-20" id="microchipNumber" name="microchipNumber"
-                      type="text" spellcheck="false" {% if activeTab=="microchip"
+                      type="text" spellcheck="false" aria-label="MicrochipNumber Input" {% if activeTab=="microchip"
                       %}value={{documentSearchMainModelData.searchText}} {% endif %}>
                   </div>
                 </div>
