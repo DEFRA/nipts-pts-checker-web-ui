@@ -64,6 +64,7 @@ const saveAndContinueHandler = async (request, h) => {
     }
 
     if (checklist === CheckOutcomeConstants.Pass) {
+      request.yar.set("successConfirmation", true);
       return h.redirect("/checker/document-search");
     }
 
