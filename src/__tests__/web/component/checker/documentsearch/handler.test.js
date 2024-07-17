@@ -17,82 +17,62 @@ jest.mock("../../../../../web/component/checker/documentsearch/validate.js");
 
 describe("DocumentSearchHandlers", () => {
   describe("getDocumentSearch", () => {
-    it("should return view with documentSearchMainModelData", async () => {
-      const mockData = {
-        pageHeading: "Find a document",
-        pageTitle:
-          "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
-        ptdSearchText: "GB826",
-        errorLabel: "Error:",
-        searchOptions: [
-          { value: "Search by PTD number", error: "Enter a PTD number" },
-          {
-            value: "Search by application number",
-            error: "Enter an application number",
-          },
-          {
-            value: "Search by microchip number",
-            error: "Enter a PTD or application number",
-          },
-        ],
+    let _request, h;
+
+    beforeEach(() => {
+      _request = {
+        yar: {
+          get: jest.fn(),
+          clear: jest.fn()
+        }
       };
-
-      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
-        mockData
-      );
-
-      const request = {};
-      const h = {
-        view: jest.fn((viewPath, data) => {
-          return { viewPath, data };
-        }),
+  
+      h = {
+        view: jest.fn()
       };
-
-      const response = await DocumentSearchHandlers.getDocumentSearch(
-        request,
-        h
-      );
-
-      expect(response.viewPath).toBe(
-        "componentViews/checker/documentsearch/documentSearchView"
-      );
-      expect(response.data).toEqual({ documentSearchMainModelData: mockData });
+    });
+  
+    it("should return the document search view with data on successful fetch", async () => {
+      const mockData = { some: "data" };
+      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(mockData);
+      _request.yar.get.mockReturnValueOnce(true);
+  
+      await DocumentSearchHandlers.getDocumentSearch(_request, h);
+  
+      expect(documentSearchMainService.getDocumentSearchMain).toHaveBeenCalled();
+      expect(_request.yar.get).toHaveBeenCalledWith("successConfirmation");
+      expect(_request.yar.clear).toHaveBeenCalledWith("successConfirmation");
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentSearchView",
-        {
-          documentSearchMainModelData: mockData,
-        }
+        { documentSearchMainModelData: mockData, successConfirmation: true }
       );
     });
-
-    it("should return view with error message on failure", async () => {
-      documentSearchMainService.getDocumentSearchMain.mockRejectedValue(
-        new Error("Service failure")
-      );
-
-      const request = {};
-      const h = {
-        view: jest.fn((viewPath, data) => {
-          return { viewPath, data };
-        }),
-      };
-
-      const response = await DocumentSearchHandlers.getDocumentSearch(
-        request,
-        h
-      );
-
-      expect(response.viewPath).toBe(
-        "componentViews/checker/documentsearch/documentSearchView"
-      );
-      expect(response.data).toEqual({
-        error: "Failed to fetch document search data",
-      });
+  
+    it("should return the document search view with successConfirmation as false if it is null", async () => {
+      const mockData = { some: "data" };
+      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(mockData);
+      _request.yar.get.mockReturnValueOnce(null);
+  
+      await DocumentSearchHandlers.getDocumentSearch(_request, h);
+  
+      expect(documentSearchMainService.getDocumentSearchMain).toHaveBeenCalled();
+      expect(_request.yar.get).toHaveBeenCalledWith("successConfirmation");
+      expect(_request.yar.clear).toHaveBeenCalledWith("successConfirmation");
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentSearchView",
-        {
-          error: "Failed to fetch document search data",
-        }
+        { documentSearchMainModelData: mockData, successConfirmation: false }
+      );
+    });
+  
+    it("should return the error view if fetching data fails", async () => {
+      documentSearchMainService.getDocumentSearchMain.mockRejectedValue(new Error("Fetch error"));
+  
+      await DocumentSearchHandlers.getDocumentSearch(_request, h);
+  
+      expect(documentSearchMainService.getDocumentSearchMain).toHaveBeenCalled();
+      expect(h.view).toHaveBeenCalledWith(
+        "componentViews/checker/documentsearch/documentSearchView",
+        { error: "Failed to fetch document search data" }
       );
     });
   });

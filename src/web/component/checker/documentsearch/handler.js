@@ -18,7 +18,13 @@ const getDocumentSearch = async (_request, h) => {
   try {
     const documentSearchMainModelData =
       await documentSearchMainService.getDocumentSearchMain();
-    return h.view(VIEW_PATH, { documentSearchMainModelData });
+      let successConfirmation = _request.yar.get("successConfirmation");
+      if(successConfirmation === null)
+      {
+        successConfirmation = false;
+      }
+      _request.yar.clear("successConfirmation");
+    return h.view(VIEW_PATH, { documentSearchMainModelData, successConfirmation });
   } catch (error) {
     return h.view(VIEW_PATH, {
       error: "Failed to fetch document search data",

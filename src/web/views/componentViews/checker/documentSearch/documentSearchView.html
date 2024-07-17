@@ -7,6 +7,12 @@
 {% endblock %}
 
 {% block content %}
+<div id="successBanner" class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-0">
+  {% if successConfirmation %}
+  {% include "./success/successBanner.html" %}
+  {% endif %}
+</div>
+
 <div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-0">
   <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
 
@@ -16,9 +22,9 @@
       {% endif %}
     </div>
 
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
-      {{ documentSearchMainModelData.pageHeading }}
-    </h1>
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
+        {{ documentSearchMainModelData.pageHeading }}
+      </h1>
 
     <form action="/checker/document-search" method="POST">
       <div class="govuk-grid-row govuk-!-margin-bottom-0 govuk-!-margin-top-4">
