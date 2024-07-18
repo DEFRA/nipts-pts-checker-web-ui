@@ -1,7 +1,6 @@
 "use strict";
 import Joi from "joi";
 import { CurrentSailingMainModelErrors } from "../../../../constants/currentSailingConstant.js";
-import { HttpStatusConstants } from "../../../../constants/httpMethod.js";
 
 const routeRadioSchema = Joi.string().required().label('Route').messages({
   'string.empty': CurrentSailingMainModelErrors.routeError,

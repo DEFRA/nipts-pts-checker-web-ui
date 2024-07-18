@@ -1,7 +1,6 @@
 "use strict";
 import Joi from "joi";
 import errorMessages from "./errorMessage.js";
-import { HttpStatusConstants } from "../../../../constants/httpMethod.js";
 
 const radioSchema = Joi.string().required().messages({
         'string.empty': errorMessages.passOrFailOption.empty,
