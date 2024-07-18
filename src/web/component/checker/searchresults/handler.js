@@ -2,7 +2,6 @@
 import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
 import apiService from "../../../../api/services/apiService.js";
 import errorMessages from "./errorMessage.js";
-import { HttpStatusConstants } from "../../../../constants/httpMethod.js";
 import { CheckOutcomeConstants } from "../../../../constants/checkOutcomeConstant.js";
 import {
   validatePassOrFail,
