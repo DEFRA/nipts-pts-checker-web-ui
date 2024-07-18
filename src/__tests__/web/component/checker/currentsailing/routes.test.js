@@ -19,7 +19,6 @@ describe("Routes", () => {
 
     expect(route).toBeDefined();
     expect(route.options.handler).toBeDefined();
-    expect(route.options.validate).toBeDefined();
   });
 
 

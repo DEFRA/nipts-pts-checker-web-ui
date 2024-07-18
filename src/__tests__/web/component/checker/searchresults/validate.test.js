@@ -4,57 +4,28 @@ import {
   } from "../../../../../web/component/checker/searchresults/validate";
   import errorMessages from "../../../../../web/component/checker/searchresults/errorMessage";
 
+describe('validatePassOrFail', () => {
+    it('should return valid for a non-empty string', () => {
+        const result = validatePassOrFail('Pass');
+        expect(result.isValid).toBe(true);
+        expect(result.error).toBe(null);
+    });
 
+    it('should return invalid for an empty string', () => {
+        const result = validatePassOrFail('');
+        expect(result.isValid).toBe(false);
+        expect(result.error).toBe(errorMessages.passOrFailOption.empty);
+    });
 
-describe('validatePassOrFail Schema', () => {
-  it('should validate successfully when radio buttons are present and checklist is selected', () => {
-    const payload = {
-      radioButtonsPresent: true,
-      checklist: 'option1',
-    };
+    it('should return invalid for undefined', () => {
+        const result = validatePassOrFail(undefined);
+        expect(result.isValid).toBe(false);
+        expect(result.error).toBe(errorMessages.passOrFailOption.empty);
+    });
 
-    const { error } = validatePassOrFail.payload.validate(payload);
-    expect(error).toBeUndefined();
-  });
-
-  it('should fail validation when radio buttons are present and checklist is not selected', () => {
-    const payload = {
-      radioButtonsPresent: true,
-      checklist: '',
-    };
-
-    const { error } = validatePassOrFail.payload.validate(payload);
-    expect(error).toBeDefined();
-    expect(error.details[0].message).toBe(errorMessages.passOrFailOption.empty);
-  });
-
-  it('should validate successfully when radio buttons are not present', () => {
-    const payload = {
-      radioButtonsPresent: false,
-      checklist: '',
-    };
-
-    const { error } = validatePassOrFail.payload.validate(payload);
-    expect(error).toBeUndefined();
-  });
-
-  it('should fail validation when radioButtonsPresent is missing', () => {
-    const payload = {
-      checklist: '',
-    };
-
-    const { error } = validatePassOrFail.payload.validate(payload);
-    expect(error).toBeDefined();
-    expect(error.details[0].message).toContain('"radioButtonsPresent" is required');
-  });
-
-  it('should validate successfully when radio buttons are not present and checklist has any value', () => {
-    const payload = {
-      radioButtonsPresent: false,
-      checklist: 'any value',
-    };
-
-    const { error } = validatePassOrFail.payload.validate(payload);
-    expect(error).toBeUndefined();
-  });
+    it('should return invalid for null', () => {
+        const result = validatePassOrFail(null);
+        expect(result.isValid).toBe(false);
+        expect(result.error).toBe(errorMessages.passOrFailOption.empty);
+    });
 });

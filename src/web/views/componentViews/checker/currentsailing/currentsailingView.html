@@ -9,25 +9,32 @@
 
 {% block content %}
 
-{% include "./errors/errorSummary.html" %}
-
 <div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-0">
   <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
+
+    <div id="errorSummary">
+      {% if formSubmitted %}
+      {% include "./errors/displayErrorSummary.html" %}
+      {% endif %}
+    </div>
+
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
       {{ currentSailingMainModelData.pageHeading }}
     </h1>
 
     <form id="sailingForm" action="/checker/sailing-slot" method="POST">
-      <div id="routeradio-group" class="govuk-form-group">
+      <div id="routeradio-group" class="govuk-form-group {% if errorRouteRadio %}govuk-form-group--error{%endif %}">
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
             <h2 class="govuk-fieldset__heading">{{ currentSailingMainModelData.routeSubHeading }}</h2>
           </legend>
-          <div id="routeradio-error" hidden>
+          <div id="routeradio-error">
+            {% if errorRouteRadio %}
             <p class="govuk-error-message">
               <span class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError
                 }}</span> {{currentSailingMainModelData.currentSailingMainModelErrors.routeError}}
             </p>
+            {% endif %}
           </div>
           {% if currentSailingMainModelData.sailingRoutes.length > 0 %}
           <div class="govuk-radios" data-module="govuk-radios">
@@ -35,13 +42,13 @@
             <div class="govuk-radios__item">
               {% if route.id == 1 %}
               <input class="govuk-radios__input" id="routeRadio" name="routeRadio" type="radio" value="{{ route.id }}"
-                tabindex="0">
+              {% if routeRadio == route.id %}checked{% endif %} tabindex="0">
               <label class="govuk-label govuk-radios__label" for="routeRadio">
                 {{ route.label }}
               </label>
               {% else %}
               <input class="govuk-radios__input" id="routeRadio-{{ route.id }}" name="routeRadio" type="radio"
-                value="{{ route.id }}" tabindex="0">
+                value="{{ route.id }}" {% if routeRadio == route.id %}checked{% endif %} tabindex="0">
               <label class="govuk-label govuk-radios__label" for="routeRadio-{{ route.id }}">
                 {{ route.label }}
               </label>
@@ -55,15 +62,17 @@
         </fieldset>
       </div>
 
-      <div id="time-group" class="govuk-form-group">
+      <div id="time-group" class="govuk-form-group {% if errorSailingHour or errorSailingMinutes %}govuk-form-group--error{%endif %}">
         <div class="govuk-label">
           <b> {{ currentSailingMainModelData.sailingTimeSubHeading }} </b>
         </div>
-        <div id="time-error" hidden>
+        <div id="time-error">
+          {% if errorSailingHour or errorSailingMinutes %}
           <p class="govuk-error-message">
             <span class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError
               }}</span> {{currentSailingMainModelData.currentSailingMainModelErrors.timeError}}
           </p>
+          {% endif %}
         </div>
         <div id="event-name-hint" class="govuk-hint">
           {{ currentSailingMainModelData.sailingHintText1 }} <br> {{ currentSailingMainModelData.sailingHintText2 }}
@@ -71,14 +80,14 @@
         <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingHour" name="sailingHour"
           tabindex="0" aria-label="sailingHour">
           {% for timeHour in currentSailingMainModelData.sailingTimes.slice(0, 25) %}
-          <option value="{{timeHour}}">{{ timeHour }}</option>
+          <option value="{{timeHour}}" {% if sailingHour == timeHour %}selected{% endif %}>{{ timeHour }}</option>
           {% endfor %}
         </select>
         <span role="presentation">:</span>
         <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingMinutes"
           name="sailingMinutes" tabindex="0" aria-label="sailingMinutes">
           {% for timeMinutes in currentSailingMainModelData.sailingTimes %}
-          <option value="{{timeMinutes}}">{{ timeMinutes }}</option>
+          <option value="{{timeMinutes}}" {% if sailingMinutes == timeMinutes %}selected{% endif %}>{{ timeMinutes }}</option>
           {% endfor %}
         </select>
       </div>
@@ -90,6 +99,5 @@
 
   </div>
 </div>
-<script src="../../../../assets/javascripts/currentSailing.js"></script>
 
 {% endblock %}

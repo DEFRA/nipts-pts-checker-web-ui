@@ -1,81 +1,79 @@
 "use strict";
-import  { CurrentSailingValidation } from "../../../../../web/component/checker/currentsailing/validate.js";
+import  { validateRouteRadio, validateSailingHour, validateSailingMinutes } from "../../../../../web/component/checker/currentsailing/validate.js";
 import { CurrentSailingMainModelErrors } from "../../../../../constants/currentSailingConstant.js";
 
-describe('validateSailings', () => {
-  const { payload, failAction } = CurrentSailingValidation.validateSailings;
 
-  const validData = {
-    routeRadio: 'someRoute',
-    sailingHour: '12',
-    sailingMinutes: '30',
-  };
-
-  const invalidData = {
-    routeRadio: '',
-    sailingHour: 'ab',
-    sailingMinutes: 'cd',
-  };
-
-  test('should pass validation with valid data', () => {
-    const { error } = payload.validate(validData);
-    expect(error).toBeUndefined();
-  });
-
-  test('should fail validation with invalid route data', () => {
-    const errorCount = 3;
-    const { error } = payload.validate(invalidData);
-    expect(error).not.toBeUndefined();
-    expect(error.details).toHaveLength(errorCount);
-    expect(error.details.map(err => err.message)).toEqual(expect.arrayContaining([
-        CurrentSailingMainModelErrors.routeError,
-        CurrentSailingMainModelErrors.timeError,
-        CurrentSailingMainModelErrors.timeError,
-    ]));
-  });
-
-  test('should fail validation with invalid sailing data', () => {
-    const errorCount = 2;
-   const invalidSailingData = {
-        routeRadio: 'someRoute',
-        sailingHour: '',
-        sailingMinutes: 'cd',
-      };
-
-    const { error } = payload.validate(invalidSailingData);
-    expect(error).not.toBeUndefined();
-    expect(error.details).toHaveLength(errorCount);
-    expect(error.details.map(err => err.message)).toEqual(expect.arrayContaining([
-        CurrentSailingMainModelErrors.timeError,
-        CurrentSailingMainModelErrors.timeError,
-    ]));
-  });
-
-  test('should handle validation failure correctly', () => {
-    const statusCode = 400;
-    const request = { payload: invalidData };
-    const h = {
-      response: jest.fn().mockReturnThis(),
-      code: jest.fn().mockReturnThis(),
-      takeover: jest.fn().mockReturnThis(),
-    };
-
-    const error = {
-      details: [
-        { message: CurrentSailingMainModelErrors.routeError, context: { key: 'routeRadio' } },
-        { message: CurrentSailingMainModelErrors.timeError, context: { key: 'sailingHour' } },
-        { message: CurrentSailingMainModelErrors.timeError, context: { key: 'sailingMinutes' } },
-      ],
-    };
-
-    failAction(request, h, error);
-
-    expect(h.response).toHaveBeenCalledWith({
-      status: "fail",
-      message: CurrentSailingMainModelErrors.genericError,
-      details: error.details,
+describe('Validation Functions', () => {
+  describe('validateRouteRadio', () => {
+    it('should return valid for a non-empty string', () => {
+      const result = validateRouteRadio('1');
+      expect(result.isValid).toBe(true);
+      expect(result.error).toBe(null);
     });
-    expect(h.code).toHaveBeenCalledWith(statusCode);
-    expect(h.takeover).toHaveBeenCalled();
+
+    it('should return invalid for an empty string', () => {
+      const result = validateRouteRadio('');
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe(CurrentSailingMainModelErrors.routeError); // Replace with your actual error message
+    });
+
+    it('should return invalid for undefined', () => {
+      const result = validateRouteRadio(undefined);
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe(CurrentSailingMainModelErrors.routeError); // Replace with your actual error message
+    });
+  });
+
+  describe('validateSailingHour', () => {
+    it('should return valid for a two-digit string', () => {
+      const result = validateSailingHour('08');
+      expect(result.isValid).toBe(true);
+      expect(result.error).toBe(null);
+    });
+
+    it('should return invalid for a single-digit string', () => {
+      const result = validateSailingHour('8');
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe(CurrentSailingMainModelErrors.timeError); // Replace with your actual error message
+    });
+
+    it('should return invalid for an empty string', () => {
+      const result = validateSailingHour('');
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe(CurrentSailingMainModelErrors.timeError); // Replace with your actual error message
+    });
+
+    it('should return invalid for undefined', () => {
+      const result = validateSailingHour(undefined);
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe(CurrentSailingMainModelErrors.timeError); // Replace with your actual error message
+    });
+  });
+
+  describe('validateSailingMinutes', () => {
+    it('should return valid for a two-digit string', () => {
+      const result = validateSailingMinutes('30');
+      expect(result.isValid).toBe(true);
+      expect(result.error).toBe(null);
+    });
+
+    it('should return invalid for a single-digit string', () => {
+      const result = validateSailingMinutes('3');
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe(CurrentSailingMainModelErrors.timeError); // Replace with your actual error message
+    });
+
+    it('should return invalid for an empty string', () => {
+      const result = validateSailingMinutes('');
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe(CurrentSailingMainModelErrors.timeError); // Replace with your actual error message
+    });
+
+    it('should return invalid for undefined', () => {
+      const result = validateSailingMinutes(undefined);
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe(CurrentSailingMainModelErrors.timeError); // Replace with your actual error message
+    });
   });
 });
+

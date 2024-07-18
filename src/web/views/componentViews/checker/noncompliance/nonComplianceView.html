@@ -2,7 +2,7 @@
 {% block pageTitle %} Report non-compliance - {{ model.ptsTitle }}:{{ model.ptsSubTitle }}– GOV.UK {% endblock %}
 
 {% block beforeContent %}
-  <a href="javascript: history.back();" class="govuk-back-link">Back</a>
+  <a href="javascript:void(0);" class="govuk-back-link" id="backButton">Back</a>
 {% endblock %}
 
 {% block content %}
@@ -50,4 +50,14 @@
 </div>
 
 <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+<script>
+    document.addEventListener('DOMContentLoaded', function() { 
+    // Intercept back button click to clear validation errors
+    document.getElementById('backButton').addEventListener('click', function(event) {
+      sessionStorage.removeItem('formSubmitted');
+      history.back();
+    });
+  });
+    
+  </script>
 {% endblock %}

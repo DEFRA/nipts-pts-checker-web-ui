@@ -16,7 +16,6 @@ const Routes = [
     method: HttpMethod.POST,
     path: "/checker/non-compliance",
     options: {
-      validate: validatePassOrFail,
       handler: SearchResultsHandlers.saveAndContinueHandler,
     },
   },
