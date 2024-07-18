@@ -12,7 +12,7 @@ import SignIn from "../web/component/checker/SignIn/index.js";
 import SignOut from "../web/component/checker/SignOut/index.js";
 import CookiesPlugin from "../plugins/cookies-plugin.js";
 import AuthPlugin from "../plugins/auth-plugin.js";
-import SessionPlugin from "../plugins/session.js";
+import HeaderPlugin from "../plugins/header.js";
 import config from "../config/index.js";
 
 
@@ -87,6 +87,9 @@ const pluginList = [
   {
     plugin: SignOut,
   },
+  {
+    plugin: HeaderPlugin,
+  }
 ];
 
 export default pluginList;

@@ -16,7 +16,6 @@ const Routes = [
     method: HttpMethod.POST,
     path: "/checker/sailing-slot",
     options: {
-      auth: false,
       validate: CurrentSailingValidation.validateSailings,
       handler: CurrentSailingHandlers.submitCurrentSailingSlot,
     },
@@ -25,7 +24,6 @@ const Routes = [
     method: HttpMethod.GET,
     path: "/checker/sailing-slot",
     options: {
-      auth: false,
       handler: CurrentSailingHandlers.getCurrentSailingSlot,
     },
   },
