@@ -57,8 +57,5 @@ describe("Routes", () => {
     expect(route.options.handler).toEqual(
       SearchResultsHandlers.saveAndContinueHandler
     );
-    expect(route.options.validate).toEqual(
-      validatePassOrFail
-    );
   });
 });

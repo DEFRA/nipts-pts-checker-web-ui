@@ -3,10 +3,14 @@
 import { SearchResultsHandlers } from "../../../../../web/component/checker/searchresults/handler.js";
 import errorMessages from "../../../../../web/component/checker/searchresults/errorMessage.js";
 import apiService from "../../../../../api/services/apiService.js";
+import {
+  validatePassOrFail,
+} from "../../../../../web/component/checker/searchresults/validate";
 import { CheckOutcomeConstants } from '../../../../../constants/checkOutcomeConstant.js';
 import { HttpStatusConstants } from '../../../../../constants/httpMethod.js';
 
 jest.mock("../../../../../api/services/apiService.js");
+jest.mock("../../../../../web/component/checker/searchresults/validate");
 
 describe("SearchResultsHandlers", () => {
   describe("getSearchResultsHandler", () => {
@@ -57,128 +61,73 @@ describe("SearchResultsHandlers", () => {
     });
   });
 
-  describe('saveAndContinueHandler', () => {
-    let request, h;
-  
-    beforeEach(() => {
-      request = {
-        payload: {
-          checklist: 'pass'
-        },
-        yar: {
-          get: jest.fn()
-        }
-      };
-  
-      h = {
-        response: jest.fn(() => h),
-        code: jest.fn(() => h),
-        takeover: jest.fn(() => h),
-        view: jest.fn(() => h)
-      };
-  
-      request.yar.get.mockImplementation((key) => {
-        switch (key) {
-          case 'data':
-            return {
-              applicationId: 'testAppId',
-              documentState: 'approved'
-            };
-          case 'CurrentSailingSlot':
-            return {
-              sailingHour: '12',
-              sailingMinutes: '30',
-              selectedRoute: { id: 'route1' }
-            };
-          default:
-            return null;
-        }
-      });
-    });
-  
-    // it('should return success response for passed checklist', async () => {
-    //   apiService.recordCheckOutCome.mockResolvedValue({});
-  
-    //   await SearchResultsHandlers.saveAndContinueHandler(request, h);
-  
-    //   expect(h.response).toHaveBeenCalledWith({
-    //     status: 'success',
-    //     message: 'Check pass',
-    //     redirectTo: '/checker/document-search',
-    //   });
-    //   expect(h.code).toHaveBeenCalledWith(200);
-    // });
-  
-    // it('should return success response for failed checklist', async () => {
-    //   request.payload.checklist = 'fail';
-    //   apiService.recordCheckOutCome.mockResolvedValue({});
-  
-    //   await SearchResultsHandlers.saveAndContinueHandler(request, h);
-  
-    //   expect(h.response).toHaveBeenCalledWith({
-    //     status: 'success',
-    //     message: 'Check fail',
-    //     redirectTo: '/checker/non-compliance',
-    //   });
-    //   expect(h.code).toHaveBeenCalledWith(200);
-    // });
-  
-    // it('should set checklist to Fail if documentState is rejected or revoked', async () => {
-    //   request.payload.checklist = 'pass';
-    //   request.yar.get.mockImplementation((key) => {
-    //     switch (key) {
-    //       case 'data':
-    //         return {
-    //           applicationId: 'testAppId',
-    //           documentState: 'rejected'
-    //         };
-    //       case 'CurrentSailingSlot':
-    //         return {
-    //           sailingHour: '12',
-    //           sailingMinutes: '30',
-    //           selectedRoute: { id: 'route1' }
-    //         };
-    //       default:
-    //         return null;
-    //     }
-    //   });
-    //   apiService.recordCheckOutCome.mockResolvedValue({});
-  
-    //   await SearchResultsHandlers.saveAndContinueHandler(request, h);
-  
-    //   expect(apiService.recordCheckOutCome).toHaveBeenCalledWith(expect.objectContaining({
-    //     checkOutcome: CheckOutcomeConstants.Fail
-    //   }));
-    // });
-  
-    it('should handle API service error', async () => {
-      apiService.recordCheckOutCome.mockResolvedValue({ error: true });
-  
-      await SearchResultsHandlers.saveAndContinueHandler(request, h);
-  
-      expect(h.response).toHaveBeenCalledWith({
-        status: "fail",
-        message: errorMessages.serviceError.message,
-        details: [
-          { fieldId: "unexpected", message: errorMessages.serviceError.message },
-        ],
-      });
-      expect(h.code).toHaveBeenCalledWith(HttpStatusConstants.BAD_REQUEST);
-    });
-  
-    it('should return view with error message on exception', async () => {
-      apiService.recordCheckOutCome.mockImplementation(() => {
-        throw new Error('Test error');
-      });
-  
-      await SearchResultsHandlers.saveAndContinueHandler(request, h);
-  
-      expect(h.view).toHaveBeenCalledWith("componentViews/checker/searchresults/searchResultsView", {
-        error: "An error occurred while processing your request",
-        errorSummary: [
-          { fieldId: "general", message: "An unexpected error occurred" },
-        ],
-      });
+
+describe('saveAndContinueHandler', () => {
+  let request;
+  let h;
+
+  beforeEach(() => {
+    request = {
+      payload: {},
+      yar: {
+        get: jest.fn(),
+        set: jest.fn(),
+      },
+    };
+    h = {
+      view: jest.fn(),
+      redirect: jest.fn(),
+    };
+
+    apiService.recordCheckOutCome.mockClear();
+    validatePassOrFail.mockClear();
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should return validation error if checklist is invalid', async () => {
+    request.payload.checklist = '';
+    request.yar.get.mockReturnValueOnce({ documentState: 'active' }); // Mock get call for data
+    validatePassOrFail.mockReturnValueOnce({ isValid: false, error: errorMessages.passOrFailOption.empty });
+
+    await SearchResultsHandlers.saveAndContinueHandler(request, h);
+
+    expect(h.view).toHaveBeenCalledWith('componentViews/checker/searchresults/searchResultsView', expect.objectContaining({
+      error: errorMessages.passOrFailOption.empty,
+      errorSummary: [{ fieldId: 'checklist', message: errorMessages.passOrFailOption.empty }],
+      formSubmitted: true,
+    }));
+  });
+
+  it('should return API error if API call fails', async () => {
+    request.payload.checklist = 'Pass';
+    request.yar.get.mockReturnValueOnce({ documentState: 'active' }).mockReturnValueOnce({ applicationId: 1 }); // Mock get call for data
+    validatePassOrFail.mockReturnValueOnce({ isValid: true });
+    apiService.recordCheckOutCome.mockResolvedValueOnce({ error: true });
+
+    await SearchResultsHandlers.saveAndContinueHandler(request, h);
+
+    expect(h.view).toHaveBeenCalledWith('componentViews/checker/searchresults/searchResultsView', expect.objectContaining({
+      error: 'An error occurred while processing your request',
+      errorSummary: [{ fieldId: 'general', message: 'An unexpected error occurred' }],
+    }));
+  });
+
+  it('should handle unexpected errors', async () => {
+    request.payload.checklist = 'Pass';
+    request.yar.get.mockReturnValueOnce({ documentState: 'active' });
+    validatePassOrFail.mockReturnValueOnce({ isValid: true });
+    apiService.recordCheckOutCome.mockRejectedValueOnce(new Error('Unexpected error'));
+
+    await SearchResultsHandlers.saveAndContinueHandler(request, h);
+
+    expect(h.view).toHaveBeenCalledWith('componentViews/checker/searchresults/searchResultsView', {
+      error: 'An error occurred while processing your request',
+      errorSummary: [{ fieldId: 'general', message: 'An unexpected error occurred' }],
     });
   });
+});
+
 });

@@ -2,7 +2,6 @@
 
 import { CurrentSailingHandlers } from "./handler.js";
 import HttpMethod from "../../../../constants/httpMethod.js";
-import { CurrentSailingValidation } from "./validate.js";
 
 const Routes = [
   {
@@ -16,7 +15,6 @@ const Routes = [
     method: HttpMethod.POST,
     path: "/checker/sailing-slot",
     options: {
-      validate: CurrentSailingValidation.validateSailings,
       handler: CurrentSailingHandlers.submitCurrentSailingSlot,
     },
   },
