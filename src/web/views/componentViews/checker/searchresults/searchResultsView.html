@@ -22,7 +22,7 @@
 {% block content %}
 <div class="govuk-grid-row govuk-!-margin-bottom-9 govuk-!-margin-top-4">    
     <div class="govuk-grid-column-full govuk-!-margin-top-0""> 
-        <div id="errorSummary">
+        <div id="errorSummary" class="govuk-grid-column-three-quarters">
             {% if formSubmitted %}
             {% include "./errors/displayErrorSummary.html" %}
             {% endif %}
