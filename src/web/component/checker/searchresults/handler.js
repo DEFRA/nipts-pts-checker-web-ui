@@ -74,12 +74,14 @@ const saveAndContinueHandler = async (request, h) => {
           {
             fieldId: "unexpected",
             message: errorMessages.serviceError.message,
+            dispalyAs: "text",
           },
         ],
           microchipNumber, 
           data, 
           pageTitle,
-          formSubmitted: true 
+          formSubmitted: true,
+          checklist,       
         });
     }
 
