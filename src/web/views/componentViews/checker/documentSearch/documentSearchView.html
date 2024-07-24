@@ -162,24 +162,24 @@
   });
 
   document.getElementById('documentSearch-1').addEventListener('click', () => {
+    document.getElementById('ptdNumberSearch').value = '';
     document.getElementById('errorSummary').hidden = true;
     document.getElementById("ptd-form-group").classList.remove("govuk-form-group--error");
     document.getElementById('ptd-error').remove();
-    document.getElementById('ptdNumberSearch').value = '';
   });
 
   document.getElementById('documentSearch-2').addEventListener('click', () => {
+    document.getElementById('applicationNumberSearch').value = '';
     document.getElementById('errorSummary').hidden = true;
     document.getElementById("application-form-group").classList.remove("govuk-form-group--error");
     document.getElementById('application-error').remove();
-    document.getElementById('applicationNumberSearch').value = '';
   });
 
   document.getElementById('documentSearch-3').addEventListener('click', () => {
+    document.getElementById('microchipNumber').value = '';
     document.getElementById('errorSummary').hidden = true;
     document.getElementById("microchip-form-group").classList.remove("govuk-form-group--error");
     document.getElementById('microchip-error').remove();
-    document.getElementById('microchipNumber').value = '';
   });
 
 
