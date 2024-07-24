@@ -42,7 +42,7 @@ extends:
         -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
         -OCP_APIM_SUBSCRIPTION_KEY "3e9a5ea1359347869b60ee03d857cdac"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
-        -CP_ENV azure
+        -NODE_ENV  "development"
         -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
 
       tst: >-
@@ -51,7 +51,7 @@ extends:
         -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
         -OCP_APIM_SUBSCRIPTION_KEY "285f8ed3d3e740df866e672d0e018072"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
-        -CP_ENV azure
+        -NODE_ENV  "test"
         -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
       snd: >-
         -PORT "8080"
@@ -59,7 +59,7 @@ extends:
         -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
         -OCP_APIM_SUBSCRIPTION_KEY "TBC"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
-        -CP_ENV azure
+        -NODE_ENV  "send"
         -DEFRA_ID_TENANT "TBC"
         -DEFRA_ID_POLICY "TBC"
         -DEFRA_ID_CLIENT_ID "TBC"
@@ -74,7 +74,7 @@ extends:
         -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
         -OCP_APIM_SUBSCRIPTION_KEY "TBC"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
-        -CP_ENV azure
+        -NODE_ENV  "preproduction"
         -DEFRA_ID_TENANT "TBC"
         -DEFRA_ID_POLICY "TBC"
         -DEFRA_ID_CLIENT_ID "TBC"
@@ -89,7 +89,7 @@ extends:
         -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
         -OCP_APIM_SUBSCRIPTION_KEY "TBC"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.cp$(environment).cui.defra.gov.uk/management/account-management"
-        -CP_ENV azure
+        -NODE_ENV  "production"
         -DEFRA_ID_TENANT "TBC"
         -DEFRA_ID_POLICY "TBC"
         -DEFRA_ID_CLIENT_ID "TBC"
