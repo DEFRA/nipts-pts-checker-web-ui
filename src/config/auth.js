@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 // Load environment variables from .env file
 dotenv.config();
 
-if (process.env.CP_ENV === "local" && !process.env.DEFRA_ID_CLIENT_ID) {
+if (process.env.NODE_ENV === "local" && !process.env.DEFRA_ID_CLIENT_ID) {
   dotenv.config({ path: './.env.local', override: true});
 }
 
