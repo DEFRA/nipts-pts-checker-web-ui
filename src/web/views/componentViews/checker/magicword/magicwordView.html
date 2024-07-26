@@ -1,0 +1,44 @@
+{% extends "./layouts/checkerLayout.html" %}
+
+{% block pageTitle %} Magic word - {{pageTitle}}– GOV.UK {% endblock %}
+
+
+
+{% block content %}
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
+  This is a prototype used for research
+</h1>
+<form action="/checker/magic-word" method="POST">
+  <div class="govuk-grid-row govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+      <div class="govuk-input__wrapper">
+      It is not a real service. You should only continue if you have been invited to test this prototype.
+      </div>
+      <div class="govuk-input__wrapper govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+        <div class="govuk-input__wrapper" aria-hidden="true">password</div>
+        <input class="govuk-input govuk-input--width-10" id="magicword" name="magicword" type="text" spellcheck="false" autocomplete="off">
+      </div>
+  </div>
+  <div class="govuk-grid-row govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+      <div class="govuk-grid-column-one-half">
+        <button type="submit" class="govuk-button" data-module="govuk-button">
+              Submit
+        </button>
+      </div>
+  </div>
+</form>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const navigation = document.querySelector('.pts-checker-navigation');
+    const headerRightIcons = document.querySelector('#headerRightIcons');
+    
+    if (navigation) {
+      navigation.style.display = 'none';
+    }
+
+    if(headerRightIcons)
+    {
+      headerRightIcons.style.display = 'none';
+    }
+  });
+</script>
+{% endblock %}

@@ -8,7 +8,7 @@ const Routes = [
     method: HttpMethod.GET,
     path: "/",
     options: {
-      auth: false,
+      auth: false,     
       handler: HomeHandlers.getHome,
     },
   },

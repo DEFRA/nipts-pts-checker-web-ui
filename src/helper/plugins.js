@@ -14,6 +14,7 @@ import CookiesPlugin from "../plugins/cookies-plugin.js";
 import AuthPlugin from "../plugins/auth-plugin.js";
 import HeaderPlugin from "../plugins/header.js";
 import config from "../config/index.js";
+import MagicWord from "../web/component/checker/magicword/index.js";
 
 
 const pluginList = [
@@ -70,6 +71,9 @@ const pluginList = [
   },
   {
     plugin: NonCompliance,
+  },
+  {
+    plugin: MagicWord,
   },
   {
     plugin: AuthPlugin,
