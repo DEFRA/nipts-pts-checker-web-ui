@@ -18,7 +18,11 @@ export default {
         },
         keepAlive: true,
         redirectTo: (request) => {
-          return auth.requestAuthorizationCodeUrl(session, request);
+         if(request.path !== '/checker/magic-word')
+         {
+            //return request.path;
+            return auth.requestAuthorizationCodeUrl(session, request);
+         }         
         },
         validateFunc: async (request, s) => {
           let result = { valid: false };

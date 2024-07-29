@@ -13,9 +13,12 @@ export default {
     register: (server, _) => {
       server.ext("onPreResponse", (request, h) => {
         const response = request.response;
-        headerOptions?.forEach((x) => {
-          response.header(x.key, x.value);
-        });
+        // Check if response is a Hapi response object
+        if (response && response.isBoom === undefined) {
+           headerOptions?.forEach((x) => {
+              response.header(x.key, x.value);
+           });
+        }
         return h.continue;
       });
     },

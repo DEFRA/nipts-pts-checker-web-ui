@@ -8,6 +8,7 @@ const Routes = [
     method: HttpMethod.GET,
     path: "/checker/magic-word",
     options: {
+      auth: false,
       handler: MagicWordHandlers.getMagicWord,
     },
   },
@@ -15,6 +16,7 @@ const Routes = [
     method: HttpMethod.POST,
     path: "/checker/magic-word",
     options: {
+      auth: false,
       handler: MagicWordHandlers.checkMagicWord,
     },
   },

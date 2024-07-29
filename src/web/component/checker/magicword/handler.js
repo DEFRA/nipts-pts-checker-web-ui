@@ -11,7 +11,10 @@ const checkMagicWord = async (request, h) => {
     request.yar.set("magicwordchecked", true);
     let navigationPath = request.yar.get("magicwordpathtonavigate");
     return h.redirect(navigationPath).takeover();
-  }  
+  }else{
+    // Render the view with an error message
+    return h.view(VIEW_PATH, { pageTitle : "Magic word" });
+  } 
 };
 
 
