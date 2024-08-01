@@ -13,9 +13,17 @@ export default {
     register: (server, _) => {
       server.ext("onPreResponse", (request, h) => {
         const response = request.response;
-        headerOptions?.forEach((x) => {
-          response.header(x.key, x.value);
-        });
+        if (response.isBoom) {
+          // Error response, set headers appropriately
+          headerOptions?.forEach((x) => {
+            response.output.headers[x.key] = x.value;
+          });
+        } else if (response.variety === 'plain') {
+          // Normal response, set headers appropriately
+          headerOptions?.forEach((x) => {
+            response.header(x.key, x.value);
+          });
+        }
         return h.continue;
       });
     },
