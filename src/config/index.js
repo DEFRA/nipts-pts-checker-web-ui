@@ -56,11 +56,10 @@ if (result.error) {
   throw new Error(`The server config is invalid. ${result.error.message}`);
 }
 
-const value = result.value;
-
+let value = result.value;
 authConfig.getAuthConfig()
-  .then(authConfig => {
-    value.authConfig = authConfig;
+  .then(cfg => {
+    value.authConfig = cfg;
   })
   .catch(error => {
     throw new Error(`The server config is invalid. ${error}`);
