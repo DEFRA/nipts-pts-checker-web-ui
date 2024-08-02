@@ -34,26 +34,11 @@ const authSchema = Joi.object({
   },
 });
 
-const tenantName = await getConfigValue(
-  process.env.DEFRA_ID_TENANT,
-  "PTS-CP-B2C-TENANT"
-);
-const policy = await getConfigValue(
-  process.env.DEFRA_ID_POLICY,
-  "PTS-CP-B2C-POLICY"
-);
-const clientId = await getConfigValue(
-  process.env.DEFRA_ID_CLIENT_ID,
-  "PTS-CP-B2C-CLIENT-ID"
-);
-const clientSecret = await getConfigValue(
-  process.env.DEFRA_ID_CLIENT_SECRET,
-  "PTS-CP-B2C-CLIENT-SECRET"
-);
-const serviceId = await getConfigValue(
-  process.env.DEFRA_ID_SERVICE_ID,
-  "PTS-CP-B2C-SERVICE-ID"
-);
+const tenantName = await getConfigValue(process.env.DEFRA_ID_TENANT, "PTS-CP-B2C-TENANT");
+const policy = await getConfigValue(process.env.DEFRA_ID_POLICY, "PTS-CP-B2C-POLICY");
+const clientId = await getConfigValue(process.env.DEFRA_ID_CLIENT_ID, "PTS-CP-B2C-CLIENT-ID");
+const clientSecret = await getConfigValue(process.env.DEFRA_ID_CLIENT_SECRET, "PTS-CP-B2C-CLIENT-SECRET");
+const serviceId = await getConfigValue(process.env.DEFRA_ID_SERVICE_ID, "PTS-CP-B2C-SERVICE-ID");
 
 const authConfig = {
   defraId: {

@@ -9,9 +9,28 @@ import { HttpStatusConstants } from "../../constants/httpMethod.js";
 import session from "../../session/index.js";
 import sessionKeys from "../../session/keys.js";
 import dotenv from "dotenv";
+import getSecretValue from "./keyvaultService.js";
 
 // Load environment variables from .env file
 dotenv.config();
+
+if (process.env.NODE_ENV === "local" && !process.env.DEFRA_ID_CLIENT_ID) {
+  dotenv.config({ path: "./.env.local", override: true });
+}
+
+const getSubscriptionKey = async (envValue, secretKey) => {
+  if (!envValue || envValue === "") {
+    const kvValue = await getSecretValue(secretKey);
+    return kvValue;
+  }
+
+  return envValue;
+};
+
+const subscriptionKey = await getSubscriptionKey(
+  process.env.OCP_APIM_SUBSCRIPTION_KEY,
+  "PTS-CP-OCP-APIM-SUBSCRIPTION-KEY"
+);
 
 /*========== errorResponseWithErrorLogging(e): Logs error and returns ServerErrorResponse ==========*/
 const errorResponseWithErrorLogging = (error) => {
@@ -95,7 +114,6 @@ const validateStatus = (status) => {
 };
 
 const createOptions = (request) => {
-  const subscriptionKey = process.env.OCP_APIM_SUBSCRIPTION_KEY;
   const token = session.getToken(request, sessionKeys.tokens.accessToken);
 
   return {
