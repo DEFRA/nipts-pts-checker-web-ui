@@ -34,15 +34,15 @@ const getMicrochipData = async (microchipNumber, request) => {
     );
 
     // Ensure the item structure is as expected
-    if (response?.error?.error) {
+    if (response.error.error) {
       return { error: "not_found" };
     }
 
-    if (response?.error?.error) {
+    if (response.error.error) {
       return { error: "not_found" };
     }
 
-    const item = response?.data;
+    const item = response.data;
 
     if (!item || typeof item !== "object") {
       throw new Error("Unexpected response structure");

@@ -11,7 +11,6 @@ import sessionKeys from "../../session/keys.js";
 import dotenv from "dotenv";
 import getSecretValue from "./keyvaultService.js";
 import KeyVaultConstants from "../../constants/KeyVaultConstant.js";
-import { v1 } from "uuid";
 
 // Load environment variables from .env file
 dotenv.config();

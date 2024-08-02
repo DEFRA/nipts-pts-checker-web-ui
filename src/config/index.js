@@ -63,7 +63,7 @@ authConfig.getAuthConfig()
     value.authConfig = authConfig;
   })
   .catch(error => {
-    console.error(error);
+    throw new Error(`The server config is invalid. ${error}`);
   });
 
 export default value;

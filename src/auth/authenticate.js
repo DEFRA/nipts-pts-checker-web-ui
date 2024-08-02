@@ -2,7 +2,7 @@ import state from "./auth-code-grant/state.js";
 import redeemAuthorizationCodeForAccessToken from "./auth-code-grant/redeem-authorization-code-for-access-token.js";
 import jwtVerify from "./token-verify/jwt-verify.js";
 import decodeJwt from "./token-verify/jwt-decode.js";
-import jwtVerifyIss from "./token-verify/jwt-verify-iss.js";
+//import jwtVerifyIss from "./token-verify/jwt-verify-iss.js";
 import nonce from "./id-token/nonce.js";
 import expiresIn from "./auth-code-grant/expires-in.js";
 import session from "../session/index.js";
