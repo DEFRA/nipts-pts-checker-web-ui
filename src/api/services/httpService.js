@@ -10,6 +10,8 @@ import session from "../../session/index.js";
 import sessionKeys from "../../session/keys.js";
 import dotenv from "dotenv";
 import getSecretValue from "./keyvaultService.js";
+import KeyVaultConstants from "../../constants/KeyVaultConstant.js";
+import { v1 } from "uuid";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -26,11 +28,6 @@ const getSubscriptionKey = async (envValue, secretKey) => {
 
   return envValue;
 };
-
-const subscriptionKey = await getSubscriptionKey(
-  process.env.OCP_APIM_SUBSCRIPTION_KEY,
-  "PTS-CP-OCP-APIM-SUBSCRIPTION-KEY"
-);
 
 /*========== errorResponseWithErrorLogging(e): Logs error and returns ServerErrorResponse ==========*/
 const errorResponseWithErrorLogging = (error) => {
@@ -113,7 +110,11 @@ const validateStatus = (status) => {
   return status < HttpStatusConstants.INTERNAL_SERVER_ERROR;
 };
 
-const createOptions = (request) => {
+const createOptions = async (request) => {
+  const subscriptionKey = await getSubscriptionKey(
+    process.env.OCP_APIM_SUBSCRIPTION_KEY,
+    KeyVaultConstants.OCP_APIM_SUBSCRIPTION_KEY
+  );
   const token = session.getToken(request, sessionKeys.tokens.accessToken);
 
   return {
@@ -126,37 +127,12 @@ const createOptions = (request) => {
   };
 };
 
-/*========== getSync(url): GET API Call (Sync) ==========*/
-const getSync = (url, request) => {
-  console.log("getSync (url)", url);
-  axios
-    .get(url, createOptions(request))
-    .then(function (response) {
-      return statusBasedResponse(response);
-    })
-    .catch(function (error) {
-      return errorResponseWithErrorLogging(error);
-    });
-};
-
-/*========== postSync(url, data): POST API Call (Sync) ==========*/
-const postSync = (url, data, request) => {
-  console.log("postSync (url, data)", url, data);
-  axios
-    .post(url, data, createOptions(request))
-    .then(function (response) {
-      return statusBasedResponse(response);
-    })
-    .catch(function (error) {
-      return errorResponseWithErrorLogging(error);
-    });
-};
-
 /*========== getAsync(url): GET API Call (Async) ==========*/
 const getAsync = async (url, request) => {
   try {
     console.log("getAsync (url)", url);
-    const response = await axios.get(url, createOptions(request));
+    const options = await createOptions(request);
+    const response = await axios.get(url, options);
     return statusBasedResponse(response);
   } catch (error) {
     return errorResponseWithErrorLogging(error);
@@ -167,7 +143,8 @@ const getAsync = async (url, request) => {
 const postAsync = async (url, data, request) => {
   try {
     console.log("postAsync (url, data)", url, data);
-    const response = await axios.post(url, data, createOptions(request));
+    const options = await createOptions(request);
+    const response = await axios.post(url, data, options);
     return statusBasedResponse(response);
   } catch (error) {
     return errorResponseWithErrorLogging(error);
@@ -178,7 +155,8 @@ const postAsync = async (url, data, request) => {
 const putAsync = async (url, data, request) => {
   try {
     console.log("putAsync (url, data)", url, data);
-    const response = await axios.put(url, data, createOptions(request));
+    const options = await createOptions(request);
+    const response = await axios.put(url, data, options);
     return statusBasedResponse(response);
   } catch (error) {
     return errorResponseWithErrorLogging(error);
@@ -189,7 +167,8 @@ const putAsync = async (url, data, request) => {
 const deleteAsync = async (url, request) => {
   try {
     console.log("deleteAsync (url)", url);
-    const response = await axios.delete(url, createOptions(request));
+    const options = await createOptions(request);
+    const response = await axios.delete(url, options);
     return statusBasedResponse(response);
   } catch (error) {
     return errorResponseWithErrorLogging(error);
@@ -201,6 +180,4 @@ export default {
   postAsync,
   putAsync,
   deleteAsync,
-  getSync,
-  postSync,
 };
