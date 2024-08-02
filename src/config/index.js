@@ -1,5 +1,5 @@
 import Joi from "joi";
-import authConfig from "./auth.js";
+import  authConfig from "./auth.js";
 
 const schema = Joi.object({
   namespace: Joi.string().optional(),
@@ -57,6 +57,12 @@ if (result.error) {
 }
 
 const value = result.value;
-value.authConfig = authConfig;
+authConfig.getAuthConfig()
+  .then(cfg => {
+    value.authConfig = cfg;
+  })
+  .catch(error => {
+    throw new Error(`The server config is invalid. ${error}`);
+  });
 
 export default value;
