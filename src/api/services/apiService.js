@@ -102,7 +102,7 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
     const transformedItem = new MicrochipAppPtdMainModel({
       petId: item.pet ? item.pet.petId : undefined,
       petName: item.pet ? item.pet.petName : undefined,
-      petSpecie: item.pet ? item.pet.species : undefined,
+      petSpecies: item.pet ? item.pet.species : undefined,
       petBreed: item.pet ? item.pet.breedName : undefined,
       documentState,
       ptdNumber,
@@ -216,7 +216,7 @@ const getApplicationByApplicationNumber = async (
     const transformedItem = new MicrochipAppPtdMainModel({
       petId: item.pet ? item.pet.petId : undefined,
       petName: item.pet ? item.pet.petName : undefined,
-      petSpecie: item.pet ? item.pet.species : undefined,
+      petSpecies: item.pet ? item.pet.species : undefined,
       petBreed: item.pet ? item.pet.breedName : undefined,
       documentState,
       ptdNumber,

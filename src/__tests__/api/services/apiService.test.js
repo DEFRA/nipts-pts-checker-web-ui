@@ -74,7 +74,7 @@ describe("apiService", () => {
       const expectedInstance = new MicrochipAppPtdMainModel({
         petId: "1",
         petName: "Buddy",
-        petSpecie: "Dog",
+        petSpecies: "Dog",
         petBreed: "Beagle",
         documentState: "approved",
         ptdNumber: "GB826TD123",
@@ -191,7 +191,7 @@ describe("apiService", () => {
       const expectedInstance = new MicrochipAppPtdMainModel({
         petId: "1",
         petName: "Buddy",
-        petSpecie: "Dog",
+        petSpecies: "Dog",
         petBreed: "Beagle",
         documentState: "approved",
         ptdNumber: "GB826TD123",
