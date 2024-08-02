@@ -1,6 +1,6 @@
 {% extends "./layouts/checkerLayout.html" %}
 
-{% block pageTitle %} Current sailing - {{currentSailingMainModelData.pageTitle}}– GOV.UK {% endblock %}
+{% block pageTitle %} {{ currentSailingMainModelData.pageHeading }} - {{currentSailingMainModelData.pageTitle}}– GOV.UK {% endblock %}
 
 {% block beforeContent %}
 {# {{ super() }} #}
@@ -10,7 +10,7 @@
 {% block content %}
 
 <div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-0">
-  <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
+  <div class="govuk-grid-column-full govuk-!-margin-top-0">
 
     <div id="errorSummary">
       {% if formSubmitted %}

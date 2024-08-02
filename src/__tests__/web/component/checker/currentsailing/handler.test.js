@@ -7,7 +7,7 @@ describe('Handler', () => {
   describe("index", () => {
       it('should return view with currentSailingMainModelData', async () => {
         const mockData = {
-          pageHeading: "Current sailing",
+          pageHeading: "What route are you checking?",
           serviceName: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
           routeSubHeading: "Route",
           routes: [
@@ -110,12 +110,12 @@ describe('getCurrentSailingSlot', () => {
 
     expect(mockRequest.yar.get).toHaveBeenCalledWith('CurrentSailingSlot');
     expect(mockResponseToolkit.response).toHaveBeenCalledWith({
-      message: 'Retrieved Current sailing slot',
+      message: 'Retrieved Route details slot',
       currentSailingSlot: 'testSlot'
     });
     expect(response.code).toBe(200);
     expect(response.source).toEqual({
-      message: 'Retrieved Current sailing slot',
+      message: 'Retrieved Route details slot',
       currentSailingSlot: 'testSlot'
     });
   });

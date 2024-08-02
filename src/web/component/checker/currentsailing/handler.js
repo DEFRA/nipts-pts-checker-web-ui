@@ -82,7 +82,7 @@ const submitCurrentSailingSlot = async (request, h) => {
 const getCurrentSailingSlot = async (request, h) => {
   const currentSailingSlot = request.yar.get("CurrentSailingSlot");
   return h.response({
-    message: "Retrieved Current sailing slot",
+    message: "Retrieved Route details slot",
     currentSailingSlot,
   });
 };
