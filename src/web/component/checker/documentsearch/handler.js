@@ -9,6 +9,7 @@ import {
   validateMicrochipNumber,
 } from "./validate.js";
 import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
+import headerData from "../../../../web/helper/constants.js";
 
 const VIEW_PATH = "componentViews/checker/documentsearch/documentSearchView";
 const NOT_FOUND_VIEW_PATH =
@@ -16,6 +17,7 @@ const NOT_FOUND_VIEW_PATH =
 
 const getDocumentSearch = async (_request, h) => {
   try {
+    headerData.section = "search";
     const documentSearchMainModelData =
       await documentSearchMainService.getDocumentSearchMain();
       let successConfirmation = _request.yar.get("successConfirmation");

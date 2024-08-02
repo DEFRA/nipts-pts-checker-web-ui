@@ -6,7 +6,7 @@ class MicrochipAppPtdMainModel {
     this.microchipNumber = data.microchipNumber;
     this.microchipDate = data.microchipDate;    
     this.petName = data.petName;
-    this.petSpecie = data.petSpecie;
+    this.petSpecies = data.petSpecies;
     this.petBreed = data.petBreed;
     this.petSex = data.petSex;
     this.petDoB = data.petDoB;

@@ -4,10 +4,11 @@ import {
   validateSailingHour,
   validateSailingMinutes,
 } from "./validate.js";
-
+import headerData from "../../../../web/helper/constants.js";
 const VIEW_PATH = "componentViews/checker/currentsailing/currentsailingView";
 
 const getCurrentSailings = async (request, h) => {
+  headerData.section = "sailing";
   const currentSailingMainModelData =
     (await currentSailingMainService.getCurrentSailingMain(request)) || {};
   request.yar.set("CurrentSailingModel", currentSailingMainModelData);
