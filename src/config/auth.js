@@ -1,7 +1,7 @@
 import Joi from "joi";
 import dotenv from "dotenv";
-import getSecretValue from "../api/services/keyvaultService.js";
-import KeyVaultConstants from "../constants/KeyVaultConstant.js";
+import keyvaultService from "../api/services/keyvaultService.js";
+import KeyVaultConstants from "../constants/KeyVaultConstants.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -28,7 +28,7 @@ const authSchema = Joi.object({
 
 const getConfigValue = async (envValue, secretKey) => {
   if (!envValue || envValue === "") {
-    const kvValue = await getSecretValue(secretKey);
+    const kvValue = await keyvaultService.getSecretValue(secretKey);
     return kvValue;
   }
 

@@ -9,8 +9,8 @@ import { HttpStatusConstants } from "../../constants/httpMethod.js";
 import session from "../../session/index.js";
 import sessionKeys from "../../session/keys.js";
 import dotenv from "dotenv";
-import getSecretValue from "./keyvaultService.js";
-import KeyVaultConstants from "../../constants/KeyVaultConstant.js";
+import keyvaultService from "./keyvaultService.js";
+import KeyVaultConstants from "../../constants/KeyVaultConstants.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === "local" && !process.env.DEFRA_ID_CLIENT_ID) {
 
 const getSubscriptionKey = async (envValue, secretKey) => {
   if (!envValue || envValue === "") {
-    const kvValue = await getSecretValue(secretKey);
+    const kvValue = await keyvaultService.getSecretValue(secretKey);
     return kvValue;
   }
 

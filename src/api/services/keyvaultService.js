@@ -30,4 +30,4 @@ const getSecretValue = async (secretName) => {
   return null;
 };
 
-export default getSecretValue;
+export default  { getSecretValue };
