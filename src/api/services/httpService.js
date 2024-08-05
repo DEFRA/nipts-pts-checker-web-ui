@@ -6,8 +6,7 @@ import {
   ServerErrorResponse,
 } from "../models/apiResponse.js";
 import { HttpStatusConstants } from "../../constants/httpMethod.js";
-import session from "../../session/index.js";
-import sessionKeys from "../../session/keys.js";
+import userService from "./userService.js";
 import dotenv from "dotenv";
 import keyvaultService from "./keyvaultService.js";
 import KeyVaultConstants from "../../constants/KeyVaultConstants.js";
@@ -114,12 +113,15 @@ const createOptions = async (request) => {
     process.env.OCP_APIM_SUBSCRIPTION_KEY,
     KeyVaultConstants.OCP_APIM_SUBSCRIPTION_KEY
   );
-  const token = session.getToken(request, sessionKeys.tokens.accessToken);
+
+  const token = userService.getToken(request);
+  const organisation = userService.getUserOrganisation(request) || { id: null };
 
   return {
     headers: {
       "Content-Type": "application/json",
       "Ocp-Apim-Subscription-Key": subscriptionKey,
+      "x-organisation-id": organisation.id,
       Authorization: `Bearer ${token}`,
     },
     validateStatus,
