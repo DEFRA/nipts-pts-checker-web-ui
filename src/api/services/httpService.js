@@ -115,17 +115,19 @@ const createOptions = async (request) => {
   );
 
   const token = userService.getToken(request);
-  const organisation = userService.getUserOrganisation(request) || { id: null };
+  const organisation = userService.getUserOrganisation(request);
 
-  return {
+  const axioOptions = {
     headers: {
       "Content-Type": "application/json",
       "Ocp-Apim-Subscription-Key": subscriptionKey,
-      "x-organisation-id": organisation.id,
+      "x-organisation-id": organisation.organisationId,
       Authorization: `Bearer ${token}`,
     },
     validateStatus,
   };
+
+  return axioOptions;
 };
 
 /*========== getAsync(url): GET API Call (Async) ==========*/

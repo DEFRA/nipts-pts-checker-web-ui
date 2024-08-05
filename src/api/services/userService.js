@@ -7,36 +7,61 @@ const getToken = (request) => {
   return token;
 };
 
+const userHasOrganisation = (request) => {
+  const organisation = getUserOrganisation(request);
+  if (
+    organisation &&
+    organisation.organisationId &&
+    organisation.organisationId.length > 0
+  ) {
+    return true;
+  }
+
+  return false;
+};
+
 const getUserOrganisation = (request) => {
+  const organisation = {
+    relationshipId: "",
+    organisationId: "",
+    organisationName: "",
+  };
+
   const accessToken = getToken(request);
   if (!accessToken) {
-    return null;
+    return organisation;
   }
 
   const token = decodeJwt(accessToken);
 
-  if (!token.relationships || token.relationships.length < 1) {
-    return null;
+  organisation.relationshipId = token.currentRelationshipId;
+
+  if (token.relationships && token.relationships.length > 0) {
+    token.relationships.forEach(async (relationship) => {
+      const relationArray = relationship.split(":");
+      if (
+        relationArray.length > 0 &&
+        token.currentRelationshipId === relationArray[0]
+      ) {
+        // organisationId is a string value
+        if (relationArray.length > 1) {
+          organisation.organisationId = relationArray[1];
+        }
+
+        if (relationArray.length > 2) {
+          organisation.organisationName = relationArray[2];
+        }
+
+        return organisation;
+      }
+    });
   }
 
-  const relationArray = token.relationships[0].split(":");
-
-  if (relationArray.length > 2) {
-    const organisation = {
-      // A string value
-      id: relationArray[1],
-      name: relationArray[2],
-      isGB: relationArray[2] === "GB",
-      isSPS: relationArray[2] === "SPS",
-    };
-
-    return organisation;
-  }
-
-  return null;
+  return organisation;
 };
 
 export default {
   getToken,
+  userHasOrganisation,
   getUserOrganisation,
 };
