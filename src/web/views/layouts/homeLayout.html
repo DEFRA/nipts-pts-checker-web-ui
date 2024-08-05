@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="govuk-template">
+<html lang="en" class="govuk-template pts-checker-home-html">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -11,28 +11,29 @@
     – GOV.UK
 
         </title>
-
-        
+      
         <!-- <link href="/assets/govuk-frontend/dist/govuk/govuk-frontend.min.css" rel="stylesheet" type="text/css" media="all" /> -->
         <link href="/assets/css/application.css" rel="stylesheet" type="text/css" media="all">
         <link href="/assets/css/checker.css" rel="stylesheet" type="text/css" media="all">
         <link href="/assets/javascripts/autocomplete/accessible-autocomplete.min.css" rel="stylesheet" type="text/css" media="all">
         
 
-        <script type="module" src="/assets/govuk-frontend/dist/govuk/govuk-frontend.min.js"></script>        
+        <script type="module" src="/assets/govuk-frontend/dist/govuk/govuk-frontend.min.js"></script>
     </head>
     <body class="govuk-template__body pts-checker-home">
         <script>
             document.body.className += ' js-enabled' + (
-            'noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : ''
-        );
+                'noModule' in HTMLScriptElement.prototype
+                ? ' govuk-frontend-supported'
+                : '');
         </script>
 
         <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
 
         <div class="govuk-width-container">
 
-            <main class="govuk-main-wrapper" id="main-content" role="main"> {% block beforeContent %}{% endblock %}
+            <main class="govuk-main-wrapper" id="main-content" role="main">
+                {% block beforeContent %}{% endblock %}
 
                 <div class="pts-checker-splash">
                     <div class="govuk-grid-row">
@@ -66,7 +67,7 @@
                       </g>
                     </svg>
                           </div>
-                          
+                         
                         </div>
                       </div>
                     </div>
