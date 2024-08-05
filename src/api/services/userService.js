@@ -8,7 +8,7 @@ const getToken = (request) => {
 };
 
 const getUserOrganisation = (request) => {
-  const accessToken = getToken(request, sessionKeys.tokens.accessToken);
+  const accessToken = getToken(request);
   if (!accessToken) {
     return null;
   }
