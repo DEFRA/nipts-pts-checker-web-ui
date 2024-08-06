@@ -17,7 +17,7 @@ const getCurrentSailings = async (request, h) => {
 };
 
 const submitCurrentSailingSlot = async (request, h) => {
-  let { routeRadio, sailingHour, sailingMinutes } = request.payload;
+  let { routeOption, routeRadio, sailingHour, sailingMinutes } = request.payload;
   const validationRouteRadioResult = validateRouteRadio(routeRadio);
   const validateSailingHourResult = validateSailingHour(sailingHour);
   const validateSailingMinutesResult = validateSailingMinutes(sailingMinutes);
@@ -57,6 +57,7 @@ const submitCurrentSailingSlot = async (request, h) => {
         routeRadio,
         sailingHour,
         sailingMinutes,
+        routeOption,
       });
   }
 

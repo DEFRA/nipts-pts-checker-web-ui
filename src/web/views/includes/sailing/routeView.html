@@ -1,0 +1,23 @@
+<div class="govuk-form-group govuk-!-margin-top-6">
+    <fieldset class="govuk-fieldset" aria-describedby="routeOption-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+        <h3 class="govuk-fieldset__heading">{{ currentSailingMainModelData.routeOptionHeading }}</h3>
+      </legend>
+      
+      <div class="govuk-radios" data-module="govuk-radios">
+        {% for option in currentSailingMainModelData.routeOptions %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="routeOption-{{ option.id }}" name="routeOption" 
+           type="radio" value="{{ option.id }}" {% if routeOption == option.id %}checked{% endif %}
+           data-aria-controls="conditional-routeOption-{{ option.id }}">
+          <label class="govuk-label govuk-radios__label" for="routeOption-{{ option.id }}">
+            {{ option.label }}
+          </label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-routeOption-{{ option.id }}">          
+            {% include "includes/sailing/" + option.template %}       
+        </div>
+        {% endfor %}
+      </div>
+    </fieldset>
+  </div>

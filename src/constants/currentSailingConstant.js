@@ -8,6 +8,11 @@ const errors = {
   genericError: "Validation errors occurred",
 };
 
+const routeOptions =  [
+  { id: '1', value: 'Ferry', label: 'Ferry', template: 'ferryView.html' },
+  { id: '2', value: 'Flight', label: 'Flight', template: 'flightView.html' }
+];
+
 const currentSailingMainModelData = {
     pageHeading: "What route are you checking?",
     pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
@@ -22,6 +27,9 @@ const currentSailingMainModelData = {
     sailingHintText2: "For midday, use 12:00. For midnight, use 23:59.",
     sailingTimes: times,
     currentSailingMainModelErrors: errors,
+    routeOptions: routeOptions,
+    routeOptionHeading: "Are you checking a sailing or a flight?",
+    flightSubHeading: "Flight number",
   };
 
 
