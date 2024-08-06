@@ -15,7 +15,7 @@ const routeOptions =  [
 
 const currentSailingMainModelData = {
     pageHeading: "What route are you checking?",
-    pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+    pageTitle: "What route are you checking - Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
     routeSubHeading: "Route",
     routes: [
       { id: '1001', value: 'Birkenhead to Belfast (Stena)', label: 'Birkenhead to Belfast (Stena)' },
