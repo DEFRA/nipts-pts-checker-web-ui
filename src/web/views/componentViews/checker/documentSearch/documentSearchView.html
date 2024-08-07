@@ -26,7 +26,7 @@
         {{ documentSearchMainModelData.pageHeading }}
       </h1>
 
-    <form action="/checker/document-search" method="POST">
+    <form id="documentSearchForm" action="/checker/document-search" method="POST">
       <div class="govuk-grid-row govuk-!-margin-bottom-0 govuk-!-margin-top-4">
         <div class="govuk-grid-column-full govuk-!-margin-top-0">
           <div class="govuk-form-group">
@@ -184,16 +184,40 @@
 
 
   document.addEventListener('DOMContentLoaded', function() {
+      // Clear validation errors only when the page is loaded
+      if (!sessionStorage.getItem('formSubmitted')) {
+            clearValidationErrors();
+        } else {
+            sessionStorage.removeItem('formSubmitted');
+        }   
 
+
+      // Intercept back button click to clear validation errors
+      document.getElementById('backButton').addEventListener('click', function(event) {
+        sessionStorage.removeItem('formSubmitted');
+        history.back();
+      });
+}); 
+
+
+    document.getElementById('documentSearchForm').addEventListener('submit', function(event) {
+        // Clear previous error messages before submitting the form
+        sessionStorage.setItem('formSubmitted', 'true');
+        clearValidationErrors();
     
-
-
-  // Intercept back button click to clear validation errors
-  document.getElementById('backButton').addEventListener('click', function(event) {
-    sessionStorage.removeItem('formSubmitted');
-    history.back();
-  });
-});
-  
+        // Optional: Add any additional validation or actions here
+    
+        // Allow the form to proceed with submission
+    });
+    
+    function clearValidationErrors() {
+        document.querySelectorAll('.govuk-error-message').forEach(function(el) {
+        el.remove();
+        });
+        document.querySelectorAll('.govuk-form-group--error').forEach(function(el) {
+        el.classList.remove('govuk-form-group--error');
+        });
+        document.getElementById('errorSummary').innerHTML = '';
+    }
 </script>
 {% endblock %}
