@@ -57,6 +57,11 @@ const getAuthConfig = async () => {
     KeyVaultConstants.DEFRA_ID_SERVICE_ID
   );
 
+  const issuerId = await getConfigValue(
+    process.env.DEFRA_ID_JWT_ISSUER_ID,
+    KeyVaultConstants.DEFRA_ID_JWT_ISSUER_ID
+  ) || "";
+
   const authConfig = {
     defraId: {
       hostname: `https://${tenantName}.b2clogin.com/${tenantName}.onmicrosoft.com`,
@@ -66,7 +71,7 @@ const getAuthConfig = async () => {
       tenantName: tenantName,
       clientId: clientId,
       clientSecret: clientSecret,
-      jwtIssuerId: process.env.DEFRA_ID_JWT_ISSUER_ID || "",
+      jwtIssuerId: issuerId,
       serviceId: serviceId,
       scope: `openid ${clientId} offline_access`,
       signOutUrl: process.env.DEFRA_ID_SIGNOUT_URI,
