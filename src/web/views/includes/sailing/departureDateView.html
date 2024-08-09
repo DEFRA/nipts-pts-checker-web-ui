@@ -1,0 +1,56 @@
+<div class="govuk-form-group {% if data['error'] === 'date'%}govuk-form-group--error{% endif %}">
+    <fieldset class="govuk-fieldset" role="group" aria-describedby="sailing-date-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+        <h2 class="govuk-fieldset__heading">
+          {{currentSailingMainModelData.scheduledDepartureHeading}}
+        </h2>
+      </legend>
+      <div id="sailing-date-hint" class="govuk-hint">
+        {{currentSailingMainModelData.scheduledDepartureHelpText}}
+      </div>
+      {% if data['error'] === 'date'%}
+      <p id="sailingHour-error" class="govuk-error-message">
+        <span class="govuk-visually-hidden">Error:</span> Select the date for the scheduled sailing
+      </p>
+      {% endif %}
+      <div class="govuk-date-input" id="sailing-date">
+        <div class="govuk-date-input__item">
+          <div class="govuk-form-group">
+            <label class="govuk-label govuk-date-input__label" for="sailing-date-day">
+              {{currentSailingMainModelData.dayText}}
+            </label>
+            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="sailing-date-day" name="sailing-date-day" type="text" inputmode="numeric" value="10">
+          </div>
+        </div>
+        <div class="govuk-date-input__item">
+          <div class="govuk-form-group">
+            <label class="govuk-label govuk-date-input__label" for="sailing-date-month">
+              {{currentSailingMainModelData.monthText}}
+            </label>
+            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="sailing-date-month" name="sailing-date-month" type="text" inputmode="numeric" value="10">
+          </div>
+        </div>
+        <div class="govuk-date-input__item">
+          <div class="govuk-form-group">
+            <label class="govuk-label govuk-date-input__label" for="sailing-date-year">
+              {{currentSailingMainModelData.yearText}}
+            </label>
+            <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="sailing-date-year" name="sailing-date-year" type="text" inputmode="numeric" value="2024">
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var today = new Date();
+      var day = String(today.getDate()).padStart(2, '0');
+      var month = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+      var year = today.getFullYear();
+  
+      document.getElementById('sailing-date-day').value = day;
+      document.getElementById('sailing-date-month').value = month;
+      document.getElementById('sailing-date-year').value = year;
+    });
+  </script>

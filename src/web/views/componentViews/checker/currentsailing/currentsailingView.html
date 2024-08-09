@@ -24,6 +24,7 @@
 
     <form id="sailingForm" action="/checker/sailing-slot" method="POST">
       {% include "./includes/sailing/routeView.html" %}
+      {% include "./includes/sailing/departureDateView.html" %}
       <div id="time-group" class="govuk-form-group {% if errorSailingHour or errorSailingMinutes %}govuk-form-group--error{%endif %}">
         <div class="govuk-label">
           <b> {{ currentSailingMainModelData.sailingTimeSubHeading }} </b>

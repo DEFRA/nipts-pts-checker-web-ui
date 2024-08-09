@@ -30,6 +30,11 @@ const currentSailingMainModelData = {
     routeOptions: routeOptions,
     routeOptionHeading: "Are you checking a sailing or a flight?",
     flightSubHeading: "Flight number",
+    scheduledDepartureHeading: 'Scheduled departure date',
+    scheduledDepartureHelpText: 'For example, 27 3 2024',
+    dayText: 'Day',
+    monthText: 'Month',
+    yearText: 'Year',
   };
 
 
