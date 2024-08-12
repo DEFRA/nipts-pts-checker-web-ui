@@ -22,7 +22,7 @@ const currentSailingMainModelData = {
       { id: '1002', value: 'Cairnryan to Larne (P&O)', label: 'Cairnryan to Larne (P&O)' },
       { id: '1003', value: 'Loch Ryan to Belfast (Stena)', label: 'Loch Ryan to Belfast (Stena)' }
     ],
-    sailingTimeSubHeading: "Scheduled sailing time",
+    sailingTimeSubHeading: "Scheduled departure time",
     sailingHintText1: "Use the 24-hour clock - for example, 15:30.",
     sailingHintText2: "For midday, use 12:00. For midnight, use 23:59.",
     sailingTimes: times,
