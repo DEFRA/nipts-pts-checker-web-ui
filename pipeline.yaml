@@ -22,7 +22,8 @@ resources:
     - repository: PipelineCommon
       name: DEFRA-TRD/Defra.TRD.Pipeline.Common
       type: git
-      ref: master
+      #ref: master
+      ref: aj/snyc-npm
 
 variables:
   APIName: DEFRA_nipts-pts-checker-web-ui
