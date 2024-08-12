@@ -12,6 +12,11 @@ class CurrentSailingMainModel {
       this.routeOptions = data.routeOptions;
       this.routeOptionHeading = data.routeOptionHeading;
       this.flightSubHeading = data.flightSubHeading;
+      this.scheduledDepartureHeading = data.scheduledDepartureHeading;
+      this.scheduledDepartureHelpText = data.scheduledDepartureHelpText;
+      this.dayText = data.dayText;
+      this.monthText = data.monthText;
+      this.yearText = data.yearText;
     }
   }
   
