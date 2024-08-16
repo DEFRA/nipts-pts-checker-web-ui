@@ -87,7 +87,7 @@ describe('saveAndContinueHandler', () => {
     jest.clearAllMocks();
   });
 
-  it('should return validation error if checklist is invalid', async () => {
+  it('should return a validation error if checklist is invalid & data is invalid', async () => {
     request.payload.checklist = '';
     request.yar.get.mockReturnValueOnce({ documentState: 'active' }); // Mock get call for data
     validatePassOrFail.mockReturnValueOnce({ isValid: false, error: errorMessages.passOrFailOption.empty });
@@ -100,6 +100,21 @@ describe('saveAndContinueHandler', () => {
       formSubmitted: true,
     }));
   });
+
+  it('should return error if documentstate is revoked', async () => {
+    request.payload.checklist = '';
+    request.yar.get.mockReturnValueOnce({ documentState: 'revoked' }); // Mock get call for data
+    validatePassOrFail.mockReturnValueOnce({ isValid: false, error: errorMessages.passOrFailOption.empty });
+
+    await SearchResultsHandlers.saveAndContinueHandler(request, h);
+
+    expect(h.view).toHaveBeenCalledWith('componentViews/checker/searchresults/searchResultsView', expect.objectContaining({
+      error: errorMessages.passOrFailOption.empty,
+      errorSummary: [{ fieldId: 'checklist', message: errorMessages.passOrFailOption.empty }],
+      formSubmitted: true,
+    }));
+  });
+
 
   it('should return API error if API call fails', async () => {
     request.payload.checklist = 'Pass';
