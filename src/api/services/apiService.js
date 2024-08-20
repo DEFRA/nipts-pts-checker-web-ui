@@ -288,8 +288,33 @@ const recordCheckOutCome = async (checkOutcome, request) => {
   }
 };
 
+const saveCheckerUser = async (checker, request) => {
+  try {
+    const data = checker;
+    const url = buildApiUrl("Checker/CheckerUser");
+    const response = await httpService.postAsync(url, data, request);
+
+    const checkerId = response.data;
+    if (!checkerId || typeof checkerId !== "object") {
+      throw new Error("Unexpected response structure");
+    }
+
+    return checkerId;
+  } catch (error) {
+    console.error("Error fetching data:", error.message);
+
+    // Check for specific error message and return a structured error
+    if (error?.message) {
+        return { error: error.message };
+    }
+
+    return { error: "Unexpected error occurred" };
+  }
+};
+
 export default {
   getApplicationByPTDNumber,
   getApplicationByApplicationNumber,
-  recordCheckOutCome
+  recordCheckOutCome,
+  saveCheckerUser
 };
