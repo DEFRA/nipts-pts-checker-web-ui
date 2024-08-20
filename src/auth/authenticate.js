@@ -8,6 +8,7 @@ import session from "../session/index.js";
 import sessionKeys from "../session/keys.js";
 import cookieAuthentication from "./cookie-auth/cookie-auth.js";
 import { InvalidStateError } from "../exceptions/index.js";
+import apiService from "../api/services/apiService.js";
 
 const authenticate = async (request) => {
   if (!state.verify(request)) {
@@ -37,6 +38,20 @@ const authenticate = async (request) => {
   );
 
   cookieAuthentication.set(request, accessToken);
+
+  // Add or update checker user
+  try {
+    const checker = {
+      id: accessToken.sub,
+      firstName: accessToken.firstName,
+      lastName: accessToken.lastName,
+      roleId: null,
+    };
+
+    await apiService.saveCheckerUser(checker, request);
+  } catch (error) {
+    console.error("Error saving checker user:", error);
+  }
 
   return accessToken;
 };
