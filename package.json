@@ -35,12 +35,12 @@
     "dotenv": "^16.4.5",
     "govuk-frontend": "^5.3.1",
     "govuk-prototype-kit": "^13.16.2",
-    "gulp": "^4.0.2",
+    "gulp": "^5.0.0",
     "gulp-babel": "^8.0.0",
     "gulp-eslint": "^6.0.0",
     "gulp-html": "^3.5.0",
     "gulp-htmlmin": "^5.0.1",
-    "gulp-image": "^6.2.1",
+    "gulp-image": "^4.3.0",
     "gulp-sass": "^5.0.0",
     "gulp-stylelint": "^13.0.0",
     "gulp-uglify": "^3.0.2",
@@ -75,7 +75,6 @@
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/models/.*",
       "/server.js",
       "/helper/configServer.js"
     ]
