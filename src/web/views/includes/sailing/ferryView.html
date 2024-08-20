@@ -1,11 +1,11 @@
-<div id="routeradio-group" class="govuk-form-group {% if errorRouteRadio %}govuk-form-group--error{%endif %}">
+<div id="ferry-form" class="govuk-form-group {% if errorRouteRadio %}govuk-form-group--error{%endif %}">
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
         <h2 class="govuk-fieldset__heading">{{ currentSailingMainModelData.routeSubHeading }}</h2>
       </legend>
-      <div id="routeradio-error">
+      <div>
         {% if errorRouteRadio %}
-        <p class="govuk-error-message">
+        <p id="ferry-error" class="govuk-error-message">
           <span class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError
             }}</span> {{currentSailingMainModelData.currentSailingMainModelErrors.routeError}}
         </p>
