@@ -292,7 +292,7 @@ const saveCheckerUser = async (checker, request) => {
   try {
     const data = checker;
     const url = buildApiUrl("Checker/CheckerUser");
-    var response = await httpService.postAsync(url, data, request);
+    const response = await httpService.postAsync(url, data, request);
 
     const checkerId = response.data;
     if (!checkerId || typeof checkerId !== "object") {
@@ -304,7 +304,7 @@ const saveCheckerUser = async (checker, request) => {
     console.error("Error fetching data:", error.message);
 
     // Check for specific error message and return a structured error
-    if (error && error.message) {
+    if (error?.message) {
         return { error: error.message };
     }
 
