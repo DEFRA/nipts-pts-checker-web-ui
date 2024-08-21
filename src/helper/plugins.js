@@ -8,13 +8,14 @@ import Dashboard from "../web/component/checker/dashboard/index.js";
 import DocumentSearch from "../web/component/checker/documentsearch/index.js";
 import SearchResults from "../web/component/checker/searchresults/index.js";
 import NonCompliance from "../web/component/checker/noncompliance/index.js";
+import MagicPassword from "../web/component/checker/magicPassword/index.js";
 import SignIn from "../web/component/checker/SignIn/index.js";
 import SignOut from "../web/component/checker/SignOut/index.js";
 import CookiesPlugin from "../plugins/cookies-plugin.js";
 import AuthPlugin from "../plugins/auth-plugin.js";
 import HeaderPlugin from "../plugins/header.js";
+import MagicPasswordPlugin from "../plugins/magic-password.js";
 import config from "../config/index.js";
-
 
 const pluginList = [
   {
@@ -74,8 +75,8 @@ const pluginList = [
   {
     plugin: AuthPlugin,
   },
-  { 
-      plugin: CookiesPlugin,
+  {
+    plugin: CookiesPlugin,
   },
   {
     plugin: SignIn,
@@ -85,7 +86,13 @@ const pluginList = [
   },
   {
     plugin: HeaderPlugin,
-  }
+  },
+  {
+    plugin: MagicPassword,
+  },
+  {
+    plugin: MagicPasswordPlugin,
+  },
 ];
 
 export default pluginList;
