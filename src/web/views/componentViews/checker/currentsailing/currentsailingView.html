@@ -25,34 +25,34 @@
     <form id="sailingForm" action="/checker/sailing-slot" method="POST">
       {% include "./includes/sailing/routeView.html" %}
       {% include "./includes/sailing/departureDateView.html" %}
-      <div id="time-group" class="govuk-form-group {% if errorSailingHour or errorSailingMinutes %}govuk-form-group--error{%endif %}">
-        <div class="govuk-label">
-          <b> {{ currentSailingMainModelData.sailingTimeSubHeading }} </b>
-        </div>
-        <div id="time-error">
-          {% if errorSailingHour or errorSailingMinutes %}
-          <p class="govuk-error-message">
-            <span class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError
-              }}</span> {{currentSailingMainModelData.currentSailingMainModelErrors.timeError}}
-          </p>
-          {% endif %}
-        </div>
-        <div id="event-name-hint" class="govuk-hint">
-          {{ currentSailingMainModelData.sailingHintText1 }} <br> {{ currentSailingMainModelData.sailingHintText2 }}
-        </div>
-        <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingHour" name="sailingHour"
-          tabindex="0" aria-label="sailingHour">
-          {% for timeHour in currentSailingMainModelData.sailingTimes.slice(0, 25) %}
-          <option value="{{timeHour}}" {% if sailingHour == timeHour %}selected{% endif %}>{{ timeHour }}</option>
-          {% endfor %}
-        </select>
-        <span role="presentation">:</span>
-        <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingMinutes"
-          name="sailingMinutes" tabindex="0" aria-label="sailingMinutes">
-          {% for timeMinutes in currentSailingMainModelData.sailingTimes %}
-          <option value="{{timeMinutes}}" {% if sailingMinutes == timeMinutes %}selected{% endif %}>{{ timeMinutes }}</option>
-          {% endfor %}
-        </select>
+      <div id="time-group" class="govuk-form-group {% if errorSailingHour or errorSailingMinutes %}govuk-form-group--error{%endif %}">        
+          <div class="govuk-label">
+            <b> {{ currentSailingMainModelData.sailingTimeSubHeading }} </b>
+          </div>
+          <div id="time-error">
+            {% if errorSailingHour or errorSailingMinutes %}
+            <p class="govuk-error-message">
+              <span class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError
+                }}</span> {{currentSailingMainModelData.currentSailingMainModelErrors.timeError}}
+            </p>
+            {% endif %}
+          </div>
+          <div id="event-name-hint" class="govuk-hint">
+            {{ currentSailingMainModelData.sailingHintText1 }} <br> {{ currentSailingMainModelData.sailingHintText2 }}
+          </div>
+          <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingHour" name="sailingHour"
+            tabindex="0" aria-label="sailingHour">
+            {% for timeHour in currentSailingMainModelData.sailingTimes.slice(0, 25) %}
+            <option value="{{timeHour}}" {% if sailingHour == timeHour %}selected{% endif %}>{{ timeHour }}</option>
+            {% endfor %}
+          </select>
+          <span role="presentation">:</span>
+          <select class="govuk-select govuk-input--width-5 pts-checker-time-select" id="sailingMinutes"
+            name="sailingMinutes" tabindex="0" aria-label="sailingMinutes">
+            {% for timeMinutes in currentSailingMainModelData.sailingTimes %}
+            <option value="{{timeMinutes}}" {% if sailingMinutes == timeMinutes %}selected{% endif %}>{{ timeMinutes }}</option>
+            {% endfor %}
+          </select>       
       </div>
       <button type="submit" class="govuk-button" data-module="govuk-button">
         Save and continue

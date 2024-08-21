@@ -1,6 +1,14 @@
-<div class="govuk-form-group">
-    <label class="govuk-label" for="radioFlight">
+<div id="flight-form" class="govuk-form-group {% if errorFlight %}govuk-form-group--error{%endif %}">
+    <label class="govuk-label" for="routeFlight">
       <b>{{currentSailingMainModelData.flightSubHeading }}</b>
     </label>
-    <input class="govuk-input govuk-!-width-one-third" id="radioFlight" name="radioFlight" type="text" autocomplete="tel">
+    <div>
+      {% if errorFlight %}
+      <p id="flight-error" class="govuk-error-message">
+        <span class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError
+          }}</span> {{currentSailingMainModelData.currentSailingMainModelErrors.flightError}}
+      </p>
+      {% endif %}
+    </div>
+    <input class="govuk-input govuk-!-width-one-third" id="routeFlight" name="routeFlight" type="text" autocomplete="tel" value={{routeFlight}}>
 </div>
