@@ -52,33 +52,72 @@ document.addEventListener('DOMContentLoaded', function() {
   const selectRouteLink = document.querySelector('a[href="#routeOption"]');
   const ferryError = document.getElementById('ferry-error');
   const ferryform = document.getElementById('ferry-form');
+  const ferryRouteOne = document.getElementById('routeRadio');
+  const ferryRouteTwo = document.getElementById('routeRadio-1');
+  const ferryRouteThree = document.getElementById('routeRadio-2');
+
   const flightError = document.getElementById('flight-error');
   const flightform = document.getElementById('flight-form');
+  const flightText = document.getElementById('routeFlight');
 
   ferryRadioButton.addEventListener('change', function() {
-    if (ferryRadioButton.checked) {
-      flightform.classList.remove("govuk-form-group--error");
-      flightError.remove();
+    if (ferryRadioButton.checked) 
+    {
+      if(flightform.classList.contains('govuk-form-group--error'))
+      {
+        flightform.classList.remove("govuk-form-group--error");
+      }
+      
+      if (flightError) { 
+            flightError.remove();
+      }
+
+      flightText.value = '';
     }
   });
 
   flightRadioButton.addEventListener('change', function() {
-    if (flightRadioButton.checked){
-      ferryform.classList.remove("govuk-form-group--error");
-      ferryError.remove();
+    if (flightRadioButton.checked)
+    {
+      if(ferryform.classList.contains('govuk-form-group--error'))
+      {
+        ferryform.classList.remove("govuk-form-group--error");
+      }
+
+      if (ferryError) { 
+        ferryError.remove();
+      }
+
+      if(ferryRouteOne)
+      {
+        ferryRouteOne.checked = false;
+      }
+
+      if(ferryRouteTwo)
+      {
+        ferryRouteTwo.checked = false;
+      }
+
+      if(ferryRouteThree)
+      {
+        ferryRouteThree.checked = false;
+      }
      }
   });
 
-  selectRouteLink.addEventListener('click', function(e) {
-    e.preventDefault();
-    ferryRadioButton.checked = true;  // Programmatically check the radio button
-    conditionalContent.hidden = false;  // Show the content
-    conditionalContent.classList.remove('govuk-radios__conditional--hidden');
-    ferryRadioButton.setAttribute('aria-expanded', 'true');
-    if(!conditionalContentFlight.classList.contains('govuk-radios__conditional--hidden'))
-    {
-      conditionalContentFlight.classList.add('govuk-radios__conditional--hidden');
-    }    
-  });
+  if (selectRouteLink) 
+  {
+    selectRouteLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      ferryRadioButton.checked = true;  // Programmatically check the radio button
+      conditionalContent.hidden = false;  // Show the content
+      conditionalContent.classList.remove('govuk-radios__conditional--hidden');
+      ferryRadioButton.setAttribute('aria-expanded', 'true');
+      if(!conditionalContentFlight.classList.contains('govuk-radios__conditional--hidden'))
+      {
+        conditionalContentFlight.classList.add('govuk-radios__conditional--hidden');
+      }    
+    });
+  }
 });
 </script>
