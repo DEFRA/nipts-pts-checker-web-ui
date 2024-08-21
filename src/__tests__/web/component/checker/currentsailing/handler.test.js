@@ -68,8 +68,10 @@ describe('submitCurrentSailingSlot', () => {
       sailingMinutes: '30',
       departureDateDay: '1',
       departureDateMonth: '1',
-      departureDateYear: '2024'
+      departureDateYear: '2024',
+      routeFlight: '',
     };
+    const departureDate = mockPayload.departureDateDay.trim() + "/" + mockPayload.departureDateMonth.trim() + "/" + mockPayload.departureDateYear.trim();
 
     // Mock sailing routes stored in session
     const sailingRoutes = [
@@ -143,7 +145,11 @@ describe('submitCurrentSailingSlot', () => {
       sailingHour: mockPayload.sailingHour,
       sailingMinutes: mockPayload.sailingMinutes,
       selectedRoute: { id: '1', value: 'Birkenhead to Belfast (Stena)' },
+      departureDate,
+      selectedRouteOption: routeOptions[0],
+      routeFlight: mockPayload.routeFlight,
     };
+
 
     // Invoke the handler
     await CurrentSailingHandlers.submitCurrentSailingSlot(mockRequest, mockResponseToolkit);

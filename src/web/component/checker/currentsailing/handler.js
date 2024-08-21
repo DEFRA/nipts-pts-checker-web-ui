@@ -37,7 +37,8 @@ const submitCurrentSailingSlot = async (request, h) => {
   let validateFlightNumberResult;
   const validateSailingHourResult = validateSailingHour(sailingHour);
   const validateSailingMinutesResult = validateSailingMinutes(sailingMinutes);
-  const validateDepartureDateResult = validateDate(departureDateDay.trim() + "/" + departureDateMonth.trim() + "/" + departureDateYear.trim());
+  const departureDate = departureDateDay.trim() + "/" + departureDateMonth.trim() + "/" + departureDateYear.trim();
+  const validateDepartureDateResult = validateDate(departureDate);
   const currentSailingMainModelData =  request.yar.get("CurrentSailingModel");
 
   let errorSummary = [];
@@ -119,6 +120,10 @@ const submitCurrentSailingSlot = async (request, h) => {
 
 
   // Handle the form submission here
+  const selectedRouteOption = currentSailingMainModelData.routeOptions.find(
+    (x) => x.id === request.payload.routeOption
+  );
+
   const sailingRoutes = request.yar.get("SailingRoutes");
   const selectedRoute = sailingRoutes.find(
     (x) => x.id === request.payload.routeRadio
@@ -128,6 +133,9 @@ const submitCurrentSailingSlot = async (request, h) => {
     sailingHour: request.payload.sailingHour,
     sailingMinutes: request.payload.sailingMinutes,
     selectedRoute,
+    departureDate,
+    selectedRouteOption,
+    routeFlight,
   };
 
   request.yar.set("CurrentSailingSlot", currentSailingSlot);
