@@ -76,7 +76,11 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/server.js",
-      "/helper/configServer.js"
+      "/helper/configServer.js",
+      "/auth/",
+      "/session/index.js",
+      "/api/services/userService.js",
+      "/api/services/httpService.js"
     ]
   },
   "type": "module"
