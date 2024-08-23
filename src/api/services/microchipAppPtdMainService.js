@@ -38,10 +38,6 @@ const getMicrochipData = async (microchipNumber, request) => {
       return { error: "not_found" };
     }
 
-    if (response?.error?.error) {
-      return { error: "not_found" };
-    }
-
     const item = response?.data;
 
     if (!item || typeof item !== "object") {
