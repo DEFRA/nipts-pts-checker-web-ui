@@ -80,7 +80,8 @@
       "/auth/",
       "/session/index.js",
       "/api/services/userService.js",
-      "/api/services/httpService.js"
+      "/api/services/httpService.js",
+      "/config/"
     ]
   },
   "type": "module"
