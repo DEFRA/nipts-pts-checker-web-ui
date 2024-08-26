@@ -10,7 +10,7 @@ const VIEW_PATH = "componentViews/checker/magicPassword/view";
 const getMagicPassword = async (request, h) => {
   headerData.section = "MagicPassword";
 
-  var returnURL = appHelper.getQueryParamFromRequest(request, "returnURL") || "";
+  const returnURL = appHelper.getQueryParamFromRequest(request, "returnURL") || "";
 
   return h.view(VIEW_PATH, { formSubmitted: false, returnURL });
 };
