@@ -46,5 +46,9 @@ const currentSailingMainModelData = {
     currentSailingMainModelData,
   };
 
-  export const CurrentSailingMainModelErrors =  errors ;
+  export const CurrentSailingMainModelErrors =  errors;
+
+  export const CurrentSailingRouteOptions =  routeOptions;
+
+
 
