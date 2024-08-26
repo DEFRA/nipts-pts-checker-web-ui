@@ -11,8 +11,9 @@ export default {
         const currentPath = request.path.toLowerCase();
 
         const ignore = ignoredPaths.includes(currentPath);
+        const isAsset = currentPath.includes("/assets")
 
-        if (!ignore && config.authConfig?.magicPassword?.isEnabled) {
+        if (!ignore && !isAsset && config.authConfig?.magicPassword?.isEnabled) {
           const password = session.getToken(
             request,
             sessionKeys.tokens.magicPassword
