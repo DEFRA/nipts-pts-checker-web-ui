@@ -24,6 +24,10 @@ const authSchema = Joi.object({
     scope: Joi.string(),
     signOutUrl: Joi.string(),
   },
+  magicPassword: {
+    isEnabled: Joi.boolean().optional().allow(null),
+    password: Joi.string().allow(null, ""),
+  }
 });
 
 const getConfigValue = async (envValue, secretKey) => {
@@ -62,6 +66,18 @@ const getAuthConfig = async () => {
     KeyVaultConstants.DEFRA_ID_JWT_ISSUER_ID
   ) || "";
 
+let password = "";
+try{
+  password = await getConfigValue(
+    process.env.MAGIC_PASSWORD,
+    KeyVaultConstants.MAGIC_PASSWORD
+  ) || "";
+}
+catch(error)
+{
+  console.log(error);
+}
+
   const authConfig = {
     defraId: {
       hostname: `https://${tenantName}.b2clogin.com/${tenantName}.onmicrosoft.com`,
@@ -76,6 +92,10 @@ const getAuthConfig = async () => {
       scope: `openid ${clientId} offline_access`,
       signOutUrl: process.env.DEFRA_ID_SIGNOUT_URI,
     },
+    magicPassword: {
+      isEnabled: process.env.MAGIC_PASSWORD_ENABLED || false,
+      password: password,
+    }
   };
 
   const authResult = authSchema.validate(authConfig, {

@@ -45,6 +45,7 @@ extends:
         -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
         -DEFRA_ID_SIGNOUT_URI "https://your-account.cpdev.cui.defra.gov.uk/idphub/b2c/b2c_1a_cui_cpdev_signupsignin/signout"
         -DEFRA_KEYVAULT_NAME "$(environment)trd$(nc-function-infrastructure-lower)$(nc-resource-keyvault-lower)1001"
+        -MAGIC_PASSWORD_ENABLED true
       tst: >-
         -PORT "8080"
         -HOST "0.0.0.0"
@@ -54,6 +55,7 @@ extends:
         -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
         -DEFRA_ID_SIGNOUT_URI "https://your-account.cpdev.cui.defra.gov.uk/idphub/b2c/b2c_1a_cui_cpdev_signupsignin/signout"
         -DEFRA_KEYVAULT_NAME "$(environment)trd$(nc-function-infrastructure-lower)$(nc-resource-keyvault-lower)1001"
+        -MAGIC_PASSWORD_ENABLED true
       snd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
@@ -63,6 +65,7 @@ extends:
         -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
         -DEFRA_ID_SIGNOUT_URI "https://your-account.cpdev.cui.defra.gov.uk/idphub/b2c/b2c_1a_cui_cpdev_signupsignin/signout"
         -DEFRA_KEYVAULT_NAME "$(environment)trd$(nc-function-infrastructure-lower)$(nc-resource-keyvault-lower)1001"
+        -MAGIC_PASSWORD_ENABLED true
       pre: >-
         -PORT "8080"
         -HOST "0.0.0.0"
@@ -70,8 +73,9 @@ extends:
         -ACCOUNT_MANAGEMENT_URL "https://your-account.$(environment).cui.defra.gov.uk/management/account-management"
         -NODE_ENV  "preproduction"
         -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
-        -DEFRA_ID_SIGNOUT_URI "TBC"
+        -DEFRA_ID_SIGNOUT_URI "https://your-account.$(environment).cui.defra.gov.uk/idphub/b2c/b2c_1a_cui_signupsignin/signout"
         -DEFRA_KEYVAULT_NAME "$(environment)trd$(nc-function-infrastructure-lower)$(nc-resource-keyvault-lower)1001"
+        -MAGIC_PASSWORD_ENABLED true
       prd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
@@ -79,8 +83,9 @@ extends:
         -ACCOUNT_MANAGEMENT_URL "https://your-account.$(environment).cui.defra.gov.uk/management/account-management"
         -NODE_ENV  "production"
         -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
-        -DEFRA_ID_SIGNOUT_URI "TBC"
+        -DEFRA_ID_SIGNOUT_URI "https://your-account.$(environment).cui.defra.gov.uk/idphub/b2c/b2c_1a_cui_signupsignin/signout"
         -DEFRA_KEYVAULT_NAME "$(environment)trd$(nc-function-infrastructure-lower)$(nc-resource-keyvault-lower)1001"
+        -MAGIC_PASSWORD_ENABLED true
     runSonarScan: true
     #runVulnerabilityScan: true
     #skipOwaspScan: false
