@@ -102,7 +102,7 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
     const transformedItem = new MicrochipAppPtdMainModel({
       petId: item.pet ? item.pet.petId : undefined,
       petName: item.pet ? item.pet.petName : undefined,
-      petSpecie: item.pet ? item.pet.species : undefined,
+      petSpecies: item.pet ? item.pet.species : undefined,
       petBreed: item.pet ? item.pet.breedName : undefined,
       documentState,
       ptdNumber,
@@ -216,7 +216,7 @@ const getApplicationByApplicationNumber = async (
     const transformedItem = new MicrochipAppPtdMainModel({
       petId: item.pet ? item.pet.petId : undefined,
       petName: item.pet ? item.pet.petName : undefined,
-      petSpecie: item.pet ? item.pet.species : undefined,
+      petSpecies: item.pet ? item.pet.species : undefined,
       petBreed: item.pet ? item.pet.breedName : undefined,
       documentState,
       ptdNumber,
@@ -288,8 +288,33 @@ const recordCheckOutCome = async (checkOutcome, request) => {
   }
 };
 
+const saveCheckerUser = async (checker, request) => {
+  try {
+    const data = checker;
+    const url = buildApiUrl("Checker/CheckerUser");
+    const response = await httpService.postAsync(url, data, request);
+
+    const checkerId = response.data;
+    if (!checkerId || typeof checkerId !== "object") {
+      throw new Error("Unexpected response structure");
+    }
+
+    return checkerId;
+  } catch (error) {
+    console.error("Error fetching data:", error.message);
+
+    // Check for specific error message and return a structured error
+    if (error?.message) {
+        return { error: error.message };
+    }
+
+    return { error: "Unexpected error occurred" };
+  }
+};
+
 export default {
   getApplicationByPTDNumber,
   getApplicationByApplicationNumber,
-  recordCheckOutCome
+  recordCheckOutCome,
+  saveCheckerUser
 };

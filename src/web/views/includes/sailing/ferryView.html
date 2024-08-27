@@ -1,0 +1,38 @@
+<div id="ferry-form" class="govuk-form-group {% if errorRouteRadio %}govuk-form-group--error{%endif %}">
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+        <h2 class="govuk-fieldset__heading">{{ currentSailingMainModelData.routeSubHeading }}</h2>
+      </legend>
+      <div>
+        {% if errorRouteRadio %}
+        <p id="ferry-error" class="govuk-error-message">
+          <span class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError
+            }}</span> {{currentSailingMainModelData.currentSailingMainModelErrors.routeError}}
+        </p>
+        {% endif %}
+      </div>
+      {% if currentSailingMainModelData.sailingRoutes.length > 0 %}
+      <div class="govuk-radios" data-module="govuk-radios">
+        {% for route in currentSailingMainModelData.sailingRoutes %}
+        <div class="govuk-radios__item">
+          {% if route.id == 1 %}
+          <input class="govuk-radios__input" id="routeRadio" name="routeRadio" type="radio" value="{{ route.id }}"
+          {% if routeRadio == route.id %}checked{% endif %} tabindex="0">
+          <label class="govuk-label govuk-radios__label" for="routeRadio">
+            {{ route.label }}
+          </label>
+          {% else %}
+          <input class="govuk-radios__input" id="routeRadio-{{ route.id }}" name="routeRadio" type="radio"
+            value="{{ route.id }}" {% if routeRadio == route.id %}checked{% endif %} tabindex="0">
+          <label class="govuk-label govuk-radios__label" for="routeRadio-{{ route.id }}">
+            {{ route.label }}
+          </label>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p>No routes available.</p>
+      {% endif %}
+    </fieldset>
+  </div>

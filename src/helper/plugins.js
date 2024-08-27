@@ -8,13 +8,14 @@ import Dashboard from "../web/component/checker/dashboard/index.js";
 import DocumentSearch from "../web/component/checker/documentsearch/index.js";
 import SearchResults from "../web/component/checker/searchresults/index.js";
 import NonCompliance from "../web/component/checker/noncompliance/index.js";
+import MagicPassword from "../web/component/checker/magicPassword/index.js";
 import SignIn from "../web/component/checker/SignIn/index.js";
 import SignOut from "../web/component/checker/SignOut/index.js";
 import CookiesPlugin from "../plugins/cookies-plugin.js";
 import AuthPlugin from "../plugins/auth-plugin.js";
-import SessionPlugin from "../plugins/session.js";
+import HeaderPlugin from "../plugins/header.js";
+import MagicPasswordPlugin from "../plugins/magic-password.js";
 import config from "../config/index.js";
-
 
 const pluginList = [
   {
@@ -32,16 +33,12 @@ const pluginList = [
       name: config.cookie.cookieNameSession,
       maxCookieSize: 1024,
       storeBlank: true,
-      cache: {
-        cache: config.cache.name,
-        expiresIn: config.cache.expiresIn,
-      },
       cookieOptions: {
         isHttpOnly: true,
         isSameSite: config.cookie.isSameSite,
         isSecure: config.cookie.isSecure,
         password: config.cookie.password,
-        ttl: config.cache.expiresIn,
+        ttl: config.cookie.ttl,
       },
     },
   },
@@ -78,14 +75,23 @@ const pluginList = [
   {
     plugin: AuthPlugin,
   },
-  { 
-      plugin: CookiesPlugin,
+  {
+    plugin: CookiesPlugin,
   },
   {
     plugin: SignIn,
   },
   {
     plugin: SignOut,
+  },
+  {
+    plugin: HeaderPlugin,
+  },
+  {
+    plugin: MagicPassword,
+  },
+  {
+    plugin: MagicPasswordPlugin,
   },
 ];
 

@@ -1,0 +1,14 @@
+{% if currentSailingSlot %}
+<div class="pts-location-bar">
+  <div class="govuk-width-container">
+    <p>
+    {% if currentSailingSlot.selectedRouteOption.id === ROUTE_OPTION_ID %}
+      <b>Route:</b> {{currentSailingSlot.selectedRoute.value}} &nbsp;&nbsp;&nbsp;&nbsp;
+      {% else %}
+      <b>Flight number:</b> {{currentSailingSlot.routeFlight}} &nbsp;&nbsp;&nbsp;&nbsp;
+      {% endif %}<b>Departure:</b> {{currentSailingSlot.departureDate}} {{currentSailingSlot.sailingHour}}:{{currentSailingSlot.sailingMinutes}}
+      &nbsp;&nbsp;<a href="/checker/current-sailings">Change</a>
+    </p>
+  </div>
+</div>
+{% endif %}

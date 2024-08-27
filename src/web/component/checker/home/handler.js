@@ -3,11 +3,12 @@
 import appSettingsService from "../../../../api/services/appSettingsService.js";
 import requestAuthorizationCodeUrl from "../../../../auth/auth-code-grant/request-authorization-code-url.js";
 import session from "../../../../session/index.js";
+import headerData from "../../../../web/helper/constants.js";
 
 const VIEW_PATH = "componentViews/checker/home/view";
 
 const getHome = async (request, h) => {
-
+  headerData.section = "home"
   const appSettings = await appSettingsService.getAppSettings();
   const loginUrl = requestAuthorizationCodeUrl(session, request);
 

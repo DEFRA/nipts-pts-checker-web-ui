@@ -33,20 +33,16 @@ const getMicrochipData = async (microchipNumber, request) => {
       request
     );
 
-    const item = response.data;
+    // Ensure the item structure is as expected
+    if (response?.error?.error) {
+      return { error: "not_found" };
+    }
+
+    const item = response?.data;
 
     if (!item || typeof item !== "object") {
       throw new Error("Unexpected response structure");
-    }
-
-    // Ensure the item structure is as expected
-    if (!item.pet) {
-      return { error: "Pet not found" };
-    }
-
-    if (!item.application) {
-      return { error: "Application not found" };
-    }
+    }   
 
     // Convert application status to lowercase and trim for consistent comparison
     const applicationStatus = item.application.status.toLowerCase().trim();
@@ -88,7 +84,7 @@ const getMicrochipData = async (microchipNumber, request) => {
     const transformedItem = new MicrochipAppPtdMainModel({
       petId: item.pet ? item.pet.petId : undefined,
       petName: item.pet ? item.pet.petName : undefined,
-      petSpecie: item.pet ? item.pet.species : undefined,
+      petSpecies: item.pet ? item.pet.species : undefined,
       petBreed: item.pet ? item.pet.breedName : undefined,
       documentState,
       ptdNumber,

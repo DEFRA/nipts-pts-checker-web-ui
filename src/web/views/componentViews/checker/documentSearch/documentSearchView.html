@@ -3,10 +3,16 @@
 {% block pageTitle %} Find a document - {{documentSearchMainModelData.pageTitle}} – GOV.UK {% endblock %}
 
 {% block beforeContent %}
-<a href="javascript: history.back();" class="govuk-back-link">Back</a>
+<a href="javascript:void(0);" class="govuk-back-link" id="backButton">Back</a>
 {% endblock %}
 
 {% block content %}
+<div id="successBanner" class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-0">
+  {% if successConfirmation %}
+  {% include "./success/successBanner.html" %}
+  {% endif %}
+</div>
+
 <div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-0">
   <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
 
@@ -16,11 +22,11 @@
       {% endif %}
     </div>
 
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
-      {{ documentSearchMainModelData.pageHeading }}
-    </h1>
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
+        {{ documentSearchMainModelData.pageHeading }}
+      </h1>
 
-    <form action="/checker/document-search" method="POST">
+    <form id="documentSearchForm" action="/checker/document-search" method="POST">
       <div class="govuk-grid-row govuk-!-margin-bottom-0 govuk-!-margin-top-4">
         <div class="govuk-grid-column-full govuk-!-margin-top-0">
           <div class="govuk-form-group">
@@ -48,7 +54,7 @@
                     <div class="govuk-input__wrapper">
                       <div class="govuk-input__prefix" aria-hidden="true">{{documentSearchMainModelData.ptdSearchText}}
                       </div>
-                      <input class="govuk-input govuk-input--width-10" id="ptdNumberSearch" name="ptdNumberSearch"
+                      <input class="govuk-input govuk-input--width-10" id="ptdNumberSearch" aria-label="PtdNumber Input" name="ptdNumberSearch"
                         type="text" spellcheck="false" {% if activeTab=="ptd"
                         %}value={{documentSearchMainModelData.searchText}} {% endif %}>
                     </div>
@@ -74,7 +80,7 @@
                     </p>
                     {% endif %}
                     <input class="govuk-input govuk-input--width-10" id="applicationNumberSearch"
-                      name="applicationNumberSearch" type="text" spellcheck="false" {% if activeTab=="application"
+                      name="applicationNumberSearch" type="text" spellcheck="false" aria-label="ApplicationNumber Input" {% if activeTab=="application"
                       %}value={{documentSearchMainModelData.searchText}} {% endif %}>
                   </div>
                 </div>
@@ -98,7 +104,7 @@
                     </p>
                     {% endif %}
                     <input class="govuk-input govuk-input--width-20" id="microchipNumber" name="microchipNumber"
-                      type="text" spellcheck="false" {% if activeTab=="microchip"
+                      type="text" spellcheck="false" aria-label="MicrochipNumber Input" {% if activeTab=="microchip"
                       %}value={{documentSearchMainModelData.searchText}} {% endif %}>
                   </div>
                 </div>
@@ -156,26 +162,62 @@
   });
 
   document.getElementById('documentSearch-1').addEventListener('click', () => {
+    document.getElementById('ptdNumberSearch').value = '';
     document.getElementById('errorSummary').hidden = true;
     document.getElementById("ptd-form-group").classList.remove("govuk-form-group--error");
     document.getElementById('ptd-error').remove();
-    document.getElementById('ptdNumberSearch').value = '';
   });
 
   document.getElementById('documentSearch-2').addEventListener('click', () => {
+    document.getElementById('applicationNumberSearch').value = '';
     document.getElementById('errorSummary').hidden = true;
     document.getElementById("application-form-group").classList.remove("govuk-form-group--error");
     document.getElementById('application-error').remove();
-    document.getElementById('applicationNumberSearch').value = '';
   });
 
   document.getElementById('documentSearch-3').addEventListener('click', () => {
+    document.getElementById('microchipNumber').value = '';
     document.getElementById('errorSummary').hidden = true;
     document.getElementById("microchip-form-group").classList.remove("govuk-form-group--error");
     document.getElementById('microchip-error').remove();
-    document.getElementById('microchipNumber').value = '';
   });
 
-  
+
+  document.addEventListener('DOMContentLoaded', function() {
+      // Clear validation errors only when the page is loaded
+      if (!sessionStorage.getItem('formSubmitted')) {
+            clearValidationErrors();
+        } else {
+            sessionStorage.removeItem('formSubmitted');
+        }   
+
+
+      // Intercept back button click to clear validation errors
+      document.getElementById('backButton').addEventListener('click', function(event) {
+        sessionStorage.removeItem('formSubmitted');
+        history.back();
+      });
+}); 
+
+
+    document.getElementById('documentSearchForm').addEventListener('submit', function(event) {
+        // Clear previous error messages before submitting the form
+        sessionStorage.setItem('formSubmitted', 'true');
+        clearValidationErrors();
+    
+        // Optional: Add any additional validation or actions here
+    
+        // Allow the form to proceed with submission
+    });
+    
+    function clearValidationErrors() {
+        document.querySelectorAll('.govuk-error-message').forEach(function(el) {
+        el.remove();
+        });
+        document.querySelectorAll('.govuk-form-group--error').forEach(function(el) {
+        el.classList.remove('govuk-form-group--error');
+        });
+        document.getElementById('errorSummary').innerHTML = '';
+    }
 </script>
 {% endblock %}

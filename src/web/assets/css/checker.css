@@ -5,7 +5,7 @@
 
 body {
   background-color: #f3f2f1 !important;
-  padding-top: 80px;
+  padding-top: 140px;
   min-width: 380px;
 }
 
@@ -1277,17 +1277,27 @@ ul.language-toggle li:first-child {
 }
 
 /* HOME */
-.pts-checker-home {
+.pts-checker-home-html {
   background-color: #00a33b !important;
-  background: linear-gradient(180deg, rgb(1, 96, 35) 0%, rgb(0, 163, 59) 100%) !important;
-  height: 100vh;
-  width: 100vw;
-  padding-top: 0 !important;
+  background-image: linear-gradient(180deg, rgb(1, 96, 35) 0%, rgb(0, 163, 59) 100%) !important;
+  background-repeat: repeat-x;
+  background-attachment: scroll;
+}
+
+.pts-checker-home {
+  padding: 0 !important;
+  display: block;
+  background: transparent !important;
 }
 .pts-checker-home h1.govuk-heading-xl {
   line-height: 1.2;
 }
 
+@media only screen and (max-width: 1000px) {
+  .pts-checker-home .govuk-grid-column-one-third {
+    width: 42%;
+  }
+}
 .gem-c-organisation-logo-white {
   font-size: 13px;
   font-weight: 400;
@@ -1480,6 +1490,49 @@ ul.language-toggle li:first-child {
   width: 70px;
 }
 
+.pts-checker-check {
+  align-self: center;
+  max-width: calc(100% - 74px);
+  margin-bottom: 0;
+  padding: 7px 15px;
+  margin-left: 40px;
+}
+.pts-checker-check::after {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  top: 13px;
+  left: 10px;
+  width: 23px;
+  height: 12px;
+  transform: rotate(-45deg);
+  border: solid;
+  border-width: 0 0 5px 5px;
+  border-top-color: transparent;
+  opacity: 1;
+  background: transparent;
+}
+.pts-checker-check::before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+}
+
+.checker-dashboard .govuk-summary-list__key {
+  width: 45% !important;
+  white-space: nowrap;
+}
+
+@media (min-width: 40.0625em) {
+  .checker-dashboard .govuk-summary-list__key {
+    width: 45%;
+  }
+}
 .pts-checker-header {
   background-color: #000000;
   padding: 1em 0;
@@ -1490,10 +1543,10 @@ ul.language-toggle li:first-child {
   height: 80px;
   box-sizing: border-box;
   z-index: 100;
-  filter: drop-shadow(rgba(0, 0, 0, 0.15) 0.5rem 0.5rem 0.3rem);
-  -moz-box-shadow: 0.5rem 0.5rem 0.3rem rgba(0, 0, 0, 0.15);
-  -webkit-box-shadow: 0.5rem 0.5rem 0.3rem rgba(0, 0, 0, 0.15);
-  box-shadow: 0.5rem 0.5rem 0.3rem rgba(0, 0, 0, 0.15);
+  filter: drop-shadow(rgba(0, 0, 0, 0.05) 0.5rem 0.5rem 0.2rem);
+  -moz-box-shadow: 0.5rem 0.5rem 0.2rem rgba(0, 0, 0, 0.05);
+  -webkit-box-shadow: 0.5rem 0.5rem 0.2rem rgba(0, 0, 0, 0.05);
+  box-shadow: 0.5rem 0.5rem 0.2rem rgba(0, 0, 0, 0.05);
 }
 .pts-checker-header .pet-declaration-logos {
   zoom: 0.8;
@@ -1504,6 +1557,18 @@ ul.language-toggle li:first-child {
 .pts-checker-header h1 {
   display: inline-block;
   margin-top: 0.4em;
+}
+.pts-checker-header .pts-header-title {
+  padding-bottom: 16px;
+}
+.pts-checker-header .pts-location-bar {
+  background-color: white;
+  border-bottom: 1px #b1b4b6 solid;
+}
+.pts-checker-header .pts-location-bar p {
+  padding: 16px;
+  padding-left: 0;
+  margin-bottom: 0;
 }
 
 .pts-checker-header-nav {
@@ -1621,13 +1686,16 @@ body.pts-management {
   height: 30px;
   display: block;
   margin: 0 auto;
-  margin-bottom: 0.7em;
+  padding-bottom: 0.7em;
 }
 .pts-checker-navigation ul li a {
   color: #ffffff;
   font-size: 14px;
   text-decoration: none;
   white-space: nowrap;
+}
+.pts-checker-navigation ul li a span {
+  padding-top: 0.2em;
 }
 
 .pts-checker-nav-icon {
@@ -1767,3 +1835,4 @@ html {
   user-select: none;
   width: 1px;
 }
+

@@ -27,4 +27,5 @@ export default {
   checkerShortTitle: "Check a pet from GB to NI",
   currentDate: formattedToday,
   accountManagementLink:  idmLink,
+  section:""
 };

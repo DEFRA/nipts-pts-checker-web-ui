@@ -2,13 +2,13 @@ import state from "./auth-code-grant/state.js";
 import redeemAuthorizationCodeForAccessToken from "./auth-code-grant/redeem-authorization-code-for-access-token.js";
 import jwtVerify from "./token-verify/jwt-verify.js";
 import decodeJwt from "./token-verify/jwt-decode.js";
-import jwtVerifyIss from "./token-verify/jwt-verify-iss.js";
 import nonce from "./id-token/nonce.js";
 import expiresIn from "./auth-code-grant/expires-in.js";
 import session from "../session/index.js";
 import sessionKeys from "../session/keys.js";
 import cookieAuthentication from "./cookie-auth/cookie-auth.js";
 import { InvalidStateError } from "../exceptions/index.js";
+import apiService from "../api/services/apiService.js";
 
 const authenticate = async (request) => {
   if (!state.verify(request)) {
@@ -23,7 +23,6 @@ const authenticate = async (request) => {
 
   const idToken = decodeJwt(redeemResponse.id_token);
 
-  //await jwtVerifyIss(accessToken.iss);
   nonce.verify(request, idToken);
 
   session.setToken(
@@ -39,6 +38,20 @@ const authenticate = async (request) => {
   );
 
   cookieAuthentication.set(request, accessToken);
+
+  // Add or update checker user
+  try {
+    const checker = {
+      id: accessToken.sub,
+      firstName: accessToken.firstName,
+      lastName: accessToken.lastName,
+      roleId: null,
+    };
+
+    await apiService.saveCheckerUser(checker, request);
+  } catch (error) {
+    console.error("Error saving checker user:", error);
+  }
 
   return accessToken;
 };

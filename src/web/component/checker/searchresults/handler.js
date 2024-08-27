@@ -2,8 +2,10 @@
 import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
 import apiService from "../../../../api/services/apiService.js";
 import errorMessages from "./errorMessage.js";
-import { HttpStatusConstants } from "../../../../constants/httpMethod.js";
 import { CheckOutcomeConstants } from "../../../../constants/checkOutcomeConstant.js";
+import {
+  validatePassOrFail,
+} from "./validate.js";
 
 const VIEW_PATH = "componentViews/checker/searchresults/searchResultsView";
 
@@ -17,14 +19,27 @@ const getSearchResultsHandler = async (request, h) => {
 const saveAndContinueHandler = async (request, h) => {
   try {
     let { checklist } = request.payload;
-    checklist =
-      checklist === "pass"
-        ? CheckOutcomeConstants.Pass
-        : CheckOutcomeConstants.Fail;
 
     const data = request.yar.get("data");
     if (data.documentState === "rejected" || data.documentState === "revoked") {
       checklist = CheckOutcomeConstants.Fail;
+    }
+
+    const validationResult = validatePassOrFail(checklist);
+    if (!validationResult.isValid) {
+      const microchipNumber = request.yar.get("microchipNumber");
+      const data = request.yar.get("data");
+      const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
+      return h.view(VIEW_PATH, {
+        error: validationResult.error,
+        errorSummary: [
+          { fieldId: "checklist", message: validationResult.error },
+        ],
+        microchipNumber, 
+        data, 
+        pageTitle,
+        formSubmitted: true,
+      });
     }
 
     const currentSailingSlot = request.yar.get("CurrentSailingSlot") || {};
@@ -49,21 +64,29 @@ const saveAndContinueHandler = async (request, h) => {
     );
     if (responseData.error) {
       const errorMessage = errorMessages.serviceError.message;
-      let errorSummary = [
-        { fieldId: "unexpected", message: errorMessages.serviceError.message },
-      ];
-
-      return h
-        .response({
-          status: "fail",
-          message: errorMessage,
-          details: errorSummary,
-        })
-        .code(HttpStatusConstants.BAD_REQUEST)
-        .takeover();
+      const microchipNumber = request.yar.get("microchipNumber");
+      const data = request.yar.get("data");
+      const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
+      return h.view(VIEW_PATH, 
+        { 
+          error: errorMessage,
+          errorSummary: [
+          {
+            fieldId: "unexpected",
+            message: errorMessages.serviceError.message,
+            dispalyAs: "text",
+          },
+        ],
+          microchipNumber, 
+          data, 
+          pageTitle,
+          formSubmitted: true,
+          checklist,       
+        });
     }
 
     if (checklist === CheckOutcomeConstants.Pass) {
+      request.yar.set("successConfirmation", true);
       return h.redirect("/checker/document-search");
     }
 

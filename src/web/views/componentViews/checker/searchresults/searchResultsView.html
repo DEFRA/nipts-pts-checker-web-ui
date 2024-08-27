@@ -4,7 +4,7 @@
 
 {% block beforeContent %}
 {{ super() }}
-<a href="/checker/document-search" class="govuk-back-link">Back</a>
+<a href="javascript: history.back();" class="govuk-back-link">Back</a>
 {% endblock %}
 
 {% set ptdNumber = data.ptdNumber %}
@@ -12,7 +12,7 @@
 {% set microchipNumber = data.microchipNumber %}
 {% set microchipDate = data.microchipDate %}
 {% set petName = data.petName %}
-{% set petSpecie = data.petSpecie %}
+{% set petSpecies = data.petSpecies %}
 {% set petBreed = data.petBreed %}
 {% set petSex = data.petSex %}
 {% set petDoB = data.petDoB %}
@@ -20,8 +20,13 @@
 {% set petFeaturesDetail = data.petFeaturesDetail %}
 
 {% block content %}
-<div class="govuk-grid-row govuk-!-margin-bottom-9 govuk-!-margin-top-4">
-    {% include "./errors/errorSummary.html" %}
+<div class="govuk-grid-row govuk-!-margin-bottom-9 govuk-!-margin-top-4">    
+    <div class="govuk-grid-column-full govuk-!-margin-top-0""> 
+        <div id="errorSummary" class="govuk-grid-column-three-quarters">
+            {% if formSubmitted %}
+            {% include "./errors/displayErrorSummary.html" %}
+            {% endif %}
+        </div>
     <div class="govuk-grid-row govuk-!-static-margin-top-4">
         <div class="govuk-grid-column-three-quarters">
             {# <div class="govuk-grid-row pet-declaration-logos govuk-!-static-margin-bottom-4">
@@ -162,7 +167,7 @@
                                 Species
                             </dt>
                             <dd class="govuk-summary-list__value">
-                                {{ petSpecie }}
+                                {{ petSpecies }}
                             </dd>
                         </div>
                         <div class="govuk-summary-list__row">
@@ -239,37 +244,43 @@
                 </ul>
                 {% if data['documentState'] !== 'rejected' and data['documentState'] !== 'revoked' %}
                 <div>
-                    <div id="radio-check-error" hidden>
-                        <p class="govuk-error-message">
+                    
+                    <div id="radio-check-error" class="govuk-form-group {% if error %}govuk-form-group--error{%
+                        endif %}">
+                        {% if error %}
+                        <p id="passOrFailOption" class="govuk-error-message">
                             <span class="govuk-visually-hidden">Error:</span> Select an option
                         </p>
-                    </div>
-                    <div class="govuk-radios" data-module="govuk-radios">
-                        <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="checklist" name="checklist" type="radio"
-                                value="pass">
-                            {# data-aria-controls="conditional-checklist-1" #}
-                            <label class="govuk-label govuk-radios__label" for="checklist">
-                                Pass
-                            </label>
-                            <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
-                                Passes all checks.
+                        {% endif %}
+                    
+                    
+                        <div class="govuk-radios" data-module="govuk-radios">
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="checklist" name="checklist" type="radio"
+                                    value="Pass" {% if checklist == "Pass" %}checked{% endif %}>
+                                {# data-aria-controls="conditional-checklist-1" #}
+                                <label class="govuk-label govuk-radios__label" for="checklist">
+                                    Pass
+                                </label>
+                                <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
+                                    Passes all checks.
+                                </div>
                             </div>
-                        </div>
-                        {# <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
-                            id="conditional-checklist-1">
+                            {# <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                                id="conditional-checklist-1">
 
 
-                        </div> #}
-                        <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="contact-2" name="checklist" type="radio"
-                                value="fail">
-                            {# data-aria-controls="conditional-contact-2" #}
-                            <label class="govuk-label govuk-radios__label" for="contact-2">
-                                Fail
-                            </label>
-                            <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
-                                Fails at least one check.
+                            </div> #}
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="contact-2" name="checklist" type="radio"
+                                    value="Fail" {% if checklist == "Fail" %}checked{% endif %}>
+                                {# data-aria-controls="conditional-contact-2" #}
+                                <label class="govuk-label govuk-radios__label" for="contact-2">
+                                    Fail
+                                </label>
+                                <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
+                                    Fails at least one check.
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -278,12 +289,9 @@
             </fieldset>
         </div>
 
-        <!-- Hidden input to indicate if radio buttons are present -->
-        <input type="hidden" id="radioButtonsPresent" name="radioButtonsPresent" value="{% if data['documentState'] !== 'rejected' and data['documentState'] !== 'revoked' %}true{% else %}false{% endif %}">
-
         <div class="govuk-grid-row govuk-!-static-margin-top-4">
             <div class="govuk-grid-column-one-half">
-                <button type="submit" class="govuk-button" data-module="govuk-button">
+                <button type="submit" class="govuk-button" data-module="govuk-button" id="saveAndContinue">
                     Save and continue
                 </button>
             </div>
@@ -292,5 +300,34 @@
     <div style="height: 2rem;"></div>
 
 </div>
-<script src="../../../../assets/javascripts/searchResult.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Clear validation errors only when the page is loaded
+        if (!sessionStorage.getItem('formSubmitted')) {
+            clearValidationErrors();
+        } else {
+            sessionStorage.removeItem('formSubmitted');
+        }
+    });
+    
+    document.getElementById('searchResultForm').addEventListener('submit', function(event) {
+        // Clear previous error messages before submitting the form
+        sessionStorage.setItem('formSubmitted', 'true');
+        clearValidationErrors();
+    
+        // Optional: Add any additional validation or actions here
+    
+        // Allow the form to proceed with submission
+    });
+    
+    function clearValidationErrors() {
+        document.querySelectorAll('.govuk-error-message').forEach(function(el) {
+        el.remove();
+        });
+        document.querySelectorAll('.govuk-form-group--error').forEach(function(el) {
+        el.classList.remove('govuk-form-group--error');
+        });
+        document.getElementById('errorSummary').innerHTML = '';
+    }
+</script>
 {% endblock %}

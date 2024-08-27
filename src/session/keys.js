@@ -8,6 +8,7 @@ const tokens = Object.freeze({
   idToken: "idToken",
   state: "state",
   nonce: "nonce",
+  magicPassword: "magicPassword",
 });
 
 export default {
