@@ -12,14 +12,17 @@ export default {
 
         const ignore = ignoredPaths.includes(currentPath);
         const isAsset = currentPath.includes("/assets")
+        const requireMagicPassword = config.authConfig?.magicPassword?.isEnabled === true || 
+                                     config.authConfig?.magicPassword?.isEnabled === 'Yes' ||
+                                     config.authConfig?.magicPassword?.isEnabled === 'yes'; 
 
-        if (!ignore && !isAsset && config.authConfig?.magicPassword?.isEnabled) {
-          const password = session.getToken(
+        if (!ignore && !isAsset && requireMagicPassword) {
+          const confirmed = session.getToken(
             request,
             sessionKeys.tokens.magicPassword
           );
 
-          if (!password || password !== "confirmed") {
+          if (!confirmed || confirmed !== "confirmed") {
             const url = `/password?returnURL=${currentPath}`;
             return h.response().redirect(url);
           }
