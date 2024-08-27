@@ -25,7 +25,7 @@ const authSchema = Joi.object({
     signOutUrl: Joi.string(),
   },
   magicPassword: {
-    isEnabled: Joi.boolean().optional().allow(null),
+    isEnabled: Joi.string().optional().allow(null),
     password: Joi.string().allow(null, ""),
   }
 });
