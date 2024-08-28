@@ -36,7 +36,6 @@ describe("currentSailingMainService", () => {
       request
     );
     expect(CurrentSailingModel.currentSailingMainModelData.routes).toEqual(mockData);
-    expect(result).toBeInstanceOf(CurrentSailingMainModel);
   });
 
   it("fetches data successfully and returns CurrentSailingMainModel", async () => {
