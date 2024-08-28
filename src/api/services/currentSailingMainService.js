@@ -17,20 +17,23 @@ const getCurrentSailingMain = async (request) => {
       request
     );
 
-    if(response.status === HttpStatusConstants.OK && response.data !== undefined)
+    if(response.status !== HttpStatusConstants.OK || response.data === undefined)
     {
-      CurrentSailingModel.currentSailingMainModelData.routes = response.data.map(
-        (route) => ({
-          id: String(route.id), // Convert id to a string
-          value: route.routeName,
-          label: route.routeName,
-        })
-      );
+      return response;
     }
+
+    CurrentSailingModel.currentSailingMainModelData.routes = response.data.map(
+      (route) => ({
+        id: String(route.id), // Convert id to a string
+        value: route.routeName,
+        label: route.routeName,
+      })
+    );    
 
     return new CurrentSailingMainModel(
       CurrentSailingModel.currentSailingMainModelData
     );
+
   } catch (error) {
     console.error("Error fetching data:", error);
   }
