@@ -21,6 +21,24 @@ describe("currentSailingMainService", () => {
     };
   });
 
+  it("Doesnt fetches data and returns CurrentSailingMainModel with out route", async () => {
+    const mockData = undefined;
+
+    // Mock axios response
+    httpService.getAsync.mockResolvedValue({ status: 400, data: mockData });
+
+    const result = await currentSailingMainService.getCurrentSailingMain(
+      request
+    );
+
+    expect(httpService.getAsync).toHaveBeenCalledWith(
+      `${baseUrl}/sailing-routes`,
+      request
+    );
+    expect(CurrentSailingModel.currentSailingMainModelData.routes).toEqual(mockData);
+    expect(result).toBeInstanceOf(CurrentSailingMainModel);
+  });
+
   it("fetches data successfully and returns CurrentSailingMainModel", async () => {
     const mockData = [
       { id: 1, routeName: "Route 1" },
@@ -28,7 +46,7 @@ describe("currentSailingMainService", () => {
     ];
 
     // Mock axios response
-    httpService.getAsync.mockResolvedValue({ data: mockData });
+    httpService.getAsync.mockResolvedValue({ status: 200, data: mockData });
 
     const result = await currentSailingMainService.getCurrentSailingMain(
       request
@@ -44,6 +62,8 @@ describe("currentSailingMainService", () => {
     ]);
     expect(result).toBeInstanceOf(CurrentSailingMainModel);
   });
+
+
 
   it("handles errors correctly", async () => {
     httpService.getAsync.mockRejectedValue(new Error("Network Error"));
