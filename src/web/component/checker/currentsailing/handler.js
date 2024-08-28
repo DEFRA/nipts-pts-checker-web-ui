@@ -125,9 +125,13 @@ const submitCurrentSailingSlot = async (request, h) => {
   );
 
   const sailingRoutes = request.yar.get("SailingRoutes");
-  const selectedRoute = sailingRoutes.find(
-    (x) => x.id === request.payload.routeRadio
-  );
+  let selectedRoute =null;
+  if(sailingRoutes !== null)
+  {
+    selectedRoute = sailingRoutes.find(
+      (x) => x.id === request.payload.routeRadio
+    );
+  }
 
   const currentSailingSlot = {
     sailingHour: request.payload.sailingHour,
