@@ -11,7 +11,7 @@ describe("HomeHandlers", () => {
       // Arrange
       const mockedData = {
         ptsTitle: "Pet Travel Scheme",
-        ptsSubTitle: "Check a pet from Great Britain to Northern Ireland",
+        ptsSubTitle: "Check a pet travelling from Great Britain to Northern Ireland",
       };
       const mockLoginUrl = "/auth/login";
 
