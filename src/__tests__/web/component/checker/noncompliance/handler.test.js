@@ -8,7 +8,7 @@ describe("Handler", () => {
       // Arrange
       const mockedData = {
         ptsTitle: "Pet Travel Scheme",
-        ptsSubTitle: "Check a pet from Great Britain to Northern Ireland",
+        ptsSubTitle: "Check a pet travelling from Great Britain to Northern Ireland",
       };
 
       appSettingsService.getAppSettings.mockResolvedValue(mockedData);

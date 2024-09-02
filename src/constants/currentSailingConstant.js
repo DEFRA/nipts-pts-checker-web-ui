@@ -19,7 +19,7 @@ const routeOptions =  [
 
 const currentSailingMainModelData = {
     pageHeading: "What route are you checking?",
-    pageTitle: "What route are you checking - Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+    pageTitle: "What route are you checking - Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
     routeSubHeading: "Route",
     routes: undefined,
     sailingTimeSubHeading: "Scheduled departure time",

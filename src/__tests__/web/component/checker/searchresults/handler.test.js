@@ -45,7 +45,7 @@ describe("SearchResultsHandlers", () => {
         "componentViews/checker/searchresults/searchResultsView",
         {
           microchipNumber: mockMicrochipNumber,
-          pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+          pageTitle: "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
           data: mockData,
         }
       );
@@ -56,7 +56,7 @@ describe("SearchResultsHandlers", () => {
       expect(response.data).toEqual({
           data: mockData,
           microchipNumber: "123456789012345",
-          pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+          pageTitle: "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
         });
     });
   });
