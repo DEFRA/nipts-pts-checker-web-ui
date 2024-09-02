@@ -1352,7 +1352,7 @@ ul.language-toggle li:first-child {
 }
 @media only screen and (min-width: 40.0625em) and (-webkit-min-device-pixel-ratio: 2), only screen and (min-width: 40.0625em) and (min-resolution: 192dpi), only screen and (min-width: 40.0625em) and (min-resolution: 2dppx) {
   .gem-c-organisation-logo-white .gem-c-organisation-logo__container.gem-c-organisation-logo__crest--single-identity, .gem-c-organisation-logo-white .gem-c-organisation-logo__container.gem-c-organisation-logo__crest--eo, .gem-c-organisation-logo-white .gem-c-organisation-logo__container.gem-c-organisation-logo__crest--org {
-    background-image: url(/public/images/white/org_crest_18px_x2-d759444376a83ad439650d64c8de4158658aa1b5034e5a6080e66ebaa9594b0d.png);
+    background-image: url(/assets/images/white/org_crest_18px_x2-d759444376a83ad439650d64c8de4158658aa1b5034e5a6080e66ebaa9594b0d.png);
   }
 }
 .pet-logo-print.gem-c-organisation-logo-white {
@@ -1378,7 +1378,7 @@ ul.language-toggle li:first-child {
   padding-left: 60px;
 }
 .pet-logo-print.gem-c-organisation-logo-white .gem-c-organisation-logo__container.gem-c-organisation-logo__crest--single-identity, .pet-logo-print.gem-c-organisation-logo-white .gem-c-organisation-logo__container.gem-c-organisation-logo__crest--eo, .pet-logo-print.gem-c-organisation-logo-white .gem-c-organisation-logo__container.gem-c-organisation-logo__crest--org {
-  background: url(/public/images/white/org_crest_18px_x2-d759444376a83ad439650d64c8de4158658aa1b5034e5a6080e66ebaa9594b0d.png) no-repeat 5px 5px;
+  background: url(/assets/images/white/org_crest_18px_x2-d759444376a83ad439650d64c8de4158658aa1b5034e5a6080e66ebaa9594b0d.png) no-repeat 5px 5px;
   background-size: auto 40px;
 }
 .pet-logo-print.gem-c-organisation-logo-white .gem-c-organisation-logo__container .gem-c-organisation-logo__name {
