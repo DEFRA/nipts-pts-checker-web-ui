@@ -13,7 +13,7 @@ const Routes = [
   },
   {
     method: HttpMethod.POST,
-    path: "/checker/sailing-slot",
+    path: "/checker/current-sailings",
     options: {
       handler: CurrentSailingHandlers.submitCurrentSailingSlot,
     },
