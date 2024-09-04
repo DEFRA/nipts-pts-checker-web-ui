@@ -12,9 +12,9 @@ describe("Routes", () => {
   });
 
 
-  it("should have a POST route for /checker/sailing-slot", () => {
+  it("should have a POST route for /checker/current-sailings", () => {
     const route = Routes.find(
-      (route) => route.path === "/checker/sailing-slot" && route.method === "POST"
+      (route) => route.path === "/checker/current-sailings" && route.method === "POST"
     );
 
     expect(route).toBeDefined();

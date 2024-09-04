@@ -22,7 +22,7 @@
       {{ currentSailingMainModelData.pageHeading }}
     </h1>
 
-    <form id="sailingForm" action="/checker/sailing-slot" method="POST">
+    <form id="sailingForm" action="/checker/current-sailings" method="POST">
       {% include "./includes/sailing/routeView.html" %}
       {% include "./includes/sailing/departureDateView.html" %}
       <div id="time-group" class="govuk-form-group {% if errorSailingHour or errorSailingMinutes %}govuk-form-group--error{%endif %}">        
