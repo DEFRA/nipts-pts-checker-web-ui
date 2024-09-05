@@ -11,6 +11,7 @@ import NonCompliance from "../web/component/checker/noncompliance/index.js";
 import MagicPassword from "../web/component/checker/magicPassword/index.js";
 import SignIn from "../web/component/checker/SignIn/index.js";
 import SignOut from "../web/component/checker/SignOut/index.js";
+import Account from "../web/component/checker/Account/index.js";
 import CookiesPlugin from "../plugins/cookies-plugin.js";
 import AuthPlugin from "../plugins/auth-plugin.js";
 import HeaderPlugin from "../plugins/header.js";
@@ -84,6 +85,9 @@ const pluginList = [
   },
   {
     plugin: SignOut,
+  },
+  {
+    plugin: Account,
   },
   {
     plugin: HeaderPlugin,
