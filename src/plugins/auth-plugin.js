@@ -27,6 +27,13 @@ export default {
             result.valid = true;
           }
 
+          if (result.valid) {
+            const sso = session.getToken(request, sessionKeys.tokens.sso);
+            if (sso && sso === "sso") {
+              result.valid = false;
+            }
+          }
+
           return result;
         },
       });

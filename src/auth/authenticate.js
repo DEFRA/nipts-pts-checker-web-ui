@@ -49,6 +49,9 @@ const authenticate = async (request) => {
     };
 
     await apiService.saveCheckerUser(checker, request);
+
+    session.setToken(request, sessionKeys.tokens.sso, "");
+
   } catch (error) {
     console.error("Error saving checker user:", error);
   }
