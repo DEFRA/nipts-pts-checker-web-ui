@@ -10,7 +10,7 @@ const schema = Joi.object({
     isSameSite: Joi.string().default("Lax"),
     isSecure: Joi.boolean().default(false),
     password: Joi.string().min(32).required(),
-    ttl: Joi.number().default(1000 * 3600 * 24 * 3), // 3 days
+    ttl: Joi.number().default(1000 * 60 * 30), // 30 minutes
   },
   cookiePolicy: {
     clearInvalid: Joi.bool().default(false),
