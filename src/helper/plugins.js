@@ -11,10 +11,12 @@ import NonCompliance from "../web/component/checker/noncompliance/index.js";
 import MagicPassword from "../web/component/checker/magicPassword/index.js";
 import SignIn from "../web/component/checker/SignIn/index.js";
 import SignOut from "../web/component/checker/SignOut/index.js";
+import Account from "../web/component/checker/Account/index.js";
 import CookiesPlugin from "../plugins/cookies-plugin.js";
 import AuthPlugin from "../plugins/auth-plugin.js";
 import HeaderPlugin from "../plugins/header.js";
 import MagicPasswordPlugin from "../plugins/magic-password.js";
+import CurrentSailingSlotPlugin from "../plugins/currentsailingslot.js";
 import config from "../config/index.js";
 
 const pluginList = [
@@ -85,6 +87,9 @@ const pluginList = [
     plugin: SignOut,
   },
   {
+    plugin: Account,
+  },
+  {
     plugin: HeaderPlugin,
   },
   {
@@ -92,6 +97,9 @@ const pluginList = [
   },
   {
     plugin: MagicPasswordPlugin,
+  },
+  {
+    plugin: CurrentSailingSlotPlugin,
   },
 ];
 

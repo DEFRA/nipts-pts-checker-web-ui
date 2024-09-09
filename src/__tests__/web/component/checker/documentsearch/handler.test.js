@@ -81,7 +81,7 @@ describe("DocumentSearchHandlers", () => {
     const mockData = {
       pageHeading: "Find a document",
       pageTitle:
-        "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+        "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
       ptdSearchText: "GB826",
       errorLabel: "Error:",
       searchOptions: [
@@ -187,7 +187,7 @@ describe("DocumentSearchHandlers", () => {
         "componentViews/checker/documentsearch/documentNotFoundView",
         {
           pageTitle:
-            "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+            "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
           searchValue: request.payload.microchipNumber,
         }
       );
@@ -297,7 +297,7 @@ describe("DocumentSearchHandlers", () => {
         "componentViews/checker/documentsearch/documentNotFoundView",
         {
           pageTitle:
-            "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+            "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
           searchValue: "GB826" + request.payload.ptdNumberSearch,
         }
       );
@@ -379,7 +379,7 @@ describe("DocumentSearchHandlers", () => {
         "componentViews/checker/documentsearch/documentNotFoundView",
         {
           pageTitle:
-            "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+            "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
           searchValue: request.payload.applicationNumberSearch,
         }
       );

@@ -1,4 +1,3 @@
-import { CurrentSailingRouteOptions } from "../constants/currentSailingConstant.js";
 const headerOptions = [
   {
     key: "Cache-Control",
@@ -25,21 +24,6 @@ export default {
             response.header(x.key, x.value);
           });
         }
-
-        if (request.response.variety === 'view') {
-          const currentSailingSlot = request.yar.get("CurrentSailingSlot");
-          const currentPath = request.path;
-          if(currentPath !== "/" &&
-            currentPath !== "/checker/current-sailings")
-          {
-              request.response.source.context = {
-                  ...request.response.source.context,
-                  currentSailingSlot: currentSailingSlot || null,
-                  ROUTE_OPTION_ID: CurrentSailingRouteOptions[0].id,
-              };
-          }
-        }
-
         return h.continue;
       });
     },

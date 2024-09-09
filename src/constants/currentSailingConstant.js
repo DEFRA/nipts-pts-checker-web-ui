@@ -19,13 +19,9 @@ const routeOptions =  [
 
 const currentSailingMainModelData = {
     pageHeading: "What route are you checking?",
-    pageTitle: "What route are you checking - Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+    pageTitle: "What route are you checking - Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
     routeSubHeading: "Route",
-    routes: [
-      { id: '1001', value: 'Birkenhead to Belfast (Stena)', label: 'Birkenhead to Belfast (Stena)' },
-      { id: '1002', value: 'Cairnryan to Larne (P&O)', label: 'Cairnryan to Larne (P&O)' },
-      { id: '1003', value: 'Loch Ryan to Belfast (Stena)', label: 'Loch Ryan to Belfast (Stena)' }
-    ],
+    routes: undefined,
     sailingTimeSubHeading: "Scheduled departure time",
     sailingHintText1: "Use the 24-hour clock - for example, 15:30.",
     sailingHintText2: "For midday, use 12:00. For midnight, use 23:59.",

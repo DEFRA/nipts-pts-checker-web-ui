@@ -6,7 +6,7 @@ describe("appSettingsService", () => {
     it("should return AppSettingsModel instance", () => {
       const expected = new AppSettingsModel(
         "Pet Travel Scheme",
-        "Check a pet from Great Britain to Northern Ireland"
+        "Check a pet travelling from Great Britain to Northern Ireland"
       );
 
       const result = appSettingsService.getAppSettings();

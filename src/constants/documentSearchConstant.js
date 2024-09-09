@@ -1,7 +1,7 @@
 
 const documentSearchMainModelData = {
     pageHeading: "Find a document",
-    pageTitle: "Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland",
+    pageTitle: "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
     ptdSearchText: "GB826",
     errorLabel: "Error:",
     searchOptions: [
