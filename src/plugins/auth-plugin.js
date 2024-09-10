@@ -56,8 +56,11 @@ export default {
         handler: (request, h) => {
           request.cookieAuth.clear();
           h.unstate('sessionCreationTime');  // Clear the session creation time cookie on timeout
-          //this needs to be created - no prototype
-          return h.redirect('/timeout-warning');
+          const loginUrl = auth.requestAuthorizationCodeUrl(session, request);
+          const model = { loginUrl: loginUrl };
+          const VIEW_PATH = "timeout/timeout-warning";
+
+          return h.view(VIEW_PATH, { model });
         },
         options: {
           auth: false,
