@@ -50,6 +50,23 @@ export default {
 
       server.auth.default({ strategy: "session", mode: "required" });
 
+      //this should be polled using javascript on the client side. 
+      server.route({
+        method: 'GET',
+        path: '/check-session',
+        handler: (request, h) => {
+          const token = session.getToken(request, sessionKeys.tokens.accessToken);
+      
+          //adjust this later on to check if the session is within 2 minutes to display the popup
+          if (token) {
+            return h.response({ success: true });
+          }
+        },
+        options: {
+          auth: false,
+        },
+      });
+
       server.route({
         method: 'GET',
         path: '/timeout',
