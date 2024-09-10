@@ -77,37 +77,37 @@ const setup = (server) => {
   server.route({
     method: "GET",
     path: "/500error",
-    handler: (request, h) => {
+    handler: (_request, _h) => {
       throw new Error("500 error encountered");
     }
   });
 
   // Global error handling via 'onPreResponse' extension
-  server.ext('onPreResponse', (request, h) => {
-    const response = request.response;
+  server.ext('onPreResponse', (_request, _h) => {
+    const response = _request.response;
 
     // Check if the response is an error (500 level)
     if (response.isBoom && response.output.statusCode === 500) {
       // Render the 500Error.html template
-      return h.view('errors/500Error').code(500).takeover();
+      return _h.view('errors/500Error').code(500).takeover();
     }
 
     // If it's not a 500 error, continue as normal
-    return h.continue;
+    return _h.continue;
   });
 
     // Global error handling via 'onPreResponse' extension
-    server.ext('onPostResponse', (request, h) => {
-      const response = request.response;
+    server.ext('onPostResponse', (_request, _h) => {
+      const response = _request.response;
   
       // Check if the response is an error (500 level)
       if (response.statusCode === 500) {
         // Render the 500Error.html template
-        return h.view('errors/500Error').code(500).takeover();
+        return _h.view('errors/500Error').code(500).takeover();
       }
   
       // If it's not a 500 error, continue as normal
-      return h.continue;
+      return _h.continue;
     });
 
 };
