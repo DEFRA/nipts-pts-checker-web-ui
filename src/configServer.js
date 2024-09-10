@@ -72,6 +72,44 @@ const setup = (server) => {
       },
     }
   });
+
+  // Test route to simulate 500 error
+  server.route({
+    method: "GET",
+    path: "/500error",
+    handler: (request, h) => {
+      throw new Error("500 error encountered");
+    }
+  });
+
+  // Global error handling via 'onPreResponse' extension
+  server.ext('onPreResponse', (request, h) => {
+    const response = request.response;
+
+    // Check if the response is an error (500 level)
+    if (response.isBoom && response.output.statusCode === 500) {
+      // Render the 500Error.html template
+      return h.view('errors/500Error').code(500).takeover();
+    }
+
+    // If it's not a 500 error, continue as normal
+    return h.continue;
+  });
+
+    // Global error handling via 'onPreResponse' extension
+    server.ext('onPostResponse', (request, h) => {
+      const response = request.response;
+  
+      // Check if the response is an error (500 level)
+      if (response.statusCode === 500) {
+        // Render the 500Error.html template
+        return h.view('errors/500Error').code(500).takeover();
+      }
+  
+      // If it's not a 500 error, continue as normal
+      return h.continue;
+    });
+
 };
 
 export default {

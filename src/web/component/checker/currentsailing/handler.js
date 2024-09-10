@@ -22,6 +22,10 @@ const getCurrentSailings = async (request, h) => {
   var departureDateMonth = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
   var departureDateYear = today.getFullYear();
 
+  if (currentSailingMainModelData.status === 500) {
+    return h.redirect("/500error").takeover();
+  }
+
   return h.view(VIEW_PATH, { 
     currentSailingMainModelData,
     departureDateDay,
