@@ -1,3 +1,4 @@
+import moment from "moment-timezone";
 import { CurrentSailingHandlers } from "../../../../../web/component/checker/currentsailing/handler.js";
 import currentSailingMainService from "../../../../../api/services/currentSailingMainService.js";
 import { validateRouteOptionRadio, validateRouteRadio, validateSailingHour, validateSailingMinutes, validateFlightNumber, validateDate } from "../../../../../web/component/checker/currentsailing/validate.js";
@@ -40,19 +41,37 @@ describe('Handler', () => {
       var departureDateDay = String(today.getDate()).padStart(2, '0');
       var departureDateMonth = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
       var departureDateYear = today.getFullYear();
+      var departureTimeHours = String(today.getHours()).padStart(2, '0');
+      var departureTimeMinutes = String(today.getMinutes()).padStart(2, '0');
+
+      var londonTime = moment.tz("Europe/London");
+      var LdepartureDateDay = londonTime.format('DD');
+      var LdepartureDateMonth = londonTime.format('MM');
+      var LdepartureDateYear = londonTime.format('YYYY');
+      var LdepartureTimeHours = londonTime.format('HH');
+      var LdepartureTimeMinutes = londonTime.format('mm');
 
       const response = await CurrentSailingHandlers.getCurrentSailings(request, h);
 
       expect(response.viewPath).toBe("componentViews/checker/currentsailing/currentsailingView");
       expect(response.data).toEqual({
-        currentSailingMainModelData: mockData, departureDateDay,
+        currentSailingMainModelData: mockData, 
+        departureDateDay,
         departureDateMonth,
-        departureDateYear
+        departureDateYear,
+        departureTimeHours,
+        departureTimeMinutes,
+        LdepartureTimeHours,
+        LdepartureTimeMinutes,
       });
       expect(h.view).toHaveBeenCalledWith("componentViews/checker/currentsailing/currentsailingView", {
         currentSailingMainModelData: mockData, departureDateDay,
         departureDateMonth,
-        departureDateYear
+        departureDateYear,
+        departureTimeHours,
+        departureTimeMinutes,
+        LdepartureTimeHours,
+        LdepartureTimeMinutes,
       });
     });
   });
