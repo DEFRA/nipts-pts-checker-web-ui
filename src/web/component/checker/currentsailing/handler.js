@@ -26,6 +26,10 @@ const getCurrentSailings = async (request, h) => {
   var departureDateYear = londonTime.format('YYYY');
 
 
+  if (currentSailingMainModelData.status === 500) {
+    return h.redirect("/500error").takeover();
+  }
+
   return h.view(VIEW_PATH, { 
     currentSailingMainModelData,
     departureDateDay,
