@@ -19,29 +19,18 @@ const getCurrentSailings = async (request, h) => {
   request.yar.set("CurrentSailingModel", currentSailingMainModelData);
   request.yar.set("SailingRoutes", currentSailingMainModelData.sailingRoutes);
 
-  var today = new Date();
-  var departureDateDay = String(today.getDate()).padStart(2, '0');
-  var departureDateMonth = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-  var departureDateYear = today.getFullYear();
-  var departureTimeHours = String(today.getHours()).padStart(2, '0');
-  var departureTimeMinutes = String(today.getMinutes()).padStart(2, '0');
-
+ 
   var londonTime = moment.tz("Europe/London");
-  var LdepartureDateDay = londonTime.format('DD');
-  var LdepartureDateMonth = londonTime.format('MM');
-  var LdepartureDateYear = londonTime.format('YYYY');
-  var LdepartureTimeHours = londonTime.format('HH');
-  var LdepartureTimeMinutes = londonTime.format('mm');
+  var departureDateDay = londonTime.format('DD');
+  var departureDateMonth = londonTime.format('MM');
+  var departureDateYear = londonTime.format('YYYY');
+
 
   return h.view(VIEW_PATH, { 
     currentSailingMainModelData,
     departureDateDay,
     departureDateMonth,
-    departureDateYear,
-    departureTimeHours,
-    departureTimeMinutes,
-    LdepartureTimeHours,
-    LdepartureTimeMinutes
+    departureDateYear
   });
 };
 
