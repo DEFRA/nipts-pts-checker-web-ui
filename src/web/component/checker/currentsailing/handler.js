@@ -1,3 +1,5 @@
+"use strict";
+import moment from "moment-timezone";
 import currentSailingMainService from "../../../../api/services/currentSailingMainService.js";
 import {
   validateRouteOptionRadio,
@@ -17,10 +19,12 @@ const getCurrentSailings = async (request, h) => {
   request.yar.set("CurrentSailingModel", currentSailingMainModelData);
   request.yar.set("SailingRoutes", currentSailingMainModelData.sailingRoutes);
 
-  var today = new Date();
-  var departureDateDay = String(today.getDate()).padStart(2, '0');
-  var departureDateMonth = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-  var departureDateYear = today.getFullYear();
+ 
+  var londonTime = moment.tz("Europe/London");
+  var departureDateDay = londonTime.format('DD');
+  var departureDateMonth = londonTime.format('MM');
+  var departureDateYear = londonTime.format('YYYY');
+
 
   if (currentSailingMainModelData.status === 500) {
     return h.redirect("/500error").takeover();
@@ -30,7 +34,7 @@ const getCurrentSailings = async (request, h) => {
     currentSailingMainModelData,
     departureDateDay,
     departureDateMonth,
-    departureDateYear 
+    departureDateYear
   });
 };
 
