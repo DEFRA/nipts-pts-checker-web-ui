@@ -25,9 +25,10 @@ const getCurrentSailings = async (request, h) => {
   var departureDateMonth = londonTime.format('MM');
   var departureDateYear = londonTime.format('YYYY');
 
-
-  if (currentSailingMainModelData.status === 500) {
-    return h.redirect("/500error").takeover();
+  //this is not caught in OnPreResponse. If we let it continue, we will get a template
+  //render error, so handle it here
+  if (currentSailingMainModelData.status === 500 || currentSailingMainModelData.status === 401) {
+    throw Boom.badImplementation('error retreiving current saling data');
   }
 
   return h.view(VIEW_PATH, { 
