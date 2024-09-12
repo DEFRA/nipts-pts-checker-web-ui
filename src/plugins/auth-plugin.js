@@ -74,6 +74,9 @@ export default {
           request.cookieAuth.clear();
           h.unstate('sessionCreationTime');  // Clear the session creation time cookie on timeout
           const loginUrl = auth.requestAuthorizationCodeUrl(session, request);
+          request.cookieAuth.clear();
+          session.clear(request);
+
           const model = { loginUrl: loginUrl };
           const VIEW_PATH = "timeout/timeout-warning";
 
@@ -86,8 +89,14 @@ export default {
 
       // Pre-authentication check to see if the session has expired based on TTL
       server.ext('onPreAuth', (request, h) => {
+        const isIdm2Page = request.path.includes('signin-oidc');
+
+        if (isIdm2Page) {
+          return h.continue;
+        }
+
         const isStaticAsset = request.path.startsWith('/static/') || request.path.endsWith('.css') || request.path.endsWith('.js') || request.path.endsWith('.jpg') || request.path.endsWith('.png') || request.path.endsWith('.ico');
-        const isLandingPage = ['/login', '/logout', '/', '/timeout', '/password', '/timeout-warning'].includes(request.path);
+        const isLandingPage = ['/login', '/logout', '/', '/500error', '/timeout', '/password', '/timeout-warning'].includes(request.path);
 
         const token = session.getToken(request, sessionKeys.tokens.accessToken);
         const sessionCreationCookie = request.state.sessionCreationTime;
@@ -116,6 +125,13 @@ export default {
 
       // Store session creation time in a separate cookie at login
       server.ext('onPostAuth', (request, h) => {
+
+        const isIdm2Page = request.path.includes('signin-oidc');
+
+        if (isIdm2Page) {
+          return h.continue;
+        }
+
         if (!request.state.sessionCreationTime) {
           const currentTime = Date.now();
           h.state('sessionCreationTime', String(currentTime), {  // Convert timestamp to string
