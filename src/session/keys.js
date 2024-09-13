@@ -9,6 +9,7 @@ const tokens = Object.freeze({
   state: "state",
   nonce: "nonce",
   magicPassword: "magicPassword",
+  sso: "sso",
 });
 
 export default {
