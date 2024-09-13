@@ -27,7 +27,8 @@ export default {
             '/',
             '/checker/current-sailings',
             '/password', 
-            '/timeout'
+            '/timeout',
+            '/500error'
           ];
           
           const isExcluded = excludedPaths.includes(currentPath);
