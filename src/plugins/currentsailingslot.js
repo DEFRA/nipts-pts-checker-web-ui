@@ -28,7 +28,6 @@ export default {
             '/checker/current-sailings',
             '/password', 
             '/500error', 
-            '/non-compliance',
             '/timeout'
           ];
           
@@ -50,10 +49,10 @@ export default {
                        
             
               //if currentSailingSlot is null redirect to sailing-slot page
-              //if(currentSailingSlot === null)
-              //{              
-                //return h.redirect('/checker/current-sailings').takeover();
-              //}
+              if(currentSailingSlot === null)
+              {              
+                return h.redirect('/checker/current-sailings').takeover();
+              }
             }
           }
           return h.continue;
