@@ -61,6 +61,7 @@ export default {
           if (token) {
             return h.response({ success: true });
           }
+          return h.response({sucess: false});
         },
         options: {
           auth: false,
