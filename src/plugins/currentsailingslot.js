@@ -27,6 +27,7 @@ export default {
             '/',
             '/checker/current-sailings',
             '/password', 
+            '/timeout',
             '/500error'
           ];
           
