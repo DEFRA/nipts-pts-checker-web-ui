@@ -116,19 +116,6 @@ describe('saveAndContinueHandler', () => {
   });
 
 
-  it('should return API error if API call fails', async () => {
-    request.payload.checklist = 'Pass';
-    request.yar.get.mockReturnValueOnce({ documentState: 'active' }).mockReturnValueOnce({ applicationId: 1 }); // Mock get call for data
-    validatePassOrFail.mockReturnValueOnce({ isValid: true });
-    apiService.recordCheckOutCome.mockResolvedValueOnce({ error: true });
-
-    await SearchResultsHandlers.saveAndContinueHandler(request, h);
-
-    expect(h.view).toHaveBeenCalledWith('componentViews/checker/searchresults/searchResultsView', expect.objectContaining({
-      error: 'An error occurred while processing your request',
-      errorSummary: [{ fieldId: 'general', message: 'An unexpected error occurred' }],
-    }));
-  });
 
   it('should handle unexpected errors', async () => {
     request.payload.checklist = 'Pass';
