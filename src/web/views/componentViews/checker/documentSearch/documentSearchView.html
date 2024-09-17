@@ -56,7 +56,7 @@
                     <div class="govuk-input__wrapper">
                       <div class="govuk-input__prefix" aria-hidden="true">{{documentSearchMainModelData.ptdSearchText}}
                       </div>
-                      <input class="govuk-input govuk-input--width-10" id="ptdNumberSearch" aria-label="PtdNumber Input" name="ptdNumberSearch"
+                      <input class="govuk-input {% if error %} govuk-input--error {% endif %} govuk-input--width-10" id="ptdNumberSearch" aria-label="PtdNumber Input" name="ptdNumberSearch"
                         type="text" spellcheck="false" {% if activeTab=="ptd"
                         %}value={{documentSearchMainModelData.searchText}} {% endif %}>
                     </div>
@@ -81,7 +81,7 @@
                       <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span> {{error}}
                     </p>
                     {% endif %}
-                    <input class="govuk-input govuk-input--width-10" id="applicationNumberSearch"
+                    <input class="govuk-input {% if error %} govuk-input--error {% endif %} govuk-input--width-10" id="applicationNumberSearch"
                       name="applicationNumberSearch" type="text" spellcheck="false" aria-label="ApplicationNumber Input" {% if activeTab=="application"
                       %}value={{documentSearchMainModelData.searchText}} {% endif %}>
                   </div>
@@ -105,7 +105,7 @@
                       <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span> {{error}}
                     </p>
                     {% endif %}
-                    <input class="govuk-input govuk-input--width-20" id="microchipNumber" name="microchipNumber"
+                    <input class="govuk-input {% if error %} govuk-input--error {% endif %} govuk-input--width-20" id="microchipNumber" name="microchipNumber"
                       type="text" spellcheck="false" aria-label="MicrochipNumber Input" {% if activeTab=="microchip"
                       %}value={{documentSearchMainModelData.searchText}} {% endif %}>
                   </div>
@@ -136,26 +136,39 @@
 </div>
 
 <script>
-  document.getElementById('clearSearchButton').addEventListener('click', () => {
-    document.getElementById('ptdNumberSearch').value = '';
-    document.getElementById('applicationNumberSearch').value = '';
-    document.getElementById('microchipNumber').value = '';
-    document.getElementById('documentSearch-1').checked = true;
-
-    document.getElementById('conditional-documentSearch-1').className = 'govuk-radios__conditional';
-    document.getElementById('conditional-documentSearch-2').className = 'govuk-radios__conditional govuk-radios__conditional--hidden';
-    document.getElementById('conditional-documentSearch-3').className = 'govuk-radios__conditional govuk-radios__conditional--hidden';
-
+  function resetField(inputId, formGroupId, errorId) {
+    const inputElement = document.getElementById(inputId);
+    inputElement.value = '';
     document.getElementById('errorSummary').hidden = true;
+    document.getElementById(formGroupId).classList.remove("govuk-form-group--error");
+    inputElement.classList.remove("govuk-input--error");
+    
+    const errorElement = document.getElementById(errorId);
+    if (errorElement) {
+      errorElement.remove();
+    }
+  }
 
-    document.getElementById("ptd-form-group").classList.remove("govuk-form-group--error");
-    document.getElementById("application-form-group").classList.remove("govuk-form-group--error");
-    document.getElementById("microchip-form-group").classList.remove("govuk-form-group--error");
+  function toggleConditionals(visibleId) {
+    const allConditionals = ['conditional-documentSearch-1', 'conditional-documentSearch-2', 'conditional-documentSearch-3'];
+    allConditionals.forEach(id => {
+      const element = document.getElementById(id);
+      element.className = id === visibleId 
+        ? 'govuk-radios__conditional'
+        : 'govuk-radios__conditional govuk-radios__conditional--hidden';
+    });
+  }
 
-    document.getElementById('ptd-error').remove();
-    document.getElementById('application-error').remove();
-    document.getElementById('microchip-error').remove();
-  });
+  // Clear all fields and reset radio buttons
+  function clearSearchFields() {
+    resetField('ptdNumberSearch', 'ptd-form-group', 'ptd-error');
+    resetField('applicationNumberSearch', 'application-form-group', 'application-error');
+    resetField('microchipNumber', 'microchip-form-group', 'microchip-error');
+    document.getElementById('documentSearch-1').checked = true;
+    toggleConditionals('conditional-documentSearch-1');
+  }
+
+  document.getElementById('clearSearchButton').addEventListener('click', clearSearchFields);
 
   window.addEventListener('load', () => {
     if (!window.location.hash) {
@@ -163,63 +176,51 @@
     }
   });
 
+  // Event listeners for radio buttons
   document.getElementById('documentSearch-1').addEventListener('click', () => {
-    document.getElementById('ptdNumberSearch').value = '';
-    document.getElementById('errorSummary').hidden = true;
-    document.getElementById("ptd-form-group").classList.remove("govuk-form-group--error");
-    document.getElementById('ptd-error').remove();
+    resetField('ptdNumberSearch', 'ptd-form-group', 'ptd-error');
   });
 
   document.getElementById('documentSearch-2').addEventListener('click', () => {
-    document.getElementById('applicationNumberSearch').value = '';
-    document.getElementById('errorSummary').hidden = true;
-    document.getElementById("application-form-group").classList.remove("govuk-form-group--error");
-    document.getElementById('application-error').remove();
+    resetField('applicationNumberSearch', 'application-form-group', 'application-error');
   });
 
   document.getElementById('documentSearch-3').addEventListener('click', () => {
-    document.getElementById('microchipNumber').value = '';
-    document.getElementById('errorSummary').hidden = true;
-    document.getElementById("microchip-form-group").classList.remove("govuk-form-group--error");
-    document.getElementById('microchip-error').remove();
+    resetField('microchipNumber', 'microchip-form-group', 'microchip-error');
   });
 
+  // Function to clear validation errors
+  function clearValidationErrors() {
+    document.querySelectorAll('.govuk-error-message').forEach(function(el) {
+      el.remove();
+    });
+    document.querySelectorAll('.govuk-form-group--error').forEach(function(el) {
+      el.classList.remove('govuk-form-group--error');
+    });
+    document.getElementById('errorSummary').innerHTML = '';
+  }
 
   document.addEventListener('DOMContentLoaded', function() {
-      // Clear validation errors only when the page is loaded
-      if (!sessionStorage.getItem('formSubmitted')) {
-            clearValidationErrors();
-        } else {
-            sessionStorage.removeItem('formSubmitted');
-        }   
-
-
-      // Intercept back button click to clear validation errors
-      document.getElementById('backButton').addEventListener('click', function(event) {
-        sessionStorage.removeItem('formSubmitted');
-        history.back();
-      });
-}); 
-
-
-    document.getElementById('documentSearchForm').addEventListener('submit', function(event) {
-        // Clear previous error messages before submitting the form
-        sessionStorage.setItem('formSubmitted', 'true');
-        clearValidationErrors();
-    
-        // Optional: Add any additional validation or actions here
-    
-        // Allow the form to proceed with submission
-    });
-    
-    function clearValidationErrors() {
-        document.querySelectorAll('.govuk-error-message').forEach(function(el) {
-        el.remove();
-        });
-        document.querySelectorAll('.govuk-form-group--error').forEach(function(el) {
-        el.classList.remove('govuk-form-group--error');
-        });
-        document.getElementById('errorSummary').innerHTML = '';
+    // Clear validation errors on page load if form wasn't submitted
+    if (!sessionStorage.getItem('formSubmitted')) {
+      clearValidationErrors();
+    } else {
+      sessionStorage.removeItem('formSubmitted');
     }
+
+    // Intercept back button click to clear validation errors
+    document.getElementById('backButton').addEventListener('click', function() {
+      sessionStorage.removeItem('formSubmitted');
+      history.back();
+    });
+  });
+
+  // Form submission event listener
+  document.getElementById('documentSearchForm').addEventListener('submit', function() {
+    // Mark form as submitted and clear previous error messages
+    sessionStorage.setItem('formSubmitted', 'true');
+    clearValidationErrors();
+    
+  });
 </script>
 {% endblock %}
