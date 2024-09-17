@@ -56,7 +56,7 @@
                     <div class="govuk-input__wrapper">
                       <div class="govuk-input__prefix" aria-hidden="true">{{documentSearchMainModelData.ptdSearchText}}
                       </div>
-                      <input class="govuk-input govuk-input--width-10" id="ptdNumberSearch" aria-label="PtdNumber Input" name="ptdNumberSearch"
+                      <input class="govuk-input {% if error %} govuk-input--error {% endif %} govuk-input--width-10" id="ptdNumberSearch" aria-label="PtdNumber Input" name="ptdNumberSearch"
                         type="text" spellcheck="false" {% if activeTab=="ptd"
                         %}value={{documentSearchMainModelData.searchText}} {% endif %}>
                     </div>
@@ -81,7 +81,7 @@
                       <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span> {{error}}
                     </p>
                     {% endif %}
-                    <input class="govuk-input govuk-input--width-10" id="applicationNumberSearch"
+                    <input class="govuk-input {% if error %} govuk-input--error {% endif %} govuk-input--width-10" id="applicationNumberSearch"
                       name="applicationNumberSearch" type="text" spellcheck="false" aria-label="ApplicationNumber Input" {% if activeTab=="application"
                       %}value={{documentSearchMainModelData.searchText}} {% endif %}>
                   </div>
@@ -105,7 +105,7 @@
                       <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span> {{error}}
                     </p>
                     {% endif %}
-                    <input class="govuk-input govuk-input--width-20" id="microchipNumber" name="microchipNumber"
+                    <input class="govuk-input {% if error %} govuk-input--error {% endif %} govuk-input--width-20" id="microchipNumber" name="microchipNumber"
                       type="text" spellcheck="false" aria-label="MicrochipNumber Input" {% if activeTab=="microchip"
                       %}value={{documentSearchMainModelData.searchText}} {% endif %}>
                   </div>
@@ -149,8 +149,13 @@
     document.getElementById('errorSummary').hidden = true;
 
     document.getElementById("ptd-form-group").classList.remove("govuk-form-group--error");
+    document.getElementById("ptdNumberSearch").classList.remove("govuk-input--error");
+
     document.getElementById("application-form-group").classList.remove("govuk-form-group--error");
+    document.getElementById("applicationNumberSearch").classList.remove("govuk-input--error");
+
     document.getElementById("microchip-form-group").classList.remove("govuk-form-group--error");
+    document.getElementById("microchipNumber").classList.remove("govuk-input--error");
 
     document.getElementById('ptd-error').remove();
     document.getElementById('application-error').remove();
@@ -167,6 +172,7 @@
     document.getElementById('ptdNumberSearch').value = '';
     document.getElementById('errorSummary').hidden = true;
     document.getElementById("ptd-form-group").classList.remove("govuk-form-group--error");
+    document.getElementById("ptdNumberSearch").classList.remove("govuk-input--error");
     document.getElementById('ptd-error').remove();
   });
 
@@ -174,6 +180,7 @@
     document.getElementById('applicationNumberSearch').value = '';
     document.getElementById('errorSummary').hidden = true;
     document.getElementById("application-form-group").classList.remove("govuk-form-group--error");
+    document.getElementById("applicationNumberSearch").classList.remove("govuk-input--error");
     document.getElementById('application-error').remove();
   });
 
@@ -181,6 +188,7 @@
     document.getElementById('microchipNumber').value = '';
     document.getElementById('errorSummary').hidden = true;
     document.getElementById("microchip-form-group").classList.remove("govuk-form-group--error");
+    document.getElementById("microchipNumber").classList.remove("govuk-input--error");
     document.getElementById('microchip-error').remove();
   });
 
