@@ -44,13 +44,26 @@ const validatePtdNumber = (ptdNumber) => {
   };
 };
 
+
+
 const validateApplicationNumber = (applicationNumber) => {
-  const { error } = applicationNumberSchema.validate(applicationNumber);
-  return {
-    isValid: !error,
-    error: error ? error.details[0].message : null,
-  };
+  const { error } = applicationNumberSchema.validate(applicationNumber, {
+    abortEarly: false,
+  });
+  if (!error) {
+    return { isValid: true, error: null };
+  }
+  // Prioritize pattern error over length error
+  const patternError = error.details.find(
+    (detail) => detail.type === "string.pattern.base"
+  );
+  if (patternError) {
+    return { isValid: false, error: patternError.message };
+  }
+  // Otherwise, return the first error
+  return { isValid: false, error: error.details[0].message };
 };
+
 
 const validateMicrochipNumber = (microchipNumber) => {
   const { error } = microchipNumberSchema.validate(microchipNumber);
