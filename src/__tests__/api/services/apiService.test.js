@@ -50,7 +50,19 @@ describe("apiService", () => {
             travelDocumentId: "td123",
             dateOfIssue: "2023-02-01",
           },
-        },
+          petOwner: {
+            name: "Pet Owner Name change",
+            telephone: "07894465438",
+            email: "siri.kukkala+GB6@capgemini.com",
+            address: {
+              addressLineOne: "CURRIE & BROWN UK LTD  40",
+              addressLineTwo: " HOLBORN VIADUCT",
+              townOrCity: "LONDON",
+              county: "",
+              postCode: "EC1N 2PB"
+            }
+          },
+        }
       };
 
       httpService.postAsync.mockResolvedValue({
@@ -88,6 +100,32 @@ describe("apiService", () => {
         applicationId: "app123",
         travelDocumentId: "td123",
         dateOfIssue: "2023-02-01",
+        petOwnerName: "Pet Owner Name change",
+        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+        petOwnerTelephone: "07894465438",
+        petOwnerName: "Pet Owner Name change",
+        petOwnerTelephone: "07894465438",
+        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+        petOwnerAddress: 
+        {
+          addressLineOne: "CURRIE & BROWN UK LTD  40",
+          addressLineTwo: " HOLBORN VIADUCT",
+          townOrCity: "LONDON",
+          county: "",
+          postCode: "EC1N 2PB"
+        },
+        issuingAuthority:  {
+          address: {
+                  addressLineOne: "Pet Travel Section",
+                  addressLineThree: "Lowther Street",
+                  addressLineTwo: "Eden Bridge House",
+                  county: "",
+                  postCode: "CA3 8DX",
+                  townOrCity: "Carlisle",
+                  },
+          name: "Animal and Plant Health Agency",
+          signature: "John Smith (APHA) (Signed digitally)",
+        },
       });
 
       expect(result).toEqual(expectedInstance);
@@ -117,6 +155,18 @@ describe("apiService", () => {
             travelDocumentReferenceNumber: "GB826TD123",
             travelDocumentId: "td123",
             dateOfIssue: "2023-02-01",
+          },
+          petOwner: {
+            name: "Pet Owner Name change",
+            telephone: "07894465438",
+            email: "siri.kukkala+GB6@capgemini.com",
+            address: {
+              addressLineOne: "CURRIE & BROWN UK LTD  40",
+              addressLineTwo: " HOLBORN VIADUCT",
+              townOrCity: "LONDON",
+              county: "",
+              postCode: "EC1N 2PB"
+            }
           },
         },
       };
@@ -155,6 +205,29 @@ describe("apiService", () => {
         applicationId: "app123",
         travelDocumentId: "td123",
         dateOfIssue: "2023-02-01",
+        petOwnerName: "Pet Owner Name change",
+        petOwnerTelephone: "07894465438",
+        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+        petOwnerAddress: 
+        {
+          addressLineOne: "CURRIE & BROWN UK LTD  40",
+          addressLineTwo: " HOLBORN VIADUCT",
+          townOrCity: "LONDON",
+          county: "",
+          postCode: "EC1N 2PB"
+        },
+        issuingAuthority:  {
+          address: {
+                  addressLineOne: "Pet Travel Section",
+                  addressLineThree: "Lowther Street",
+                  addressLineTwo: "Eden Bridge House",
+                  county: "",
+                  postCode: "CA3 8DX",
+                  townOrCity: "Carlisle",
+                  },
+          name: "Animal and Plant Health Agency",
+          signature: "John Smith (APHA) (Signed digitally)",
+        },
       });
 
       expect(result).toEqual(expectedInstance);
@@ -184,6 +257,18 @@ describe("apiService", () => {
             travelDocumentReferenceNumber: "GB826TD123",
             travelDocumentId: "td123",
             dateOfIssue: "2023-02-01",
+          },
+          petOwner: {
+            name: "Pet Owner Name change",
+            telephone: "07894465438",
+            email: "siri.kukkala+GB6@capgemini.com",
+            address: {
+              addressLineOne: "CURRIE & BROWN UK LTD  40",
+              addressLineTwo: " HOLBORN VIADUCT",
+              townOrCity: "LONDON",
+              county: "",
+              postCode: "EC1N 2PB"
+            }
           },
         },
       };
@@ -221,6 +306,29 @@ describe("apiService", () => {
         applicationId: "app123",
         travelDocumentId: "td123",
         dateOfIssue: "2023-02-01",
+        petOwnerName: "Pet Owner Name change",
+        petOwnerTelephone: "07894465438",
+        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+        petOwnerAddress: 
+        {
+          addressLineOne: "CURRIE & BROWN UK LTD  40",
+          addressLineTwo: " HOLBORN VIADUCT",
+          townOrCity: "LONDON",
+          county: "",
+          postCode: "EC1N 2PB"
+        },
+        issuingAuthority:  {
+          address: {
+                  addressLineOne: "Pet Travel Section",
+                  addressLineThree: "Lowther Street",
+                  addressLineTwo: "Eden Bridge House",
+                  county: "",
+                  postCode: "CA3 8DX",
+                  townOrCity: "Carlisle",
+                  },
+          name: "Animal and Plant Health Agency",
+          signature: "John Smith (APHA) (Signed digitally)",
+        },
       });
 
       expect(result).toEqual(expectedInstance);
@@ -250,6 +358,18 @@ describe("apiService", () => {
             travelDocumentReferenceNumber: "GB826TD123",
             travelDocumentId: "td123",
             dateOfIssue: "2023-02-01",
+          },
+          petOwner: {
+            name: "Pet Owner Name change",
+            telephone: "07894465438",
+            email: "siri.kukkala+GB6@capgemini.com",
+            address: {
+              addressLineOne: "CURRIE & BROWN UK LTD  40",
+              addressLineTwo: " HOLBORN VIADUCT",
+              townOrCity: "LONDON",
+              county: "",
+              postCode: "EC1N 2PB"
+            }
           },
         },
       };
@@ -287,6 +407,29 @@ describe("apiService", () => {
         applicationId: "app123",
         travelDocumentId: "td123",
         dateOfIssue: "2023-02-01",
+        petOwnerName: "Pet Owner Name change",
+        petOwnerTelephone: "07894465438",
+        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+		    petOwnerAddress: 
+        {
+          addressLineOne: "CURRIE & BROWN UK LTD  40",
+          addressLineTwo: " HOLBORN VIADUCT",
+          townOrCity: "LONDON",
+          county: "",
+          postCode: "EC1N 2PB"
+        },
+        issuingAuthority:  {
+          address: {
+                  addressLineOne: "Pet Travel Section",
+                  addressLineThree: "Lowther Street",
+                  addressLineTwo: "Eden Bridge House",
+                  county: "",
+                  postCode: "CA3 8DX",
+                  townOrCity: "Carlisle",
+                  },
+          name: "Animal and Plant Health Agency",
+          signature: "John Smith (APHA) (Signed digitally)",
+        },
       });
 
       expect(result).toEqual(expectedInstance);
@@ -406,6 +549,18 @@ describe("apiService", () => {
             travelDocumentId: "td123",
             dateOfIssue: "2023-02-01",
           },
+          petOwner: {
+            name: "Pet Owner Name change",
+            telephone: "07894465438",
+            email: "siri.kukkala+GB6@capgemini.com",
+            address: {
+              addressLineOne: "CURRIE & BROWN UK LTD  40",
+              addressLineTwo: " HOLBORN VIADUCT",
+              townOrCity: "LONDON",
+              county: "",
+              postCode: "EC1N 2PB"
+            }
+          },
         },
       };
 
@@ -444,6 +599,29 @@ describe("apiService", () => {
         applicationId: "app123",
         travelDocumentId: "td123",
         dateOfIssue: "2023-02-01",
+        petOwnerName: "Pet Owner Name change",
+        petOwnerTelephone: "07894465438",
+        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+        petOwnerAddress: 
+            {
+              addressLineOne: "CURRIE & BROWN UK LTD  40",
+              addressLineTwo: " HOLBORN VIADUCT",
+              townOrCity: "LONDON",
+              county: "",
+              postCode: "EC1N 2PB"
+            },
+            issuingAuthority:  {
+              address: {
+                      addressLineOne: "Pet Travel Section",
+                      addressLineThree: "Lowther Street",
+                      addressLineTwo: "Eden Bridge House",
+                      county: "",
+                      postCode: "CA3 8DX",
+                      townOrCity: "Carlisle",
+                      },
+              name: "Animal and Plant Health Agency",
+              signature: "John Smith (APHA) (Signed digitally)",
+            },
       });
 
       expect(result).toEqual(expectedInstance);
@@ -473,6 +651,18 @@ describe("apiService", () => {
             travelDocumentReferenceNumber: "GB826TD123",
             travelDocumentId: "td123",
             dateOfIssue: "2023-02-01",
+          },
+          petOwner: {
+            name: "Pet Owner Name change",
+            telephone: "07894465438",
+            email: "siri.kukkala+GB6@capgemini.com",
+            address: {
+              addressLineOne: "CURRIE & BROWN UK LTD  40",
+              addressLineTwo: " HOLBORN VIADUCT",
+              townOrCity: "LONDON",
+              county: "",
+              postCode: "EC1N 2PB"
+            }
           },
         },
       };
@@ -511,6 +701,29 @@ describe("apiService", () => {
         applicationId: "app123",
         travelDocumentId: "td123",
         dateOfIssue: "2023-02-01",
+        petOwnerName: "Pet Owner Name change",
+        petOwnerTelephone: "07894465438",
+        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+        petOwnerAddress: 
+            {
+              addressLineOne: "CURRIE & BROWN UK LTD  40",
+              addressLineTwo: " HOLBORN VIADUCT",
+              townOrCity: "LONDON",
+              county: "",
+              postCode: "EC1N 2PB"
+            },
+            issuingAuthority:  {
+              address: {
+                      addressLineOne: "Pet Travel Section",
+                      addressLineThree: "Lowther Street",
+                      addressLineTwo: "Eden Bridge House",
+                      county: "",
+                      postCode: "CA3 8DX",
+                      townOrCity: "Carlisle",
+                      },
+              name: "Animal and Plant Health Agency",
+              signature: "John Smith (APHA) (Signed digitally)",
+            },
       });
 
       expect(result).toEqual(expectedInstance);
@@ -540,6 +753,18 @@ describe("apiService", () => {
             travelDocumentReferenceNumber: "GB826TD123",
             travelDocumentId: "td123",
             dateOfIssue: "2023-02-01",
+          },
+          petOwner: {
+            name: "Pet Owner Name change",
+            telephone: "07894465438",
+            email: "siri.kukkala+GB6@capgemini.com",
+            address: {
+              addressLineOne: "CURRIE & BROWN UK LTD  40",
+              addressLineTwo: " HOLBORN VIADUCT",
+              townOrCity: "LONDON",
+              county: "",
+              postCode: "EC1N 2PB"
+            }
           },
         },
       };
@@ -577,6 +802,29 @@ describe("apiService", () => {
         applicationId: "app123",
         travelDocumentId: "td123",
         dateOfIssue: "2023-02-01",
+        petOwnerName: "Pet Owner Name change",
+        petOwnerTelephone: "07894465438",
+        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+        petOwnerAddress: 
+            {
+              addressLineOne: "CURRIE & BROWN UK LTD  40",
+              addressLineTwo: " HOLBORN VIADUCT",
+              townOrCity: "LONDON",
+              county: "",
+              postCode: "EC1N 2PB"
+            },
+            issuingAuthority:  {
+              address: {
+                      addressLineOne: "Pet Travel Section",
+                      addressLineThree: "Lowther Street",
+                      addressLineTwo: "Eden Bridge House",
+                      county: "",
+                      postCode: "CA3 8DX",
+                      townOrCity: "Carlisle",
+                      },
+              name: "Animal and Plant Health Agency",
+              signature: "John Smith (APHA) (Signed digitally)",
+            },
       });
 
       expect(result).toEqual(expectedInstance);
@@ -607,7 +855,19 @@ describe("apiService", () => {
             travelDocumentId: "td123",
             dateOfIssue: "2023-02-01",
           },
-        },
+          petOwner: {
+            name: "Pet Owner Name change",
+            telephone: "07894465438",
+            email: "siri.kukkala+GB6@capgemini.com",
+            address: {
+              addressLineOne: "CURRIE & BROWN UK LTD  40",
+              addressLineTwo: " HOLBORN VIADUCT",
+              townOrCity: "LONDON",
+              county: "",
+              postCode: "EC1N 2PB"
+            }
+          },
+        }
       };
 
       httpService.postAsync.mockResolvedValue({
@@ -643,6 +903,29 @@ describe("apiService", () => {
         applicationId: "app123",
         travelDocumentId: "td123",
         dateOfIssue: "2023-02-01",
+        petOwnerName: "Pet Owner Name change",
+        petOwnerTelephone: "07894465438",
+        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+        petOwnerAddress: 
+            {
+              addressLineOne: "CURRIE & BROWN UK LTD  40",
+              addressLineTwo: " HOLBORN VIADUCT",
+              townOrCity: "LONDON",
+              county: "",
+              postCode: "EC1N 2PB"
+            },
+            issuingAuthority:  {
+              address: {
+                      addressLineOne: "Pet Travel Section",
+                      addressLineThree: "Lowther Street",
+                      addressLineTwo: "Eden Bridge House",
+                      county: "",
+                      postCode: "CA3 8DX",
+                      townOrCity: "Carlisle",
+                      },
+              name: "Animal and Plant Health Agency",
+              signature: "John Smith (APHA) (Signed digitally)",
+            },
       });
 
       expect(result).toEqual(expectedInstance);

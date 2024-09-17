@@ -1,6 +1,7 @@
 import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js";
 import dotenv from "dotenv";
 import httpService from "./httpService.js";
+import { issuingAuthorityModelData } from '../../constants/issuingAuthority.js';
 import moment from "moment";
 
 dotenv.config();
@@ -104,6 +105,11 @@ const getMicrochipData = async (microchipNumber, request) => {
         ? item.travelDocument.travelDocumentId
         : null,
       dateOfIssue: item.travelDocument ? item.travelDocument.dateOfIssue : null,
+      petOwnerName: item.petOwner ? item.petOwner.name : null,
+      petOwnerEmail: item.petOwner ? item.petOwner.email : null,
+      petOwnerTelephone: item.petOwner ? item.petOwner.telephone : null,
+      petOwnerAddress: item.petOwner.address ? item.petOwner.address : null,
+      issuingAuthority: issuingAuthorityModelData,
     });
 
     return transformedItem;

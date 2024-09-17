@@ -18,6 +18,22 @@
 {% set petDoB = data.petDoB %}
 {% set petColour = data.petColour %}
 {% set petFeaturesDetail = data.petFeaturesDetail %}
+{% set petOwnerName = data.petOwnerName %}
+{% set petOwnerEmail = data.petOwnerEmail %}
+{% set petOwnerTelephone = data.petOwnerTelephone %}
+{% set petOwnerAddressLineOne = data.petOwnerAddress.addressLineOne %}
+{% set petOwnerAddressLineTwo = data.petOwnerAddress.addressLineTwo %}
+{% set petOwnerAddressTownOrCity = data.petOwnerAddress.townOrCity %}
+{% set petOwnerAddressCounty = data.petOwnerAddress.county %}
+{% set petOwnerAddressPostCode = data.petOwnerAddress.postCode %}
+{% set issuingAuthorityName = data.issuingAuthority.name %}
+{% set issuingAuthorityAddressLineOne = data.issuingAuthority.address.addressLineOne %}
+{% set issuingAuthorityAddressLineTwo = data.issuingAuthority.address.addressLineTwo %}
+{% set issuingAuthorityAddressLineThree = data.issuingAuthority.address.addressLineThree %}
+{% set issuingAuthorityAddressTownOrCity = data.issuingAuthority.address.townOrCity %}
+{% set issuingAuthorityAddressCounty = data.issuingAuthority.address.county %}
+{% set issuingAuthorityAddressPostCode = data.issuingAuthority.address.postCode %}
+{% set issuingAuthorityAddressSignature = data.issuingAuthority.signature %}
 
 {% block content %}
 <div class="govuk-grid-row govuk-!-margin-bottom-9 govuk-!-margin-top-4">    
@@ -109,7 +125,56 @@
                 </div>
             </div>
             {% endif %}
-
+            
+            <div id="document-IssuingAuthority-card" class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                    <h2 class="govuk-summary-card__title">Pet owner details</h2>
+                </div>
+                <div class="govuk-summary-card__content">
+                    <dl class="govuk-summary-list">
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Name and address of competent authority
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {%if issuingAuthorityName.trim() !== '' %}
+                                    <strong>{{ issuingAuthorityName }}</strong>
+                                    <br class="pet-br-print">
+                                {% endif %} 
+                                {%if issuingAuthorityAddressLineOne.trim() !== '' %}
+                                    {{ issuingAuthorityAddressLineOne }}
+                                    <br class="pet-br-print">
+                                {% endif %}
+                                {%if issuingAuthorityAddressLineTwo.trim() !== '' %}                             
+                                    {{ issuingAuthorityAddressLineTwo }}
+                                    <br class="pet-br-print">
+                                {% endif %}
+                                {%if issuingAuthorityAddressLineThree.trim() !== '' %}                             
+                                    {{ issuingAuthorityAddressLineThree }}
+                                    <br class="pet-br-print">
+                                {% endif %}
+                                {%if issuingAuthorityAddressTownOrCity.trim() !== '' %}                             
+                                    {{ issuingAuthorityAddressTownOrCity }}
+                                    <br class="pet-br-print">
+                                {% endif %}
+                                {%if issuingAuthorityAddressCounty.trim() !== '' %}                             
+                                    {{ issuingAuthorityAddressCounty }}
+                                    <br class="pet-br-print">
+                                {% endif %}
+                                {{ issuingAuthorityAddressPostCode }}
+                            </dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Signed on behalf of the competent authority (APHA)
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {{ issuingAuthorityAddressSignature }}
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
 
             <div id="document-microchip-card" class="govuk-summary-card">
                 <div class="govuk-summary-card__title-wrapper">
@@ -208,6 +273,64 @@
                             </dt>
                             <dd class="govuk-summary-list__value">
                                 {{ petFeaturesDetail }}
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+
+            <div id="document-owner-card" class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                    <h2 class="govuk-summary-card__title">Pet owner details</h2>
+                </div>
+                <div class="govuk-summary-card__content">
+                    <dl class="govuk-summary-list">
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Name
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {{ petOwnerName }}
+                            </dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Email
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {{ petOwnerEmail }}
+                            </dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Address
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {%if petOwnerAddressLineOne.trim() !== '' %}
+                                    {{ petOwnerAddressLineOne }}
+                                    <br class="pet-br-print">
+                                {% endif %} 
+                                {%if petOwnerAddressLineTwo.trim() !== '' %}
+                                    {{ petOwnerAddressLineTwo }}
+                                    <br class="pet-br-print">
+                                {% endif %}
+                                {%if petOwnerAddressTownOrCity.trim() !== '' %}                             
+                                    {{ petOwnerAddressTownOrCity }}
+                                    <br class="pet-br-print">
+                                {% endif %}
+                                {%if petOwnerAddressCounty.trim() !== '' %}                             
+                                    {{ petOwnerAddressCounty }}
+                                    <br class="pet-br-print">
+                                {% endif %}
+                                {{ petOwnerAddressPostCode }}
+                            </dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Phone number
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                {{ petOwnerTelephone }}
                             </dd>
                         </div>
                     </dl>
