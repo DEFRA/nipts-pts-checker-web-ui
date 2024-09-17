@@ -126,7 +126,7 @@ describe('Validation Functions', () => {
     it('should return required eror for a partial empty string', () => {
       const result = validateDate('33//2024');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe(CurrentSailingMainModelErrors.departureDateRequiredError);
+      expect(result.error).toBe(CurrentSailingMainModelErrors.departureDateFormatError);
     });
 
     it('should return invalid format for a non-empty string', () => {
