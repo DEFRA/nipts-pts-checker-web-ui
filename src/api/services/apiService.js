@@ -2,6 +2,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 import { HttpStatusCode } from "axios";
 import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js";
 import httpService from "./httpService.js";
+import { issuingAuthorityModelData } from '../../constants/issuingAuthority.js';
 import moment from "moment";
 
 const buildApiUrl = (endpoint) => {
@@ -122,6 +123,11 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
         ? item.travelDocument.travelDocumentId
         : null,
       dateOfIssue: item.travelDocument ? item.travelDocument.dateOfIssue : null,
+      petOwnerName: item.petOwner ? item.petOwner.name : null,
+      petOwnerEmail: item.petOwner ? item.petOwner.email : null,
+      petOwnerTelephone: item.petOwner ? item.petOwner.telephone : null,
+      petOwnerAddress: item.petOwner.address ? item.petOwner.address : null,
+      issuingAuthority: issuingAuthorityModelData,
     });
 
     return transformedItem;
@@ -236,6 +242,11 @@ const getApplicationByApplicationNumber = async (
         ? item.travelDocument.travelDocumentId
         : null,
       dateOfIssue: item.travelDocument ? item.travelDocument.dateOfIssue : null,
+      petOwnerName: item.petOwner ? item.petOwner.name : null,
+      petOwnerEmail: item.petOwner ? item.petOwner.email : null,
+      petOwnerTelephone: item.petOwner ? item.petOwner.telephone : null,
+      petOwnerAddress: item.petOwner.address ? item.petOwner.address : null,
+      issuingAuthority: issuingAuthorityModelData,
     });
 
     return transformedItem;
