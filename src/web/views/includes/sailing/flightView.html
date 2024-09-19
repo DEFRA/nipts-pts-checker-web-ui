@@ -10,5 +10,5 @@
       </p>
       {% endif %}
     </div>
-    <input class="govuk-input govuk-!-width-one-third" id="routeFlight" name="routeFlight" type="text" autocomplete="tel" value={{routeFlight}}>
+    <input class="govuk-input {% if errorFlight %} govuk-input--error {%endif %} govuk-!-width-one-third" id="routeFlight" name="routeFlight" type="text" autocomplete="tel" value={{routeFlight}}>
 </div>
