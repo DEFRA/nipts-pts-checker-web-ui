@@ -132,6 +132,34 @@ const getMicrochipData = async (microchipNumber, request) => {
   }
 };
 
+const checkMicrochipNumberExistWithPtd = async (microchipNumber, request) => {
+  try {
+    const response = await httpService.postAsync(
+      `${baseUrl}/Checker/checkMicrochipNumberExistWithPtd`,
+      { microchipNumber },
+      request
+    );
+
+    // The API returns a boolean value
+    const exists = response?.data;
+
+    return { exists };
+  } catch (error) {
+    console.error("Error checking microchip number existence:", error.message);
+
+    // Handle specific errors if needed
+    if (error.response && error.response.data) {
+      return {
+        error: error.response.data.error || "Unexpected error occurred",
+      };
+    }
+
+    return { error: "Unexpected error occurred" };
+  }
+};
+
+// Export the new function
 export default {
   getMicrochipData,
+  checkMicrochipNumberExistWithPtd,
 };

@@ -1,78 +1,199 @@
 {% extends "./layouts/checkerLayout.html" %}
+
 {% block pageTitle %} Report non-compliance - {{ model.ptsTitle }}:{{ model.ptsSubTitle }} – GOV.UK {% endblock %}
 
 {% block beforeContent %}
 <a href="javascript:void(0);" class="govuk-back-link" id="backButton">Back</a>
 {% endblock %}
 
+{% set microchipNumber = data.microchipNumber %}
+{% set microchipDate = data.microchipDate %}
+
 {% block content %}
-<div class="govuk-width-container">
-<main class="govuk-main-wrapper pts-checker govuk-!-margin-bottom-9 govuk-!-padding-top-4" id="main-content">
-            
-  <div class="govuk-grid-row govuk-!-margin-bottom-0 govuk-!-margin-top-0">
-    <div class="govuk-grid-column-full govuk-!-margin-top-0">
-      <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
-        Report non-compliance
-      </h1>
+<div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-0">
+  <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
+
+    <div id="errorSummary">
+      {% if formSubmitted %}
+      {% include "./errors/displayErrorSummary.html" %}
+      {% endif %}
     </div>
+
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
+      Report non-compliance
+    </h1>
+
+    <form id="nonComplianceForm" action="/checker/non-compliance" method="POST">
+      <div class="govuk-grid-row govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+        <div class="govuk-grid-column-full govuk-!-margin-top-0">
+          <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h2 class="govuk-fieldset__heading">
+                  Reasons
+                </h2>
+              </legend>
+              <div id="event-name-hint" class="govuk-hint">
+                Select all that apply.
+              </div>
+
+              <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+                  <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                    <h3 class="govuk-fieldset__heading">
+                      Microchip
+                    </h3>
+                  </legend>
+                  <details class="govuk-details">
+                    <summary class="govuk-details__summary">
+                      <span class="govuk-details__summary-text">
+                        Microchip details from PTD
+                      </span>
+                    </summary>
+                    <div class="govuk-details__text">
+                      <div id="document-microchip-card" class="govuk-summary-card">
+                        <div class="govuk-summary-card__title-wrapper">
+                          <h2 class="govuk-summary-card__title">Microchip information from PTD or application</h2>
+                        </div>
+                        <div class="govuk-summary-card__content">
+                          <dl class="govuk-summary-list">
+              
+                            <div class="govuk-summary-list__row">
+                              <dt class="govuk-summary-list__key">
+                                Microchip number
+                              </dt>
+                              <dd class="govuk-summary-list__value">
+                                {{ data['microchipNumber'] if data['microchipNumber'] else ""}}
+                              </dd>
+                            </div>
+              
+              
+                            <div class="govuk-summary-list__row">
+                              <dt class="govuk-summary-list__key">
+                                Implant or scan date
+                              </dt>
+                              <dd class="govuk-summary-list__value">
+                                {{ microchipDate if microchipDate else "" }}
+                              </dd>
+                            </div>
+                          </dl>
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+              
+                  <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                    <div class="govuk-checkboxes__item">
+                      <input class="govuk-checkboxes__input" id="microchipNumberRadio" name="microchipNumberRadio" type="checkbox"
+                        value="on" data-aria-controls="conditional-microchipNumber" {% if payload['microchipNumberRadio']=="on"
+                        %}checked{% endif %}>
+                      <label class="govuk-label govuk-checkboxes__label" for="microchipNumberRadio">
+                        Microchip number does not match the PTD
+                      </label>
+                    </div>
+                  
+                <div class="govuk-checkboxes__conditional {% if payload['microchipNumberRadio'] == "on" %}{% else %}
+                  govuk-checkboxes__conditional--hidden{% endif %}" id="conditional-microchipNumber">
+
+                    <div id="microchipNumber-form-group"
+                      class="govuk-form-group {% if errors['microchipNumber'] %}govuk-form-group--error{% endif %}">
+                      {% if errors['microchipNumber'] %}
+                      <p id="microchipNumber-error" class="govuk-error-message">
+                        <span class="govuk-visually-hidden">Error:</span> {{ errors['microchipNumber'] }}
+                      </p>
+                      {% endif %}
+                      <label class="govuk-label" for="microchipNumber">
+                        Microchip number found in scan
+                      </label>
+                      <input class="govuk-input govuk-input--width-20 {% if errors['microchipNumber'] %}govuk-input--error{% endif %}"
+                        id="microchipNumber" name="microchipNumber" type="text" spellcheck="false"
+                        aria-describedby="microchipNumber-error" value="{{ payload['microchipNumber']|default('') }}">
+                    </div>
+                  </div>
+
+                  
+                    <div class="govuk-checkboxes__item">
+                      <input class="govuk-checkboxes__input" id="ptdProblem" name="ptdProblem" type="checkbox" value="on" {% if
+                        payload['ptdProblem']=="on" %}checked{% endif %}>
+                      <label class="govuk-label govuk-checkboxes__label" for="ptdProblem">
+                        Cannot find microchip
+                      </label>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+
+           
+
+              <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
+              <h2 class="govuk-heading-l govuk-!-margin-top-9">Pet owner details</h2>
+
+              <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
+              <h2 class="govuk-heading-l govuk-!-margin-top-9">Passenger details</h2>
+
+              <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
+              <div class="govuk-form-group">
+                <h2 class="govuk-label-wrapper">
+                  <label class="govuk-label govuk-label--l" for="more-detail">
+                    Any relevant comments
+                  </label>
+                </h2>
+              </div>
+
+            </fieldset>
+          </div>
+        </div>
+      </div>
+
+      <div class="govuk-grid-row" style="margin-bottom: 100px;">
+        <div class="govuk-grid-column-one-half">
+          <button type="submit" class="govuk-button" data-module="govuk-button">
+            Report non-compliance
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
-  
-  <div class="govuk-grid-row govuk-!-static-margin-top-6">
-    <div class="govuk-grid-column-two-thirds">
-  
-      <h2 class="govuk-heading-l govuk-!-static-margin-bottom-2">Reasons</h2>
-   
-      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-  
-      <h2 class="govuk-heading-l govuk-!-static-margin-top-9">Pet owner details</h2>
-       
-      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-  
-      <h2 class="govuk-heading-l govuk-!-static-margin-top-9">Passenger details</h2>
-  
-      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-  
-      <div class="govuk-form-group">
-    <h2 class="govuk-label-wrapper">
-      <label class="govuk-label govuk-label--l" for="more-detail">
-        Any relevant comments
-      </label>
-    </h2>
-  </div>
-  
-      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-  
-      <h2 class="govuk-heading-l govuk-!-static-margin-top-9">GB outcome</h2>
-        
-      <h2 class="govuk-heading-l govuk-!-static-margin-top-9">SPS outcome</h2>
-        
-    </div>
-  </div>
-  
-  <div class="govuk-grid-row govuk-!-static-margin-top-4">
-    <div class="govuk-grid-column-one-half">
-      <form action="">
-        <input type="hidden" name="pageState" value="pass">
-        <button type="button" class="govuk-button" data-module="govuk-button">
-          Report non-compliance
-        </button>
-      </form>
-    </div>
-  </div>
-  
-  
-          </main>
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() { 
-  // Intercept back button click to clear validation errors
-  document.getElementById('backButton').addEventListener('click', function(event) {
-    sessionStorage.removeItem('formSubmitted');
-    history.back();
-  });
-});
-  
-</script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Clear validation errors only when the page is loaded
+    if (!sessionStorage.getItem('formSubmitted')) {
+      clearValidationErrors();
+    } else {
+      sessionStorage.removeItem('formSubmitted');
+    }
 
+    // Intercept back button click to clear validation errors
+    document.getElementById('backButton').addEventListener('click', function (event) {
+      sessionStorage.removeItem('formSubmitted');
+      history.back();
+    });
+
+    // Initialize GOV.UK Frontend JavaScript
+    GOVUKFrontend.initAll();
+  });
+
+  document.getElementById('nonComplianceForm').addEventListener('submit', function (event) {
+    // Clear previous error messages before submitting the form
+    sessionStorage.setItem('formSubmitted', 'true');
+    clearValidationErrors();
+
+    // Allow the form to proceed with submission
+  });
+
+  function clearValidationErrors() {
+    document.querySelectorAll('.govuk-error-message').forEach(function (el) {
+      el.remove();
+    });
+    document.querySelectorAll('.govuk-form-group--error').forEach(function (el) {
+      el.classList.remove('govuk-form-group--error');
+    });
+    document.getElementById('errorSummary').innerHTML = '';
+  }
+</script>
 {% endblock %}
