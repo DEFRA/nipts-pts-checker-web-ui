@@ -126,6 +126,7 @@
             </div>
             {% endif %}
             
+            {% if data['documentState'] !== "approved" %}
             <div id="document-IssuingAuthority-card" class="govuk-summary-card">
                 <div class="govuk-summary-card__title-wrapper">
                     <h2 class="govuk-summary-card__title">Issuing authority</h2>
@@ -175,6 +176,7 @@
                     </dl>
                 </div>
             </div>
+            {% endif %}
 
             <div id="document-microchip-card" class="govuk-summary-card">
                 <div class="govuk-summary-card__title-wrapper">
