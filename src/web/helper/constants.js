@@ -27,5 +27,9 @@ export default {
   checkerShortTitle: "Check a pet travelling from GB to NI",
   currentDate: formattedToday,
   accountManagementLink:  idmLink,
-  section:""
+  section:"",
+  // session time out 30 minutes
+  sessionTimeoutInSeconds: "1800",
+  // session timout warning count alert: 2 minuets
+  sessionTimeoutCountdownInSeconds: "120"
 };
