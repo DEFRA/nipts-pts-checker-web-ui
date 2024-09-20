@@ -85,7 +85,8 @@
       "/api/services/httpService.js",
       "/config/",
       "/plugins/magic-password.js",
-      "/web/component/checker/magicPassword/"
+      "/web/component/checker/magicPassword/",
+      "/assets/"
     ]
   },
   "type": "module"
