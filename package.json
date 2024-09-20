@@ -86,6 +86,7 @@
       "/config/",
       "/plugins/magic-password.js",
       "/web/component/checker/magicPassword/",
+      "/web/assets/",
       "/assets/"
     ]
   },
