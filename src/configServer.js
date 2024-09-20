@@ -24,6 +24,7 @@ const setup = (server) => {
         prepare: (options, next) => {
           options.compileOptions.environment = Nunjucks.configure(
             [
+              "node_modules/hmrc-frontend/dist",
               "node_modules/govuk-frontend/dist",
               options.path,
               viewsPath,
