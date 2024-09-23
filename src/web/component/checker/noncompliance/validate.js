@@ -12,19 +12,32 @@ const nonComplianceSchema = Joi.object({
 
       const trimmedValue = val.trim();
 
-      // No number entered
       if (!trimmedValue) {
         return helpers.message(errorMessages.microchipNumber.empty);
       }
 
-      // Check for letters
-      if (/[A-Za-z]/.test(trimmedValue)) {
-        return helpers.message(errorMessages.microchipNumber.letters);
+      // Check if the value contains any letters or special characters
+      if (/[^0-9]/.test(trimmedValue)) {
+        if (
+          /[A-Za-z]/.test(trimmedValue) &&
+          /[^0-9A-Za-z]/.test(trimmedValue)
+        ) {
+          // Case where both letters and special characters are present
+          return helpers.message(errorMessages.microchipNumber.incorrectFormat);
+        } else if (/[^0-9A-Za-z]/.test(trimmedValue)) {
+          // Special characters without letters
+          return helpers.message(
+            errorMessages.microchipNumber.specialCharacters
+          );
+        } else if (/[A-Za-z]/.test(trimmedValue)) {
+          // Only letters present
+          return helpers.message(errorMessages.microchipNumber.letters);
+        }
       }
 
-      // Check for special characters (excluding digits)
-      if (/[^0-9]/.test(trimmedValue)) {
-        return helpers.message(errorMessages.microchipNumber.specialCharacters);
+      // Check length: It must be exactly 15 digits
+      if (trimmedValue.length !== 15) {
+        return helpers.message(errorMessages.microchipNumber.length);
       }
 
       // Check length
