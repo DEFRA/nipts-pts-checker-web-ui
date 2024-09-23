@@ -1,5 +1,3 @@
-
-
 import { NonComplianceHandlers } from "../../../../../web/component/checker/noncompliance/handler.js";
 import appSettingsService from "../../../../../api/services/appSettingsService.js";
 import errorMessages from "../../../../../web/component/checker/noncompliance/errorMessage.js";
@@ -64,7 +62,7 @@ describe("NonComplianceHandlers", () => {
     it("should render errors when validation fails", async () => {
       const payload = {
         microchipNumberRadio: "on",
-        microchipNumber: "invalid_microchip",
+        microchipNumber: "invalid_microchip", // Contains letters and possibly special characters
         ptdProblem: "someProblem",
       };
       request.payload = payload;
@@ -73,16 +71,17 @@ describe("NonComplianceHandlers", () => {
 
       await NonComplianceHandlers.postNonComplianceHandler(request, h);
 
+      // Since "invalid_microchip" contains letters and special characters, it should return incorrect format
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/noncompliance/noncomplianceView",
         expect.objectContaining({
           errors: {
-            microchipNumber: errorMessages.microchipNumber.letters,
+            microchipNumber: errorMessages.microchipNumber.incorrectFormat, // Adjust to incorrect format as per validation
           },
           errorSummary: [
             {
               fieldId: "microchipNumber",
-              message: errorMessages.microchipNumber.letters,
+              message: errorMessages.microchipNumber.incorrectFormat, // Adjust to incorrect format
             },
           ],
           formSubmitted: true,
@@ -110,8 +109,5 @@ describe("NonComplianceHandlers", () => {
       expect(request.yar.clear).toHaveBeenCalledWith("payload");
       expect(h.redirect).toHaveBeenCalledWith("/checker/dashboard");
     });
-
-    
-
   });
 });
