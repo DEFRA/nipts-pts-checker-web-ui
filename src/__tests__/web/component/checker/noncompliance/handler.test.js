@@ -62,7 +62,7 @@ describe("NonComplianceHandlers", () => {
     it("should render errors when validation fails", async () => {
       const payload = {
         microchipNumberRadio: "on",
-        microchipNumber: "invalid_microchip", // Contains letters and possibly special characters
+        microchipNumber: "invalid_microchip",
         ptdProblem: "someProblem",
       };
       request.payload = payload;
@@ -71,17 +71,17 @@ describe("NonComplianceHandlers", () => {
 
       await NonComplianceHandlers.postNonComplianceHandler(request, h);
 
-      // Since "invalid_microchip" contains letters and special characters, it should return incorrect format
+      // Since "invalid_microchip" contains letters and special characters, it should return the special characters error message
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/noncompliance/noncomplianceView",
         expect.objectContaining({
           errors: {
-            microchipNumber: errorMessages.microchipNumber.incorrectFormat, // Adjust to incorrect format as per validation
+            microchipNumber: errorMessages.microchipNumber.specialCharacters, // Adjusted to specialCharacters
           },
           errorSummary: [
             {
               fieldId: "microchipNumber",
-              message: errorMessages.microchipNumber.incorrectFormat, // Adjust to incorrect format
+              message: errorMessages.microchipNumber.specialCharacters, // Adjusted to specialCharacters
             },
           ],
           formSubmitted: true,
@@ -89,6 +89,7 @@ describe("NonComplianceHandlers", () => {
         })
       );
     });
+
 
     it("should set microchip number in session and redirect when validation passes", async () => {
       const payload = {
