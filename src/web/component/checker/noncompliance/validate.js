@@ -7,22 +7,21 @@ const nonComplianceSchema = Joi.object({
   microchipNumber: Joi.when("microchipNumberRadio", {
     is: Joi.valid("on"),
     then: Joi.any().custom((value, helpers) => {
-      // Handle undefined, null, and empty string values
       const val = value || "";
       const trimmedValue = val.trim();
 
-    // No number entered
+      // No number entered
       if (!trimmedValue) {
         return helpers.message(errorMessages.microchipNumber.empty);
       }
 
       // Check if the value contains any letters
       if (/[A-Za-z]/.test(trimmedValue)) {
-        // If there are both letters and special characters or numbers with letters
         if (/[^0-9A-Za-z]/.test(trimmedValue)) {
-          return helpers.message(errorMessages.microchipNumber.specialCharacters);
+          return helpers.message(
+            errorMessages.microchipNumber.specialCharacters
+          );
         }
-        // If only letters or letters combined with numbers
         return helpers.message(errorMessages.microchipNumber.letters);
       }
 
@@ -41,12 +40,12 @@ const nonComplianceSchema = Joi.object({
     }),
     otherwise: Joi.optional(),
   }),
-  ptdProblem: Joi.any(),
-});
+  ptdProblem: Joi.any().optional(),
+}).unknown(true);
 
 const validateNonCompliance = (payload) => {
   const { error } = nonComplianceSchema.validate(payload, {
-    abortEarly: false, // Collect all validation errors
+    abortEarly: false,
     presence: "optional",
   });
 
@@ -67,34 +66,4 @@ const validateNonCompliance = (payload) => {
   };
 };
 
-// Handling errors in the route handler to avoid 403
-const postNonComplianceHandler = async (request, h) => {
-  try {
-    const validationResult = validateNonCompliance(request.payload);
-
-    if (!validationResult.isValid) {
-      // Return validation errors to the user
-      return h.view("componentViews/checker/noncompliance/noncomplianceView", {
-        errors: validationResult.errors.reduce((acc, err) => {
-          acc[err.path[0]] = err.message;
-          return acc;
-        }, {}),
-        errorSummary: validationResult.errors.map((err) => ({
-          fieldId: err.path[0],
-          message: err.message,
-        })),
-        formSubmitted: true,
-        payload: request.payload,
-      });
-    }
-
-    // Proceed with further logic if validation passes
-    // ...
-  } catch (err) {
-    // Catch unexpected errors and return a 500 error to prevent 403
-    console.error("Unexpected Error:", err);
-    return h.response({ message: "An unexpected error occurred" }).code(500);
-  }
-};
-
-export { validateNonCompliance, postNonComplianceHandler };
+export { validateNonCompliance };

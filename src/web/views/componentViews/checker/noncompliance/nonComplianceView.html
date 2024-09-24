@@ -13,11 +13,13 @@
 <div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-0">
   <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
 
-    <div id="errorSummary">
-      {% if formSubmitted %}
-      {% include "./errors/displayErrorSummary.html" %}
-      {% endif %}
-    </div>
+      <div id="errorSummary">
+        {% if formSubmitted and errorSummary|length > 0 %}
+        {% include "./errors/displayErrorSummary.html" %}
+        {% endif %}
+      </div>
+
+ 
 
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
       Report non-compliance
@@ -38,7 +40,7 @@
               </div>
 
               <div class="govuk-form-group">
-                <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+                <fieldset class="govuk-fieldset">
                   <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
                     <h3 class="govuk-fieldset__heading">
                       Microchip
@@ -57,7 +59,7 @@
                         </div>
                         <div class="govuk-summary-card__content">
                           <dl class="govuk-summary-list">
-              
+
                             <div class="govuk-summary-list__row">
                               <dt class="govuk-summary-list__key">
                                 Microchip number
@@ -66,8 +68,7 @@
                                 {{ data['microchipNumber'] if data['microchipNumber'] else ""}}
                               </dd>
                             </div>
-              
-              
+
                             <div class="govuk-summary-list__row">
                               <dt class="govuk-summary-list__key">
                                 Implant or scan date
@@ -81,40 +82,40 @@
                       </div>
                     </div>
                   </details>
-              
+
                   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
                     <div class="govuk-checkboxes__item">
-                      <input class="govuk-checkboxes__input" id="microchipNumberRadio" name="microchipNumberRadio" type="checkbox"
-                        value="on" data-aria-controls="conditional-microchipNumber" {% if payload['microchipNumberRadio']=="on"
-                        %}checked{% endif %}>
+                      <input class="govuk-checkboxes__input" id="microchipNumberRadio" name="microchipNumberRadio"
+                        type="checkbox" value="on" data-aria-controls="conditional-microchipNumber" {% if
+                        payload['microchipNumberRadio']=="on" %}checked{% endif %}>
                       <label class="govuk-label govuk-checkboxes__label" for="microchipNumberRadio">
                         Microchip number does not match the PTD
                       </label>
                     </div>
-                  
-                <div class="govuk-checkboxes__conditional {% if payload['microchipNumberRadio'] == "on" %}{% else %}
-                  govuk-checkboxes__conditional--hidden{% endif %}" id="conditional-microchipNumber">
 
-                    <div id="microchipNumber-form-group"
-                      class="govuk-form-group {% if errors['microchipNumber'] %}govuk-form-group--error{% endif %}">
-                      {% if errors['microchipNumber'] %}
-                      <p id="microchipNumber-error" class="govuk-error-message">
-                        <span class="govuk-visually-hidden">Error:</span> {{ errors['microchipNumber'] }}
-                      </p>
-                      {% endif %}
-                      <label class="govuk-label" for="microchipNumber">
-                        Microchip number found in scan
-                      </label>
-                      <input class="govuk-input govuk-input--width-20 {% if errors['microchipNumber'] %}govuk-input--error{% endif %}"
-                        id="microchipNumber" name="microchipNumber" type="text" spellcheck="false"
-                        aria-describedby="microchipNumber-error" value="{{ payload['microchipNumber']|default('') }}">
+                    <div class="govuk-checkboxes__conditional{% if payload['microchipNumberRadio'] != " on" %}
+                      govuk-checkboxes__conditional--hidden{% endif %}" id="conditional-microchipNumber">
+                      <div id="microchipNumber-form-group"
+                        class="govuk-form-group {% if errors['microchipNumber'] %}govuk-form-group--error{% endif %}">
+                        <label class="govuk-label" for="microchipNumber">
+                          Microchip number found in scan
+                        </label>
+                        {% if errors['microchipNumber'] %}
+                        <p id="microchipNumber-error" class="govuk-error-message">
+                          <span class="govuk-visually-hidden">Error:</span> {{ errors['microchipNumber'] }}
+                        </p>
+                        {% endif %}
+                        <input
+                          class="govuk-input govuk-input--width-20 {% if errors['microchipNumber'] %}govuk-input--error{% endif %}"
+                          id="microchipNumber" name="microchipNumber" type="text" spellcheck="false" {% if
+                          errors['microchipNumber'] %} aria-describedby="microchipNumber-error" {% endif %}
+                          value="{{ payload['microchipNumber']|default('') }}">
+                      </div>
                     </div>
-                  </div>
 
-                  
                     <div class="govuk-checkboxes__item">
-                      <input class="govuk-checkboxes__input" id="ptdProblem" name="ptdProblem" type="checkbox" value="on" {% if
-                        payload['ptdProblem']=="on" %}checked{% endif %}>
+                      <input class="govuk-checkboxes__input" id="ptdProblem" name="ptdProblem" type="checkbox"
+                        value="on" {% if payload['ptdProblem']=="on" %}checked{% endif %}>
                       <label class="govuk-label govuk-checkboxes__label" for="ptdProblem">
                         Cannot find microchip
                       </label>
@@ -123,31 +124,14 @@
                 </fieldset>
               </div>
 
-           
-
-              <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-
-              <h2 class="govuk-heading-l govuk-!-margin-top-9">Pet owner details</h2>
-
-              <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-
-              <h2 class="govuk-heading-l govuk-!-margin-top-9">Passenger details</h2>
-
-              <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-
-              <div class="govuk-form-group">
-                <h2 class="govuk-label-wrapper">
-                  <label class="govuk-label govuk-label--l" for="more-detail">
-                    Any relevant comments
-                  </label>
-                </h2>
-              </div>
+              <!-- Other sections of your form can go here -->
 
             </fieldset>
           </div>
         </div>
       </div>
 
+      <!-- Submit button -->
       <div class="govuk-grid-row" style="margin-bottom: 100px;">
         <div class="govuk-grid-column-one-half">
           <button type="submit" class="govuk-button" data-module="govuk-button">
@@ -155,6 +139,7 @@
           </button>
         </div>
       </div>
+
     </form>
   </div>
 </div>

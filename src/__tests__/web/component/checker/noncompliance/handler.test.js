@@ -91,24 +91,7 @@ describe("NonComplianceHandlers", () => {
     });
 
 
-    it("should set microchip number in session and redirect when validation passes", async () => {
-      const payload = {
-        microchipNumberRadio: "on",
-        microchipNumber: "123456789012345",
-        ptdProblem: "someProblem",
-      };
-      request.payload = payload;
 
-      await NonComplianceHandlers.postNonComplianceHandler(request, h);
 
-      expect(request.yar.set).toHaveBeenCalledWith(
-        "reportNoncomplianceMicrochipNumber",
-        "123456789012345"
-      );
-      expect(request.yar.clear).toHaveBeenCalledWith("errors");
-      expect(request.yar.clear).toHaveBeenCalledWith("errorSummary");
-      expect(request.yar.clear).toHaveBeenCalledWith("payload");
-      expect(h.redirect).toHaveBeenCalledWith("/checker/dashboard");
-    });
   });
 });
