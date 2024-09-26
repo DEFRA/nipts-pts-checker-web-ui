@@ -77,11 +77,20 @@ const postNonComplianceHandler = async (request, h) => {
       }
     }
 
+    let reportNoncomplianceData = request.yar.get("reportNoncomplianceData") || [];
     // Proceed with further logic if validation passes
     if (payload.microchipNumberRadio === "on") {
-      const microchipNumber = payload.microchipNumber;
-      request.yar.set("reportNoncomplianceMicrochipNumber", microchipNumber);
+      reportNoncomplianceData['microchipNumberRadio'] = payload.microchipNumberRadio;
+      reportNoncomplianceData['microchipNumber'] = payload.microchipNumber;      
     }
+
+    if (payload.visualCheckProblem === "on") {
+      reportNoncomplianceData["visualCheckProblem"] =
+        payload.visualCheckProblem;
+    }
+
+    request.yar.set("reportNoncomplianceData", reportNoncomplianceData);
+    
 
     // Redirect to the dashboard
     return h.redirect("/checker/dashboard");
