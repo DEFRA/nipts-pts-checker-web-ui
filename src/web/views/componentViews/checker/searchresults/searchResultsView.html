@@ -56,15 +56,15 @@
 
             {% include "includes/status.html" %}
 
-            {% if data['documentState'] !== "awaiting" and data['documentState'] !== "rejected" %}
+            {% if data['documentState'] !== "awaiting" %}
             <h1 id="documents" class="govuk-heading-l govuk-!-margin-bottom-6">
                 Lifelong pet travel document and declaration
             </h1>
             {% endif %}
 
-            {% if data['documentState'] === "awaiting" or data['documentState'] === "rejected" %}
+            {% if data['documentState'] === "awaiting" %}
             <h1 id="documents" class="govuk-heading-l govuk-!-margin-bottom-6">
-                Your application summary
+                Lifelong pet travel document and declaration
             </h1>
             {% endif %}
 
@@ -100,14 +100,14 @@
             {% if data['documentState'] === "awaiting" or data['documentState'] === "rejected" %}
             <div id="document-issued-card" class="govuk-summary-card">
                 <div class="govuk-summary-card__title-wrapper">
-                    <h2 class="govuk-summary-card__title">Application</h2>
+                    <h2 class="govuk-summary-card__title">Reference number</h2>
                 </div>
 
                 <div class="govuk-summary-card__content">
                     <dl class="govuk-summary-list">
                         <div class="govuk-summary-list__row">
                             <dt class="govuk-summary-list__key">
-                                Reference number
+                                Application reference number
                             </dt>
                             <dd class="govuk-summary-list__value">
                                 {{ ptdNumber }}
@@ -126,7 +126,7 @@
             </div>
             {% endif %}
             
-            {% if data['documentState'] === "approved" %}
+            {% if data['documentState'] === "approved"  or data['documentState'] === "revoked"  or data['documentState'] === "rejected"%}
             <div id="document-IssuingAuthority-card" class="govuk-summary-card">
                 <div class="govuk-summary-card__title-wrapper">
                     <h2 class="govuk-summary-card__title">Issuing authority</h2>
@@ -237,6 +237,8 @@
                                 {{ petSpecies }}
                             </dd>
                         </div>
+
+                        {%if petBreed and petBreed !== '' %}
                         <div class="govuk-summary-list__row">
                             <dt class="govuk-summary-list__key">
                                 Breed
@@ -245,6 +247,8 @@
                                 {{ petBreed }}
                             </dd>
                         </div>
+                        {% endif %} 
+
                         <div class="govuk-summary-list__row">
                             <dt class="govuk-summary-list__key">
                                 Sex
