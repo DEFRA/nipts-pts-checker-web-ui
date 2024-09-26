@@ -3,9 +3,6 @@
 import appSettingsService from "../../../../api/services/appSettingsService.js";
 import { validateNonCompliance } from "./validate.js";
 import errorMessages from "./errorMessage.js";
-// Import or define the function to check microchip number association
-import microchipApi from "../../../../api/services/microchipAppPtdMainService.js";
-
 
 const VIEW_PATH = "componentViews/checker/noncompliance/noncomplianceView";
 
@@ -28,48 +25,69 @@ const getNonComplianceHandler = async (request, h) => {
 const postNonComplianceHandler = async (request, h) => {
   try {
     const payload = request.payload;
-    console.log("Payload:", payload);
     const validationResult = validateNonCompliance(payload);
+
+    console.log("Validation Result:", validationResult);
 
     if (!validationResult.isValid) {
       const errors = {};
-      const errorSummary = validationResult.errors.map((err) => {
+      const errorSummary = [];
+
+      validationResult.errors.forEach((err) => {
         const fieldId = err.path.join("_");
         const message = err.message;
+
+        // Only process microchipNumber errors if the checkbox is selected
+        if (
+          fieldId === "microchipNumber" &&
+          payload.microchipNumberRadio !== "on"
+        ) {
+          // Skip this error
+          return;
+        }
+
+        // Skip errors for fields that are optional
+        if (fieldId === "microchipNumberRadio" || fieldId === "ptdProblem") {
+          return;
+        }
+
+        // Handle any unexpected errors
+        if (!fieldId) {
+          return;
+        }
+
         errors[fieldId] = message;
-        return { fieldId, message };
+        errorSummary.push({ fieldId, message });
       });
 
-      const data = request.yar.get("data");
-      const appSettings = await appSettingsService.getAppSettings();
-      const model = { ...appSettings };
+      // If there are errors after filtering, render the view with errors
+      if (Object.keys(errors).length > 0) {
+        const data = request.yar.get("data");
+        const appSettings = await appSettingsService.getAppSettings();
+        const model = { ...appSettings };
 
-      return h.view(VIEW_PATH, {
-        data,
-        model,
-        errors,
-        errorSummary,
-        formSubmitted: true,
-        payload,
-      });
+        return h.view(VIEW_PATH, {
+          data,
+          model,
+          errors,
+          errorSummary,
+          formSubmitted: true,
+          payload,
+        });
+      }
     }
 
-    // After validation passes, check if microchip number is associated with another document
+    // Proceed with further logic if validation passes
     if (payload.microchipNumberRadio === "on") {
-      const microchipNumber = payload.microchipNumber;     
+      const microchipNumber = payload.microchipNumber;
       request.yar.set("reportNoncomplianceMicrochipNumber", microchipNumber);
     }
 
-    // Process the valid data here (e.g., save to database)
-
-    // Clear error-related data and payload before redirecting
-    request.yar.clear("errors");
-    request.yar.clear("errorSummary");
-    request.yar.clear("payload");
-
-    // Redirect to a success page or another route
+    // Redirect to the dashboard
     return h.redirect("/checker/dashboard");
   } catch (error) {
+    console.error("Unexpected Error:", error);
+
     const errorMessage = errorMessages.serviceError.message;
     const data = request.yar.get("data");
     const appSettings = await appSettingsService.getAppSettings();
@@ -90,6 +108,7 @@ const postNonComplianceHandler = async (request, h) => {
     });
   }
 };
+
 
 export const NonComplianceHandlers = {
   getNonComplianceHandler,

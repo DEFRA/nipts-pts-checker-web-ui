@@ -2,20 +2,14 @@
 
 {% block pageTitle %} Find a document - {{documentSearchMainModelData.pageTitle}} – GOV.UK {% endblock %}
 
-{% block beforeContent %}
-  {% if successConfirmation %}
-    <a href="javascript:void(0);" class="govuk-back-link" id="backButton">Back</a>
-  {% endif %}
-{% endblock %}
-
 {% block content %}
   {% if successConfirmation %}
-    <div id="successBanner" class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-0">
+    <div id="successBanner" class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-6">
       {% include "./success/successBanner.html" %}
     </div>
   {% endif %}
 
-<div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-0">
+<div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-8">
   <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
 
     <div id="errorSummary">
