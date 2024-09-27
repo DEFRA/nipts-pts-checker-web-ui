@@ -7,6 +7,7 @@ describe("Validation Functions", () => {
       const payload = {
         microchipNumberRadio: "off",
         ptdProblem: "someProblem",
+        passengerType: "foot"
       };
       const result = validateNonCompliance(payload);
       expect(result.isValid).toBe(true);
@@ -18,6 +19,7 @@ describe("Validation Functions", () => {
         microchipNumberRadio: "on",
         microchipNumber: "123456789012345",
         ptdProblem: "someProblem",
+        passengerType: "foot"
       };
       const result = validateNonCompliance(payload);
       expect(result.isValid).toBe(true);
@@ -29,6 +31,7 @@ describe("Validation Functions", () => {
         microchipNumberRadio: "on",
         microchipNumber: "",
         ptdProblem: "someProblem",
+        passengerType: "foot"
       };
       const result = validateNonCompliance(payload);
       expect(result.isValid).toBe(false);
@@ -45,6 +48,7 @@ describe("Validation Functions", () => {
         microchipNumberRadio: "on",
         microchipNumber: "12345678901234A",
         ptdProblem: "someProblem",
+        passengerType: "foot"
       };
       const result = validateNonCompliance(payload);
       expect(result.isValid).toBe(false);
@@ -61,6 +65,7 @@ describe("Validation Functions", () => {
         microchipNumberRadio: "on",
         microchipNumber: "12345678901234!",
         ptdProblem: "someProblem",
+        passengerType: "foot"
       };
       const result = validateNonCompliance(payload);
       expect(result.isValid).toBe(false);
@@ -77,6 +82,7 @@ describe("Validation Functions", () => {
         microchipNumberRadio: "on",
         microchipNumber: "12345678901234",
         ptdProblem: "someProblem",
+        passengerType: "foot"
       };
       const result = validateNonCompliance(payload);
       expect(result.isValid).toBe(false);
