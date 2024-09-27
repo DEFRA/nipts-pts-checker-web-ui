@@ -77,17 +77,26 @@ const postNonComplianceHandler = async (request, h) => {
       }
     }
 
+    let reportNoncomplianceData = request.yar.get("reportNoncomplianceData") || [];
     // Proceed with further logic if validation passes
     if (payload.microchipNumberRadio === "on") {
-      const microchipNumber = payload.microchipNumber;
-      request.yar.set("reportNoncomplianceMicrochipNumber", microchipNumber);
+      reportNoncomplianceData['microchipNumberRadio'] = payload.microchipNumberRadio;
+      reportNoncomplianceData['microchipNumber'] = payload.microchipNumber;      
     }
 
+    if (payload.visualCheckProblem === "on") {
+      reportNoncomplianceData["visualCheckProblem"] =
+        payload.visualCheckProblem;
+    }
+
+    
     // Proceed with further logic if validation passes
     if (payload.relevantComments.length > 0) {
-      const relevantComments = payload.relevantComments;
-      request.yar.set("reportNoncomplianceRelevantComments", relevantComments);
+      reportNoncomplianceData["relevantComments"] = payload.relevantComments;
     }
+
+    request.yar.set("reportNoncomplianceData", reportNoncomplianceData);    
+
 
     // Redirect to the dashboard
     return h.redirect("/checker/dashboard");

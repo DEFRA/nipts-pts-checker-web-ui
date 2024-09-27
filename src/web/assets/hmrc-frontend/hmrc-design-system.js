@@ -7024,13 +7024,13 @@
 	    }
 	  }
 
-	  // Normally the parent kicks things off when it detects the iFrame has loaded.
-	  // If this script is async-loaded, then tell parent page to retry init.
-	  function chkLateLoaded() {
-	    if ('loading' !== document.readyState) {
-	      window.parent.postMessage('[iFrameResizerChild]Ready', '*');
-	    }
-	  }
+  // Normally the parent kicks things off when it detects the iFrame has loaded.
+  // If this script is async-loaded, then tell parent page to retry init.
+  function chkLateLoaded() {
+    if ('loading' !== document.readyState) {
+      window.parent.postMessage('[iFrameResizerChild]Ready', window.location.origin);
+    }
+  }
 
 	  addEventListener(window, 'message', receiver);
 	  addEventListener(window, 'readystatechange', chkLateLoaded);
