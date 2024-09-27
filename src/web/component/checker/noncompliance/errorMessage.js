@@ -10,6 +10,12 @@ export default {
     wrongMicrochip:
       "The microchip number is associated with another lifelong pet travel document",
   },
+  passengerType: {
+    empty: "Select a type of passenger",
+  },
+  vehicleRegistration: {
+    empty: "Enter a vehicle registration",
+  },
   serviceError: {
     message: "An unexpected error occurred while processing your request",
   },

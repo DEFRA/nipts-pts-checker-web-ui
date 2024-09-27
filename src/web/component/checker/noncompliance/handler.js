@@ -95,6 +95,8 @@ const postNonComplianceHandler = async (request, h) => {
       reportNoncomplianceData["relevantComments"] = payload.relevantComments;
     }
 
+    reportNoncomplianceData["passengerType"] = payload.passengerType;
+
     request.yar.set("reportNoncomplianceData", reportNoncomplianceData);    
 
 

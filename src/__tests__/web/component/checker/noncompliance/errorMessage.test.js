@@ -20,4 +20,11 @@ describe("errorMessages", () => {
       message: "An unexpected error occurred while processing your request",
     });
   });
+
+  test("should contain the correct error message for no passenger type selected", () => {
+    expect(errorMessages.passengerType).toEqual({
+      empty: "Select a type of passenger",
+    });
+  });
+
 });

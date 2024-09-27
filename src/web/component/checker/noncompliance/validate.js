@@ -41,6 +41,19 @@ const nonComplianceSchema = Joi.object({
     otherwise: Joi.optional(),
   }),
   ptdProblem: Joi.any().optional(),
+  passengerType: Joi.string().required().messages({
+    'string.empty': errorMessages.passengerType.empty,
+    'any.required': errorMessages.passengerType.empty,
+  }),
+  /*
+  vehicleRegistration: Joi.when('passengerType', {
+    is: 'vehiclePassenger',
+    then: Joi.string().trim().required().messages({
+      'string.empty': errorMessages.vehicleRegistration.empty,
+    }),
+    otherwise: Joi.optional(),
+  }),
+  */
 }).unknown(true);
 
 const validateNonCompliance = (payload) => {
