@@ -89,8 +89,14 @@ const postNonComplianceHandler = async (request, h) => {
         payload.visualCheckProblem;
     }
 
-    request.yar.set("reportNoncomplianceData", reportNoncomplianceData);
     
+    // Proceed with further logic if validation passes
+    if (payload.relevantComments.length > 0) {
+      reportNoncomplianceData["relevantComments"] = payload.relevantComments;
+    }
+
+    request.yar.set("reportNoncomplianceData", reportNoncomplianceData);    
+
 
     // Redirect to the dashboard
     return h.redirect("/checker/dashboard");
