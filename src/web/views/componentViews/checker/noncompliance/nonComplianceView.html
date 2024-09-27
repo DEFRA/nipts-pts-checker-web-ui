@@ -73,8 +73,7 @@
 </div>
 
 <script>
-  function resetField(inputId, formGroupId, errorId) {
-    const inputElement = document.getElementById(inputId);
+  function resetField(formGroupId, errorId) {
     document.getElementById('errorSummary').hidden = true;
     document.getElementById(formGroupId).classList.remove("govuk-form-group--error");
     
@@ -86,11 +85,11 @@
 
   // Event listeners for radio buttons
   document.getElementById('footPassenger').addEventListener('click', () => {
-    resetField('footPassenger', 'passengerFormGroup', 'passengerError');
+    resetField('passengerFormGroup', 'passengerError');
   });
 
   document.getElementById('vehiclePassenger').addEventListener('click', () => {
-    resetField('vehiclePassenger', 'passengerFormGroup', 'passengerError');
+    resetField('passengerFormGroup', 'passengerError');
   });
 </script>
 
