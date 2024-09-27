@@ -83,6 +83,12 @@ const postNonComplianceHandler = async (request, h) => {
       request.yar.set("reportNoncomplianceMicrochipNumber", microchipNumber);
     }
 
+    // Proceed with further logic if validation passes
+    if (payload.relevantComments.length > 0) {
+      const relevantComments = payload.relevantComments;
+      request.yar.set("reportNoncomplianceRelevantComments", relevantComments);
+    }
+
     // Redirect to the dashboard
     return h.redirect("/checker/dashboard");
   } catch (error) {
