@@ -32,9 +32,11 @@
                                     Species
                                 </dt>
                                 <dd class="govuk-summary-list__value">
-                                    {{ data['petSpecies'] if data['petSpecies'] else ""}}
+                                    {{ data['petSpecies'] if data['petSpecies'] else "" }}
                                 </dd>
                             </div>
+
+                            {% if data['petSpecies'] != 'Ferret' %}
                             <div class="govuk-summary-list__row">
                                 <dt class="govuk-summary-list__key">
                                     Breed
@@ -43,6 +45,8 @@
                                     {{ data['petBreed'] if data['petBreed'] else ""}}
                                 </dd>
                             </div>
+                            {% endif %}
+
                             <div class="govuk-summary-list__row">
                                 <dt class="govuk-summary-list__key">
                                     Sex
@@ -72,7 +76,7 @@
                                     Significant features
                                 </dt>
                                 <dd class="govuk-summary-list__value">
-                                    {{ data['petFeaturesDetail'] if data['petFeaturesDetail'] else ""}}
+                                    {{ data['petFeaturesDetail'] if data['petFeaturesDetail'] else "No"}}
                                 </dd>
                             </div>
                         </dl>
