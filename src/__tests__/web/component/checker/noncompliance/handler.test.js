@@ -64,6 +64,7 @@ describe("NonComplianceHandlers", () => {
         microchipNumberRadio: "on",
         microchipNumber: "invalid_microchip",
         ptdProblem: "someProblem",
+        passengerType: "foot"
       };
       request.payload = payload;
       const mockAppSettings = { setting1: "value1" };

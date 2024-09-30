@@ -3,7 +3,7 @@
 {% block pageTitle %} Report non-compliance - {{ model.ptsTitle }}:{{ model.ptsSubTitle }} – GOV.UK {% endblock %}
 
 {% block beforeContent %}
-<a href="javascript:void(0);" class="govuk-back-link" id="backButton">Back</a>
+<a href="javascript:void(0);" class="govuk-back-link govuk-!-margin-top-9" id="backButton">Back</a>
 {% endblock %}
 
 {% set microchipNumber = data.microchipNumber %}
@@ -72,6 +72,25 @@
   </div>
 </div>
 
-<!-- Include your JavaScript code here -->
+<script>
+  function resetField(formGroupId, errorId) {
+    document.getElementById('errorSummary').hidden = true;
+    document.getElementById(formGroupId).classList.remove("govuk-form-group--error");
+    
+    const errorElement = document.getElementById(errorId);
+    if (errorElement) {
+      errorElement.remove();
+    }
+  }
+
+  // Event listeners for radio buttons
+  document.getElementById('footPassenger').addEventListener('click', () => {
+    resetField('passengerFormGroup', 'passengerError');
+  });
+
+  document.getElementById('vehiclePassenger').addEventListener('click', () => {
+    resetField('passengerFormGroup', 'passengerError');
+  });
+</script>
 
 {% endblock %}
