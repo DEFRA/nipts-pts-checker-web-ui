@@ -89,6 +89,22 @@ const postNonComplianceHandler = async (request, h) => {
         payload.visualCheckProblem;
     }
 
+     if (payload.otherIssuesCommercialRadio === "on") {
+       reportNoncomplianceData["otherIssuesCommercialRadio"] =
+         payload.otherIssuesCommercialRadio;
+     }
+
+      if (payload.otherIssuesAuthorisedRadio === "on") {
+        reportNoncomplianceData["otherIssuesAuthorisedRadio"] =
+          payload.otherIssuesAuthorisedRadio;
+      }
+
+      if (payload.otherIssuesSomethingRadio === "on") {
+        reportNoncomplianceData["otherIssuesSomethingRadio"] =
+          payload.otherIssuesSomethingRadio;
+      }
+
+
     
     // Proceed with further logic if validation passes
     if (payload.relevantComments.length > 0) {
