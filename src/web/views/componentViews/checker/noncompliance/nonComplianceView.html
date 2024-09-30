@@ -95,6 +95,15 @@
   document.getElementById('vehiclePassenger').addEventListener('click', () => {
     resetField('passengerFormGroup', 'passengerError');
   });
+
+  document.addEventListener('DOMContentLoaded', function() { 
+  // Intercept back button click to clear validation errors
+  document.getElementById('backButton').addEventListener('click', function(event) {
+    sessionStorage.removeItem('formSubmitted');
+    history.back();
+  });
+});
+
 </script>
 
 {% endblock %}
