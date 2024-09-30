@@ -113,6 +113,13 @@ const postNonComplianceHandler = async (request, h) => {
 
     reportNoncomplianceData["passengerType"] = payload.passengerType;
 
+    reportNoncomplianceData["outcomeReferred"] = payload.outcomeReferred;
+    reportNoncomplianceData["outcomeAdvised"] = payload.outcomeAdvised;
+    reportNoncomplianceData["outcomeNotTravelling"] = payload.outcomeNotTravelling;
+    reportNoncomplianceData["outcomeSPS"] = payload.outcomeSPS;
+    reportNoncomplianceData["moreDetail"] = payload.moreDetail;
+    
+
     request.yar.set("reportNoncomplianceData", reportNoncomplianceData);    
 
 
