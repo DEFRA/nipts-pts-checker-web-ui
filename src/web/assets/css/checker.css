@@ -1533,57 +1533,68 @@ ul.language-toggle li:first-child {
     width: 45%;
   }
 }
+
 .pts-checker-header {
   background-color: #000000;
-  padding: 1em 0;
+  padding: 1em 0; /* Adjust padding as needed */
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 80px;
+  height: 18vh; /* Height set relative to viewport (14% of viewport height) */
+  width: 100vw; /* Full width relative to viewport width */
   box-sizing: border-box;
   z-index: 100;
   filter: drop-shadow(rgba(0, 0, 0, 0.05) 0.5rem 0.5rem 0.2rem);
-  -moz-box-shadow: 0.5rem 0.5rem 0.2rem rgba(0, 0, 0, 0.05);
-  -webkit-box-shadow: 0.5rem 0.5rem 0.2rem rgba(0, 0, 0, 0.05);
   box-shadow: 0.5rem 0.5rem 0.2rem rgba(0, 0, 0, 0.05);
+  overflow: hidden; /* Prevent overflow issues */
 }
+
 .pts-checker-header .pet-declaration-logos {
-  zoom: 0.8;
+  /* Removed zoom, instead apply fixed sizes */
+  display: flex; /* Ensure logos are arranged flexibly */
+  justify-content: center; /* Center logos */
+  align-items: center; /* Center vertically */
 }
+
 .pts-checker-header .pet-declaration-logos .pet-logo-print.gem-c-organisation-logo-white {
   margin-bottom: 0;
+  /* Set a fixed height to maintain size during zoom */
+  height: 50px; /* Adjust based on your needs */
 }
+
 .pts-checker-header h1 {
   display: inline-block;
   margin-top: 0.4em;
+  color: #ffffff; /* Ensure text is visible on the black background */
+  font-size: 2rem; /* Use rem or vw for scaling */
 }
-.pts-checker-header .pts-header-title {
-  padding-bottom: 16px;
-}
+
 .pts-checker-header .pts-location-bar {
   background-color: white;
   border-bottom: 1px #b1b4b6 solid;
+  z-index: 101; /* Higher z-index so it appears above the header */
+  position: relative; /* Positioning relative to the flow of the document */
 }
+
 .pts-checker-header .pts-location-bar p {
   padding: 16px;
   padding-left: 0;
   margin-bottom: 0;
 }
 
+/* Navigation styles */
 .pts-checker-header-nav {
   float: right;
   list-style: none;
-  display: inline-block;
-  display: flex;
-  flex-grow: 1;
-  flex-shrink: 0;
+  display: flex; /* Use flex for navigation items */
   margin: 0;
   padding: 0;
-  column-gap: 0.5em;
+  column-gap: 0.5em; /* Space between items */
   box-sizing: border-box;
   z-index: 100;
 }
+
 .pts-checker-header-nav li {
   display: inline-block;
   padding: 0;
@@ -1591,57 +1602,69 @@ ul.language-toggle li:first-child {
   padding-right: 0.7em;
   text-align: center;
 }
+
 .pts-checker-header-nav li svg {
-  height: 30px;
+  height: 30px; /* Fixed height for icons */
   display: block;
   margin: 0 auto;
   margin-bottom: 0.7em;
 }
+
 .pts-checker-header-nav li a {
   color: #ffffff;
-  font-size: 14px;
+  font-size: 14px; /* Use rem for responsive scaling if necessary */
   text-decoration: none;
   white-space: nowrap;
 }
 
+/* Responsive Styles */
 @media only screen and (max-width: 650px) {
   .pts-checker-header {
-    padding-top: 1.5em;
+    padding-top: 1.5em; /* Adjust padding as necessary */
   }
+
   .pts-checker-header .govuk-grid-column-one-half,
   .pts-checker-header .govuk-grid-column-two-thirds {
     display: inline-block;
-    width: 65%;
+    width: 65%; /* Fixed width for mobile */
   }
+
   .pts-checker-header .govuk-grid-column-one-quarter,
   .pts-checker-header .govuk-grid-column-one-third {
     display: inline-block;
-    width: auto;
+    width: auto; /* Responsive width */
   }
+
   .pts-checker-header .govuk-grid-column-one-third {
-    float: right;
+    float: right; /* Float to the right for layout */
   }
+
   .pts-checker-header .govuk-heading-l {
-    font-size: 1.8em;
+    font-size: 1.8em; /* Adjust font size for smaller screens */
   }
-  .pts-checker-header .pts-checker-header-nav li svg {
-    margin-top: 0.4em;
-    height: 30px;
+
+  .pts-checker-header-nav li svg {
+    margin-top: 0.4em; /* Adjust spacing for mobile */
+    height: 30px; /* Fixed size for icons */
     margin-bottom: 0;
   }
-  .pts-checker-header .pts-checker-header-nav span {
-    display: none;
+
+  .pts-checker-header-nav span {
+    display: none; /* Hide spans in mobile */
   }
+
   .pts-checker-header .pet-declaration-logos .govuk-grid-column-one-half:first-child,
   .pts-checker-header .pet-declaration-logos .govuk-grid-column-one-quarter:first-child {
-    display: none;
+    display: none; /* Hide specific columns on smaller screens */
   }
 }
+
 @media only screen and (max-width: 450px) {
   .pts-checker-header h1.govuk-heading-l {
-    font-size: 1.5em;
+    font-size: 1.5em; /* Smaller font size for very small screens */
   }
 }
+
 body.pts-management {
   padding-top: 0;
 }
@@ -1652,28 +1675,29 @@ body.pts-management {
 }
 
 .pts-checker-navigation {
-  background-color: rgb(1, 96, 35);
-  position: fixed;
+  background-color: rgb(1, 96, 35); /* Dark green background */
+  position: fixed; /* Stays fixed in place */
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 100;
-  height: 100px;
+  height: 14vh; /* Height set relative to viewport (10% of viewport height) */
+  width: 100vw; /* Full width relative to viewport width */
   filter: drop-shadow(rgba(0, 0, 0, 0.15) 0.5rem -0.5rem 0.3rem);
+  box-sizing: border-box; /* Ensure padding is included in height/width */
 }
+
 .pts-checker-navigation ul {
   list-style: none;
-  display: block;
-  width: 100%;
   display: flex;
-  flex-grow: 1;
-  flex-shrink: 0;
   justify-content: space-between;
-  align-items: stretch;
+  align-items: center;
   margin: 0;
   padding: 0;
+  width: 100%; /* Ensure full width is utilized */
   box-sizing: border-box;
 }
+
 .pts-checker-navigation ul li {
   display: inline-block;
   padding-bottom: 1.5em;
@@ -1681,19 +1705,25 @@ body.pts-management {
   padding-left: 0.5em;
   padding-right: 0.5em;
   text-align: center;
+  box-sizing: border-box; /* Ensure padding doesn't affect size */
 }
+
 .pts-checker-navigation ul li svg {
-  height: 30px;
+  height: 4.5vh; /* Fixed height relative to viewport height (3% of the viewport height) */
+  width: auto; /* Maintain aspect ratio */
   display: block;
   margin: 0 auto;
   padding-bottom: 0.7em;
 }
+
+
 .pts-checker-navigation ul li a {
   color: #ffffff;
-  font-size: 14px;
+  font-size: 14px; /* Fixed font size */
   text-decoration: none;
   white-space: nowrap;
 }
+
 .pts-checker-navigation ul li a span {
   padding-top: 0.2em;
 }
