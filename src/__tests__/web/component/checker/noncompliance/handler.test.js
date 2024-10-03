@@ -20,7 +20,25 @@ describe("NonComplianceHandlers", () => {
     });
 
     it("should render the view with the correct data", async () => {
-      const mockData = { some: "data" };
+      const mockData = { some: "data", documentState: "awaiting" };
+      const applicationStatus = mockData.documentState.toLowerCase().trim();
+
+      const statusMapping = {
+        approved: "Approved",
+        awaiting: "Awaiting Verification",
+        revoked: "Revoked",
+        rejected: "	Unsuccessful",
+      };
+    
+      const statusColourMapping = {
+        approved: "govuk-tag govuk-tag--green",
+        awaiting: "govuk-tag govuk-tag--yellow",
+        revoked: "govuk-tag govuk-tag--orange",
+        rejected: "govuk-tag govuk-tag--red",
+      };
+      
+      const documentStatus = statusMapping[applicationStatus] || applicationStatus;
+      const documentStatusColourMapping = statusColourMapping[applicationStatus] || applicationStatus;
       const mockAppSettings = { setting1: "value1" };
       request.yar.get.mockReturnValueOnce(mockData);
       appSettingsService.getAppSettings.mockResolvedValue(mockAppSettings);
@@ -31,6 +49,8 @@ describe("NonComplianceHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/noncompliance/noncomplianceView",
         {
+          documentStatus: documentStatus,
+          documentStatusColourMapping: documentStatusColourMapping,
           data: mockData,
           model: mockAppSettings,
           errors: {},

@@ -1,0 +1,45 @@
+<details class="govuk-details">
+    <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            Pet Travel Document details
+        </span>
+    </summary>
+    <div class="govuk-details__text">
+        <div id="document-microchip-card" class="govuk-summary-card">
+            <div class="govuk-summary-card__title-wrapper">
+                <h2 class="govuk-summary-card__title">Application Details</h2>
+            </div>
+            <div class="govuk-summary-card__content">
+                <dl class="govuk-summary-list">
+
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Reference number
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            {{ data['ptdNumber'] if data['ptdNumber'] else ""}}
+                        </dd>
+                    </div>
+
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Date
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            {{ data['issuedDate'] if data['issuedDate'] else "" }}
+                        </dd>
+                    </div>
+
+                    <div class="govuk-summary-list__row"></div>
+                        <dt class="govuk-summary-list__key">
+                            Status
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            <strong class="{{documentStatusColourMapping}}">{{ documentStatus }}</strong>
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    </div>
+</details>

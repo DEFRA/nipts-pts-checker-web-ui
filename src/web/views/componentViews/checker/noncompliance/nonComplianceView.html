@@ -27,15 +27,35 @@
       <div class="govuk-grid-row govuk-!-margin-bottom-0 govuk-!-margin-top-4">
         <div class="govuk-grid-column-full govuk-!-margin-top-0">
           <div class="govuk-form-group">
-            <fieldset class="govuk-fieldset">
-              <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h2 class="govuk-fieldset__heading">
-                  Reasons
-                </h2>
-              </legend>
-              <div id="event-name-hint" class="govuk-hint">
-                Select all that apply.
+              {% if data['documentState'] !== "awaiting" and data['documentState'] !== "rejected" %}
+                {% include "componentViews/checker/noncompliance/ptdDetails.html" %}
+              {% endif %} 
+
+              {% if data['documentState'] === "awaiting" or data['documentState'] === "rejected" %}
+                {% include "componentViews/checker/noncompliance/applicationDetails.html" %} 
+              {% endif %}             
+              
+              <div class="govuk-section-break--l">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                  <h2 class="govuk-fieldset__heading">
+                    Reasons
+                  </h2>
+                </legend>
+                <div id="event-name-hint" class="govuk-hint">
+                  Select all that apply.
+                </div>
               </div>
+
+              {% if data['documentState'] !== "approved" %} 
+              <div class="govuk-section-break--l">
+                <span class="govuk-heading-s">Pet Travel Document</span>
+                <div class="govuk-checkboxes__item">
+                  <p class="govuk-body govuk-!-margin-bottom-0 pts-checker-check">
+                    PTD {{ documentStatus | lower }}
+                  </p>
+                </div>
+              </div>
+              {% endif %}
 
               <!-- Include Microchip Section -->
               {% include "componentViews/checker/noncompliance/microchipSection.html" %}
@@ -57,8 +77,6 @@
               {% include "componentViews/checker/noncompliance/spsOutcome.html" %}
 
               {% include "componentViews/checker/noncompliance/outcomeDetails.html" %}
-
-            </fieldset>
           </div>
         </div>
       </div>
