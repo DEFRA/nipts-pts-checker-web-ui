@@ -1536,7 +1536,7 @@ ul.language-toggle li:first-child {
 
 .pts-checker-header {
   background-color: #000000;
-  padding: 1em 0; /* Adjust padding as needed */
+  padding-top: 1em; /* Adjust padding as needed */
   position: absolute;
   top: 0;
   left: 0;
@@ -1573,7 +1573,9 @@ ul.language-toggle li:first-child {
   overflow: visible;
   position: relative;
   max-width: 100%;
-  z-index: 101; /* Higher z-index so it appears above the header */
+  z-index: 101;
+  padding-top: 0;
+  padding-bottom: 1em 0; /* Higher z-index so it appears above the header */
 }
 
 .pts-checker-header .pts-location-bar p {
