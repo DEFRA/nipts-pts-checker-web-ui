@@ -1546,8 +1546,6 @@ ul.language-toggle li:first-child {
   z-index: 100;
   filter: drop-shadow(rgba(0, 0, 0, 0.05) 0.5rem 0.5rem 0.2rem);
   box-shadow: 0.5rem 0.5rem 0.2rem rgba(0, 0, 0, 0.05);
-  overflow: hidden; /* Prevent overflow issues */
-  max-width: 100%;
 }
 
 .pts-checker-header .pet-declaration-logos {
@@ -1562,6 +1560,7 @@ ul.language-toggle li:first-child {
   display: inline-block;
   margin-top: 0.2em;
 }
+
 .pts-checker-header .pts-header-title {
   padding-bottom: 16px;
 }
@@ -1665,7 +1664,7 @@ ul.language-toggle li:first-child {
 
 @media only screen and (max-width: 450px) {
   .pts-checker-header h1.govuk-heading-l {
-    font-size: 1.5em; /* Smaller font size for very small screens */
+    font-size: 1.2em; /* Smaller font size for very small screens */
   }
 }
 

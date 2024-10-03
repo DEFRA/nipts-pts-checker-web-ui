@@ -64,37 +64,4 @@
 </div>
 {% endblock %}
 
-<script> 
-function adjustFontSize() {
-    const zoomLevel = Math.round(window.devicePixelRatio * 100); // Get zoom level as percentage
-    const h1 = document.querySelector('.pts-checker-header h1');
-
-    if (zoomLevel >= 200) {  // Approx 200% zoom
-        h1.style.fontSize = '20px';
-    } else if (zoomLevel >= 150) {  // Approx 150% zoom
-        h1.style.fontSize = '25px';
-    } else {
-        h1.style.fontSize = '50px';  // Default font size
-    }
-}
-
-function adjustLogoSize() {
-    const zoomLevel = Math.round(window.devicePixelRatio * 100); // Get zoom level as percentage
-    const logo = document.querySelector('.pet-declaration-logos');
-
-    if (zoomLevel >= 200) {  // Approx 200% zoom
-      logo.style.zoom = '0.4';
-    } else if (zoomLevel >= 150) {  // Approx 150% zoom
-      logo.style.zoom = '0.6';
-    } else {
-      logo.style.zoom = '0.8';  // Default font size
-    }
-}
-
-window.addEventListener('resize', adjustFontSize);  // Trigger on resize
-window.addEventListener('load', adjustFontSize);    // Trigger on page load
-window.addEventListener('resize', adjustLogoSize);  // Trigger on resize
-window.addEventListener('load', adjustLogoSize);    // Trigger on page load
-</script>
-
 
