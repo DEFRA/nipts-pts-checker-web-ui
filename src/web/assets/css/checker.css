@@ -1537,50 +1537,52 @@ ul.language-toggle li:first-child {
 .pts-checker-header {
   background-color: #000000;
   padding: 1em 0; /* Adjust padding as needed */
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  height: 18vh; /* Height set relative to viewport (14% of viewport height) */
-  width: 100vw; /* Full width relative to viewport width */
+  right: 0;/* Height set relative to viewport (14% of viewport height) */
+  width: 100%; /* Full width relative to viewport width */
   box-sizing: border-box;
   z-index: 100;
   filter: drop-shadow(rgba(0, 0, 0, 0.05) 0.5rem 0.5rem 0.2rem);
   box-shadow: 0.5rem 0.5rem 0.2rem rgba(0, 0, 0, 0.05);
   overflow: hidden; /* Prevent overflow issues */
+  max-width: 100%;
 }
 
 .pts-checker-header .pet-declaration-logos {
-  /* Removed zoom, instead apply fixed sizes */
-  display: flex; /* Ensure logos are arranged flexibly */
-  justify-content: center; /* Center logos */
-  align-items: center; /* Center vertically */
+  zoom: 0.8;
 }
 
 .pts-checker-header .pet-declaration-logos .pet-logo-print.gem-c-organisation-logo-white {
   margin-bottom: 0;
-  /* Set a fixed height to maintain size during zoom */
-  height: 50px; /* Adjust based on your needs */
 }
 
 .pts-checker-header h1 {
   display: inline-block;
-  margin-top: 0.4em;
-  color: #ffffff; /* Ensure text is visible on the black background */
-  font-size: 2rem; /* Use rem or vw for scaling */
+  margin-top: 0.2em;
+}
+.pts-checker-header .pts-header-title {
+  padding-bottom: 16px;
 }
 
-.pts-checker-header .pts-location-bar {
+.pts-location-bar {
   background-color: white;
   border-bottom: 1px #b1b4b6 solid;
+  width: 100%;
+  overflow: visible;
+  position: relative;
+  max-width: 100%;
   z-index: 101; /* Higher z-index so it appears above the header */
-  position: relative; /* Positioning relative to the flow of the document */
 }
 
 .pts-checker-header .pts-location-bar p {
   padding: 16px;
   padding-left: 0;
   margin-bottom: 0;
+  width: 100%;
+  position: relative;
+  z-index: 102;
 }
 
 /* Navigation styles */
@@ -1682,9 +1684,10 @@ body.pts-management {
   right: 0;
   z-index: 100;
   height: 14vh; /* Height set relative to viewport (10% of viewport height) */
-  width: 100vw; /* Full width relative to viewport width */
+  width: 100%; /* Full width relative to viewport width */
   filter: drop-shadow(rgba(0, 0, 0, 0.15) 0.5rem -0.5rem 0.3rem);
   box-sizing: border-box; /* Ensure padding is included in height/width */
+  max-width: 100%;
 }
 
 .pts-checker-navigation ul {
