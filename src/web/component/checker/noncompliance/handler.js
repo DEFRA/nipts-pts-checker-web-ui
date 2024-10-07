@@ -11,8 +11,28 @@ const getNonComplianceHandler = async (request, h) => {
   const appSettings = await appSettingsService.getAppSettings();
   const model = { ...appSettings };
 
+  const statusMapping = {
+    approved: "Approved",
+    awaiting: "Awaiting Verification",
+    revoked: "Revoked",
+    rejected: "	Unsuccessful",
+  };
+
+  const statusColourMapping = {
+    approved: "govuk-tag govuk-tag--green",
+    awaiting: "govuk-tag govuk-tag--yellow",
+    revoked: "govuk-tag govuk-tag--orange",
+    rejected: "govuk-tag govuk-tag--red",
+  };
+
+  const applicationStatus = data.documentState.toLowerCase().trim();
+  const documentStatus = statusMapping[applicationStatus] || applicationStatus;
+  const documentStatusColourMapping = statusColourMapping[applicationStatus] || applicationStatus;
+
   // Clear any previous error data
   return h.view(VIEW_PATH, {
+    documentStatus,
+    documentStatusColourMapping,
     data,
     model,
     errors: {},
