@@ -1570,7 +1570,8 @@ ul.language-toggle li:first-child {
   background-color: white;
   border-bottom: 1px #b1b4b6 solid;
   width: 100%;
-  overflow: visible;
+  overflow-y: visible;
+  overflow-x: hidden;
   position: relative;
   max-width: 100%;
   z-index: 101;
@@ -1636,7 +1637,7 @@ ul.language-toggle li:first-child {
   .pts-checker-header .govuk-grid-column-one-quarter,
   .pts-checker-header .govuk-grid-column-one-third {
     display: inline-block;
-    width: auto; /* Responsive width */
+    width: 100%; /* Responsive width */
   }
 
   .pts-checker-header .govuk-grid-column-one-third {
