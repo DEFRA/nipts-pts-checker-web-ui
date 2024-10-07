@@ -1,0 +1,48 @@
+<h2 class="govuk-heading-l govuk-!-margin-top-9">Pet owner details</h2>
+<div id="document-owner-card" class="govuk-summary-card">
+    <div class="govuk-summary-card__title-wrapper">
+        <h2 class="govuk-summary-card__title">Pet owner details</h2>
+    </div>
+    <div class="govuk-summary-card__content">
+        <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Name</dt>
+                <dd class="govuk-summary-list__value">{{ data['petOwnerName'] if data['petOwnerName'] else
+                    ""}}</dd>                
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Email</dt>
+                <dd class="govuk-summary-list__value">{{ data['petOwnerEmail'] if data['petOwnerEmail'] else
+                    ""}}</dd>                
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Address
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {%if data['petOwnerAddress'].addressLineOne.trim() !== '' %}
+                        <p> {{data['petOwnerAddress'].addressLineOne}}</p>
+                    {% endif %}
+                    
+                    {%if data['petOwnerAddress'].addressLineTwo.trim() !== '' %}
+                    <p> {{data['petOwnerAddress'].addressLineTwo}}</p>
+                    {% endif %}
+
+                    {%if data['petOwnerAddress'].townOrCity.trim() !== '' %}
+                    <p> {{data['petOwnerAddress'].townOrCity}}</p>
+                    {% endif %}
+
+                    {%if data['petOwnerAddress'].postCode.trim() !== '' %}
+                    <p> {{data['petOwnerAddress'].postCode}}</p>
+                    {% endif %}
+                </dd>            
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Phone number</dt>
+                <dd class="govuk-summary-list__value">{{ data['petOwnerTelephone'] if data['petOwnerTelephone'] else
+                    ""}}</dd>                
+            </div>
+        </dl>
+    </div>
+</div>
+<hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">

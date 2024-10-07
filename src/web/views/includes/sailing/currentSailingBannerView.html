@@ -1,5 +1,5 @@
 {% if currentSailingSlot %}
-<div class="pts-location-bar">
+<header class="pts-location-bar">
   <div class="govuk-width-container">
     <p>
     {% if currentSailingSlot.selectedRouteOption.id === ROUTE_OPTION_ID %}
@@ -10,5 +10,5 @@
       &nbsp;&nbsp;<a href="/checker/current-sailings">Change</a>
     </p>
   </div>
-</div>
+</header>
 {% endif %}

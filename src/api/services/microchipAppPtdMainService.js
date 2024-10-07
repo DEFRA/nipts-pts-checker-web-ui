@@ -1,6 +1,7 @@
 import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js";
 import dotenv from "dotenv";
 import httpService from "./httpService.js";
+import { issuingAuthorityModelData } from '../../constants/issuingAuthority.js';
 import moment from "moment";
 
 dotenv.config();
@@ -104,6 +105,11 @@ const getMicrochipData = async (microchipNumber, request) => {
         ? item.travelDocument.travelDocumentId
         : null,
       dateOfIssue: item.travelDocument ? item.travelDocument.dateOfIssue : null,
+      petOwnerName: item.petOwner ? item.petOwner.name : null,
+      petOwnerEmail: item.petOwner ? item.petOwner.email : null,
+      petOwnerTelephone: item.petOwner ? item.petOwner.telephone : null,
+      petOwnerAddress: item.petOwner.address ? item.petOwner.address : null,
+      issuingAuthority: issuingAuthorityModelData,
     });
 
     return transformedItem;
@@ -126,6 +132,34 @@ const getMicrochipData = async (microchipNumber, request) => {
   }
 };
 
+const checkMicrochipNumberExistWithPtd = async (microchipNumber, request) => {
+  try {
+    const response = await httpService.postAsync(
+      `${baseUrl}/Checker/checkMicrochipNumberExistWithPtd`,
+      { microchipNumber },
+      request
+    );
+
+    // The API returns a boolean value
+    const exists = response?.data;
+
+    return { exists };
+  } catch (error) {
+    console.error("Error checking microchip number existence:", error.message);
+
+    // Handle specific errors if needed
+    if (error.response && error.response.data) {
+      return {
+        error: error.response.data.error || "Unexpected error occurred",
+      };
+    }
+
+    return { error: "Unexpected error occurred" };
+  }
+};
+
+// Export the new function
 export default {
   getMicrochipData,
+  checkMicrochipNumberExistWithPtd,
 };

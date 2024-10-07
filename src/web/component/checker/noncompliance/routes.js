@@ -8,8 +8,15 @@ const Routes = [
     method: HttpMethod.GET,
     path: "/checker/non-compliance",
     options: {
-     handler: NonComplianceHandlers.getNonComplianceHandler,
-    } 
+      handler: NonComplianceHandlers.getNonComplianceHandler,
+    },
+  },
+  {
+    method: HttpMethod.POST,
+    path: "/checker/non-compliance",
+    options: {
+      handler: NonComplianceHandlers.postNonComplianceHandler,
+    },
   },
 ];
 

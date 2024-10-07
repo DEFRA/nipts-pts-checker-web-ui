@@ -24,6 +24,7 @@ const setup = (server) => {
         prepare: (options, next) => {
           options.compileOptions.environment = Nunjucks.configure(
             [
+              "node_modules/hmrc-frontend/dist",
               "node_modules/govuk-frontend/dist",
               options.path,
               viewsPath,
@@ -72,6 +73,31 @@ const setup = (server) => {
       },
     }
   });
+
+  // Route to get a 500error
+  server.route({
+    method: "GET",
+    path: "/500error",
+    handler: (_request, _h) => {
+      return _h.view('errors/500error').code(500).takeover();
+    }
+
+  });
+
+  // Global error handling via 'onPreResponse' extension
+  server.ext('onPreResponse', (_request, _h) => {
+    const response = _request.response;
+
+    // Check if the response is an error (500 level)
+    if (response.isBoom && response.output.statusCode === 500) {
+      // Render the 500Error.html template
+      return _h.redirect('/500error').takeover();
+    }
+
+    // If it's not a 500 error, continue as normal
+    return _h.continue;
+  });
+
 };
 
 export default {

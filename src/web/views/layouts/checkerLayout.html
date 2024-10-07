@@ -10,6 +10,7 @@
         
         {% block stylesheets %}
         <!-- <link href="/assets/govuk-frontend/dist/govuk/govuk-frontend.min.css" rel="stylesheet" type="text/css" media="all" /> -->
+        <link href="/assets/css/hmrc-design-system.min.css" rel="stylesheet" type="text/css" media="all" />
         <link href="/assets/css/application.css" rel="stylesheet" type="text/css" media="all" />
         <link href="/assets/css/checker.css" rel="stylesheet" type="text/css" media="all" />
         <link href="/assets/javascripts/autocomplete/accessible-autocomplete.min.css" rel="stylesheet" type="text/css"
@@ -17,8 +18,9 @@
         {% endblock %}
 
         <script type="module" src="/assets/govuk-frontend/dist/govuk/govuk-frontend.min.js"></script>
+        <script type="module" src="/assets/hmrc-frontend/hmrc-design-system.js"></script>
     </head>
-    <body class="govuk-frontend-supported">
+    <body class="govuk-template__body js-enabled govuk-frontend-supported">
     {% include "../partials/checkerHeader.html" %}
 
 
@@ -33,6 +35,25 @@
     </div>
    
     {% include "../partials/checkerFooter.html" %}
+
+    <meta 
+        name="hmrc-timeout-dialog" 
+        content="hmrc-timeout-dialog" 
+        data-language="en" 
+        data-timeout="{{ headerData['sessionTimeoutInSeconds'] }}" 
+        data-countdown="{{ headerData['sessionTimeoutCountdownInSeconds'] }}" 
+        data-keep-alive-url="?continue=true" 
+        data-sign-out-url="/timeout" 
+        data-timeout-url="" 
+        data-title="You’re about to be signed out" 
+        data-message="For your security, we will sign you out in" 
+        data-message-suffix="" 
+        data-keep-alive-button-text="Stay signed in" 
+        data-sign-out-button-text="Sign out" 
+        data-synchronise-tabs="" 
+        data-hide-sign-out-button="" 
+    />
+
 </body>
     {% block scripts %}
     <script type="module">

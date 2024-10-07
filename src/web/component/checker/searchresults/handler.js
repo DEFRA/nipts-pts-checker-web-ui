@@ -54,7 +54,7 @@ const saveAndContinueHandler = async (request, h) => {
       applicationId: data.applicationId,
       checkOutcome: checklist,
       checkerId: null,
-      routeId: currentSailingSlot.selectedRoute.id,
+      routeId: currentSailingSlot?.selectedRoute?.id,
       sailingTime: dateTimeString,
     };
 

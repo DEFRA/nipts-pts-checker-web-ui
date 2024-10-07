@@ -1,6 +1,14 @@
 import Joi from "joi";
 import  authConfig from "./auth.js";
 
+
+const minutesToMilliseconds = (minutes) => {
+  return (60000 * minutes);
+}
+
+// 30 minutes
+const timeOutInMilliseconds = minutesToMilliseconds(30);
+
 const schema = Joi.object({
   namespace: Joi.string().optional(),
   cookie: {
@@ -10,7 +18,7 @@ const schema = Joi.object({
     isSameSite: Joi.string().default("Lax"),
     isSecure: Joi.boolean().default(false),
     password: Joi.string().min(32).required(),
-    ttl: Joi.number().default(1000 * 3600 * 24 * 3), // 3 days
+    ttl: Joi.number().default(timeOutInMilliseconds), 
   },
   cookiePolicy: {
     clearInvalid: Joi.bool().default(false),
@@ -19,7 +27,7 @@ const schema = Joi.object({
     isSecure: Joi.bool().default(true),
     password: Joi.string().min(32).required(),
     path: Joi.string().default("/"),
-    ttl: Joi.number().default(1000 * 60 * 60 * 24 * 365), // 1 year
+    ttl: Joi.number().default(timeOutInMilliseconds),  
   },
   env: Joi.string()
     .valid("local","development", "test", "send", "preproduction","production")

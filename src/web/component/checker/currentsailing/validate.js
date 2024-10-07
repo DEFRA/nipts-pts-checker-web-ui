@@ -54,12 +54,13 @@ const dateSchema = Joi.string()
   .required()
   .custom((value, helpers) => {
     let parts = value.split('/');
-    const hasEmptyParts = parts.some(part => part.trim() === '');
-    if(hasEmptyParts)
-    {
-      return helpers.error('date.required');
-    }
 
+    const noDateProvided = parts.every(part => part.trim() === '');
+    if(noDateProvided)
+      {
+        return helpers.error('date.required');
+      }
+  
     // Regex to match the format D/M/YYYY or DD/MM/YYYY
     const regex = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
     const match = value.match(regex);

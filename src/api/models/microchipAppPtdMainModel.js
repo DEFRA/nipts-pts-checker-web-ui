@@ -17,6 +17,13 @@ class MicrochipAppPtdMainModel {
     this.applicationId = data.applicationId;
     this.travelDocumentId = data.travelDocumentId;
     this.error = data.error;
+
+    this.petOwnerName = data.petOwnerName;
+    this.petOwnerEmail = data.petOwnerEmail;
+    this.petOwnerTelephone = data.petOwnerTelephone;
+    this.petOwnerAddress = data.petOwnerAddress;
+
+    this.issuingAuthority = data.issuingAuthority;
   }
 }
 
