@@ -331,7 +331,7 @@ a:focus, .govuk-link:focus {
 }
 @media (min-width: 40.0625em) {
   .govuk-heading-l {
-    font-size: 2.25rem;
+    font-size: 2rem;
     line-height: 1.1111111111;
   }
 }
