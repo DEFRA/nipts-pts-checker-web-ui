@@ -6,7 +6,8 @@
 body {
   background-color: #f3f2f1 !important;
   padding-top: 100px;
-  min-width: 190px;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 main.pts-checker {
@@ -1615,7 +1616,7 @@ ul.language-toggle li:first-child {
 
 .pts-checker-header-nav li a {
   color: #ffffff;
-  font-size: 14px; /* Use rem for responsive scaling if necessary */
+  font-size: 0.7em; /* Use rem for responsive scaling if necessary */
   text-decoration: none;
   white-space: nowrap;
 }
@@ -1653,6 +1654,10 @@ ul.language-toggle li:first-child {
   }
 
   .pts-checker-header-nav span {
+    display: none; /* Hide spans in mobile */
+  }
+
+  .pts-checker-navigation span {
     display: none; /* Hide spans in mobile */
   }
 
