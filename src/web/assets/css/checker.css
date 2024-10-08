@@ -8,6 +8,7 @@ body {
   padding-top: 100px;
   max-width: 100%;
   overflow-x: hidden;
+  padding-bottom: 16vh;
 }
 
 main.pts-checker {
