@@ -5,7 +5,7 @@
 
 body {
   background-color: #f3f2f1 !important;
-  padding-top: 150px;
+  padding-top: 155px;
   padding-bottom: 90px;
   max-width: 100%;
   overflow-x: hidden;
@@ -1672,7 +1672,7 @@ ul.language-toggle li:first-child {
 
 @media only screen and (max-width: 450px) {
   .pts-checker-header h1.govuk-heading-l {
-    font-size: 1.2em; /* Smaller font size for very small screens */
+    font-size: 1em; /* Smaller font size for very small screens */
   }
 }
 
