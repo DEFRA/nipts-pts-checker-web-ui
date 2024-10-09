@@ -2,9 +2,16 @@ import moment from "moment-timezone";
 import { CurrentSailingHandlers } from "../../../../../web/component/checker/currentsailing/handler.js";
 import currentSailingMainService from "../../../../../api/services/currentSailingMainService.js";
 import { validateRouteOptionRadio, validateRouteRadio, validateSailingHour, validateSailingMinutes, validateFlightNumber, validateDate } from "../../../../../web/component/checker/currentsailing/validate.js";
+import { HttpStatusCode } from "axios";
 
 jest.mock("../../../../../api/services/currentSailingMainService.js");
 jest.mock("../../../../../web/component/checker/currentsailing/validate.js");
+
+const sailingRoutesDefault = [
+  { id: '1', value: 'Birkenhead to Belfast (Stena)', label: 'Birkenhead to Belfast (Stena)' },
+  { id: '2', value: 'Cairnryan to Larne (P&O)', label: 'Cairnryan to Larne (P&O)' },
+  { id: '3', value: 'Loch Ryan to Belfast (Stena)', label: 'Loch Ryan to Belfast (Stena)' }
+];
 
 describe('Handler', () => {
   describe("index", () => {
@@ -13,11 +20,7 @@ describe('Handler', () => {
         pageHeading: "What route are you checking?",
         serviceName: "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
         routeSubHeading: "Route",
-        routes: [
-          { id: '1', value: 'Birkenhead to Belfast (Stena)', label: 'Birkenhead to Belfast (Stena)' },
-          { id: '2', value: 'Cairnryan to Larne (P&O)', label: 'Cairnryan to Larne (P&O)' },
-          { id: '3', value: 'Loch Ryan to Belfast (Stena)', label: 'Loch Ryan to Belfast (Stena)' }
-        ],
+        routes: sailingRoutesDefault,
         sailingTimeSubHeading: "Scheduled sailing time",
         sailingHintText1: "Use the 24-hour clock - for example, 15:30.",
         sailingHintText2: "For midday, use 12:00. For midnight, use 23:59.",
@@ -38,10 +41,10 @@ describe('Handler', () => {
       };
 
 
-      var londonTime = moment.tz("Europe/London");
-      var departureDateDay = londonTime.format('DD');
-      var departureDateMonth = londonTime.format('MM');
-      var departureDateYear = londonTime.format('YYYY');
+      const londonTime = moment.tz("Europe/London");
+      const departureDateDay = londonTime.format('DD');
+      const departureDateMonth = londonTime.format('MM');
+      const departureDateYear = londonTime.format('YYYY');
 
       const response = await CurrentSailingHandlers.getCurrentSailings(request, h);
 
@@ -77,11 +80,7 @@ describe('submitCurrentSailingSlot', () => {
     const departureDate = mockPayload.departureDateDay.trim() + "/" + mockPayload.departureDateMonth.trim() + "/" + mockPayload.departureDateYear.trim();
 
     // Mock sailing routes stored in session
-    const sailingRoutes = [
-      { id: '1', value: 'Birkenhead to Belfast (Stena)' },
-      { id: '2', value: 'Cairnryan to Larne (P&O)' },
-      { id: '3', value: 'Loch Ryan to Belfast (Stena)' },
-    ];
+    const sailingRoutes = sailingRoutesDefault;
 
     const routeOptions = [
       { id: '1', value: 'Ferry', label: 'Ferry', template: 'ferryView.html' },
@@ -102,7 +101,7 @@ describe('submitCurrentSailingSlot', () => {
           if (key === 'CurrentSailingModel') {
             return currentSailingMainModelData;
           }
-          return undefined;
+          return null;
         }),
       },
     };
@@ -147,7 +146,7 @@ describe('submitCurrentSailingSlot', () => {
     const expectedSailingSlot = {
       sailingHour: mockPayload.sailingHour,
       sailingMinutes: mockPayload.sailingMinutes,
-      selectedRoute: { id: '1', value: 'Birkenhead to Belfast (Stena)' },
+      selectedRoute: { id: '1', value: 'Birkenhead to Belfast (Stena)', label: 'Birkenhead to Belfast (Stena)' },
       departureDate,
       selectedRouteOption: routeOptions[0],
       routeFlight: mockPayload.routeFlight,
@@ -181,11 +180,7 @@ describe('submitCurrentSailingSlot', () => {
 
 
     // Mock sailing routes stored in session
-    const sailingRoutes = [
-      { id: '1', value: 'Birkenhead to Belfast (Stena)' },
-      { id: '2', value: 'Cairnryan to Larne (P&O)' },
-      { id: '3', value: 'Loch Ryan to Belfast (Stena)' },
-    ];
+    const sailingRoutes = sailingRoutesDefault;
 
     const currentSailingMainModelData = { sailingRoutes, routeOptions };
     // Mock payload
@@ -212,13 +207,14 @@ describe('submitCurrentSailingSlot', () => {
           if (key === 'CurrentSailingModel') {
             return currentSailingMainModelData;
           }
-          return undefined;
+          return null;
         }),
       },
     };
 
     // Mock response toolkit
     const mockRedirect = jest.fn();
+
     const mockResponseToolkit = {
       redirect: mockRedirect,
     };
@@ -258,7 +254,7 @@ describe('submitCurrentSailingSlot', () => {
     });
 
 
-    const response = await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
 
     expect(h.view).toHaveBeenCalledWith(
       "componentViews/checker/currentsailing/currentsailingView",
@@ -303,17 +299,13 @@ describe('submitCurrentSailingSlot', () => {
       { id: '2', value: 'Flight', label: 'Flight', template: 'flightView.html' }
     ];
 
-    const sailingRoutes = [
-      { id: '1', value: 'Birkenhead to Belfast (Stena)' },
-      { id: '2', value: 'Cairnryan to Larne (P&O)' },
-      { id: '3', value: 'Loch Ryan to Belfast (Stena)' },
-    ];
+    const sailingRoutes = sailingRoutesDefault;
 
     const currentSailingMainModelData = { sailingRoutes, routeOptions };
 
     const mockPayload = {
       routeOption: '1',
-      routeRadio: undefined,
+      routeRadio: null,
       sailingHour: '12',
       sailingMinutes: '30',
       departureDateDay: '1',
@@ -329,7 +321,7 @@ describe('submitCurrentSailingSlot', () => {
         get: jest.fn((key) => {
           if (key === 'SailingRoutes') return sailingRoutes;
           if (key === 'CurrentSailingModel') return currentSailingMainModelData;
-          return undefined;
+          return null;
         }),
       },
     };
@@ -415,17 +407,13 @@ describe('submitCurrentSailingSlot', () => {
       { id: '2', value: 'Flight', label: 'Flight', template: 'flightView.html' }
     ];
 
-    const sailingRoutes = [
-      { id: '1', value: 'Birkenhead to Belfast (Stena)' },
-      { id: '2', value: 'Cairnryan to Larne (P&O)' },
-      { id: '3', value: 'Loch Ryan to Belfast (Stena)' },
-    ];
+    const sailingRoutes = sailingRoutesDefault;
 
     const currentSailingMainModelData = { sailingRoutes, routeOptions };
 
     const mockPayload = {
       routeOption: '2',
-      routeRadio: undefined,
+      routeRadio: null,
       sailingHour: '12',
       sailingMinutes: '30',
       departureDateDay: '1',
@@ -441,7 +429,7 @@ describe('submitCurrentSailingSlot', () => {
         get: jest.fn((key) => {
           if (key === 'SailingRoutes') return sailingRoutes;
           if (key === 'CurrentSailingModel') return currentSailingMainModelData;
-          return undefined;
+          return null;
         }),
       },
     };
@@ -529,17 +517,13 @@ describe('submitCurrentSailingSlot', () => {
       { id: '2', value: 'Flight', label: 'Flight', template: 'flightView.html' }
     ];
 
-    const sailingRoutes = [
-      { id: '1', value: 'Birkenhead to Belfast (Stena)' },
-      { id: '2', value: 'Cairnryan to Larne (P&O)' },
-      { id: '3', value: 'Loch Ryan to Belfast (Stena)' },
-    ];
+    const sailingRoutes = sailingRoutesDefault;
 
     const currentSailingMainModelData = { sailingRoutes, routeOptions };
 
     const mockPayload = {
       routeOption: '1',
-      routeRadio: undefined,
+      routeRadio: null,
       sailingHour: '12',
       sailingMinutes: '30',
       departureDateDay: '',
@@ -555,7 +539,7 @@ describe('submitCurrentSailingSlot', () => {
         get: jest.fn((key) => {
           if (key === 'SailingRoutes') return sailingRoutes;
           if (key === 'CurrentSailingModel') return currentSailingMainModelData;
-          return undefined;
+          return null;
         }),
       },
     };
@@ -642,17 +626,13 @@ describe('submitCurrentSailingSlot', () => {
       { id: '2', value: 'Flight', label: 'Flight', template: 'flightView.html' }
     ];
 
-    const sailingRoutes = [
-      { id: '1', value: 'Birkenhead to Belfast (Stena)' },
-      { id: '2', value: 'Cairnryan to Larne (P&O)' },
-      { id: '3', value: 'Loch Ryan to Belfast (Stena)' },
-    ];
+    const sailingRoutes = sailingRoutesDefault;
 
     const currentSailingMainModelData = { sailingRoutes, routeOptions };
 
     const mockPayload = {
       routeOption: '1',
-      routeRadio: undefined,
+      routeRadio: null,
       sailingHour: '12',
       sailingMinutes: '30',
       departureDateDay: '33',
@@ -668,7 +648,7 @@ describe('submitCurrentSailingSlot', () => {
         get: jest.fn((key) => {
           if (key === 'SailingRoutes') return sailingRoutes;
           if (key === 'CurrentSailingModel') return currentSailingMainModelData;
-          return undefined;
+          return nill;
         }),
       },
     };
@@ -755,17 +735,13 @@ describe('submitCurrentSailingSlot', () => {
       { id: '2', value: 'Flight', label: 'Flight', template: 'flightView.html' }
     ];
 
-    const sailingRoutes = [
-      { id: '1', value: 'Birkenhead to Belfast (Stena)' },
-      { id: '2', value: 'Cairnryan to Larne (P&O)' },
-      { id: '3', value: 'Loch Ryan to Belfast (Stena)' },
-    ];
+    const sailingRoutes = sailingRoutesDefault;
 
     const currentSailingMainModelData = { sailingRoutes, routeOptions };
 
     const mockPayload = {
       routeOption: '1',
-      routeRadio: undefined,
+      routeRadio: null,
       sailingHour: '',
       sailingMinutes: '30',
       departureDateDay: '33',
@@ -779,9 +755,17 @@ describe('submitCurrentSailingSlot', () => {
       yar: {
         set: jest.fn(),
         get: jest.fn((key) => {
-          if (key === 'SailingRoutes') return sailingRoutes;
-          if (key === 'CurrentSailingModel') return currentSailingMainModelData;
-          return undefined;
+
+          if (key === 'SailingRoutes') 
+          {
+            return sailingRoutes;
+          }
+
+          if (key === 'CurrentSailingModel') 
+          {
+              return currentSailingMainModelData;
+          }
+          return null;
         }),
       },
     };
@@ -822,7 +806,7 @@ describe('submitCurrentSailingSlot', () => {
       error: errors.departureDateFormatError
     });
 
-    const response = await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
 
     expect(mockResponseToolkit.view).toHaveBeenCalledWith(
       "componentViews/checker/currentsailing/currentsailingView",
@@ -876,7 +860,7 @@ describe('getCurrentSailingSlot', () => {
       message: 'Retrieved Route details slot',
       currentSailingSlot: 'testSlot'
     });
-    expect(response.code).toBe(200);
+    expect(response.code).toBe(HttpStatusCode.Ok);
     expect(response.source).toEqual({
       message: 'Retrieved Route details slot',
       currentSailingSlot: 'testSlot'
