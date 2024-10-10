@@ -20,10 +20,10 @@ const getCurrentSailings = async (request, h) => {
   request.yar.set("SailingRoutes", currentSailingMainModelData.sailingRoutes);
 
  
-  let londonTime = moment.tz("Europe/London");
-  let departureDateDay = londonTime.format('DD');
-  let departureDateMonth = londonTime.format('MM');
-  let departureDateYear = londonTime.format('YYYY');
+  const londonTime = moment.tz("Europe/London");
+  const departureDateDay = londonTime.format('DD');
+  const departureDateMonth = londonTime.format('MM');
+  const departureDateYear = londonTime.format('YYYY');
 
   //this is not caught in OnPreResponse. If we let it continue, we will get a template
   //render error, so handle it here
