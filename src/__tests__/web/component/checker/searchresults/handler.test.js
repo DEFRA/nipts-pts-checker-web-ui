@@ -6,8 +6,6 @@ import apiService from "../../../../../api/services/apiService.js";
 import {
   validatePassOrFail,
 } from "../../../../../web/component/checker/searchresults/validate";
-import { CheckOutcomeConstants } from '../../../../../constants/checkOutcomeConstant.js';
-import { HttpStatusConstants } from '../../../../../constants/httpMethod.js';
 
 jest.mock("../../../../../api/services/apiService.js");
 jest.mock("../../../../../web/component/checker/searchresults/validate");

@@ -11,10 +11,6 @@ jest.mock("moment");
 const baseUrl =
   process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
 
-const applicationNotFoundErrorText = "Application not found";
-const petNotFoundErrorText = "Pet not found";
-const unexpectedResponseErrorText = "Unexpected response structure";
-
 describe("apiService", () => {
   let request;
 
@@ -107,9 +103,6 @@ describe("apiService", () => {
         petOwnerName: "Pet Owner Name change",
         petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
         petOwnerTelephone: "07894465438",
-        petOwnerName: "Pet Owner Name change",
-        petOwnerTelephone: "07894465438",
-        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
         petOwnerAddress: 
         {
           addressLineOne: "CURRIE & BROWN UK LTD  40",
@@ -443,7 +436,7 @@ describe("apiService", () => {
     it("should return error when PTD number is not found", async () => {
       httpService.postAsync.mockResolvedValue({
         status: 404,
-        error: applicationNotFoundErrorText,
+        error: "Application not found",
       });
 
       const result = await apiService.getApplicationByPTDNumber(
@@ -474,7 +467,7 @@ describe("apiService", () => {
         "123456",
         request
       );
-      expect(result).toEqual({ error: applicationNotFoundErrorText });
+      expect(result).toEqual({ error: "Application not found" });
     });
 
     it("should return error when pet is not found", async () => {
@@ -492,7 +485,7 @@ describe("apiService", () => {
         "123456",
         request
       );
-      expect(result).toEqual({ error: petNotFoundErrorText });
+      expect(result).toEqual({ error: "Pet not found" });
     });
 
     it("should return error when traveldocument is not found", async () => {
@@ -939,7 +932,7 @@ describe("apiService", () => {
     it("should return error when application number is not found", async () => {
       httpService.postAsync.mockResolvedValue({
         status: 404,
-        error: applicationNotFoundErrorText,
+        error: "Application not found",
       });
 
       const result = await apiService.getApplicationByApplicationNumber(
@@ -964,7 +957,7 @@ describe("apiService", () => {
         "app123",
         request
       );
-      expect(result).toEqual({ error: petNotFoundErrorText });
+      expect(result).toEqual({ error: "Pet not found" });
     });
 
     it("should return error when traveldocument is not found", async () => {
@@ -1003,13 +996,13 @@ describe("apiService", () => {
         "app123",
         request
       );
-      expect(result).toEqual({ error: applicationNotFoundErrorText });
+      expect(result).toEqual({ error: "Application not found" });
     });
 
     it("should return error when application number is not found", async () => {
       httpService.postAsync.mockResolvedValue({
         status: 404,
-        error: applicationNotFoundErrorText,
+        error: "Application not found",
       });
 
       const result = await apiService.getApplicationByApplicationNumber(
@@ -1055,7 +1048,7 @@ describe("apiService", () => {
 
       const result = await apiService.recordCheckOutCome(checkOutcome);
 
-      expect(result).toEqual({ error: unexpectedResponseErrorText });
+      expect(result).toEqual({ error: "Unexpected response structure" });
     });
   });
 
@@ -1084,7 +1077,7 @@ describe("apiService", () => {
 
       const result = await apiService.saveCheckerUser(checkOutcome);
 
-      expect(result).toEqual({ error: unexpectedResponseErrorText });
+      expect(result).toEqual({ error: "Unexpected response structure" });
     });
   });
 });

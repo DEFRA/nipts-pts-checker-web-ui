@@ -1,7 +1,6 @@
 "use strict";
 import Joi from "joi";
 import HttpMethod from "../../../../constants/httpMethod.js";
-import HttpStatusConstants from "../../../../constants/httpMethod.js";
 import auth from "../../../../auth/index.js";
 import session from "../../../../session/index.js";
 import logout from "../../../../lib/logout.js";
@@ -33,7 +32,7 @@ const Routes = [
           };
           return h
             .view("componentViews/checker/SignIn/view", vm)
-            .code(HttpStatusConstants.BAD_REQUEST)
+            .code(HttpMethod.BAD_REQUEST)
             .takeover();
         },
       },
@@ -64,7 +63,7 @@ const Routes = [
 
         return h
           .view("componentViews/checker/SignIn/view", vm)
-          .code(HttpStatusConstants.BAD_REQUEST)
+          .code(HttpMethod.BAD_REQUEST)
           .takeover();
       },
     },
