@@ -9,7 +9,6 @@
         </title>
         
         {% block stylesheets %}
-        <!-- <link href="/assets/govuk-frontend/dist/govuk/govuk-frontend.min.css" rel="stylesheet" type="text/css" media="all" /> -->
         <link href="/assets/css/hmrc-design-system.min.css" rel="stylesheet" type="text/css" media="all" />
         <link href="/assets/css/application.css" rel="stylesheet" type="text/css" media="all" />
         <link href="/assets/css/checker.css" rel="stylesheet" type="text/css" media="all" />
@@ -57,7 +56,7 @@
 </body>
     {% block scripts %}
     <script type="module">
-        import { initAll } from '/assets/govuk-frontend/dist/govuk/govuk-frontend.min.js'
+        import { initAll } from '../../../../assets/govuk-frontend/dist/govuk/govuk-frontend.min.js';
         initAll()
     </script> 
     {% endblock %}

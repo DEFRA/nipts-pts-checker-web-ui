@@ -29,7 +29,8 @@ const statusMapping = {
   revoked: "revoked",
 };
 
-const unexpectedErrorText = "Unexpected response structure";
+const unexpectedResponseErrorText = "Unexpected response structure";
+const unexpectedErrorText =  "Unexpected error occurred";
 const petNotFoundErrorText = "Pet not found";
 const applicationNotFoundErrorText = "Application not found";
 
@@ -51,7 +52,7 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
     const item = response.data;
 
     if (!item || typeof item !== "object") {
-      throw new Error(unexpectedErrorText);
+      throw new Error(unexpectedResponseErrorText);
     }
 
     // Ensure the item structure is as expected
@@ -150,7 +151,7 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
       }
     }
 
-    return { error: "Unexpected error occurred" };
+    return { error: unexpectedErrorText };
   }
 };
 
@@ -170,7 +171,7 @@ const getApplicationByApplicationNumber = async (
     const item = response.data;
 
     if (!item || typeof item !== "object") {
-      throw new Error(unexpectedErrorText);
+      throw new Error(unexpectedResponseErrorText);
     }
 
     // Ensure the item structure is as expected
@@ -268,7 +269,7 @@ const getApplicationByApplicationNumber = async (
       }
     }
 
-    return { error: "Unexpected error occurred" };
+    return { error: unexpectedErrorText };
   }
 };
 
@@ -284,7 +285,7 @@ const recordCheckOutCome = async (checkOutcome, request) => {
 
     const item = response.data;
     if (!item || typeof item !== "object") {
-      throw new Error(unexpectedErrorText);
+      throw new Error(unexpectedResponseErrorText);
     }
 
     return item.checkSummaryId;
@@ -299,7 +300,7 @@ const recordCheckOutCome = async (checkOutcome, request) => {
         return { error: error.message };
       }
     }
-    return { error: "Unexpected error occurred" };
+    return { error: unexpectedErrorText };
   }
 };
 
@@ -311,7 +312,7 @@ const saveCheckerUser = async (checker, request) => {
 
     const checkerId = response.data;
     if (!checkerId || typeof checkerId !== "object") {
-      throw new Error(unexpectedErrorText);
+      throw new Error(unexpectedResponseErrorText);
     }
 
     return checkerId;
@@ -323,7 +324,7 @@ const saveCheckerUser = async (checker, request) => {
         return { error: error.message };
     }
 
-    return { error: "Unexpected error occurred" };
+    return { error: unexpectedErrorText };
   }
 };
 

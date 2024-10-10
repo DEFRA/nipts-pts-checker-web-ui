@@ -3,7 +3,7 @@ import {
   validateApplicationNumber,
   validateMicrochipNumber,
 } from "../../../../../web/component/checker/documentsearch/validate";
-import errorMessages from "../../../../../web/component/checker/documentsearch/errorMessage";
+import errorMessages from "../../../../../web/component/checker/documentsearch/errorMessages";
 
 describe("Validation Functions", () => {
   describe("PTD Number Validation", () => {

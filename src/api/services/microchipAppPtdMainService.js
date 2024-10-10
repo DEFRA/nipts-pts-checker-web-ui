@@ -21,6 +21,8 @@ const statusMapping = {
   revoked: "revoked",
 };
 
+const unexpectedErrorText =  "Unexpected error occurred";
+
 const formatDate = (dateRaw) => {
   const date = dateRaw ? new Date(dateRaw) : null;
   return date ? moment(date).format("DD/MM/YYYY") : undefined;
@@ -128,7 +130,7 @@ const getMicrochipData = async (microchipNumber, request) => {
       }
     }
 
-    return { error: "Unexpected error occurred" };
+    return { error: unexpectedErrorText };
   }
 };
 
@@ -150,11 +152,11 @@ const checkMicrochipNumberExistWithPtd = async (microchipNumber, request) => {
     // Handle specific errors if needed
     if (error.response && error.response.data) {
       return {
-        error: error.response.data.error || "Unexpected error occurred",
+        error: error.response.data.error || unexpectedErrorText,
       };
     }
 
-    return { error: "Unexpected error occurred" };
+    return { error: unexpectedErrorText };
   }
 };
 

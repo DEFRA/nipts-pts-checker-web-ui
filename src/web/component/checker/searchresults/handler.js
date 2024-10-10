@@ -1,7 +1,7 @@
 "use strict";
 import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
 import apiService from "../../../../api/services/apiService.js";
-import errorMessages from "./errorMessage.js";
+import errorMessages from "./errorMessages.js";
 import { CheckOutcomeConstants } from "../../../../constants/checkOutcomeConstant.js";
 import {
   validatePassOrFail,

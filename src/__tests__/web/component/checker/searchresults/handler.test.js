@@ -1,7 +1,7 @@
 "use strict";
 
 import { SearchResultsHandlers } from "../../../../../web/component/checker/searchresults/handler.js";
-import errorMessages from "../../../../../web/component/checker/searchresults/errorMessage.js";
+import errorMessages from "../../../../../web/component/checker/searchresults/errorMessages.js";
 import apiService from "../../../../../api/services/apiService.js";
 import {
   validatePassOrFail,
