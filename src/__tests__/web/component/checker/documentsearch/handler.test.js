@@ -115,7 +115,7 @@ describe("DocumentSearchHandlers", () => {
         error: "Enter a microchip number",
       });
 
-      const response = await DocumentSearchHandlers.submitSearch(request, h);
+      await DocumentSearchHandlers.submitSearch(request, h);
 
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentSearchView",
@@ -148,7 +148,7 @@ describe("DocumentSearchHandlers", () => {
         error: "Enter a 15-digit number",
       });
 
-      const response = await DocumentSearchHandlers.submitSearch(request, h);
+      await DocumentSearchHandlers.submitSearch(request, h);
 
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentSearchView",
@@ -183,7 +183,7 @@ describe("DocumentSearchHandlers", () => {
         mockData
       );
 
-      const response = await DocumentSearchHandlers.submitSearch(request, h);
+      await DocumentSearchHandlers.submitSearch(request, h);
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentNotFoundView",
         {
@@ -216,7 +216,7 @@ describe("DocumentSearchHandlers", () => {
         mockData
       );
 
-      const response = await DocumentSearchHandlers.submitSearch(request, h);
+      await DocumentSearchHandlers.submitSearch(request, h);
 
       expect(apiService.getApplicationByPTDNumber).toHaveBeenCalledWith(
         "GB826123456",
@@ -252,7 +252,7 @@ describe("DocumentSearchHandlers", () => {
         mockData
       );
 
-      const response = await DocumentSearchHandlers.submitSearch(request, h);
+      await DocumentSearchHandlers.submitSearch(request, h);
 
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentSearchView",
@@ -291,7 +291,7 @@ describe("DocumentSearchHandlers", () => {
         mockData
       );
 
-      const response = await DocumentSearchHandlers.submitSearch(request, h);
+      await DocumentSearchHandlers.submitSearch(request, h);
 
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentNotFoundView",
@@ -329,7 +329,7 @@ describe("DocumentSearchHandlers", () => {
         mockData
       );
 
-      const response = await DocumentSearchHandlers.submitSearch(request, h);
+      await DocumentSearchHandlers.submitSearch(request, h);
 
       expect(apiService.getApplicationByApplicationNumber).toHaveBeenCalledWith(
         "ELK7I8N4",
@@ -372,7 +372,7 @@ describe("DocumentSearchHandlers", () => {
         mockData
       );
 
-      const response = await DocumentSearchHandlers.submitSearch(request, h);
+      await DocumentSearchHandlers.submitSearch(request, h);
 
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentNotFoundView",
@@ -402,7 +402,7 @@ describe("DocumentSearchHandlers", () => {
         mockData
       );
 
-      const response = await DocumentSearchHandlers.submitSearch(request, h);
+      await DocumentSearchHandlers.submitSearch(request, h);
 
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentSearchView",

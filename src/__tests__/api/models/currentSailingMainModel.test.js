@@ -3,9 +3,7 @@ import {
   } from "../../../api/models/currentSailingMainModel.js";;
 
 describe("currentSailingMainModel", () => {
-  let response;
-
-  describe("setValues for currentSailingMainModel", () => {
+ describe("setValues for currentSailingMainModel", () => {
     it("should return correct data", async () => {
       const sailingTimes = ["", "00", "01"]
 

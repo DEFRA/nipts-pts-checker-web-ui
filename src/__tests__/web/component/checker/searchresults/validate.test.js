@@ -1,4 +1,3 @@
-import Joi from 'joi';
 import {
     validatePassOrFail
   } from "../../../../../web/component/checker/searchresults/validate";

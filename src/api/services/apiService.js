@@ -112,13 +112,11 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
       petBreed: item.pet ? item.pet.breedName : undefined,
       documentState,
       ptdNumber,
-      issuedDate: formattedIssuedDate ? formattedIssuedDate : undefined,
+      issuedDate: formattedIssuedDate || undefined,
       microchipNumber: item.pet ? item.pet.microchipNumber : undefined,
-      microchipDate: formattedMicrochippedDate
-        ? formattedMicrochippedDate
-        : undefined,
+      microchipDate: formattedMicrochippedDate || undefined,
       petSex: item.pet ? item.pet.sex : undefined,
-      petDoB: formattedDateOfBirth ? formattedDateOfBirth : undefined,
+      petDoB: formattedDateOfBirth || undefined,
       petColour: item.pet ? item.pet.colourName : undefined,
       petFeaturesDetail: item.pet ? item.pet.significantFeatures : undefined,
       applicationId: item.application
@@ -231,13 +229,11 @@ const getApplicationByApplicationNumber = async (
       petBreed: item.pet ? item.pet.breedName : undefined,
       documentState,
       ptdNumber,
-      issuedDate: formattedIssuedDate ? formattedIssuedDate : undefined,
+      issuedDate: formattedIssuedDate || undefined,
       microchipNumber: item.pet ? item.pet.microchipNumber : undefined,
-      microchipDate: formattedMicrochippedDate
-        ? formattedMicrochippedDate
-        : undefined,
+      microchipDate: formattedMicrochippedDate || undefined,
       petSex: item.pet ? item.pet.sex : undefined,
-      petDoB: formattedDateOfBirth ? formattedDateOfBirth : undefined,
+      petDoB: formattedDateOfBirth || undefined,
       petColour: item.pet ? item.pet.colourName : undefined,
       petFeaturesDetail: item.pet ? item.pet.significantFeatures : undefined,
       applicationId: item.application

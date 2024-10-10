@@ -3,9 +3,7 @@ import {
   } from "../../../api/models/microchipAppPtdMainModel.js";;
 
 describe("microchipAppPtdMainModel", () => {
-  let response;
-
-  describe("setValues for microchipAppPtdMainModel", () => {
+ describe("setValues for microchipAppPtdMainModel", () => {
     it("should return correct data", async () => {
 
       const result = new MicrochipAppPtdMainModel({

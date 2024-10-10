@@ -3,9 +3,7 @@ import {
   } from "../../../api/models/documentSearchMainModel.js";;
 
 describe("documentSearchMainModel", () => {
-  let response;
-
-  describe("setValues for documentSearchMainModel", () => {
+ describe("setValues for documentSearchMainModel", () => {
     it("should return correct data", async () => {
       const result = new DocumentSearchMainModel({
         pageHeading: "Test Heading",

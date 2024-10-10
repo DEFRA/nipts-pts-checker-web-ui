@@ -3,9 +3,7 @@ import {
   } from "../../../api/models/checkerMainModel.js";;
 
 describe("checkerMainModel", () => {
-  let response;
-
-  describe("setValues for checkerMainModel", () => {
+describe("setValues for checkerMainModel", () => {
     it("should return correct data", async () => {
       const result = new CheckerMainModel("Main Service")
 

@@ -362,7 +362,7 @@ describe('submitCurrentSailingSlot', () => {
       error: null
     });
 
-    const response = await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
 
     expect(mockResponseToolkit.view).toHaveBeenCalledWith(
       "componentViews/checker/currentsailing/currentsailingView",
@@ -472,7 +472,7 @@ describe('submitCurrentSailingSlot', () => {
       error: null
     });
 
-    const response = await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
 
     expect(mockResponseToolkit.view).toHaveBeenCalledWith(
       "componentViews/checker/currentsailing/currentsailingView",
@@ -580,7 +580,7 @@ describe('submitCurrentSailingSlot', () => {
       error: errors.departureDateRequiredError
     });
 
-    const response = await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
 
     expect(mockResponseToolkit.view).toHaveBeenCalledWith(
       "componentViews/checker/currentsailing/currentsailingView",
@@ -689,7 +689,7 @@ describe('submitCurrentSailingSlot', () => {
       error: errors.departureDateFormatError
     });
 
-    const response = await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
 
     expect(mockResponseToolkit.view).toHaveBeenCalledWith(
       "componentViews/checker/currentsailing/currentsailingView",
