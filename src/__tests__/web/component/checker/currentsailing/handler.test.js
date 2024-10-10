@@ -648,7 +648,7 @@ describe('submitCurrentSailingSlot', () => {
         get: jest.fn((key) => {
           if (key === 'SailingRoutes') return sailingRoutes;
           if (key === 'CurrentSailingModel') return currentSailingMainModelData;
-          return nill;
+          return null;
         }),
       },
     };
