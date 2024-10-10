@@ -1,4 +1,4 @@
-import errorMessages from "../../../../../web/component/checker/documentsearch/errorMessage.js";
+import errorMessages from "../../../../../web/component/checker/documentsearch/errorMessages.js";
 
 
 describe("errorMessages", () => {

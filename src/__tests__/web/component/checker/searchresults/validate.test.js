@@ -2,7 +2,7 @@ import Joi from 'joi';
 import {
     validatePassOrFail
   } from "../../../../../web/component/checker/searchresults/validate";
-  import errorMessages from "../../../../../web/component/checker/searchresults/errorMessage";
+  import errorMessages from "../../../../../web/component/checker/searchresults/errorMessages";
 
 describe('validatePassOrFail', () => {
     it('should return valid for a non-empty string', () => {

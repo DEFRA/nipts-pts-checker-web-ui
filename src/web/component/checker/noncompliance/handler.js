@@ -2,7 +2,7 @@
 
 import appSettingsService from "../../../../api/services/appSettingsService.js";
 import { validateNonCompliance } from "./validate.js";
-import errorMessages from "./errorMessage.js";
+import errorMessages from "./errorMessages.js";
 
 const VIEW_PATH = "componentViews/checker/noncompliance/noncomplianceView";
 

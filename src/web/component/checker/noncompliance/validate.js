@@ -1,6 +1,6 @@
 "use strict";
 import Joi from "joi";
-import errorMessages from "./errorMessage.js";
+import errorMessages from "./errorMessages.js";
 
 const nonComplianceSchema = Joi.object({
   microchipNumberRadio: Joi.any(),

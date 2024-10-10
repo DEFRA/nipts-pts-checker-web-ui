@@ -1,6 +1,6 @@
 import { NonComplianceHandlers } from "../../../../../web/component/checker/noncompliance/handler.js";
 import appSettingsService from "../../../../../api/services/appSettingsService.js";
-import errorMessages from "../../../../../web/component/checker/noncompliance/errorMessage.js";
+import errorMessages from "../../../../../web/component/checker/noncompliance/errorMessages.js";
 
 jest.mock("../../../../../api/services/appSettingsService.js");
 

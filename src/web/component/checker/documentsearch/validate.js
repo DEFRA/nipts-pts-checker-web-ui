@@ -1,5 +1,9 @@
 import Joi from "joi";
-import errorMessages from "./errorMessage.js";
+import errorMessages from "./errorMessages.js";
+
+const ptdNumberLength = 6;
+const applicationNumerLength = 8;
+const microchipNumberLength = 15;
 
 const ptdNumberSchema = Joi.string()
   .required()
@@ -8,14 +12,14 @@ const ptdNumberSchema = Joi.string()
     "string.empty": errorMessages.ptdNumber.empty,
   })
   .pattern(/^[a-fA-F0-9]+$/)
-  .length(6)
+  .length(ptdNumberLength)
   .messages({
     "string.pattern.base": errorMessages.ptdNumber.invalid,
     "string.length": errorMessages.ptdNumber.length,
   });
 
 const applicationNumberSchema = Joi.string()
-  .length(8)
+  .length(applicationNumerLength)
   .pattern(/^[a-zA-Z0-9]+$/)
   .required()
   .messages({
@@ -26,7 +30,7 @@ const applicationNumberSchema = Joi.string()
   });
 
 const microchipNumberSchema = Joi.string()
-  .length(15)
+  .length(microchipNumberLength)
   .pattern(/^\d{15}$/)
   .required()
   .messages({

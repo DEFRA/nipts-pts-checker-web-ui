@@ -15,6 +15,10 @@ const VIEW_PATH = "componentViews/checker/documentsearch/documentSearchView";
 const NOT_FOUND_VIEW_PATH =
   "componentViews/checker/documentsearch/documentNotFoundView";
 
+const SEARCH_RESULT_VIEW_PATH = "/checker/search-results";
+
+const errorProcessingText = "An error occurred while processing your request";
+
 const getDocumentSearch = async (_request, h) => {
   try {
     headerData.section = "search";
@@ -90,7 +94,7 @@ const submitSearch = async (request, h) => {
       request.yar.set("ptdNumber", ptdNumber);
       request.yar.set("data", responseData);
 
-      return h.redirect("/checker/search-results");
+      return h.redirect(SEARCH_RESULT_VIEW_PATH);
     }
 
     // Search by Application Number
@@ -131,11 +135,11 @@ const submitSearch = async (request, h) => {
           });
         } else {
           return h.view(VIEW_PATH, {
-            error: "An error occurred while processing your request",
+            error: errorProcessingText,
             errorSummary: [
               {
                 fieldId: "general",
-                message: "An error occurred while processing your request",
+                message: errorProcessingText
               },
             ],
             activeTab: "application",
@@ -148,7 +152,7 @@ const submitSearch = async (request, h) => {
       request.yar.set("applicationNumber", applicationNumber);
       request.yar.set("data", responseData);
 
-      return h.redirect("/checker/search-results");
+      return h.redirect(SEARCH_RESULT_VIEW_PATH);
     }
 
     // Search by Microchip Number
@@ -200,13 +204,13 @@ const submitSearch = async (request, h) => {
       request.yar.set("microchipNumber", microchipNumber);
       request.yar.set("data", microchipAppPtdMainData);
 
-      return h.redirect("/checker/search-results");
+      return h.redirect(SEARCH_RESULT_VIEW_PATH);
     }
 
-    return h.redirect("/checker/search-results");
+    return h.redirect(SEARCH_RESULT_VIEW_PATH);
   } catch (error) {
     return h.view(VIEW_PATH, {
-      error: "An error occurred while processing your request",
+      error: errorProcessingText,
       errorSummary: [
         { fieldId: "general", message: "An unexpected error occurred" },
       ],

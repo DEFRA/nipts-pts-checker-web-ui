@@ -15,6 +15,8 @@ jest.mock("../../../../../api/services/microchipAppPtdMainService.js");
 jest.mock("../../../../../api/services/apiService.js");
 jest.mock("../../../../../web/component/checker/documentsearch/validate.js");
 
+const pageTitleDefault = "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland";
+
 describe("DocumentSearchHandlers", () => {
   describe("getDocumentSearch", () => {
     let _request, h;
@@ -80,8 +82,7 @@ describe("DocumentSearchHandlers", () => {
   describe("submitSearch", () => {
     const mockData = {
       pageHeading: "Find a document",
-      pageTitle:
-        "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
+      pageTitle: pageTitleDefault,
       ptdSearchText: "GB826",
       errorLabel: "Error:",
       searchOptions: [
@@ -186,8 +187,7 @@ describe("DocumentSearchHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentNotFoundView",
         {
-          pageTitle:
-            "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
+          pageTitle: pageTitleDefault,
           searchValue: request.payload.microchipNumber,
         }
       );
@@ -296,8 +296,7 @@ describe("DocumentSearchHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentNotFoundView",
         {
-          pageTitle:
-            "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
+          pageTitle: pageTitleDefault,
           searchValue: "GB826" + request.payload.ptdNumberSearch,
         }
       );
@@ -378,8 +377,7 @@ describe("DocumentSearchHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentNotFoundView",
         {
-          pageTitle:
-            "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
+          pageTitle: pageTitleDefault,
           searchValue: request.payload.applicationNumberSearch,
         }
       );

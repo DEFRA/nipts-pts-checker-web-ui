@@ -29,6 +29,11 @@ const statusMapping = {
   revoked: "revoked",
 };
 
+const unexpectedResponseErrorText = "Unexpected response structure";
+const unexpectedErrorText =  "Unexpected error occurred";
+const petNotFoundErrorText = "Pet not found";
+const applicationNotFoundErrorText = "Application not found";
+
 const formatDate = (dateRaw) => {
   const date = dateRaw ? new Date(dateRaw) : null;
   return date ? moment(date).format("DD/MM/YYYY") : undefined;
@@ -38,25 +43,25 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
   try {
     const data = { ptdNumber: ptdNumberFromPayLoad };
     const url = buildApiUrl("Checker/checkPTDNumber");
-    var response = await httpService.postAsync(url, data, request);
+    const response = await httpService.postAsync(url, data, request);
 
-    if (response.status == HttpStatusCode.NotFound) {
+    if (response.status === HttpStatusCode.NotFound) {
       throw new Error(response.error);
     }
 
     const item = response.data;
 
     if (!item || typeof item !== "object") {
-      throw new Error("Unexpected response structure");
+      throw new Error(unexpectedResponseErrorText);
     }
 
     // Ensure the item structure is as expected
     if (!item.pet) {
-      return { error: "Pet not found" };
+      return { error: petNotFoundErrorText };
     }
 
     if (!item.application) {
-      return { error: "Application not found" };
+      return { error: applicationNotFoundErrorText };
     }
 
     if (!item.travelDocument) {
@@ -137,8 +142,8 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
     // Check for specific error message and return a structured error
     if (error && error.message) {
       if (
-        error.message === "Application not found" ||
-        error.message === "Pet not found"
+        error.message === applicationNotFoundErrorText ||
+        error.message ===  petNotFoundErrorText
       ) {
         return { error: "not_found" };
       } else {
@@ -146,7 +151,7 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
       }
     }
 
-    return { error: "Unexpected error occurred" };
+    return { error: unexpectedErrorText };
   }
 };
 
@@ -157,25 +162,25 @@ const getApplicationByApplicationNumber = async (
   try {
     const data = { applicationNumber: applicationNumber };
     const url = buildApiUrl("Checker/checkApplicationNumber");
-    var response = await httpService.postAsync(url, data, request);
+    const response = await httpService.postAsync(url, data, request);
 
-    if (response.status == HttpStatusCode.NotFound) {
+    if (response.status === HttpStatusCode.NotFound) {
       throw new Error(response.error);
     }
 
     const item = response.data;
 
     if (!item || typeof item !== "object") {
-      throw new Error("Unexpected response structure");
+      throw new Error(unexpectedResponseErrorText);
     }
 
     // Ensure the item structure is as expected
     if (!item.pet) {
-      return { error: "Pet not found" };
+      return { error: petNotFoundErrorText };
     }
 
     if (!item.application) {
-      return { error: "Application not found" };
+      return { error: applicationNotFoundErrorText };
     }
 
     if (!item.travelDocument) {
@@ -255,8 +260,8 @@ const getApplicationByApplicationNumber = async (
 
     if (error && error.message) {
       if (
-        error.message === "Application not found" ||
-        error.message === "Pet not found"
+        error.message === applicationNotFoundErrorText ||
+        error.message === petNotFoundErrorText
       ) {
         return { error: "not_found" };
       } else {
@@ -264,7 +269,7 @@ const getApplicationByApplicationNumber = async (
       }
     }
 
-    return { error: "Unexpected error occurred" };
+    return { error: unexpectedErrorText };
   }
 };
 
@@ -272,15 +277,15 @@ const recordCheckOutCome = async (checkOutcome, request) => {
   try {
     const data = checkOutcome;
     const url = buildApiUrl("Checker/CheckOutcome");
-    var response = await httpService.postAsync(url, data, request);
+    const response = await httpService.postAsync(url, data, request);
 
-    if (response.status == HttpStatusCode.NotFound) {
+    if (response.status === HttpStatusCode.NotFound) {
       throw new Error(response.error);
     }
 
     const item = response.data;
     if (!item || typeof item !== "object") {
-      throw new Error("Unexpected response structure");
+      throw new Error(unexpectedResponseErrorText);
     }
 
     return item.checkSummaryId;
@@ -289,13 +294,13 @@ const recordCheckOutCome = async (checkOutcome, request) => {
 
     // Check for specific error message and return a structured error
     if (error && error.message) {
-      if (error.message === "Application not found") {
+      if (error.message === applicationNotFoundErrorText) {
         return { error: "not_found" };
       } else {
         return { error: error.message };
       }
     }
-    return { error: "Unexpected error occurred" };
+    return { error: unexpectedErrorText };
   }
 };
 
@@ -307,7 +312,7 @@ const saveCheckerUser = async (checker, request) => {
 
     const checkerId = response.data;
     if (!checkerId || typeof checkerId !== "object") {
-      throw new Error("Unexpected response structure");
+      throw new Error(unexpectedResponseErrorText);
     }
 
     return checkerId;
@@ -319,7 +324,7 @@ const saveCheckerUser = async (checker, request) => {
         return { error: error.message };
     }
 
-    return { error: "Unexpected error occurred" };
+    return { error: unexpectedErrorText };
   }
 };
 
