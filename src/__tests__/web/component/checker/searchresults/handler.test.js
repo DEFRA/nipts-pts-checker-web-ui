@@ -12,6 +12,8 @@ import { HttpStatusConstants } from '../../../../../constants/httpMethod.js';
 jest.mock("../../../../../api/services/apiService.js");
 jest.mock("../../../../../web/component/checker/searchresults/validate");
 
+const pageTitleDefault = "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland";
+
 describe("SearchResultsHandlers", () => {
   describe("getSearchResultsHandler", () => {
     it("should return view with microchipNumber and data from session", async () => {
@@ -45,7 +47,7 @@ describe("SearchResultsHandlers", () => {
         "componentViews/checker/searchresults/searchResultsView",
         {
           microchipNumber: mockMicrochipNumber,
-          pageTitle: "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
+          pageTitle: pageTitleDefault,
           data: mockData,
         }
       );
@@ -56,7 +58,7 @@ describe("SearchResultsHandlers", () => {
       expect(response.data).toEqual({
           data: mockData,
           microchipNumber: "123456789012345",
-          pageTitle: "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
+          pageTitle: pageTitleDefault,
         });
     });
   });
