@@ -11,7 +11,9 @@ const getDashboard = async (request, h) => {
   currentSailingSlot.pageTitle =
     DashboardMainModel.dashboardMainModelData.pageTitle;
 
-  return h.view(VIEW_PATH, { currentSailingSlot });
+  const anyChecks = request.query.nochecks;
+
+  return h.view(VIEW_PATH, { currentSailingSlot, anyChecks });
 };
 
 export const DashboardHandlers = {
