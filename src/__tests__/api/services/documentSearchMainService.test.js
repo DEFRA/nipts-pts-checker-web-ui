@@ -20,13 +20,15 @@ describe('getDocumentSearchMain', () => {
     };
   });
 
-  it('should return a new DocumentSearchMainModel with the correct data', () => {
+  it('should return a new DocumentSearchMainModel with the correct data', async () => {
     const mockModelInstance = {};
+    
     DocumentSearchMainModel.mockImplementation(() => mockModelInstance);
 
-    const result = documentSearchMainService.getDocumentSearchMain();
+    const result = await documentSearchMainService.getDocumentSearchMain("test search text");
 
     expect(DocumentSearchMainModel).toHaveBeenCalledWith(DocumentSearchModel.documentSearchMainModelData);
+    
     expect(result).toBe(mockModelInstance);
   });
 });

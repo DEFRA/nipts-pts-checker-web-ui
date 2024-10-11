@@ -26,7 +26,7 @@ const nonComplianceSchema = Joi.object({
       }
 
       // Check if the value contains any special characters (excluding letters and numbers)
-      if (/[^0-9]/.test(trimmedValue)) {
+      if (/\D/.test(trimmedValue)) {
         return helpers.message(errorMessages.microchipNumber.specialCharacters);
       }
 
