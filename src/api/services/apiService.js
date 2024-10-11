@@ -74,24 +74,23 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
 
     const ptdNumber =
       documentState === "approved" || documentState === "revoked"
-        ? item.travelDocument &&
-          item.travelDocument.travelDocumentReferenceNumber
-        : item.application && item.application.referenceNumber;
+        ? item?.travelDocument?.travelDocumentReferenceNumber
+        : item?.application?.referenceNumber;
 
     let issuedDateRaw;
 
     switch (documentState) {
       case "approved":
-        issuedDateRaw = item.application && item.application.dateAuthorised;
+        issuedDateRaw = item.application?.dateAuthorised;
         break;
       case "revoked":
-        issuedDateRaw = item.application && item.application.dateRevoked;
+        issuedDateRaw = item.application?.dateRevoked;
         break;
       case "rejected":
-        issuedDateRaw = item.application && item.application.dateRejected;
+        issuedDateRaw = item.application?.dateRejected;
         break;
       default:
-        issuedDateRaw = item.application && item.application.dateOfApplication;
+        issuedDateRaw = item.application?.dateOfApplication;
         break;
     }
 
@@ -138,7 +137,7 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
     console.error("Error fetching data:", error.message);
 
     // Check for specific error message and return a structured error
-    if (error && error.message) {
+    if (error?.message) {
       if (
         error.message === applicationNotFoundErrorText ||
         error.message ===  petNotFoundErrorText
@@ -191,24 +190,23 @@ const getApplicationByApplicationNumber = async (
 
     const ptdNumber =
       documentState === "approved" || documentState === "revoked"
-        ? item.travelDocument &&
-          item.travelDocument.travelDocumentReferenceNumber
-        : item.application && item.application.referenceNumber;
+        ? item?.travelDocument?.travelDocumentReferenceNumber
+        : item?.application?.referenceNumber;
 
     let issuedDateRaw;
 
     switch (documentState) {
       case "approved":
-        issuedDateRaw = item.application && item.application.dateAuthorised;
+        issuedDateRaw = item?.application?.dateAuthorised;
         break;
       case "revoked":
-        issuedDateRaw = item.application && item.application.dateRevoked;
+        issuedDateRaw = item?.application?.dateRevoked;
         break;
       case "rejected":
-        issuedDateRaw = item.application && item.application.dateRejected;
+        issuedDateRaw = item?.application?.dateRejected;
         break;
       default:
-        issuedDateRaw = item.application && item.application.dateOfApplication;
+        issuedDateRaw = item?.application?.dateOfApplication;
         break;
     }
 
@@ -254,7 +252,7 @@ const getApplicationByApplicationNumber = async (
   } catch (error) {
     console.error("Error fetching data:", error.message);
 
-    if (error && error.message) {
+    if (error?.message) {
       if (
         error.message === applicationNotFoundErrorText ||
         error.message === petNotFoundErrorText
@@ -289,7 +287,7 @@ const recordCheckOutCome = async (checkOutcome, request) => {
     console.error("Error fetching data:", error.message);
 
     // Check for specific error message and return a structured error
-    if (error && error.message) {
+    if (error?.message) {
       if (error.message === applicationNotFoundErrorText) {
         return { error: "not_found" };
       } else {

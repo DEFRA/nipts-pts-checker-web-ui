@@ -52,25 +52,25 @@ const getMicrochipData = async (microchipNumber, request) => {
     const documentState = statusMapping[applicationStatus] || applicationStatus;
 
     const ptdNumber =
-      documentState === "approved" || documentState === "revoked"
-        ? item.travelDocument &&
-          item.travelDocument.travelDocumentReferenceNumber
-        : item.application && item.application.referenceNumber;
+    documentState === "approved" || documentState === "revoked"
+      ? item.travelDocument?.travelDocumentReferenceNumber
+      : item.application?.referenceNumber;
+  
 
     let issuedDateRaw;
 
     switch (documentState) {
       case "approved":
-        issuedDateRaw = item.application && item.application.dateAuthorised;
+        issuedDateRaw = item.application?.dateAuthorised;
         break;
       case "revoked":
-        issuedDateRaw = item.application && item.application.dateRevoked;
+        issuedDateRaw = item.application?.dateRevoked;
         break;
       case "rejected":
-        issuedDateRaw = item.application && item.application.dateRejected;
+        issuedDateRaw = item.application?.dateRejected;
         break;
       default:
-        issuedDateRaw = item.application && item.application.dateOfApplication;
+        issuedDateRaw = item.application?.dateOfApplication;
         break;
     }
 
@@ -117,7 +117,7 @@ const getMicrochipData = async (microchipNumber, request) => {
     console.error("Error fetching data:", error.message);
 
     // Check for specific error message and return a structured error
-    if (error.response && error.response.data && error.response.data.error) {
+    if (error.response?.data?.error) {
       if (
         error.response.data.error === "Application not found" ||
         error.response.data.error === "Pet not found"
@@ -148,7 +148,7 @@ const checkMicrochipNumberExistWithPtd = async (microchipNumber, request) => {
     console.error("Error checking microchip number existence:", error.message);
 
     // Handle specific errors if needed
-    if (error.response && error.response.data) {
+    if (error.response?.data) {
       return {
         error: error.response.data.error || unexpectedErrorText,
       };

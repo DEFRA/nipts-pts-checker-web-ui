@@ -2,7 +2,7 @@ import { DocumentSearchMainModel } from "../models/documentSearchMainModel.js";
 import DocumentSearchModel from "../../constants/documentSearchConstant.js";
 
 
-const getDocumentSearchMain = (searchText) => {
+const getDocumentSearchMain = async (searchText) => {
   try {
     DocumentSearchModel.documentSearchMainModelData.searchText = searchText;
     return new DocumentSearchMainModel(DocumentSearchModel.documentSearchMainModelData);

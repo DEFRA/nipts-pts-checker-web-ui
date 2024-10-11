@@ -213,12 +213,6 @@ describe('submitCurrentSailingSlot', () => {
     };
 
     // Mock response toolkit
-    const mockRedirect = jest.fn();
-
-    const mockResponseToolkit = {
-      redirect: mockRedirect,
-    };
-
     const h = {
       view: jest.fn().mockReturnValue({}),
     };
