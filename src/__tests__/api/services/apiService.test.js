@@ -69,7 +69,7 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((date) => ({
+      moment.mockImplementation((_date) => ({
         format: () => "01/01/2022",
       }));
 
@@ -172,7 +172,7 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((date) => ({
+      moment.mockImplementation((_date) => ({
         format: () => "01/01/2022",
       }));
 
@@ -274,7 +274,7 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((date) => ({
+      moment.mockImplementation((_date) => ({
         format: () => "01/01/2022",
       }));
 
@@ -375,7 +375,7 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((date) => ({
+      moment.mockImplementation((_date) => ({
         format: () => "01/01/2022",
       }));
 
@@ -565,7 +565,7 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((date) => ({
+      moment.mockImplementation((_date) => ({
         format: () => "01/01/2022",
       }));
 
@@ -668,7 +668,7 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((date) => ({
+      moment.mockImplementation((_date) => ({
         format: () => "01/01/2022",
       }));
 
@@ -770,7 +770,7 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((date) => ({
+      moment.mockImplementation((_date) => ({
         format: () => "01/01/2022",
       }));
 
@@ -871,7 +871,7 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((date) => ({
+      moment.mockImplementation((_date) => ({
         format: () => "01/01/2022",
       }));
 

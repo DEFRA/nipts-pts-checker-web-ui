@@ -40,17 +40,17 @@ const getCurrentSailings = async (request, h) => {
 };
 
 const submitCurrentSailingSlot = async (request, h) => {
-  let { routeOption, routeRadio, routeFlight, departureDateDay, departureDateMonth, departureDateYear, sailingHour, sailingMinutes } = request.payload;
+  const { routeOption, routeRadio, routeFlight, departureDateDay, departureDateMonth, departureDateYear, sailingHour, sailingMinutes } = request.payload;
   const validationRouteOptionRadioResult = validateRouteOptionRadio(routeOption);
   let validationRouteRadioResult;
   let validateFlightNumberResult;
   const validateSailingHourResult = validateSailingHour(sailingHour);
   const validateSailingMinutesResult = validateSailingMinutes(sailingMinutes);
-  const departureDate = departureDateDay.trim() + "/" + departureDateMonth.trim() + "/" + departureDateYear.trim();
+  const departureDate = `${departureDateDay.trim()}/${departureDateMonth.trim()}/${departureDateYear.trim()}`;
   const validateDepartureDateResult = validateDate(departureDate);
   const currentSailingMainModelData =  request.yar.get("CurrentSailingModel");
 
-  let errorSummary = [];
+  const errorSummary = [];
   let isValid = true;
   if(!validationRouteOptionRadioResult.isValid)
   {

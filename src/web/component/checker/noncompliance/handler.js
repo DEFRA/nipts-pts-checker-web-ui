@@ -97,7 +97,7 @@ const postNonComplianceHandler = async (request, h) => {
       }
     }
 
-    let reportNoncomplianceData = request.yar.get("reportNoncomplianceData") || [];
+    const reportNoncomplianceData = request.yar.get("reportNoncomplianceData") || [];
     // Proceed with further logic if validation passes
     if (payload.microchipNumberRadio === "on") {
       reportNoncomplianceData['microchipNumberRadio'] = payload.microchipNumberRadio;
