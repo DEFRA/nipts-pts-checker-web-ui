@@ -116,7 +116,7 @@
 
   document.addEventListener('DOMContentLoaded', function() { 
   // Intercept back button click to clear validation errors
-  document.getElementById('backButton').addEventListener('click', function(event) {
+  document.getElementById('backButton').addEventListener('click', function(_event) {
     sessionStorage.removeItem('formSubmitted');
     history.back();
   });

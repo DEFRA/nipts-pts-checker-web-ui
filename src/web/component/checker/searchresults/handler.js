@@ -43,12 +43,12 @@ const saveAndContinueHandler = async (request, h) => {
     }
 
     const currentSailingSlot = request.yar.get("CurrentSailingSlot") || {};
-    let currentDate = new Date()
+    const currentDate = new Date()
       .toLocaleDateString("en-GB")
       .split("/")
       .reverse()
       .join("-");
-    let dateTimeString = `${currentDate}T${currentSailingSlot.sailingHour}:${currentSailingSlot.sailingMinutes}:00Z`;
+    const dateTimeString = `${currentDate}T${currentSailingSlot.sailingHour}:${currentSailingSlot.sailingMinutes}:00Z`;
 
     const checkOutcome = {
       applicationId: data.applicationId,

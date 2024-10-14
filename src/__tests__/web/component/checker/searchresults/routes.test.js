@@ -36,25 +36,25 @@ describe("searchResultsPlugin", () => {
 
 describe("Routes", () => {
   it("should have a GET route for /checker/search-results", () => {
-    const route = Routes.find(
+    const foundRoute = Routes.find(
       (route) =>
         route.path === "/checker/search-results" && route.method === "GET"
     );
 
-    expect(route).toBeDefined();
-    expect(route.config).toEqual(
+    expect(foundRoute).toBeDefined();
+    expect(foundRoute.config).toEqual(
       SearchResultsHandlers.getSearchResultsHandler.index
     );
   });
 
   it("should have a POST route for /checker/search-results", () => {
-    const route = Routes.find(
+    const foundRoute = Routes.find(
       (route) =>
         route.path === "/checker/search-results" && route.method === "POST"
     );
 
-    expect(route).toBeDefined();
-    expect(route.options.handler).toEqual(
+    expect(foundRoute).toBeDefined();
+    expect(foundRoute.options.handler).toEqual(
       SearchResultsHandlers.saveAndContinueHandler
     );
   });

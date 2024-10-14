@@ -3,12 +3,12 @@ import Routes from "../../../../../web/component/checker/documentsearch/routes.j
 
 describe("Routes", () => {
   it("should have a GET route for /checker/document-search", () => {
-    const route = Routes.find(
+    const foundRoute = Routes.find(
       (route) => route.path === "/checker/document-search" && route.method === "GET"
     );
 
-    expect(route).toBeDefined();
-    expect(route.options.handler).toBeDefined();
+    expect(foundRoute).toBeDefined();
+    expect(foundRoute.options.handler).toBeDefined();
   });
 
 });

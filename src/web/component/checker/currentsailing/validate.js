@@ -53,7 +53,7 @@ function daysInMonth(month, year) {
 const dateSchema = Joi.string()
   .required()
   .custom((value, helpers) => {
-    let parts = value.split('/');
+    const parts = value.split('/');
 
     const noDateProvided = parts.every(part => part.trim() === '');
     if(noDateProvided)

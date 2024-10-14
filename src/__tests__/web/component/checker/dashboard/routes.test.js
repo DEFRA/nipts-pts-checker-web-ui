@@ -3,11 +3,11 @@ import Routes from "../../../../../web/component/checker/dashboard/routes.js";
 
 describe("Routes", () => {
   it("should have a GET route for /checker/dashboard", () => {
-    const route = Routes.find(
+    const foundRoute = Routes.find(
       x => x.path === "/checker/dashboard" && x.method === "GET"
     );
 
-    expect(route).toBeDefined();
-    expect(route.options.handler).toBeDefined();
+    expect(foundRoute).toBeDefined();
+    expect(foundRoute.options.handler).toBeDefined();
   });
 });

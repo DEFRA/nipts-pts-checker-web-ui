@@ -77,7 +77,7 @@ describe('submitCurrentSailingSlot', () => {
       departureDateYear: '2024',
       routeFlight: '',
     };
-    const departureDate = mockPayload.departureDateDay.trim() + "/" + mockPayload.departureDateMonth.trim() + "/" + mockPayload.departureDateYear.trim();
+    const departureDate = `${mockPayload.departureDateDay.trim()}/${mockPayload.departureDateMonth.trim()}/${mockPayload.departureDateYear.trim()}`;
 
     // Mock sailing routes stored in session
     const sailingRoutes = sailingRoutesDefault;

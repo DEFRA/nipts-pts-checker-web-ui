@@ -2,6 +2,8 @@
 import Joi from "joi";
 import errorMessages from "./errorMessages.js";
 
+const microchipNumberLength = 15;
+
 const nonComplianceSchema = Joi.object({
   microchipNumberRadio: Joi.any(),
   microchipNumber: Joi.when("microchipNumberRadio", {
@@ -26,12 +28,12 @@ const nonComplianceSchema = Joi.object({
       }
 
       // Check if the value contains any special characters (excluding letters and numbers)
-      if (/[^0-9]/.test(trimmedValue)) {
+      if (/\D/.test(trimmedValue)) {
         return helpers.message(errorMessages.microchipNumber.specialCharacters);
       }
 
       // Check length: It must be exactly 15 digits
-      if (trimmedValue.length !== 15) {
+      if (trimmedValue.length !== microchipNumberLength) {
         return helpers.message(errorMessages.microchipNumber.length);
       }
 
@@ -45,15 +47,6 @@ const nonComplianceSchema = Joi.object({
     'string.empty': errorMessages.passengerType.empty,
     'any.required': errorMessages.passengerType.empty,
   }),
-  /*
-  vehicleRegistration: Joi.when('passengerType', {
-    is: 'vehiclePassenger',
-    then: Joi.string().trim().required().messages({
-      'string.empty': errorMessages.vehicleRegistration.empty,
-    }),
-    otherwise: Joi.optional(),
-  }),
-  */
 }).unknown(true);
 
 const validateNonCompliance = (payload) => {
