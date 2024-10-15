@@ -148,7 +148,6 @@ const postNonComplianceHandler = async (request, h) => {
   } catch (error) {
     console.error("Unexpected Error:", error);
 
-    // const errorMessage = errorMessages.serviceError.message;
     const errorMessage ="The information wasn't recorded, please try to submit again. If you close the application, the information will be lost. You can printscreen or save the information and submit it later.";
     const data = request.yar.get("data");
     const appSettings = await appSettingsService.getAppSettings();
