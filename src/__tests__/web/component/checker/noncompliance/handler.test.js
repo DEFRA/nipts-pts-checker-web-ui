@@ -120,7 +120,6 @@ describe("NonComplianceHandlers", () => {
       const payload = {
         microchipNumberRadio: "on",
         microchipNumber: "123456789012345",
-        visualCheckProblem:"",
         ptdProblem: "",
         passengerType: "foot",
         outcomeReferred: "",
