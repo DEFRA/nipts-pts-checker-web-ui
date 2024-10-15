@@ -116,8 +116,33 @@ describe("NonComplianceHandlers", () => {
       );
     });
 
+    it("should render no errors when validation passes", async () => {
+      const payload = {
+        microchipNumberRadio: "on",
+        microchipNumber: "123456789012345",
+        visualCheckProblem:"",
+        ptdProblem: "",
+        passengerType: "foot",
+        outcomeReferred: "",
+        outcomeAdvised: "",
+        outcomeNotTravelling: "",
+        outcomeSPS: "",
+        moreDetail: "", 
+        visualCheckProblem: "on",
+        otherIssuesCommercialRadio: "on",
+        otherIssuesAuthorisedRadio: "on",
+        otherIssuesSomethingRadio: "on",
+        relevantComments: "Test Comments"
+      };
+      request.payload = payload;
+      const mockAppSettings = { setting1: "value1" };
+      appSettingsService.getAppSettings.mockResolvedValue(mockAppSettings);
 
+      await NonComplianceHandlers.postNonComplianceHandler(request, h);
 
-
+      expect(h.redirect).toHaveBeenCalledWith(
+        "/checker/dashboard"
+      );
+    });
   });
 });
