@@ -1,7 +1,6 @@
 {% extends "./layouts/checkerLayout.html" %}
 
 {% block headContent %}
-    <meta http-equiv="refresh" content="60">
 {% endblock %}
 
 {% block pageTitle %} Home - {{currentSailingSlot.pageTitle}}– GOV.UK {% endblock %}
@@ -68,4 +67,14 @@
 
         </div>
     </div>
+{% endblock %}
+
+{% block bodyContent %}
+    <script>
+        // 1 minute
+        const MILLISECONDS = 60000;
+        setTimeout(() => {
+            window.location.reload();
+        }, MILLISECONDS);
+    </script>
 {% endblock %}

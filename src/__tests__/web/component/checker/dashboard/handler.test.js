@@ -55,7 +55,7 @@ describe("Handler", () => {
         dashboardView,
         {
           currentSailingSlot: mockData,
-          anyChecks: "false",
+          checks: [{}],
         }
       );
     });
@@ -95,7 +95,7 @@ describe("Handler", () => {
        dashboardView,
         {
           currentSailingSlot: mockData,
-          anyChecks: "true",
+          checks: [],
         }
       );
     });
