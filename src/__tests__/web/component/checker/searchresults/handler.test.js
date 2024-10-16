@@ -130,6 +130,29 @@ describe('saveAndContinueHandler', () => {
       errorSummary: [{ fieldId: 'general', message: 'An unexpected error occurred' }],
     });
   });
+
+  it('should return to document search if checks pass', async () => {
+    request.payload.checklist = 'Pass';
+    request.payload.microchipNumber = "123456789012345"
+    request.yar.get.mockReturnValueOnce({ documentState: 'active' });
+    validatePassOrFail.mockReturnValueOnce({ isValid: true });
+
+    await SearchResultsHandlers.saveAndContinueHandler(request, h);
+
+    expect(h.redirect).toHaveBeenCalledWith('/checker/document-search');
+  });
+
+  it('should return to non compliance if checks fail', async () => {
+    request.payload.checklist = 'Fail';
+    request.payload.microchipNumber = "123456789012345"
+    request.yar.get.mockReturnValueOnce({ documentState: 'active' });
+    validatePassOrFail.mockReturnValueOnce({ isValid: true });
+
+    await SearchResultsHandlers.saveAndContinueHandler(request, h);
+
+    expect(h.redirect).toHaveBeenCalledWith('/checker/non-compliance');
+  });
+  
 });
 
 });
