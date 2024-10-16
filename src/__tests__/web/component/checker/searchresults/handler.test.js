@@ -115,7 +115,41 @@ describe('saveAndContinueHandler', () => {
     }));
   });
 
+  it('should return to document search if checks pass', async () => {
+    request.payload.checklist = 'Pass';
+    request.payload.microchipNumber = "123456789012345";
+    request.yar.get
+                .mockReturnValueOnce({ documentState: 'active' })
+                .mockReturnValueOnce({
+                  departureDate: '12/10/2023', // Format: DD/MM/YYYY
+                  sailingHour: '14',
+                  sailingMinutes: '30',
+                  selectedRoute: { id: 'route123' },
+                  selectedRouteOption: { id: 'option456' },
+                  routeFlight: 'FL1234',
+                });
 
+    apiService.recordCheckOutCome.mockResolvedValueOnce({
+      status: 'success', // You can set the status or result to whatever your function expects
+    });
+                
+    validatePassOrFail.mockReturnValueOnce({ isValid: true });
+
+    await SearchResultsHandlers.saveAndContinueHandler(request, h);
+
+    expect(h.redirect).toHaveBeenCalledWith('/checker/document-search');
+  });
+
+  it('should return to non compliance if checks fail', async () => {
+    request.payload.checklist = 'Fail';
+    request.payload.microchipNumber = "123456789012345"
+    request.yar.get.mockReturnValueOnce({ documentState: 'active' });
+    validatePassOrFail.mockReturnValueOnce({ isValid: true });
+
+    await SearchResultsHandlers.saveAndContinueHandler(request, h);
+
+    expect(h.redirect).toHaveBeenCalledWith('/checker/non-compliance');
+  });
 
   it('should handle unexpected errors', async () => {
     request.payload.checklist = 'Pass';
@@ -130,6 +164,7 @@ describe('saveAndContinueHandler', () => {
       errorSummary: [{ fieldId: 'general', message: 'An unexpected error occurred' }],
     });
   });
+
 });
 
 });

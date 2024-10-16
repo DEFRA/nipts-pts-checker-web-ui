@@ -64,7 +64,7 @@ const saveAndContinueHandler = async (request, h) => {
           request
         );
       
-        if (responseData.error) 
+        if (responseData?.error) 
         {
           const errorMessage = errorMessages.serviceError.message;
           const microchipNumber = request.yar.get("microchipNumber");
