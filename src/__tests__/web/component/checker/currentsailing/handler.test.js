@@ -77,7 +77,10 @@ describe('submitCurrentSailingSlot', () => {
       departureDateYear: '2024',
       routeFlight: '',
     };
-    const departureDate = `${mockPayload.departureDateDay.trim()}/${mockPayload.departureDateMonth.trim()}/${mockPayload.departureDateYear.trim()}`;
+    const departureDateDayPadded = mockPayload.departureDateDay.length === 1 ? '0' + mockPayload.departureDateDay : mockPayload.departureDateDay;
+    const departureDateMonthPadded = mockPayload.departureDateMonth.length === 1 ? '0' + mockPayload.departureDateMonth : mockPayload.departureDateMonth;
+
+    const departureDate = `${departureDateDayPadded.trim()}/${departureDateMonthPadded.trim()}/${mockPayload.departureDateYear.trim()}`;
 
     // Mock sailing routes stored in session
     const sailingRoutes = sailingRoutesDefault;
@@ -830,7 +833,6 @@ describe('submitCurrentSailingSlot', () => {
     );
   });
 });
-
 
 
 describe('getCurrentSailingSlot', () => {

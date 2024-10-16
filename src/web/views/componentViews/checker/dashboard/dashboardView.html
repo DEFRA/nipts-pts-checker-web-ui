@@ -105,5 +105,11 @@
 
         </div>
     </div>
+ <!-- Include Previous Checks -->
+ {% if anyChecks === "true" %}
+    {% include "componentViews/checker/dashboard/noPreviousChecks.html" %}
+ {% else %}
+    {% include "componentViews/checker/dashboard/previousChecks.html" %}
+ {% endif %}
 {% endblock %}
 
