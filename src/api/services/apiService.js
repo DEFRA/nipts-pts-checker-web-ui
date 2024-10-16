@@ -322,28 +322,10 @@ const saveCheckerUser = async (checker, request) => {
   }
 };
 
-const getCheckOutcomes = async (payload, request) => {
-  try {
-    const data = { startHour: payload.startHour, endHour: payload.endHour };
-    const url = buildApiUrl("Checker/getCheckOutcomes");
-    const response = await httpService.postAsync(url, data, request);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching data for Checker/getCheckOutcomes:", error.message);
-
-    // Check for specific error message and return a structured error
-    if (error?.message) {
-      return { error: error.message };
-    }
-
-    return { error: unexpectedErrorText };
-  }
-};
 
 export default {
   getApplicationByPTDNumber,
   getApplicationByApplicationNumber,
   recordCheckOutCome,
   saveCheckerUser,
-  getCheckOutcomes,
 };
