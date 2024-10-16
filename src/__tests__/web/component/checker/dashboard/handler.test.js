@@ -12,6 +12,8 @@ jest.mock("../../../../../api/services/dashboardMainService.js", () => ({
   },
 }));
 
+const dashboardView =  "componentViews/checker/dashboard/dashboardView";
+
 describe("Handler", () => {
   describe("getDashboard", () => {
     afterEach(() => {
@@ -47,10 +49,10 @@ describe("Handler", () => {
       const response = await DashboardHandlers.getDashboard(mockRequest, h);
 
       expect(response.viewPath).toBe(
-        "componentViews/checker/dashboard/dashboardView"
+        dashboardView
       );
       expect(h.view).toHaveBeenCalledWith(
-        "componentViews/checker/dashboard/dashboardView",
+        dashboardView,
         {
           currentSailingSlot: mockData,
           anyChecks: "false",
@@ -87,10 +89,10 @@ describe("Handler", () => {
       const response = await DashboardHandlers.getDashboard(mockRequest, h);
 
       expect(response.viewPath).toBe(
-        "componentViews/checker/dashboard/dashboardView"
+        dashboardView
       );
       expect(h.view).toHaveBeenCalledWith(
-        "componentViews/checker/dashboard/dashboardView",
+       dashboardView,
         {
           currentSailingSlot: mockData,
           anyChecks: "true",
