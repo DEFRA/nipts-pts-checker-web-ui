@@ -71,9 +71,10 @@
 
 {% block bodyContent %}
     <script>
-        // Function to refresh the page every 1 minute (60000 ms)
+        // 1 minute
+        const MILLISECONDS = 60000;
         setTimeout(() => {
             window.location.reload();
-        }, 60000); // 60000 milliseconds = 1 minute
+        }, MILLISECONDS);
     </script>
 {% endblock %}
