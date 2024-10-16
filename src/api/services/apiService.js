@@ -2,7 +2,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 import { HttpStatusCode } from "axios";
 import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js";
 import httpService from "./httpService.js";
-import { issuingAuthorityModelData } from '../../constants/issuingAuthority.js';
+import { issuingAuthorityModelData } from "../../constants/issuingAuthority.js";
 import moment from "moment";
 
 const buildApiUrl = (endpoint) => {
@@ -30,7 +30,7 @@ const statusMapping = {
 };
 
 const unexpectedResponseErrorText = "Unexpected response structure";
-const unexpectedErrorText =  "Unexpected error occurred";
+const unexpectedErrorText = "Unexpected error occurred";
 const petNotFoundErrorText = "Pet not found";
 const applicationNotFoundErrorText = "Application not found";
 
@@ -140,7 +140,7 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
     if (error?.message) {
       if (
         error.message === applicationNotFoundErrorText ||
-        error.message ===  petNotFoundErrorText
+        error.message === petNotFoundErrorText
       ) {
         return { error: "not_found" };
       } else {
@@ -315,16 +315,17 @@ const saveCheckerUser = async (checker, request) => {
 
     // Check for specific error message and return a structured error
     if (error?.message) {
-        return { error: error.message };
+      return { error: error.message };
     }
 
     return { error: unexpectedErrorText };
   }
 };
 
+
 export default {
   getApplicationByPTDNumber,
   getApplicationByApplicationNumber,
   recordCheckOutCome,
-  saveCheckerUser
+  saveCheckerUser,
 };
