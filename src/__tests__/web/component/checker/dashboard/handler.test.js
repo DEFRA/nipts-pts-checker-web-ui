@@ -38,7 +38,7 @@ describe("Handler", () => {
       };
 
       // Mock the dashboardMainService.getCheckOutcomes to return data
-      dashboardMainService.getCheckOutcomes.mockResolvedValue([]);
+      dashboardMainService.getCheckOutcomes.mockResolvedValue([{}]);
 
       const h = {
         view: jest.fn((viewPath, data) => {
@@ -55,7 +55,7 @@ describe("Handler", () => {
         dashboardView,
         {
           currentSailingSlot: mockData,
-          checks: [],
+          checks: [{}],
         }
       );
     });
