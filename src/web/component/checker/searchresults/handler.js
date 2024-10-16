@@ -26,6 +26,7 @@ const saveAndContinueHandler = async (request, h) => {
     }
 
     const validationResult = validatePassOrFail(checklist);
+
     if (!validationResult.isValid) {
       const microchipNumber = request.yar.get("microchipNumber");
       const data = request.yar.get("data");
@@ -62,7 +63,8 @@ const saveAndContinueHandler = async (request, h) => {
       checkOutcome,
       request
     );
-    if (responseData.error) {
+
+    if (responseData?.error) {
       const errorMessage = errorMessages.serviceError.message;
       const microchipNumber = request.yar.get("microchipNumber");
       const data = request.yar.get("data");
@@ -84,6 +86,8 @@ const saveAndContinueHandler = async (request, h) => {
           checklist,       
         });
     }
+
+    console.log(checklist);
 
     if (checklist === CheckOutcomeConstants.Pass) {
       request.yar.set("successConfirmation", true);
