@@ -144,6 +144,7 @@ const postNonComplianceHandler = async (request, h) => {
 
 
     // Redirect to the dashboard
+    request.yar.set("successConfirmation", true);
     return h.redirect("/checker/dashboard");
   } catch (error) {
     console.error("Unexpected Error:", error);

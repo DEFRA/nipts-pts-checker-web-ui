@@ -13,6 +13,14 @@ const getDashboard = async (request, h) => {
   currentSailingSlot.pageTitle =
     DashboardMainModel.dashboardMainModelData.pageTitle;
 
+  let successConfirmation = _request.yar.get("successConfirmation");
+  if(successConfirmation === null)
+  {
+    successConfirmation = false;
+  }
+
+  _request.yar.clear("successConfirmation");
+
   // get checks
   const checks =
     (await dashboardMainService.getCheckOutcomes(
@@ -21,6 +29,7 @@ const getDashboard = async (request, h) => {
       request
     )) || [];
 
+  //return h.view(VIEW_PATH, { currentSailingSlot, checks, successConfirmation});
   return h.view(VIEW_PATH, { currentSailingSlot, checks });
 };
 
