@@ -48,6 +48,9 @@ const saveAndContinueHandler = async (request, h) => {
         const currentDate = currentSailingSlot.departureDate.split("/").reverse().join("-");
         const dateTimeString = `${currentDate}T${currentSailingSlot.sailingHour}:${currentSailingSlot.sailingMinutes}:00Z`;
 
+        
+        //TODO need to get GB/SPS check basing on Org ID and set 
+        //isGBCheck, checkerId
         const checkOutcome = {
           applicationId: data.applicationId,
           checkOutcome: checklist,
