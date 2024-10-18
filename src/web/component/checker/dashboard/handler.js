@@ -13,7 +13,7 @@ const getDashboard = async (request, h) => {
   currentSailingSlot.pageTitle =
     DashboardMainModel.dashboardMainModelData.pageTitle;
 
-  const successConfirmation = request.yar.get("successConfirmation");
+  let successConfirmation = request.yar.get("successConfirmation");
   if(successConfirmation === null)
   {
     successConfirmation = false;

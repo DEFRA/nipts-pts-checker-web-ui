@@ -40,7 +40,9 @@ describe("Handler", () => {
             } else if (key === 'successConfirmation') {
               return true;
             }
-            return null;
+            else {
+              return null;
+            }
           }),
           clear: jest.fn(), // Ensure this is correctly defined
         },
@@ -89,7 +91,9 @@ describe("Handler", () => {
             } else if (key === 'successConfirmation') {
               return false;
             }
-            return null;
+            else {
+              return null;
+            }
           }),
           clear: jest.fn(), // Ensure this is correctly defined
         },
