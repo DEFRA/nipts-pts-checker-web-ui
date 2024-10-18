@@ -6,6 +6,7 @@ import errorMessages from "../../../../../web/component/checker/noncompliance/er
 import { validateNonCompliance } from '../../../../../web/component/checker/noncompliance/validate.js'; // Mock this
 
 const VIEW_PATH = "componentViews/checker/noncompliance/noncomplianceView";
+const relevantComments = "Relevant Comments";
 jest.mock("../../../../../api/services/appSettingsService.js");
 jest.mock("../../../../../api/services/apiService.js");
 jest.mock('../../../../../web/component/checker/noncompliance/validate.js');
@@ -188,7 +189,7 @@ describe("NonComplianceHandlers", () => {
         "oiFailAuthTravellerNoConfirmation": true,
         "oiFailOther": true,
         "passengerTypeId": 1,
-        "relevantComments": "Relevant Comments",
+        "relevantComments": relevantComments,
         "gbRefersToDAERAOrSPS": true,
         "gbAdviseNoTravel": true,
         "gbPassengerSaysNoTravel": true,
@@ -197,10 +198,12 @@ describe("NonComplianceHandlers", () => {
       };
       request.payload = payload;
 
+      const passengerTypeErrorMessage = "Select a type of passenger";
+
       // Mock the validation result as failed
       const validationResult = {
         isValid: false,
-        errors: [{ path: ['passengerType'], message: 'Select a type of passenger' }],
+        errors: [{ path: ['passengerType'], message: passengerTypeErrorMessage }],
       };
        validateNonCompliance.mockReturnValue(validationResult);
   
@@ -212,8 +215,8 @@ describe("NonComplianceHandlers", () => {
         VIEW_PATH,
         expect.objectContaining({
           data: undefined,
-          errors: { passengerType: 'Select a type of passenger' },
-          errorSummary: [{ fieldId: 'passengerType', message: 'Select a type of passenger' }],
+          errors: { passengerType: passengerTypeErrorMessage },
+          errorSummary: [{ fieldId: 'passengerType', message: passengerTypeErrorMessage }],
           formSubmitted: true,
           model: {"someSetting": "testSetting"}, 
           payload: request.payload,
@@ -226,7 +229,7 @@ describe("NonComplianceHandlers", () => {
       const payload = {
         mcNotMatch: "true",
         mcNotMatchActual: "123456789123456",
-        relevantComments: "Relevant Comments",
+        relevantComments: relevantComments,
       };
       validateNonCompliance.mockReturnValue({
         isValid: true,
@@ -266,7 +269,7 @@ describe("NonComplianceHandlers", () => {
           applicationId: "testApplicationId",
           checkOutcome: "Fail",
           mcNotMatchActual: "123456789123456",
-          relevantComments: "Relevant Comments",
+          relevantComments: relevantComments,
         }),
         request
       );
