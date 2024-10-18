@@ -234,22 +234,19 @@ describe("NonComplianceHandlers", () => {
 
       request.payload = payload;
       request.yar.get.mockImplementation((key) => {
-        switch (key) {
-          case "data":
-            return { applicationId: "testApplicationId", documentState: "approved" };
-          case "IsFailSelected":
-            return true;
-          case "CurrentSailingSlot":
-            return {
-              departureDate: "12/10/2024",
-              sailingHour: "10",
-              sailingMinutes: "30",
-              selectedRoute: { id: 1 },
-              selectedRouteOption: { id: 1 },
-            };
-          default:
-            return null;
-        }
+        const mockData = {
+          data: { applicationId: "testApplicationId", documentState: "approved" },
+          IsFailSelected: { value: true },  // Return as an object
+          CurrentSailingSlot: {
+            departureDate: "12/10/2024",
+            sailingHour: "10",
+            sailingMinutes: "30",
+            selectedRoute: { id: 1 },
+            selectedRouteOption: { id: 1 },
+          }
+        };
+      
+        return mockData[key] || null;
       });
     
       validateNonCompliance.mockReturnValue({
