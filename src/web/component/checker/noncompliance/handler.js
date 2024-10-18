@@ -103,49 +103,7 @@ const postNonComplianceHandler = async (request, h) => {
     
     if(request.yar.get("IsFailSelected"))
     {
-        const reportNoncomplianceData = request.yar.get("reportNoncomplianceData") || [];
-        // Proceed with further logic if validation passes
-        if (payload.mcNotMatch === "true") {
-          reportNoncomplianceData['mcNotMatch'] = payload.mcNotMatch;
-          reportNoncomplianceData['mcNotMatchActual'] = payload.mcNotMatchActual;      
-        }
-
-        if (payload.vcNotMatchPTD === "true") {
-          reportNoncomplianceData["vcNotMatchPTD"] = payload.vcNotMatchPTD;
-        }
-
-        if (payload.oiFailPotentialCommercial === "true") {
-          reportNoncomplianceData["oiFailPotentialCommercial"] =
-            payload.oiFailPotentialCommercial;
-        }
-
-        if (payload.oiFailAuthTravellerNoConfirmation === "true") {
-          reportNoncomplianceData["oiFailAuthTravellerNoConfirmation"] =
-            payload.oiFailAuthTravellerNoConfirmation;
-        }
-
-        if (payload.oiFailOther === "true") {
-          reportNoncomplianceData["oiFailOther"] =
-            payload.oiFailOther;
-        }
-
-        
-        // Proceed with further logic if validation passes
-        if (payload.relevantComments.length > 0) {
-          reportNoncomplianceData["relevantComments"] = payload.relevantComments;
-        }
-
-        reportNoncomplianceData["passengerType"] = payload.passengerType;
-
-        reportNoncomplianceData["gbRefersToDAERAOrSPS"] = payload.gbRefersToDAERAOrSPS;
-        reportNoncomplianceData["gbAdviseNoTravel"] = payload.gbAdviseNoTravel;
-        reportNoncomplianceData["gbPassengerSaysNoTravel"] = payload.gbPassengerSaysNoTravel;
-
-        reportNoncomplianceData["spsOutcome"] = payload.spsOutcome;
-        reportNoncomplianceData["spsOutcomeDetails"] = payload.spsOutcomeDetails;
-        
-
-        request.yar.set("reportNoncomplianceData", reportNoncomplianceData); 
+        setNonComplianceSession(payload); 
     
         const currentSailingSlot = request.yar.get("CurrentSailingSlot") || {};
         const currentDate = currentSailingSlot.departureDate.split("/").reverse().join("-");
@@ -242,6 +200,52 @@ const postNonComplianceHandler = async (request, h) => {
       errors: {},
       payload: request.payload,
     });
+  }
+
+  function setNonComplianceSession(payload) {
+    const reportNoncomplianceData = request.yar.get("reportNoncomplianceData") || [];
+    // Proceed with further logic if validation passes
+    if (payload.mcNotMatch === "true") {
+      reportNoncomplianceData['mcNotMatch'] = payload.mcNotMatch;
+      reportNoncomplianceData['mcNotMatchActual'] = payload.mcNotMatchActual;
+    }
+
+    if (payload.vcNotMatchPTD === "true") {
+      reportNoncomplianceData["vcNotMatchPTD"] = payload.vcNotMatchPTD;
+    }
+
+    if (payload.oiFailPotentialCommercial === "true") {
+      reportNoncomplianceData["oiFailPotentialCommercial"] =
+        payload.oiFailPotentialCommercial;
+    }
+
+    if (payload.oiFailAuthTravellerNoConfirmation === "true") {
+      reportNoncomplianceData["oiFailAuthTravellerNoConfirmation"] =
+        payload.oiFailAuthTravellerNoConfirmation;
+    }
+
+    if (payload.oiFailOther === "true") {
+      reportNoncomplianceData["oiFailOther"] =
+        payload.oiFailOther;
+    }
+
+
+    // Proceed with further logic if validation passes
+    if (payload.relevantComments.length > 0) {
+      reportNoncomplianceData["relevantComments"] = payload.relevantComments;
+    }
+
+    reportNoncomplianceData["passengerType"] = payload.passengerType;
+
+    reportNoncomplianceData["gbRefersToDAERAOrSPS"] = payload.gbRefersToDAERAOrSPS;
+    reportNoncomplianceData["gbAdviseNoTravel"] = payload.gbAdviseNoTravel;
+    reportNoncomplianceData["gbPassengerSaysNoTravel"] = payload.gbPassengerSaysNoTravel;
+
+    reportNoncomplianceData["spsOutcome"] = payload.spsOutcome;
+    reportNoncomplianceData["spsOutcomeDetails"] = payload.spsOutcomeDetails;
+
+
+    request.yar.set("reportNoncomplianceData", reportNoncomplianceData);
   }
 };
 
