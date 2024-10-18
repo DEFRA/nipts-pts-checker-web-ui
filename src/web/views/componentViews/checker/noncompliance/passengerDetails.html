@@ -18,8 +18,8 @@
                id="footPassenger" 
                name="passengerType" 
                type="radio" 
-               value="footPassenger" 
-               {% if payload['passengerType'] == 'footPassenger' %}checked{% endif %}>
+               value="1" 
+               {% if payload['passengerType'] == '1' %}checked{% endif %}>
         <label class="govuk-label govuk-radios__label" for="footPassenger">Foot passenger</label>
       </div>
 
@@ -28,8 +28,8 @@
                id="vehiclePassenger" 
                name="passengerType" 
                type="radio" 
-               value="vehiclePassenger" 
-               {% if payload['passengerType'] == 'vehiclePassenger' %}checked{% endif %}>
+               value="2" 
+               {% if payload['passengerType'] == '2' %}checked{% endif %}>
         <label class="govuk-label govuk-radios__label" for="vehiclePassenger">Vehicle</label>
       </div>
     </div>

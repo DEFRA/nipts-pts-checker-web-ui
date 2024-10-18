@@ -298,6 +298,37 @@ const recordCheckOutCome = async (checkOutcome, request) => {
   }
 };
 
+const reportNonCompliance = async (checkOutcome, request) => {
+  try {
+    const data = checkOutcome;
+    const url = buildApiUrl("Checker/ReportNonCompliance");
+    const response = await httpService.postAsync(url, data, request);
+
+    if (response.status === HttpStatusCode.NotFound) {
+      throw new Error(response.error);
+    }
+
+    const item = response.data;
+    if (!item || typeof item !== "object") {
+      throw new Error(unexpectedResponseErrorText);
+    }
+
+    return item.checkSummaryId;
+  } catch (error) {
+    console.error("Error fetching data:", error.message);
+
+    // Check for specific error message and return a structured error
+    if (error?.message) {
+      if (error.message === applicationNotFoundErrorText) {
+        return { error: "not_found" };
+      } else {
+        return { error: error.message };
+      }
+    }
+    return { error: unexpectedErrorText };
+  }
+};
+
 const saveCheckerUser = async (checker, request) => {
   try {
     const data = checker;
@@ -327,5 +358,6 @@ export default {
   getApplicationByPTDNumber,
   getApplicationByApplicationNumber,
   recordCheckOutCome,
-  saveCheckerUser,
+  reportNonCompliance,
+  saveCheckerUser
 };

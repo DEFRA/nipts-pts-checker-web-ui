@@ -44,38 +44,38 @@
 
         <div class="govuk-checkboxes" data-module="govuk-checkboxes">
             <div class="govuk-checkboxes__item">
-                <input class="govuk-checkboxes__input" id="microchipNumberRadio" name="microchipNumberRadio"
-                    type="checkbox" value="on" data-aria-controls="conditional-microchipNumber" {% if
-                    payload['microchipNumberRadio']=="on" %}checked{% endif %}>
-                <label class="govuk-label govuk-checkboxes__label" for="microchipNumberRadio">
+                <input class="govuk-checkboxes__input" id="mcNotMatch" name="mcNotMatch"
+                    type="checkbox" value="true" data-aria-controls="conditional-mcNotMatchActual" {% if
+                        payload['mcNotMatch']=="true" %}checked{% endif %}>
+                <label class="govuk-label govuk-checkboxes__label" for="mcNotMatch">
                     Microchip number does not match the PTD
                 </label>
             </div>
 
-            <div class="govuk-checkboxes__conditional{% if payload['microchipNumberRadio'] != " on" %}
-                govuk-checkboxes__conditional--hidden{% endif %}" id="conditional-microchipNumber">
-                <div id="microchipNumber-form-group"
-                    class="govuk-form-group {% if errors['microchipNumber'] %}govuk-form-group--error{% endif %}">
-                    <label class="govuk-label" for="microchipNumber">
+            <div class="govuk-checkboxes__conditional{% if payload['mcNotMatch'] != " true" %}
+                govuk-checkboxes__conditional--hidden{% endif %}" id="conditional-mcNotMatchActual">
+                <div id="mcNotMatchActual-form-group"
+                    class="govuk-form-group {% if errors['mcNotMatchActual'] %}govuk-form-group--error{% endif %}">
+                    <label class="govuk-label" for="mcNotMatchActual">
                         Microchip number found in scan
                     </label>
-                    {% if errors['microchipNumber'] %}
-                    <p id="microchipNumber-error" class="govuk-error-message">
-                        <span class="govuk-visually-hidden">Error:</span> {{ errors['microchipNumber'] }}
+                    {% if errors['mcNotMatchActual'] %}
+                    <p id="mcNotMatchActual-error" class="govuk-error-message">
+                        <span class="govuk-visually-hidden">Error:</span> {{ errors['mcNotMatchActual'] }}
                     </p>
                     {% endif %}
                     <input
-                        class="govuk-input govuk-input--width-20 {% if errors['microchipNumber'] %}govuk-input--error{% endif %}"
-                        id="microchipNumber" name="microchipNumber" type="text" spellcheck="false" {% if
-                        errors['microchipNumber'] %} aria-describedby="microchipNumber-error" {% endif %}
-                        value="{{ payload['microchipNumber']|default('') }}">
+                        class="govuk-input govuk-input--width-20 {% if errors['mcNotMatchActual'] %}govuk-input--error{% endif %}"
+                        id="mcNotMatchActual" name="mcNotMatchActual" type="text" spellcheck="false" {% if
+                        errors['mcNotMatchActual'] %} aria-describedby="mcNotMatchActual-error" {% endif %}
+                        value="{{ payload['mcNotMatchActual']|default('') }}">
                 </div>
             </div>
 
             <div class="govuk-checkboxes__item">
-                <input class="govuk-checkboxes__input" id="ptdProblem" name="ptdProblem" type="checkbox" value="on" {%
-                    if payload['ptdProblem']=="on" %}checked{% endif %}>
-                <label class="govuk-label govuk-checkboxes__label" for="ptdProblem">
+                <input class="govuk-checkboxes__input" id="mcNotFound" name="mcNotFound" type="checkbox" value="true" {%
+                    if payload['mcNotFound']=="true" %}checked{% endif %}>
+                <label class="govuk-label govuk-checkboxes__label" for="mcNotFound">
                     Cannot find microchip
                 </label>
             </div>

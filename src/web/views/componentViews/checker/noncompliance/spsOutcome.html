@@ -5,14 +5,16 @@
     </legend>
     <div class="govuk-radios" data-module="govuk-radios">
       <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="outcomeSPS-Allowed" name="outcomeSPS" type="radio" value="Passenger referred to DAERA/SPS at NI port" aria-labelledby="allowed">
+        <input class="govuk-radios__input" id="spsOutcome-Allowed" name="spsOutcome" type="radio" value="true" aria-labelledby="allowed"
+        {% if  payload['spsOutcome']=="true" %}checked{% endif %}>
         <label class="govuk-label govuk-radios__label" id="allowed" for="outcomeSPS-Allowed">
           Allowed to travel under Windsor Framework
         </label>
       </div>
       <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="outcomeSPS-Not-Allowed" name="outcomeSPS" type="radio" value="Passenger referred to DAERA/SPS at NI port" aria-labelledby="notAllowed">
-        <label class="govuk-label govuk-radios__label" id="notAllowed" for="outcomeSPS-Not-Allowed">
+        <input class="govuk-radios__input" id="spsOutcome-Not-Allowed" name="spsOutcome" type="radio" value="false" aria-labelledby="notAllowed"
+        {% if payload['spsOutcome']=="false" %}checked{% endif %}>
+        <label class="govuk-label govuk-radios__label" id="notAllowed" for="spsOutcome-Not-Allowed">
           Not allowed to travel under Windsor Framework
         </label>
       </div>    
