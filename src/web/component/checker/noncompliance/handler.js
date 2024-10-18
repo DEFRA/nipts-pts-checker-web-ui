@@ -3,7 +3,6 @@
 import appSettingsService from "../../../../api/services/appSettingsService.js";
 import { validateNonCompliance } from "./validate.js";
 import { CheckOutcomeConstants } from "../../../../constants/checkOutcomeConstant.js";
-import { PassengerTypeConstants } from "../../../../constants/passengerTypeConstant.js";
 import errorMessages from "./errorMessages.js";
 import apiService from "../../../../api/services/apiService.js";
 
@@ -174,7 +173,8 @@ const postNonComplianceHandler = async (request, h) => {
     }
 
     // Call the helper function to create the checkOutcome object
-    const checkOutcome = createCheckOutcome(data, payload, currentSailingSlot, isGBCheck, dateTimeString);
+    const checkerId = request.yar.get("checkerId");
+    const checkOutcome = createCheckOutcome(data, payload, currentSailingSlot, isGBCheck, dateTimeString, checkerId);
 
     const responseData = await apiService.reportNonCompliance(
       checkOutcome,
@@ -193,11 +193,11 @@ const postNonComplianceHandler = async (request, h) => {
   }
 
     // Refactor checkOutcome construction
-    function createCheckOutcome(data, payload, currentSailingSlot, isGBCheck, dateTimeString) {
+    function createCheckOutcome(data, payload, currentSailingSlot, isGBCheck, dateTimeString, checkerId) {
       return ({
         applicationId: data.applicationId,
         checkOutcome: CheckOutcomeConstants.Fail,
-        checkerId: null,
+        checkerId: checkerId ?? null,
         routeId: currentSailingSlot?.selectedRoute?.id ?? null,
         sailingTime: dateTimeString,
         sailingOption: currentSailingSlot.selectedRouteOption.id,

@@ -38,7 +38,7 @@ const authenticate = async (request) => {
   );
 
   cookieAuthentication.set(request, accessToken);
-
+  
   // Add or update checker user
   try {
     const checker = {
@@ -49,7 +49,7 @@ const authenticate = async (request) => {
     };
 
     await apiService.saveCheckerUser(checker, request);
-
+    request.yar.set("checkerId", accessToken.sub);
     session.setToken(request, sessionKeys.tokens.sso, "");
 
   } catch (error) {
