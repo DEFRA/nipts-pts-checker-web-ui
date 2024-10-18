@@ -1,7 +1,6 @@
 import { NonComplianceHandlers } from "../../../../../web/component/checker/noncompliance/handler.js";
 import appSettingsService from "../../../../../api/services/appSettingsService.js";
 import apiService from '../../../../../api/services/apiService.js';
-import { CheckOutcomeConstants } from '../../../../../constants/checkOutcomeConstant.js';
 import errorMessages from "../../../../../web/component/checker/noncompliance/errorMessages.js";
 import { validateNonCompliance } from '../../../../../web/component/checker/noncompliance/validate.js'; // Mock this
 
@@ -197,6 +196,21 @@ describe("NonComplianceHandlers", () => {
         "spsOutcomeDetails": "SPS Outcome Details"
       };
       request.payload = payload;
+      request.yar.get.mockImplementation((key) => {
+        const mockData = {
+          data: { applicationId: "testApplicationId", documentState: "approved" },
+          IsFailSelected: { value: true },  // Return as an object
+          CurrentSailingSlot: {
+            departureDate: "12/10/2024",
+            sailingHour: "10",
+            sailingMinutes: "30",
+            selectedRoute: { id: 1 },
+            selectedRouteOption: { id: 1 },
+          }
+        };
+      
+        return mockData[key] || null;
+      });
 
       const passengerTypeErrorMessage = "Select a type of passenger";
 
@@ -214,7 +228,7 @@ describe("NonComplianceHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(
         VIEW_PATH,
         expect.objectContaining({
-          data: undefined,
+          data: {"applicationId": "testApplicationId", "documentState": "approved"},
           errors: { passengerType: passengerTypeErrorMessage },
           errorSummary: [{ fieldId: 'passengerType', message: passengerTypeErrorMessage }],
           formSubmitted: true,
