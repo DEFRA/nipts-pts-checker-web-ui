@@ -199,9 +199,6 @@ const postNonComplianceHandler = async (request, h) => {
         if (responseData?.error) 
         {
           const errorMessage = errorMessages.serviceError.message;
-          const microchipNumber = request.yar.get("microchipNumber");
-          const data = request.yar.get("data");
-          const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
           return h.view(VIEW_PATH, 
           { 
               error: errorMessage,
