@@ -24,8 +24,8 @@ const getDashboard = async (request, h) => {
   // get checks
   const checks =
     (await dashboardMainService.getCheckOutcomes(
-      process.env.DASHBOARD_START_HOUR || "-48",
-      process.env.DASHBOARD_END_HOUR || "24",
+      process.env.DASHBOARD_START_HOUR || "-47",
+      process.env.DASHBOARD_END_HOUR || "25",
       request
     )) || [];
 
