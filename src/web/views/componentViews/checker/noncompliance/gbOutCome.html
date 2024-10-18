@@ -6,21 +6,21 @@
       <div class="govuk-checkboxes__item">
         <input class="govuk-checkboxes__input" id="gbRefersToDAERAOrSPS" name="gbRefersToDAERAOrSPS" type="checkbox" value="true"
         {% if payload['gbRefersToDAERAOrSPS']=="true" %}checked{% endif %}>
-        <label class="govuk-label govuk-checkboxes__label" for="outcomeReferred">
+        <label class="govuk-label govuk-checkboxes__label" for="gbRefersToDAERAOrSPS">
           Passenger referred to DAERA/SPS at NI port
         </label>
       </div>
       <div class="govuk-checkboxes__item">
         <input class="govuk-checkboxes__input" id="gbAdviseNoTravel" name="gbAdviseNoTravel" type="checkbox" value="true"
         {% if payload['gbAdviseNoTravel']=="true" %}checked{% endif %}>
-        <label class="govuk-label govuk-checkboxes__label" for="outcomeAdvised">
+        <label class="govuk-label govuk-checkboxes__label" for="gbAdviseNoTravel">
           Passenger advised not to travel
         </label>
       </div>
       <div class="govuk-checkboxes__item">
         <input class="govuk-checkboxes__input" id="gbPassengerSaysNoTravel" name="gbPassengerSaysNoTravel" type="checkbox" value="true"
         {% if payload['gbPassengerSaysNoTravel']=="true" %}checked{% endif %}>
-        <label class="govuk-label govuk-checkboxes__label" for="outcomeNotTravelling">
+        <label class="govuk-label govuk-checkboxes__label" for="gbPassengerSaysNoTravel">
           Passenger says they will not travel
         </label>
       </div>
