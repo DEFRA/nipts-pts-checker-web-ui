@@ -155,7 +155,7 @@ const submitCurrentSailingSlot = async (request, h) => {
     routeFlight,
   };
 
-  request.yar.set("CurrentSailingSlot", currentSailingSlot);
+  request.yar.set("currentSailingSlot", currentSailingSlot);
 
   // Perform necessary validations and actions here
 
@@ -164,7 +164,7 @@ const submitCurrentSailingSlot = async (request, h) => {
 };
 
 const getCurrentSailingSlot = async (request, h) => {
-  const currentSailingSlot = request.yar.get("CurrentSailingSlot");
+  const currentSailingSlot = request.yar.get("currentSailingSlot");
   return h.response({
     message: "Retrieved Route details slot",
     currentSailingSlot,

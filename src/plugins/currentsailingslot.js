@@ -19,7 +19,7 @@ export default {
             return h.continue;
           }
 
-          const currentSailingSlot = request.yar.get("CurrentSailingSlot");
+          const currentSailingSlot = request.yar.get("currentSailingSlot");
           const currentPath = request.path;
 
           // List of paths or files to exclude from this check
