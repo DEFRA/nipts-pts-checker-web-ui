@@ -8,10 +8,18 @@ const VIEW_PATH = "componentViews/checker/dashboard/dashboardView";
 const getDashboard = async (request, h) => {
   headerData.section = "dashboard";
 
-  const currentSailingSlot = request.yar.get("CurrentSailingSlot") || {};
+  const currentSailingSlot = request.yar.get("currentSailingSlot") || {};
   currentSailingSlot.currentDate = new Date().toLocaleDateString("en-GB");
   currentSailingSlot.pageTitle =
     DashboardMainModel.dashboardMainModelData.pageTitle;
+
+  let successConfirmation = request.yar.get("successConfirmation");
+  if(successConfirmation === null)
+  {
+    successConfirmation = false;
+  }
+
+  request.yar.clear("successConfirmation");
 
   // get checks
   const checks =
@@ -21,7 +29,7 @@ const getDashboard = async (request, h) => {
       request
     )) || [];
 
-  return h.view(VIEW_PATH, { currentSailingSlot, checks });
+  return h.view(VIEW_PATH, { currentSailingSlot, checks, successConfirmation});
 };
 
 export const DashboardHandlers = {
