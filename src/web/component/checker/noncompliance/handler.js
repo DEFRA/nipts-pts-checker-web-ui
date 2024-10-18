@@ -173,8 +173,13 @@ const postNonComplianceHandler = async (request, h) => {
       payload.gbPassengerSaysNoTravel = null;
     }
 
+    const toBooleanOrNull = (value) => (value === 'true' ? true : null);
 
-    const checkOutcome = {
+    // Helper function to safely get a payload property or null
+    const getPayloadValue = (payload, key) => payload?.[key] ?? null;
+
+    // Refactor checkOutcome construction
+    const createCheckOutcome = (data, payload, currentSailingSlot, isGBCheck, dateTimeString) => ({
       applicationId: data.applicationId,
       checkOutcome: CheckOutcomeConstants.Fail,
       checkerId: null,
@@ -183,21 +188,24 @@ const postNonComplianceHandler = async (request, h) => {
       sailingOption: currentSailingSlot.selectedRouteOption.id,
       flightNumber: currentSailingSlot.routeFlight || null,
       isGBCheck: isGBCheck,
-      mcNotMatch: (payload?.mcNotMatch === 'true') ? true : null,
-      mcNotMatchActual: payload.mcNotMatchActual,
-      mcNotFound: (payload.mcNotFound === 'true') ? true : null,
-      vcNotMatchPTD: (payload?.vcNotMatchPTD === 'true') ? true : null,
-      oiFailPotentialCommercial: (payload?.oiFailPotentialCommercial === 'true') ? true : null,
-      oiFailAuthTravellerNoConfirmation: (payload?.oiFailAuthTravellerNoConfirmation === 'true') ? true : null,
-      oiFailOther: (payload?.oiFailOther === 'true') ? true : null,
-      passengerTypeId: payload.passengerType,
-      relevantComments: payload?.relevantComments ?? null,
-      gbRefersToDAERAOrSPS: (payload?.gbRefersToDAERAOrSPS === 'true') ? true : null,
-      gbAdviseNoTravel: (payload?.gbAdviseNoTravel === 'true') ? true : null,
-      gbPassengerSaysNoTravel: (payload?.gbPassengerSaysNoTravel === 'true') ? true : null,
-      spsOutcome: payload?.spsOutcome ?? null,
-      spsOutcomeDetails: payload?.spsOutcomeDetails ?? null
-    };
+      mcNotMatch: toBooleanOrNull(payload?.mcNotMatch),
+      mcNotMatchActual: getPayloadValue(payload, 'mcNotMatchActual'),
+      mcNotFound: toBooleanOrNull(payload?.mcNotFound),
+      vcNotMatchPTD: toBooleanOrNull(payload?.vcNotMatchPTD),
+      oiFailPotentialCommercial: toBooleanOrNull(payload?.oiFailPotentialCommercial),
+      oiFailAuthTravellerNoConfirmation: toBooleanOrNull(payload?.oiFailAuthTravellerNoConfirmation),
+      oiFailOther: toBooleanOrNull(payload?.oiFailOther),
+      passengerTypeId: getPayloadValue(payload, 'passengerType'),
+      relevantComments: getPayloadValue(payload, 'relevantComments'),
+      gbRefersToDAERAOrSPS: toBooleanOrNull(payload?.gbRefersToDAERAOrSPS),
+      gbAdviseNoTravel: toBooleanOrNull(payload?.gbAdviseNoTravel),
+      gbPassengerSaysNoTravel: toBooleanOrNull(payload?.gbPassengerSaysNoTravel),
+      spsOutcome: getPayloadValue(payload, 'spsOutcome'),
+      spsOutcomeDetails: getPayloadValue(payload, 'spsOutcomeDetails'),
+    });
+
+    // Call the helper function to create the checkOutcome object
+    const checkOutcome = createCheckOutcome(data, payload, currentSailingSlot, isGBCheck, dateTimeString);
 
     const responseData = await apiService.reportNonCompliance(
       checkOutcome,
@@ -206,6 +214,7 @@ const postNonComplianceHandler = async (request, h) => {
     return responseData;
   }
 
+  
   function setNonComplianceSession(payload) {
     const reportNoncomplianceData = request.yar.get("reportNoncomplianceData") || [];
     // Proceed with further logic if validation passes
