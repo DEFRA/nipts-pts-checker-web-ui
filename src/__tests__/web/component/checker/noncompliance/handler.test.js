@@ -5,6 +5,7 @@ import { CheckOutcomeConstants } from '../../../../../constants/checkOutcomeCons
 import errorMessages from "../../../../../web/component/checker/noncompliance/errorMessages.js";
 import { validateNonCompliance } from '../../../../../web/component/checker/noncompliance/validate.js'; // Mock this
 
+const VIEW_PATH = "componentViews/checker/noncompliance/noncomplianceView";
 jest.mock("../../../../../api/services/appSettingsService.js");
 jest.mock("../../../../../api/services/apiService.js");
 jest.mock('../../../../../web/component/checker/noncompliance/validate.js');
@@ -52,7 +53,7 @@ describe("NonComplianceHandlers", () => {
 
       expect(appSettingsService.getAppSettings).toHaveBeenCalled();
       expect(h.view).toHaveBeenCalledWith(
-        "componentViews/checker/noncompliance/noncomplianceView",
+        VIEW_PATH,
         {
           documentStatus: documentStatus,
           documentStatusColourMapping: documentStatusColourMapping,
@@ -117,7 +118,7 @@ describe("NonComplianceHandlers", () => {
 
       // Since "invalid_microchip" contains letters and special characters, it should return the special characters error message
       expect(h.view).toHaveBeenCalledWith(
-        "componentViews/checker/noncompliance/noncomplianceView",
+        VIEW_PATH,
         expect.objectContaining({
           errors: {
             microchipNumber: errorMessages.microchipNumber.specialCharacters, // Adjusted to specialCharacters
@@ -208,7 +209,7 @@ describe("NonComplianceHandlers", () => {
   
       // Assertions
       expect(h.view).toHaveBeenCalledWith(
-        'componentViews/checker/noncompliance/noncomplianceView',
+        VIEW_PATH,
         expect.objectContaining({
           data: undefined,
           errors: { passengerType: 'Select a type of passenger' },
