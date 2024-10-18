@@ -105,54 +105,7 @@ const postNonComplianceHandler = async (request, h) => {
     {
         setNonComplianceSession(payload); 
     
-        const currentSailingSlot = request.yar.get("CurrentSailingSlot") || {};
-        const currentDate = currentSailingSlot.departureDate.split("/").reverse().join("-");
-        const dateTimeString = `${currentDate}T${currentSailingSlot.sailingHour}:${currentSailingSlot.sailingMinutes}:00Z`;
-
-        //TODO need to get GB/SPS check basing on Org ID and set 
-        //isGBCheck, checkerId
-        const isGBCheck = true;
-        if(isGBCheck)
-        {
-          payload.spsOutcome = null;
-          payload.spsOutcomeDetails = null;
-        }
-        else{
-          payload.gbRefersToDAERAOrSPS = null;
-          payload.gbAdviseNoTravel = null;
-          payload.gbPassengerSaysNoTravel = null;
-        }
-
-
-        const checkOutcome = {
-          applicationId: data.applicationId,
-          checkOutcome: CheckOutcomeConstants.Fail,
-          checkerId: null,
-          routeId: currentSailingSlot?.selectedRoute?.id ?? null,
-          sailingTime: dateTimeString,
-          sailingOption: currentSailingSlot.selectedRouteOption.id,
-          flightNumber: currentSailingSlot.routeFlight || null,
-          isGBCheck: isGBCheck,
-          mcNotMatch: (payload?.mcNotMatch === 'true') ? true : null,
-          mcNotMatchActual: payload.mcNotMatchActual,
-          mcNotFound: (payload.mcNotFound === 'true') ? true : null,      
-          vcNotMatchPTD: (payload?.vcNotMatchPTD === 'true') ? true : null,
-          oiFailPotentialCommercial: (payload?.oiFailPotentialCommercial === 'true') ? true : null,
-          oiFailAuthTravellerNoConfirmation: (payload?.oiFailAuthTravellerNoConfirmation === 'true') ? true : null,
-          oiFailOther: (payload?.oiFailOther === 'true') ? true : null,
-          passengerTypeId: payload.passengerType,
-          relevantComments: payload?.relevantComments ?? null,
-          gbRefersToDAERAOrSPS: (payload?.gbRefersToDAERAOrSPS === 'true') ? true : null,
-          gbAdviseNoTravel: (payload?.gbAdviseNoTravel === 'true') ? true : null,
-          gbPassengerSaysNoTravel: (payload?.gbPassengerSaysNoTravel === 'true') ? true : null,
-          spsOutcome: payload?.spsOutcome ?? null,
-          spsOutcomeDetails: payload?.spsOutcomeDetails ?? null
-        };
-
-        const responseData = await apiService.reportNonCompliance(
-          checkOutcome,
-          request
-        );
+        const responseData = await saveReportNonCompliance(payload, data);
       
         if (responseData?.error) 
         {
@@ -200,6 +153,57 @@ const postNonComplianceHandler = async (request, h) => {
       errors: {},
       payload: request.payload,
     });
+  }
+
+  async function saveReportNonCompliance(payload, data) {
+    const currentSailingSlot = request.yar.get("CurrentSailingSlot") || {};
+    const currentDate = currentSailingSlot.departureDate.split("/").reverse().join("-");
+    const dateTimeString = `${currentDate}T${currentSailingSlot.sailingHour}:${currentSailingSlot.sailingMinutes}:00Z`;
+
+    //TODO need to get GB/SPS check basing on Org ID and set 
+    //isGBCheck, checkerId
+    const isGBCheck = true;
+    if (isGBCheck) {
+      payload.spsOutcome = null;
+      payload.spsOutcomeDetails = null;
+    }
+    else {
+      payload.gbRefersToDAERAOrSPS = null;
+      payload.gbAdviseNoTravel = null;
+      payload.gbPassengerSaysNoTravel = null;
+    }
+
+
+    const checkOutcome = {
+      applicationId: data.applicationId,
+      checkOutcome: CheckOutcomeConstants.Fail,
+      checkerId: null,
+      routeId: currentSailingSlot?.selectedRoute?.id ?? null,
+      sailingTime: dateTimeString,
+      sailingOption: currentSailingSlot.selectedRouteOption.id,
+      flightNumber: currentSailingSlot.routeFlight || null,
+      isGBCheck: isGBCheck,
+      mcNotMatch: (payload?.mcNotMatch === 'true') ? true : null,
+      mcNotMatchActual: payload.mcNotMatchActual,
+      mcNotFound: (payload.mcNotFound === 'true') ? true : null,
+      vcNotMatchPTD: (payload?.vcNotMatchPTD === 'true') ? true : null,
+      oiFailPotentialCommercial: (payload?.oiFailPotentialCommercial === 'true') ? true : null,
+      oiFailAuthTravellerNoConfirmation: (payload?.oiFailAuthTravellerNoConfirmation === 'true') ? true : null,
+      oiFailOther: (payload?.oiFailOther === 'true') ? true : null,
+      passengerTypeId: payload.passengerType,
+      relevantComments: payload?.relevantComments ?? null,
+      gbRefersToDAERAOrSPS: (payload?.gbRefersToDAERAOrSPS === 'true') ? true : null,
+      gbAdviseNoTravel: (payload?.gbAdviseNoTravel === 'true') ? true : null,
+      gbPassengerSaysNoTravel: (payload?.gbPassengerSaysNoTravel === 'true') ? true : null,
+      spsOutcome: payload?.spsOutcome ?? null,
+      spsOutcomeDetails: payload?.spsOutcomeDetails ?? null
+    };
+
+    const responseData = await apiService.reportNonCompliance(
+      checkOutcome,
+      request
+    );
+    return responseData;
   }
 
   function setNonComplianceSession(payload) {
