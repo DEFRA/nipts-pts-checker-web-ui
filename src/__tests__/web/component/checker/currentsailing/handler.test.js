@@ -160,7 +160,7 @@ describe('submitCurrentSailingSlot', () => {
     await CurrentSailingHandlers.submitCurrentSailingSlot(mockRequest, mockResponseToolkit);
 
     // Assertions
-    expect(mockRequest.yar.set).toHaveBeenCalledWith('CurrentSailingSlot', expectedSailingSlot);
+    expect(mockRequest.yar.set).toHaveBeenCalledWith('currentSailingSlot', expectedSailingSlot);
     expect(mockRedirect).toHaveBeenCalledWith('/checker/dashboard');
   });
 
@@ -836,7 +836,7 @@ describe('submitCurrentSailingSlot', () => {
 
 
 describe('getCurrentSailingSlot', () => {
-  it('should retrieve the CurrentSailingSlot from session', async () => {
+  it('should retrieve the currentSailingSlot from session', async () => {
     const mockRequest = {
       yar: {
         get: jest.fn().mockReturnValue('testSlot')
@@ -851,7 +851,7 @@ describe('getCurrentSailingSlot', () => {
 
     const response = await CurrentSailingHandlers.getCurrentSailingSlot(mockRequest, mockResponseToolkit);
 
-    expect(mockRequest.yar.get).toHaveBeenCalledWith('CurrentSailingSlot');
+    expect(mockRequest.yar.get).toHaveBeenCalledWith('currentSailingSlot');
     expect(mockResponseToolkit.response).toHaveBeenCalledWith({
       message: 'Retrieved Route details slot',
       currentSailingSlot: 'testSlot'

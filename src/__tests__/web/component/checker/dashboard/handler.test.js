@@ -16,11 +16,12 @@ const dashboardView =  "componentViews/checker/dashboard/dashboardView";
 
 describe("Handler", () => {
   describe("getDashboard", () => {
+    
     afterEach(() => {
       jest.clearAllMocks();
     });
 
-    it("should return view with CurrentSailingSlot model when data exists", async () => {
+    it("should return view with currentSailingSlot model when data exists", async () => {
       const mockData = {
         sailingHour: "15",
         sailingMinutes: "15",
@@ -30,13 +31,22 @@ describe("Handler", () => {
 
       const mockRequest = {
         yar: {
-          get: jest.fn().mockReturnValue({
-            sailingHour: "15",
-            sailingMinutes: "15",
+          get: jest.fn((key) => {
+            if (key === 'currentSailingSlot') {
+              return {
+                sailingHour: "15",
+                sailingMinutes: "15",
+              };
+            } else if (key === 'successConfirmation') {
+              return true;
+            }
+            else {
+              return null;
+            }
           }),
+          clear: jest.fn(), // Ensure this is correctly defined
         },
       };
-
       // Mock the dashboardMainService.getCheckOutcomes to return data
       dashboardMainService.getCheckOutcomes.mockResolvedValue([{}]);
 
@@ -56,6 +66,7 @@ describe("Handler", () => {
         {
           currentSailingSlot: mockData,
           checks: [{}],
+          successConfirmation: true
         }
       );
     });
@@ -68,12 +79,23 @@ describe("Handler", () => {
         pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
       };
 
+
       const mockRequest = {
         yar: {
-          get: jest.fn().mockReturnValue({
-            sailingHour: "15",
-            sailingMinutes: "15",
+          get: jest.fn((key) => {
+            if (key === 'currentSailingSlot') {
+              return {
+                sailingHour: "15",
+                sailingMinutes: "15",
+              };
+            } else if (key === 'successConfirmation') {
+              return false;
+            }
+            else {
+              return null;
+            }
           }),
+          clear: jest.fn(), // Ensure this is correctly defined
         },
       };
 
@@ -96,6 +118,7 @@ describe("Handler", () => {
         {
           currentSailingSlot: mockData,
           checks: [],
+          successConfirmation: false
         }
       );
     });
@@ -104,6 +127,7 @@ describe("Handler", () => {
       const mockRequest = {
         yar: {
           get: jest.fn().mockReturnValue({}),
+          clear: jest.fn(), // Ensure this is correctly defined
         },
       };
 
