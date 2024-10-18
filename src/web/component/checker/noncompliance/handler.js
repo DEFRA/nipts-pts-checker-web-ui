@@ -173,37 +173,6 @@ const postNonComplianceHandler = async (request, h) => {
       payload.gbPassengerSaysNoTravel = null;
     }
 
-    const toBooleanOrNull = (value) => (value === 'true' ? true : null);
-
-    // Helper function to safely get a payload property or null
-    const getPayloadValue = (payload, key) => payload?.[key] ?? null;
-
-    // Refactor checkOutcome construction
-    const createCheckOutcome = (data, payload, currentSailingSlot, isGBCheck, dateTimeString) => ({
-      applicationId: data.applicationId,
-      checkOutcome: CheckOutcomeConstants.Fail,
-      checkerId: null,
-      routeId: currentSailingSlot?.selectedRoute?.id ?? null,
-      sailingTime: dateTimeString,
-      sailingOption: currentSailingSlot.selectedRouteOption.id,
-      flightNumber: currentSailingSlot.routeFlight || null,
-      isGBCheck: isGBCheck,
-      mcNotMatch: toBooleanOrNull(payload?.mcNotMatch),
-      mcNotMatchActual: getPayloadValue(payload, 'mcNotMatchActual'),
-      mcNotFound: toBooleanOrNull(payload?.mcNotFound),
-      vcNotMatchPTD: toBooleanOrNull(payload?.vcNotMatchPTD),
-      oiFailPotentialCommercial: toBooleanOrNull(payload?.oiFailPotentialCommercial),
-      oiFailAuthTravellerNoConfirmation: toBooleanOrNull(payload?.oiFailAuthTravellerNoConfirmation),
-      oiFailOther: toBooleanOrNull(payload?.oiFailOther),
-      passengerTypeId: getPayloadValue(payload, 'passengerType'),
-      relevantComments: getPayloadValue(payload, 'relevantComments'),
-      gbRefersToDAERAOrSPS: toBooleanOrNull(payload?.gbRefersToDAERAOrSPS),
-      gbAdviseNoTravel: toBooleanOrNull(payload?.gbAdviseNoTravel),
-      gbPassengerSaysNoTravel: toBooleanOrNull(payload?.gbPassengerSaysNoTravel),
-      spsOutcome: getPayloadValue(payload, 'spsOutcome'),
-      spsOutcomeDetails: getPayloadValue(payload, 'spsOutcomeDetails'),
-    });
-
     // Call the helper function to create the checkOutcome object
     const checkOutcome = createCheckOutcome(data, payload, currentSailingSlot, isGBCheck, dateTimeString);
 
@@ -213,6 +182,43 @@ const postNonComplianceHandler = async (request, h) => {
     );
     return responseData;
   }
+
+  function toBooleanOrNull(value) {
+    return (value === 'true' ? true : null);
+  }
+
+  // Helper function to safely get a payload property or null
+  function getPayloadValue(payload, key) {
+    return payload?.[key] ?? null;
+  }
+
+    // Refactor checkOutcome construction
+    function createCheckOutcome(data, payload, currentSailingSlot, isGBCheck, dateTimeString) {
+      return ({
+        applicationId: data.applicationId,
+        checkOutcome: CheckOutcomeConstants.Fail,
+        checkerId: null,
+        routeId: currentSailingSlot?.selectedRoute?.id ?? null,
+        sailingTime: dateTimeString,
+        sailingOption: currentSailingSlot.selectedRouteOption.id,
+        flightNumber: currentSailingSlot.routeFlight || null,
+        isGBCheck: isGBCheck,
+        mcNotMatch: toBooleanOrNull(payload?.mcNotMatch),
+        mcNotMatchActual: getPayloadValue(payload, 'mcNotMatchActual'),
+        mcNotFound: toBooleanOrNull(payload?.mcNotFound),
+        vcNotMatchPTD: toBooleanOrNull(payload?.vcNotMatchPTD),
+        oiFailPotentialCommercial: toBooleanOrNull(payload?.oiFailPotentialCommercial),
+        oiFailAuthTravellerNoConfirmation: toBooleanOrNull(payload?.oiFailAuthTravellerNoConfirmation),
+        oiFailOther: toBooleanOrNull(payload?.oiFailOther),
+        passengerTypeId: getPayloadValue(payload, 'passengerType'),
+        relevantComments: getPayloadValue(payload, 'relevantComments'),
+        gbRefersToDAERAOrSPS: toBooleanOrNull(payload?.gbRefersToDAERAOrSPS),
+        gbAdviseNoTravel: toBooleanOrNull(payload?.gbAdviseNoTravel),
+        gbPassengerSaysNoTravel: toBooleanOrNull(payload?.gbPassengerSaysNoTravel),
+        spsOutcome: getPayloadValue(payload, 'spsOutcome'),
+        spsOutcomeDetails: getPayloadValue(payload, 'spsOutcomeDetails'),
+      });
+    }
 
   
   function setNonComplianceSession(payload) {
