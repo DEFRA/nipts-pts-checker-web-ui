@@ -103,7 +103,6 @@ const postNonComplianceHandler = async (request, h) => {
     if (request.yar.get("IsFailSelected")) {
       setNonComplianceSession(payload);
 
-      try {
         const responseData = await saveReportNonCompliance(payload, data);
         if (responseData?.error) {
           //const errorMessage = errorMessages.serviceError.message;
@@ -122,23 +121,6 @@ const postNonComplianceHandler = async (request, h) => {
             payload,
           });
         }
-      } catch (err) {
-        //const errorMessage = errorMessages.serviceError.message;
-        return h.view(VIEW_PATH, {
-          //error: errorMessage,
-          errorSummary: [
-            {
-              fieldId: "unexpected",
-              message: genericErrorMessage,
-              dispalyAs: "text",
-            },
-          ],
-          data,
-          model,
-          formSubmitted: true,
-          payload,
-        });
-      }
     }
 
     request.yar.set("IsFailSelected", false);
@@ -169,6 +151,8 @@ const postNonComplianceHandler = async (request, h) => {
   }
 
   async function saveReportNonCompliance(payload, data) {
+
+    try{
     const currentSailingSlot = request.yar.get("currentSailingSlot") || {};
     const currentDate = currentSailingSlot.departureDate
       .split("/")
@@ -205,6 +189,12 @@ const postNonComplianceHandler = async (request, h) => {
     );
 
     return responseData;
+  } catch (error) {
+    console.error("Error fetching data:", error.message);
+
+    // Check for specific error message and return a structured error
+    return { error: genericErrorMessage };
+  }
   }
 
   function toBooleanOrNull(value) {
