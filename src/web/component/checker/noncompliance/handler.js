@@ -156,7 +156,7 @@ const postNonComplianceHandler = async (request, h) => {
   }
 
   async function saveReportNonCompliance(payload, data) {
-    const currentSailingSlot = request.yar.get("CurrentSailingSlot") || {};
+    const currentSailingSlot = request.yar.get("currentSailingSlot") || {};
     const currentDate = currentSailingSlot.departureDate.split("/").reverse().join("-");
     const dateTimeString = `${currentDate}T${currentSailingSlot.sailingHour}:${currentSailingSlot.sailingMinutes}:00Z`;
 
