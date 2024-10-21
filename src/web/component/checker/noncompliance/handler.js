@@ -8,6 +8,8 @@ import apiService from "../../../../api/services/apiService.js";
 
 const VIEW_PATH = "componentViews/checker/noncompliance/noncomplianceView";
 
+const genericErrorMessage = "The information wasn't recorded, please try to submit again. If you close the application, the information will be lost. You can printscreen or save the information and submit it later.";
+
 const getNonComplianceHandler = async (request, h) => {
   const data = request.yar.get("data");
   const appSettings = await appSettingsService.getAppSettings();
@@ -98,9 +100,6 @@ const postNonComplianceHandler = async (request, h) => {
       }
     }
 
-    const errorMessage =
-      "The information wasn't recorded, please try to submit again. If you close the application, the information will be lost. You can printscreen or save the information and submit it later.";
-
     if (request.yar.get("IsFailSelected")) {
       setNonComplianceSession(payload);
 
@@ -113,7 +112,7 @@ const postNonComplianceHandler = async (request, h) => {
             errorSummary: [
               {
                 fieldId: "unexpected",
-                message: errorMessage,
+                message: genericErrorMessage,
                 dispalyAs: "text",
               },
             ],
@@ -130,7 +129,7 @@ const postNonComplianceHandler = async (request, h) => {
           errorSummary: [
             {
               fieldId: "unexpected",
-              message: errorMessage,
+              message: genericErrorMessage,
               dispalyAs: "text",
             },
           ],
