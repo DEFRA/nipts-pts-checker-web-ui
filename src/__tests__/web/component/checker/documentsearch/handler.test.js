@@ -15,7 +15,8 @@ jest.mock("../../../../../api/services/microchipAppPtdMainService.js");
 jest.mock("../../../../../api/services/apiService.js");
 jest.mock("../../../../../web/component/checker/documentsearch/validate.js");
 
-const pageTitleDefault = "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland";
+const pageTitleDefault =
+  "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland";
 
 describe("DocumentSearchHandlers", () => {
   describe("getDocumentSearch", () => {
@@ -25,53 +26,81 @@ describe("DocumentSearchHandlers", () => {
       _request = {
         yar: {
           get: jest.fn(),
-          clear: jest.fn()
-        }
+          clear: jest.fn(),
+        },
       };
-  
+
       h = {
-        view: jest.fn()
+        view: jest.fn(),
       };
     });
-  
+
     it("should return the document search view with data on successful fetch", async () => {
       const mockData = { some: "data" };
-      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(mockData);
+      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
+        mockData
+      );
       _request.yar.get.mockReturnValueOnce(true);
-  
+
       await DocumentSearchHandlers.getDocumentSearch(_request, h);
-  
-      expect(documentSearchMainService.getDocumentSearchMain).toHaveBeenCalled();
+
+      expect(
+        documentSearchMainService.getDocumentSearchMain
+      ).toHaveBeenCalled();
       expect(_request.yar.get).toHaveBeenCalledWith("successConfirmation");
       expect(_request.yar.clear).toHaveBeenCalledWith("successConfirmation");
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentSearchView",
-        { documentSearchMainModelData: mockData, successConfirmation: true }
+        {
+          documentSearchMainModelData: mockData,
+          successConfirmation: true,
+          activeTab: "ptd",
+          formSubmitted: false,
+          ptdNumberSearch: "",
+          applicationNumberSearch: "",
+          microchipNumber: "",
+        }
       );
     });
-  
+
     it("should return the document search view with successConfirmation as false if it is null", async () => {
       const mockData = { some: "data" };
-      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(mockData);
+      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
+        mockData
+      );
       _request.yar.get.mockReturnValueOnce(null);
-  
+
       await DocumentSearchHandlers.getDocumentSearch(_request, h);
-  
-      expect(documentSearchMainService.getDocumentSearchMain).toHaveBeenCalled();
+
+      expect(
+        documentSearchMainService.getDocumentSearchMain
+      ).toHaveBeenCalled();
       expect(_request.yar.get).toHaveBeenCalledWith("successConfirmation");
       expect(_request.yar.clear).toHaveBeenCalledWith("successConfirmation");
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentSearchView",
-        { documentSearchMainModelData: mockData, successConfirmation: false }
+        {
+          documentSearchMainModelData: mockData,
+          successConfirmation: false,
+          activeTab: "ptd",
+          formSubmitted: false,
+          ptdNumberSearch: "",
+          applicationNumberSearch: "",
+          microchipNumber: "",
+        }
       );
     });
-  
+
     it("should return the error view if fetching data fails", async () => {
-      documentSearchMainService.getDocumentSearchMain.mockRejectedValue(new Error("Fetch error"));
-  
+      documentSearchMainService.getDocumentSearchMain.mockRejectedValue(
+        new Error("Fetch error")
+      );
+
       await DocumentSearchHandlers.getDocumentSearch(_request, h);
-  
-      expect(documentSearchMainService.getDocumentSearchMain).toHaveBeenCalled();
+
+      expect(
+        documentSearchMainService.getDocumentSearchMain
+      ).toHaveBeenCalled();
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentSearchView",
         { error: "Failed to fetch document search data" }
@@ -100,7 +129,7 @@ describe("DocumentSearchHandlers", () => {
 
     it("should handle microchip search with missing microchip number", async () => {
       const request = {
-        payload: { documentSearch: "microchip" },
+        payload: { documentSearch: "microchip", microchipNumber: "" },
       };
       const h = {
         view: jest.fn().mockReturnValue({}),
@@ -126,6 +155,9 @@ describe("DocumentSearchHandlers", () => {
           ],
           activeTab: "microchip",
           formSubmitted: true,
+          ptdNumberSearch: "",
+          applicationNumberSearch: "",
+          microchipNumber: "",
           documentSearchMainModelData: mockData,
         }
       );
@@ -159,6 +191,9 @@ describe("DocumentSearchHandlers", () => {
           ],
           activeTab: "microchip",
           formSubmitted: true,
+          ptdNumberSearch: "",
+          applicationNumberSearch: "",
+          microchipNumber: "123",
           documentSearchMainModelData: mockData,
         }
       );
@@ -244,13 +279,14 @@ describe("DocumentSearchHandlers", () => {
         view: jest.fn().mockReturnValue({}),
       };
 
+      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
+        mockData
+      );
+
       validatePtdNumber.mockReturnValue({
         isValid: false,
         error: "Enter 6 characters after 'GB826'",
       });
-      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
-        mockData
-      );
 
       await DocumentSearchHandlers.submitSearch(request, h);
 
@@ -266,6 +302,9 @@ describe("DocumentSearchHandlers", () => {
           ],
           activeTab: "ptd",
           formSubmitted: true,
+          ptdNumberSearch: "123",
+          applicationNumberSearch: "",
+          microchipNumber: "",
           documentSearchMainModelData: mockData,
         }
       );
@@ -412,6 +451,10 @@ describe("DocumentSearchHandlers", () => {
             { fieldId: "general", message: "An unexpected error occurred" },
           ],
           formSubmitted: true,
+          activeTab: "ptd",
+          ptdNumberSearch: "123456",
+          applicationNumberSearch: "",
+          microchipNumber: "",
           documentSearchMainModelData: mockData,
         }
       );
