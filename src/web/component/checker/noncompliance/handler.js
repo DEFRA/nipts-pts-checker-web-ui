@@ -158,7 +158,7 @@ const postNonComplianceHandler = async (request, h) => {
       errorSummary: [
         {
           fieldId: "unexpected",
-          message: errorMessage,
+          message: genericErrorMessage,
           dispalyAs: "text",
         },
       ],
