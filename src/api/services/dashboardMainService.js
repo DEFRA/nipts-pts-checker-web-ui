@@ -44,7 +44,7 @@ const getCheckOutcomes = async (startHour, endHour, request) => {
         operatorName: item.operatorName,
         departurePort: item.departurePort,
         arrivalPort: item.arrivalPort,
-        departureDate: formatDate(item.departureDate),
+        departureDate: item.departureDate,
         departureTime: item.departureTime,
         passCount: item.passCount,
         failCount: item.failCount,
