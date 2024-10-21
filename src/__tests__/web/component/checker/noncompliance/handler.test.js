@@ -200,7 +200,7 @@ describe("NonComplianceHandlers", () => {
         const mockData = {
           data: { applicationId: "testApplicationId", documentState: "approved" },
           IsFailSelected: { value: true },  // Return as an object
-          CurrentSailingSlot: {
+          currentSailingSlot: {
             departureDate: "12/10/2024",
             sailingHour: "10",
             sailingMinutes: "30",
@@ -255,7 +255,7 @@ describe("NonComplianceHandlers", () => {
         const mockData = {
           data: { applicationId: "testApplicationId", documentState: "approved" },
           IsFailSelected: { value: true },  // Return as an object
-          CurrentSailingSlot: {
+          currentSailingSlot: {
             departureDate: "12/10/2024",
             sailingHour: "10",
             sailingMinutes: "30",
