@@ -50,11 +50,12 @@ const saveAndContinueHandler = async (request, h) => {
 
         
         //TODO need to get GB/SPS check basing on Org ID and set 
-        //isGBCheck, checkerId
+        //isGBCheck
+        const checkerId = request.yar.get("checkerId");
         const checkOutcome = {
           applicationId: data.applicationId,
           checkOutcome: checklist,
-          checkerId: null,
+          checkerId: checkerId,
           routeId: currentSailingSlot?.selectedRoute?.id ?? null,
           sailingTime: dateTimeString,
           sailingOption: currentSailingSlot.selectedRouteOption.id,

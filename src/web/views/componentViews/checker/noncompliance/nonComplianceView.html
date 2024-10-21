@@ -114,13 +114,48 @@
     resetField('passengerFormGroup', 'passengerError');
   });
 
-  document.addEventListener('DOMContentLoaded', function() { 
+  document.addEventListener('DOMContentLoaded', function() {
   // Intercept back button click to clear validation errors
   document.getElementById('backButton').addEventListener('click', function(_event) {
     sessionStorage.removeItem('formSubmitted');
     history.back();
+    });
+
+  // Select the checkboxes and radios
+  const gbCheckboxes = document.querySelectorAll('#gbRefersToDAERAOrSPS, #gbAdviseNoTravel, #gbPassengerSaysNoTravel');
+  const spsRadios = document.querySelectorAll('input[name="spsOutcome"]');
+
+  // Function to clear the SPS radio buttons
+  function clearSpsRadios() {
+    spsRadios.forEach(radio => {
+      radio.checked = false;
+    });
+  }
+
+  // Function to clear the GB checkboxes
+  function clearGbCheckboxes() {
+    gbCheckboxes.forEach(checkbox => {
+      checkbox.checked = false;
+    });
+  }
+
+  // Add change event listeners to the GB checkboxes
+  gbCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+      // When a GB checkbox is changed, clear the SPS radios
+      clearSpsRadios();
+    });
+  });
+
+  // Add change event listeners to the SPS radios
+  spsRadios.forEach(radio => {
+    radio.addEventListener('change', function() {
+      // When an SPS radio is changed, clear the GB checkboxes
+      clearGbCheckboxes();
+    });
   });
 });
+
 
 </script>
 
