@@ -20,8 +20,8 @@ export default {
         redirectTo: (request) => {
           return auth.requestAuthorizationCodeUrl(session, request);
         },
-        validateFunc: async (request, s) => {
-          let result = { valid: false };
+        validateFunc: async (request, _s) => {
+          const result = { valid: false };
 
           const token = session.getToken(request, sessionKeys.tokens.accessToken);
           const sessionCreationCookie = request.state.sessionCreationTime;

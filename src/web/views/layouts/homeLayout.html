@@ -11,14 +11,14 @@
     – GOV.UK
 
         </title>
-      
-        <!-- <link href="/assets/govuk-frontend/dist/govuk/govuk-frontend.min.css" rel="stylesheet" type="text/css" media="all" /> -->
         <link href="/assets/css/application.css" rel="stylesheet" type="text/css" media="all">
         <link href="/assets/css/checker.css" rel="stylesheet" type="text/css" media="all">
         <link href="/assets/javascripts/autocomplete/accessible-autocomplete.min.css" rel="stylesheet" type="text/css" media="all">
         
 
         <script type="module" src="/assets/govuk-frontend/dist/govuk/govuk-frontend.min.js"></script>
+        {% block headContent %}
+        {% endblock %}
     </head>
     <body class="govuk-template__body pts-checker-home">
         <script>
@@ -77,5 +77,8 @@
                 </div>
             </main>
         </div>
+    {% block bodyContent %}
+    {% endblock %}
+
     </body>
 </html>

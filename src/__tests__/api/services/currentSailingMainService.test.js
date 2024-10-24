@@ -27,9 +27,7 @@ describe("currentSailingMainService", () => {
     // Mock axios response
     httpService.getAsync.mockResolvedValue({ status: 400, data: mockData });
 
-    const result = await currentSailingMainService.getCurrentSailingMain(
-      request
-    );
+    await currentSailingMainService.getCurrentSailingMain(request);
 
     expect(httpService.getAsync).toHaveBeenCalledWith(
       `${baseUrl}/sailing-routes`,

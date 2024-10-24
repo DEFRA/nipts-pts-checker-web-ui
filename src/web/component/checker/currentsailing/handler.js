@@ -20,10 +20,10 @@ const getCurrentSailings = async (request, h) => {
   request.yar.set("SailingRoutes", currentSailingMainModelData.sailingRoutes);
 
  
-  var londonTime = moment.tz("Europe/London");
-  var departureDateDay = londonTime.format('DD');
-  var departureDateMonth = londonTime.format('MM');
-  var departureDateYear = londonTime.format('YYYY');
+  const londonTime = moment.tz("Europe/London");
+  const departureDateDay = londonTime.format('DD');
+  const departureDateMonth = londonTime.format('MM');
+  const departureDateYear = londonTime.format('YYYY');
 
   //this is not caught in OnPreResponse. If we let it continue, we will get a template
   //render error, so handle it here
@@ -40,17 +40,21 @@ const getCurrentSailings = async (request, h) => {
 };
 
 const submitCurrentSailingSlot = async (request, h) => {
-  let { routeOption, routeRadio, routeFlight, departureDateDay, departureDateMonth, departureDateYear, sailingHour, sailingMinutes } = request.payload;
+  const { routeOption, routeRadio, routeFlight, departureDateDay, departureDateMonth, departureDateYear, sailingHour, sailingMinutes } = request.payload;
   const validationRouteOptionRadioResult = validateRouteOptionRadio(routeOption);
   let validationRouteRadioResult;
   let validateFlightNumberResult;
   const validateSailingHourResult = validateSailingHour(sailingHour);
   const validateSailingMinutesResult = validateSailingMinutes(sailingMinutes);
-  const departureDate = departureDateDay.trim() + "/" + departureDateMonth.trim() + "/" + departureDateYear.trim();
+  
+  const departureDateDayPadded = departureDateDay.length === 1 ? '0' + departureDateDay : departureDateDay;
+  const departureDateMonthPadded = departureDateMonth.length === 1 ? '0' + departureDateMonth : departureDateMonth;
+
+  const departureDate = `${departureDateDayPadded.trim()}/${departureDateMonthPadded.trim()}/${departureDateYear.trim()}`;
   const validateDepartureDateResult = validateDate(departureDate);
   const currentSailingMainModelData =  request.yar.get("CurrentSailingModel");
 
-  let errorSummary = [];
+  const errorSummary = [];
   let isValid = true;
   if(!validationRouteOptionRadioResult.isValid)
   {
@@ -151,7 +155,7 @@ const submitCurrentSailingSlot = async (request, h) => {
     routeFlight,
   };
 
-  request.yar.set("CurrentSailingSlot", currentSailingSlot);
+  request.yar.set("currentSailingSlot", currentSailingSlot);
 
   // Perform necessary validations and actions here
 
@@ -160,7 +164,7 @@ const submitCurrentSailingSlot = async (request, h) => {
 };
 
 const getCurrentSailingSlot = async (request, h) => {
-  const currentSailingSlot = request.yar.get("CurrentSailingSlot");
+  const currentSailingSlot = request.yar.get("currentSailingSlot");
   return h.response({
     message: "Retrieved Route details slot",
     currentSailingSlot,

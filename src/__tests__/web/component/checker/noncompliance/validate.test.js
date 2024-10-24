@@ -1,5 +1,5 @@
 import { validateNonCompliance } from "../../../../../web/component/checker/noncompliance/validate";
-import errorMessages from "../../../../../web/component/checker/noncompliance/errorMessage.js";
+import errorMessages from "../../../../../web/component/checker/noncompliance/errorMessages.js";
 
 describe("Validation Functions", () => {
   describe("NonCompliance Validation", () => {

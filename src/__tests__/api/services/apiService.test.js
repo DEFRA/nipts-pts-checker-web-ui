@@ -69,7 +69,7 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((date) => ({
+      moment.mockImplementation((_date) => ({
         format: () => "01/01/2022",
       }));
 
@@ -103,9 +103,6 @@ describe("apiService", () => {
         petOwnerName: "Pet Owner Name change",
         petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
         petOwnerTelephone: "07894465438",
-        petOwnerName: "Pet Owner Name change",
-        petOwnerTelephone: "07894465438",
-        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
         petOwnerAddress: 
         {
           addressLineOne: "CURRIE & BROWN UK LTD  40",
@@ -175,7 +172,7 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((date) => ({
+      moment.mockImplementation((_date) => ({
         format: () => "01/01/2022",
       }));
 
@@ -277,7 +274,7 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((date) => ({
+      moment.mockImplementation((_date) => ({
         format: () => "01/01/2022",
       }));
 
@@ -378,7 +375,7 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((date) => ({
+      moment.mockImplementation((_date) => ({
         format: () => "01/01/2022",
       }));
 
@@ -568,7 +565,7 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((date) => ({
+      moment.mockImplementation((_date) => ({
         format: () => "01/01/2022",
       }));
 
@@ -671,7 +668,7 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((date) => ({
+      moment.mockImplementation((_date) => ({
         format: () => "01/01/2022",
       }));
 
@@ -773,7 +770,7 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((date) => ({
+      moment.mockImplementation((_date) => ({
         format: () => "01/01/2022",
       }));
 
@@ -874,7 +871,7 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((date) => ({
+      moment.mockImplementation((_date) => ({
         format: () => "01/01/2022",
       }));
 

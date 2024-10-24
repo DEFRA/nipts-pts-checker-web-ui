@@ -6,8 +6,6 @@ import {
   } from "../../../api/models/apiResponse.js";;
 
 describe("apiResponse", () => {
-  let response;
-
   describe("setValues for OKResponse", () => {
     it("should return correct data", async () => {
       const result = new OkResponse(200, "success")

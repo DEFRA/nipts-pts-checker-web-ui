@@ -1,62 +1,86 @@
 {% extends "./layouts/checkerLayout.html" %}
+
+{% block headContent %}
+{% endblock %}
+
 {% block pageTitle %} Home - {{currentSailingSlot.pageTitle}}– GOV.UK {% endblock %}
+
 {% block content %}
-<div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-8">
-    <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
-        <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
-          Welcome!
-        </h1>
-    </div>
-  </div>
 
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-
-        <div class="govuk-summary-card">
-            <div class="govuk-summary-card__title-wrapper">
-                <h2 class="govuk-summary-card__title">
-                    Current sailing
-                </h2>
-                <ul class="govuk-summary-card__actions">
-                    <li class="govuk-summary-card__action">
-                        <a class="govuk-link" href="/checker/current-sailings">Change<span class="govuk-visually-hidden">
-                                location</span></a>
-                    </li>
-                </ul>
-            </div>
-            <div class="govuk-summary-card__content">
-                <dl class="govuk-summary-list pts-checker-travel-details">
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Route
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            {{currentSailingSlot.selectedRoute.value}}
-                        </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Date
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            {{currentSailingSlot.currentDate}}
-                        </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Scheduled sailing time
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            {{currentSailingSlot.sailingHour}}:{{currentSailingSlot.sailingMinutes}}
-                        </dd>
-                    </div>
-
-                </dl>
-            </div>
+    {% if successConfirmation %}
+        <div id="successBanner" class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-6">
+        {% include "./success/successBanner.html" %}
         </div>
+    {% endif %}
 
+    <div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-8">
+        <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
+            <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
+          Checks
+        </h1>
+        </div>
     </div>
-</div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            {% if checks | length === 0 %}
+                <p class="govuk-body">No animals have been checked in the past 48 hours.</p>
+            {% endif %}
+
+            {% for check in checks %}
+                <div class="govuk-summary-card">
+                    <div class="govuk-summary-card__title-wrapper">
+                        <h3 class="govuk-summary-card__title">
+
+                            <p class="govuk-body  govuk-!-margin-bottom-1">
+                                <b>Route:</b>
+                                {{check.routeName}}</p>
+                            <p class="govuk-body govuk-!-margin-bottom-0">
+                                <b>Departure:</b>
+                                {{check.departureDate}}
+                                {{check.departureTime}}</p>
+                        </h3>
+                    </div>
+                    <div class="govuk-summary-card__content checker-dashboard">
+                        <dl class="govuk-summary-list">
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    Pass
+                                </dt>
+                                <dd class="govuk-summary-list__value">
+                                    {{check.passCount}}
+                                </dd>
+                            </div>
+
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    Fail: Referred to SPS
+                                </dt>
+                                <dd class="govuk-summary-list__value">
+                                    {{check.failCount}}
+                                </dd>
+
+                                <dd class="govuk-summary-list__actions">
+                                    <a class="govuk-link" href="#">View<span class="govuk-visually-hidden"> reported</span></a>
+                                </dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block bodyContent %}
+    <script>
+        // 1 minute
+        const MILLISECONDS = 60000;
+        setTimeout(() => {
+            window.location.reload();
+        }, MILLISECONDS);
+    </script>
 {% endblock %}

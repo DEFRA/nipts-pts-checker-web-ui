@@ -2,7 +2,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 import { HttpStatusCode } from "axios";
 import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js";
 import httpService from "./httpService.js";
-import { issuingAuthorityModelData } from '../../constants/issuingAuthority.js';
+import { issuingAuthorityModelData } from "../../constants/issuingAuthority.js";
 import moment from "moment";
 
 const buildApiUrl = (endpoint) => {
@@ -29,6 +29,11 @@ const statusMapping = {
   revoked: "revoked",
 };
 
+const unexpectedResponseErrorText = "Unexpected response structure";
+const unexpectedErrorText = "Unexpected error occurred";
+const petNotFoundErrorText = "Pet not found";
+const applicationNotFoundErrorText = "Application not found";
+
 const formatDate = (dateRaw) => {
   const date = dateRaw ? new Date(dateRaw) : null;
   return date ? moment(date).format("DD/MM/YYYY") : undefined;
@@ -38,25 +43,25 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
   try {
     const data = { ptdNumber: ptdNumberFromPayLoad };
     const url = buildApiUrl("Checker/checkPTDNumber");
-    var response = await httpService.postAsync(url, data, request);
+    const response = await httpService.postAsync(url, data, request);
 
-    if (response.status == HttpStatusCode.NotFound) {
+    if (response.status === HttpStatusCode.NotFound) {
       throw new Error(response.error);
     }
 
     const item = response.data;
 
     if (!item || typeof item !== "object") {
-      throw new Error("Unexpected response structure");
+      throw new Error(unexpectedResponseErrorText);
     }
 
     // Ensure the item structure is as expected
     if (!item.pet) {
-      return { error: "Pet not found" };
+      return { error: petNotFoundErrorText };
     }
 
     if (!item.application) {
-      return { error: "Application not found" };
+      return { error: applicationNotFoundErrorText };
     }
 
     if (!item.travelDocument) {
@@ -69,24 +74,23 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
 
     const ptdNumber =
       documentState === "approved" || documentState === "revoked"
-        ? item.travelDocument &&
-          item.travelDocument.travelDocumentReferenceNumber
-        : item.application && item.application.referenceNumber;
+        ? item?.travelDocument?.travelDocumentReferenceNumber
+        : item?.application?.referenceNumber;
 
     let issuedDateRaw;
 
     switch (documentState) {
       case "approved":
-        issuedDateRaw = item.application && item.application.dateAuthorised;
+        issuedDateRaw = item.application?.dateAuthorised;
         break;
       case "revoked":
-        issuedDateRaw = item.application && item.application.dateRevoked;
+        issuedDateRaw = item.application?.dateRevoked;
         break;
       case "rejected":
-        issuedDateRaw = item.application && item.application.dateRejected;
+        issuedDateRaw = item.application?.dateRejected;
         break;
       default:
-        issuedDateRaw = item.application && item.application.dateOfApplication;
+        issuedDateRaw = item.application?.dateOfApplication;
         break;
     }
 
@@ -107,13 +111,11 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
       petBreed: item.pet ? item.pet.breedName : undefined,
       documentState,
       ptdNumber,
-      issuedDate: formattedIssuedDate ? formattedIssuedDate : undefined,
+      issuedDate: formattedIssuedDate || undefined,
       microchipNumber: item.pet ? item.pet.microchipNumber : undefined,
-      microchipDate: formattedMicrochippedDate
-        ? formattedMicrochippedDate
-        : undefined,
+      microchipDate: formattedMicrochippedDate || undefined,
       petSex: item.pet ? item.pet.sex : undefined,
-      petDoB: formattedDateOfBirth ? formattedDateOfBirth : undefined,
+      petDoB: formattedDateOfBirth || undefined,
       petColour: item.pet ? item.pet.colourName : undefined,
       petFeaturesDetail: item.pet ? item.pet.significantFeatures : undefined,
       applicationId: item.application
@@ -135,10 +137,10 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
     console.error("Error fetching data:", error.message);
 
     // Check for specific error message and return a structured error
-    if (error && error.message) {
+    if (error?.message) {
       if (
-        error.message === "Application not found" ||
-        error.message === "Pet not found"
+        error.message === applicationNotFoundErrorText ||
+        error.message === petNotFoundErrorText
       ) {
         return { error: "not_found" };
       } else {
@@ -146,7 +148,7 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
       }
     }
 
-    return { error: "Unexpected error occurred" };
+    return { error: unexpectedErrorText };
   }
 };
 
@@ -157,25 +159,25 @@ const getApplicationByApplicationNumber = async (
   try {
     const data = { applicationNumber: applicationNumber };
     const url = buildApiUrl("Checker/checkApplicationNumber");
-    var response = await httpService.postAsync(url, data, request);
+    const response = await httpService.postAsync(url, data, request);
 
-    if (response.status == HttpStatusCode.NotFound) {
+    if (response.status === HttpStatusCode.NotFound) {
       throw new Error(response.error);
     }
 
     const item = response.data;
 
     if (!item || typeof item !== "object") {
-      throw new Error("Unexpected response structure");
+      throw new Error(unexpectedResponseErrorText);
     }
 
     // Ensure the item structure is as expected
     if (!item.pet) {
-      return { error: "Pet not found" };
+      return { error: petNotFoundErrorText };
     }
 
     if (!item.application) {
-      return { error: "Application not found" };
+      return { error: applicationNotFoundErrorText };
     }
 
     if (!item.travelDocument) {
@@ -188,24 +190,23 @@ const getApplicationByApplicationNumber = async (
 
     const ptdNumber =
       documentState === "approved" || documentState === "revoked"
-        ? item.travelDocument &&
-          item.travelDocument.travelDocumentReferenceNumber
-        : item.application && item.application.referenceNumber;
+        ? item?.travelDocument?.travelDocumentReferenceNumber
+        : item?.application?.referenceNumber;
 
     let issuedDateRaw;
 
     switch (documentState) {
       case "approved":
-        issuedDateRaw = item.application && item.application.dateAuthorised;
+        issuedDateRaw = item?.application?.dateAuthorised;
         break;
       case "revoked":
-        issuedDateRaw = item.application && item.application.dateRevoked;
+        issuedDateRaw = item?.application?.dateRevoked;
         break;
       case "rejected":
-        issuedDateRaw = item.application && item.application.dateRejected;
+        issuedDateRaw = item?.application?.dateRejected;
         break;
       default:
-        issuedDateRaw = item.application && item.application.dateOfApplication;
+        issuedDateRaw = item?.application?.dateOfApplication;
         break;
     }
 
@@ -226,13 +227,11 @@ const getApplicationByApplicationNumber = async (
       petBreed: item.pet ? item.pet.breedName : undefined,
       documentState,
       ptdNumber,
-      issuedDate: formattedIssuedDate ? formattedIssuedDate : undefined,
+      issuedDate: formattedIssuedDate || undefined,
       microchipNumber: item.pet ? item.pet.microchipNumber : undefined,
-      microchipDate: formattedMicrochippedDate
-        ? formattedMicrochippedDate
-        : undefined,
+      microchipDate: formattedMicrochippedDate || undefined,
       petSex: item.pet ? item.pet.sex : undefined,
-      petDoB: formattedDateOfBirth ? formattedDateOfBirth : undefined,
+      petDoB: formattedDateOfBirth || undefined,
       petColour: item.pet ? item.pet.colourName : undefined,
       petFeaturesDetail: item.pet ? item.pet.significantFeatures : undefined,
       applicationId: item.application
@@ -253,10 +252,10 @@ const getApplicationByApplicationNumber = async (
   } catch (error) {
     console.error("Error fetching data:", error.message);
 
-    if (error && error.message) {
+    if (error?.message) {
       if (
-        error.message === "Application not found" ||
-        error.message === "Pet not found"
+        error.message === applicationNotFoundErrorText ||
+        error.message === petNotFoundErrorText
       ) {
         return { error: "not_found" };
       } else {
@@ -264,7 +263,7 @@ const getApplicationByApplicationNumber = async (
       }
     }
 
-    return { error: "Unexpected error occurred" };
+    return { error: unexpectedErrorText };
   }
 };
 
@@ -272,15 +271,15 @@ const recordCheckOutCome = async (checkOutcome, request) => {
   try {
     const data = checkOutcome;
     const url = buildApiUrl("Checker/CheckOutcome");
-    var response = await httpService.postAsync(url, data, request);
+    const response = await httpService.postAsync(url, data, request);
 
-    if (response.status == HttpStatusCode.NotFound) {
+    if (response.status === HttpStatusCode.NotFound) {
       throw new Error(response.error);
     }
 
     const item = response.data;
     if (!item || typeof item !== "object") {
-      throw new Error("Unexpected response structure");
+      throw new Error(unexpectedResponseErrorText);
     }
 
     return item.checkSummaryId;
@@ -288,14 +287,45 @@ const recordCheckOutCome = async (checkOutcome, request) => {
     console.error("Error fetching data:", error.message);
 
     // Check for specific error message and return a structured error
-    if (error && error.message) {
-      if (error.message === "Application not found") {
+    if (error?.message) {
+      if (error.message === applicationNotFoundErrorText) {
         return { error: "not_found" };
       } else {
         return { error: error.message };
       }
     }
-    return { error: "Unexpected error occurred" };
+    return { error: unexpectedErrorText };
+  }
+};
+
+const reportNonCompliance = async (checkOutcome, request) => {
+  try {
+    const data = checkOutcome;
+    const url = buildApiUrl("Checker/ReportNonCompliance");
+    const response = await httpService.postAsync(url, data, request);
+
+    if (response.status === HttpStatusCode.NotFound) {
+      throw new Error(response.error);
+    }
+
+    const item = response.data;
+    if (!item || typeof item !== "object") {
+      throw new Error(unexpectedResponseErrorText);
+    }
+
+    return item.checkSummaryId;
+  } catch (error) {
+    console.error("Error fetching data:", error.message);
+
+    // Check for specific error message and return a structured error
+    if (error?.message) {
+      if (error.message === applicationNotFoundErrorText) {
+        return { error: "not_found" };
+      } else {
+        return { error: error.message };
+      }
+    }
+    return { error: unexpectedErrorText };
   }
 };
 
@@ -307,7 +337,7 @@ const saveCheckerUser = async (checker, request) => {
 
     const checkerId = response.data;
     if (!checkerId || typeof checkerId !== "object") {
-      throw new Error("Unexpected response structure");
+      throw new Error(unexpectedResponseErrorText);
     }
 
     return checkerId;
@@ -316,16 +346,18 @@ const saveCheckerUser = async (checker, request) => {
 
     // Check for specific error message and return a structured error
     if (error?.message) {
-        return { error: error.message };
+      return { error: error.message };
     }
 
-    return { error: "Unexpected error occurred" };
+    return { error: unexpectedErrorText };
   }
 };
+
 
 export default {
   getApplicationByPTDNumber,
   getApplicationByApplicationNumber,
   recordCheckOutCome,
+  reportNonCompliance,
   saveCheckerUser
 };

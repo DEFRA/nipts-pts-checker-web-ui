@@ -79,9 +79,9 @@
 
         <div class="govuk-checkboxes" data-module="govuk-checkboxes">
             <div class="govuk-checkboxes__item">
-                <input class="govuk-checkboxes__input" id="visualCheckProblem" name="visualCheckProblem" type="checkbox"
-                    value="on" {% if payload['visualCheckProblem']=="on" %}checked{% endif %}>
-                <label class="govuk-label govuk-checkboxes__label" for="visualCheckProblem">
+                <input class="govuk-checkboxes__input" id="vcNotMatchPTD" name="vcNotMatchPTD" type="checkbox"
+                    value="true" {% if payload['vcNotMatchPTD']=="true" %}checked{% endif %}>
+                <label class="govuk-label govuk-checkboxes__label" for="vcNotMatchPTD">
                     Pet does not match the PTD
                 </label>
             </div>

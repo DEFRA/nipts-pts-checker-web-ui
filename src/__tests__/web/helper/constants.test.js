@@ -14,5 +14,4 @@ describe('Constants', () => {
     expect(constants.prototypeVersion).toEqual('v1');
   });
 
-  // Add more tests for other properties as needed
 });

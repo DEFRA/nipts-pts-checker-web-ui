@@ -4,20 +4,23 @@
 <div class="govuk-form-group">
     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
       <div class="govuk-checkboxes__item">
-        <input class="govuk-checkboxes__input" id="outcomeReferred" name="outcomeReferred" type="checkbox" value="Passenger referred to DAERA/SPS at NI port">
-        <label class="govuk-label govuk-checkboxes__label" for="outcomeReferred">
+        <input class="govuk-checkboxes__input" id="gbRefersToDAERAOrSPS" name="gbRefersToDAERAOrSPS" type="checkbox" value="true"
+        {% if payload['gbRefersToDAERAOrSPS']=="true" %}checked{% endif %}>
+        <label class="govuk-label govuk-checkboxes__label" for="gbRefersToDAERAOrSPS">
           Passenger referred to DAERA/SPS at NI port
         </label>
       </div>
       <div class="govuk-checkboxes__item">
-        <input class="govuk-checkboxes__input" id="outcomeAdvised" name="outcomeAdvised" type="checkbox" value="Passenger advised not to travel">
-        <label class="govuk-label govuk-checkboxes__label" for="outcomeAdvised">
+        <input class="govuk-checkboxes__input" id="gbAdviseNoTravel" name="gbAdviseNoTravel" type="checkbox" value="true"
+        {% if payload['gbAdviseNoTravel']=="true" %}checked{% endif %}>
+        <label class="govuk-label govuk-checkboxes__label" for="gbAdviseNoTravel">
           Passenger advised not to travel
         </label>
       </div>
       <div class="govuk-checkboxes__item">
-        <input class="govuk-checkboxes__input" id="outcomeNotTravelling" name="outcomeNotTravelling" type="checkbox" value="Passenger says they will not travel">
-        <label class="govuk-label govuk-checkboxes__label" for="outcomeNotTravelling">
+        <input class="govuk-checkboxes__input" id="gbPassengerSaysNoTravel" name="gbPassengerSaysNoTravel" type="checkbox" value="true"
+        {% if payload['gbPassengerSaysNoTravel']=="true" %}checked{% endif %}>
+        <label class="govuk-label govuk-checkboxes__label" for="gbPassengerSaysNoTravel">
           Passenger says they will not travel
         </label>
       </div>

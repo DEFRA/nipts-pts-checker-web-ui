@@ -1,4 +1,4 @@
-import errorMessages from "../../../../../web/component/checker/noncompliance/errorMessage.js";
+import errorMessages from "../../../../../web/component/checker/noncompliance/errorMessages.js";
 
 describe("errorMessages", () => {
   test("should contain the correct error messages for microchipNumber", () => {

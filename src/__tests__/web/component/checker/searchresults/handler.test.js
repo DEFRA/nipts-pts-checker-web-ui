@@ -1,16 +1,16 @@
 "use strict";
 
 import { SearchResultsHandlers } from "../../../../../web/component/checker/searchresults/handler.js";
-import errorMessages from "../../../../../web/component/checker/searchresults/errorMessage.js";
+import errorMessages from "../../../../../web/component/checker/searchresults/errorMessages.js";
 import apiService from "../../../../../api/services/apiService.js";
 import {
   validatePassOrFail,
 } from "../../../../../web/component/checker/searchresults/validate";
-import { CheckOutcomeConstants } from '../../../../../constants/checkOutcomeConstant.js';
-import { HttpStatusConstants } from '../../../../../constants/httpMethod.js';
 
 jest.mock("../../../../../api/services/apiService.js");
 jest.mock("../../../../../web/component/checker/searchresults/validate");
+
+const pageTitleDefault = "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland";
 
 describe("SearchResultsHandlers", () => {
   describe("getSearchResultsHandler", () => {
@@ -45,7 +45,7 @@ describe("SearchResultsHandlers", () => {
         "componentViews/checker/searchresults/searchResultsView",
         {
           microchipNumber: mockMicrochipNumber,
-          pageTitle: "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
+          pageTitle: pageTitleDefault,
           data: mockData,
         }
       );
@@ -56,7 +56,7 @@ describe("SearchResultsHandlers", () => {
       expect(response.data).toEqual({
           data: mockData,
           microchipNumber: "123456789012345",
-          pageTitle: "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
+          pageTitle: pageTitleDefault,
         });
     });
   });
@@ -115,7 +115,41 @@ describe('saveAndContinueHandler', () => {
     }));
   });
 
+  it('should return to document search if checks pass', async () => {
+    request.payload.checklist = 'Pass';
+    request.payload.microchipNumber = "123456789012345";
+    request.yar.get
+                .mockReturnValueOnce({ documentState: 'active' })
+                .mockReturnValueOnce({
+                  departureDate: '12/10/2023', // Format: DD/MM/YYYY
+                  sailingHour: '14',
+                  sailingMinutes: '30',
+                  selectedRoute: { id: 'route123' },
+                  selectedRouteOption: { id: 'option456' },
+                  routeFlight: 'FL1234',
+                });
 
+    apiService.recordCheckOutCome.mockResolvedValueOnce({
+      status: 'success', // You can set the status or result to whatever your function expects
+    });
+                
+    validatePassOrFail.mockReturnValueOnce({ isValid: true });
+
+    await SearchResultsHandlers.saveAndContinueHandler(request, h);
+
+    expect(h.redirect).toHaveBeenCalledWith('/checker/document-search');
+  });
+
+  it('should return to non compliance if checks fail', async () => {
+    request.payload.checklist = 'Fail';
+    request.payload.microchipNumber = "123456789012345"
+    request.yar.get.mockReturnValueOnce({ documentState: 'active' });
+    validatePassOrFail.mockReturnValueOnce({ isValid: true });
+
+    await SearchResultsHandlers.saveAndContinueHandler(request, h);
+
+    expect(h.redirect).toHaveBeenCalledWith('/checker/non-compliance');
+  });
 
   it('should handle unexpected errors', async () => {
     request.payload.checklist = 'Pass';
@@ -130,6 +164,7 @@ describe('saveAndContinueHandler', () => {
       errorSummary: [{ fieldId: 'general', message: 'An unexpected error occurred' }],
     });
   });
+
 });
 
 });

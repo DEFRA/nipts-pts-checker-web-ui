@@ -9,15 +9,7 @@ const getToken = (request) => {
 
 const userHasOrganisation = (request) => {
   const organisation = getUserOrganisation(request);
-  if (
-    organisation &&
-    organisation.organisationId &&
-    organisation.organisationId.length > 0
-  ) {
-    return true;
-  }
-
-  return false;
+  return organisation?.organisationId?.length > 0;
 };
 
 const getUserOrganisation = (request) => {

@@ -3,17 +3,17 @@
 {% block pageTitle %} Find a document - {{documentSearchMainModelData.pageTitle}} – GOV.UK {% endblock %}
 
 {% block content %}
-  {% if successConfirmation %}
-    <div id="successBanner" class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-6">
-      {% include "./success/successBanner.html" %}
-    </div>
-  {% endif %}
+{% if successConfirmation %}
+<div id="successBanner" class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-6">
+  {% include "./success/successBanner.html" %}
+</div>
+{% endif %}
 
 <div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-8">
   <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
 
     <div id="errorSummary">
-      {% if formSubmitted %}
+      {% if formSubmitted and errorSummary %}
       {% include "./errors/displayErrorSummary.html" %}
       {% endif %}
     </div>
@@ -30,59 +30,65 @@
               </legend>
               <div class="govuk-radios" data-module="govuk-radios">
                 <ul style="list-style: none; padding-left: 0;">
-                  <li list-style-type: none;>
+                  <li>
                     <div class="govuk-radios__item">
                       <input class="govuk-radios__input" id="documentSearch-1" name="documentSearch" type="radio"
-                        value="ptd" data-aria-controls="conditional-documentSearch-1" aria-label="SearchByPtdNumber" {% if activeTab =="ptd"
-                        %}checked{% endif %} checked>
+                        value="ptd" data-aria-controls="conditional-documentSearch-1" aria-label="SearchByPtdNumber" {%
+                        if activeTab=="ptd" %}checked{% endif %}>
                       <label class="govuk-label govuk-radios__label" for="documentSearch-1">
                         {{documentSearchMainModelData.searchOptions[0].value}}
                       </label>
                     </div>
-                    <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                    <div
+                      class="govuk-radios__conditional {% if activeTab == 'ptd' %}{% else %}govuk-radios__conditional--hidden{% endif %}"
                       id="conditional-documentSearch-1">
-                      <div id="ptd-form-group" class="govuk-form-group {% if error and activeTab == "ptd" %}govuk-form-group--error{%
-                        endif %}">
+                      <div id="ptd-form-group" class="govuk-form-group {% if error and activeTab == " ptd"
+                        %}govuk-form-group--error{% endif %}">
                         {% if error and activeTab == "ptd" %}
                         <p id="ptd-error" class="govuk-error-message">
-                          <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span> {{error}}
+                          <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span>
+                          {{error}}
                         </p>
                         {% endif %}
                         <div class="govuk-input__wrapper">
-                          <div class="govuk-input__prefix" aria-hidden="true">{{documentSearchMainModelData.ptdSearchText}}
+                          <div class="govuk-input__prefix" aria-hidden="true">
+                            {{documentSearchMainModelData.ptdSearchText}}
                           </div>
-                          <input class="govuk-input {% if error %} govuk-input--error {% endif %} govuk-input--width-10" id="ptdNumberSearch" aria-label="PtdNumber Input" name="ptdNumberSearch"
-                            type="text" spellcheck="false" {% if activeTab=="ptd"
-                            %}value={{documentSearchMainModelData.searchText}} {% endif %}>
+                          <input class="govuk-input {% if error and activeTab == " ptd" %}govuk-input--error{% endif %}
+                            govuk-input--width-10" id="ptdNumberSearch" aria-label="PtdNumber Input"
+                            name="ptdNumberSearch" type="text" spellcheck="false" value="{{ptdNumberSearch}}">
                         </div>
                       </div>
                     </div>
                   </li>
-                  <li list-style-type: none;>
+                  <li>
                     <div class="govuk-radios__item">
                       <input class="govuk-radios__input" id="documentSearch-2" name="documentSearch" type="radio"
-                        value="application" data-aria-controls="conditional-documentSearch-2" {% if activeTab=="application"
-                        %}checked{% endif %}>
+                        value="application" data-aria-controls="conditional-documentSearch-2" {% if
+                        activeTab=="application" %}checked{% endif %}>
                       <label class="govuk-label govuk-radios__label" for="documentSearch-2">
                         {{documentSearchMainModelData.searchOptions[1].value}}
                       </label>
                     </div>
-                    <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                    <div
+                      class="govuk-radios__conditional {% if activeTab == 'application' %}{% else %}govuk-radios__conditional--hidden{% endif %}"
                       id="conditional-documentSearch-2">
-                      <div id="application-form-group" class="govuk-form-group {% if error and activeTab == "application" %}govuk-form-group--error{%
-                        endif %}">
+                      <div id="application-form-group" class="govuk-form-group {% if error and activeTab == "
+                        application" %}govuk-form-group--error{% endif %}">
                         {% if error and activeTab == "application" %}
                         <p id="application-error" class="govuk-error-message">
-                          <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span> {{error}}
+                          <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span>
+                          {{error}}
                         </p>
                         {% endif %}
-                        <input class="govuk-input {% if error %} govuk-input--error {% endif %} govuk-input--width-10" id="applicationNumberSearch"
-                          name="applicationNumberSearch" type="text" spellcheck="false" aria-label="ApplicationNumber Input" {% if activeTab=="application"
-                          %}value={{documentSearchMainModelData.searchText}} {% endif %}>
+                        <input class="govuk-input {% if error and activeTab == " application" %}govuk-input--error{%
+                          endif %} govuk-input--width-10" id="applicationNumberSearch" name="applicationNumberSearch"
+                          type="text" spellcheck="false" aria-label="ApplicationNumber Input"
+                          value="{{applicationNumberSearch}}">
                       </div>
                     </div>
                   </li>
-                  <li list-style-type: none;>
+                  <li>
                     <div class="govuk-radios__item">
                       <input class="govuk-radios__input" id="documentSearch-3" name="documentSearch" type="radio"
                         value="microchip" data-aria-controls="conditional-documentSearch-3" {% if activeTab=="microchip"
@@ -91,18 +97,20 @@
                         {{documentSearchMainModelData.searchOptions[2].value}}
                       </label>
                     </div>
-                    <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                    <div
+                      class="govuk-radios__conditional {% if activeTab == 'microchip' %}{% else %}govuk-radios__conditional--hidden{% endif %}"
                       id="conditional-documentSearch-3">
-                      <div id="microchip-form-group" class="govuk-form-group {% if error and activeTab == "microchip" %}govuk-form-group--error{%
-                        endif %}">
+                      <div id="microchip-form-group" class="govuk-form-group {% if error and activeTab == " microchip"
+                        %}govuk-form-group--error{% endif %}">
                         {% if error and activeTab == "microchip" %}
                         <p id="microchip-error" class="govuk-error-message">
-                          <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span> {{error}}
+                          <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span>
+                          {{error}}
                         </p>
                         {% endif %}
-                        <input class="govuk-input {% if error %} govuk-input--error {% endif %} govuk-input--width-20" id="microchipNumber" name="microchipNumber"
-                          type="text" spellcheck="false" aria-label="MicrochipNumber Input" {% if activeTab=="microchip"
-                          %}value={{documentSearchMainModelData.searchText}} {% endif %}>
+                        <input class="govuk-input {% if error and activeTab == " microchip" %}govuk-input--error{% endif
+                          %} govuk-input--width-20" id="microchipNumber" name="microchipNumber" type="text"
+                          spellcheck="false" aria-label="MicrochipNumber Input" value="{{microchipNumber}}">
                       </div>
                     </div>
                   </li>
@@ -133,10 +141,9 @@
   function resetField(inputId, formGroupId, errorId) {
     const inputElement = document.getElementById(inputId);
     inputElement.value = '';
-    document.getElementById('errorSummary').hidden = true;
     document.getElementById(formGroupId).classList.remove("govuk-form-group--error");
     inputElement.classList.remove("govuk-input--error");
-    
+
     const errorElement = document.getElementById(errorId);
     if (errorElement) {
       errorElement.remove();
@@ -147,14 +154,28 @@
     const allConditionals = ['conditional-documentSearch-1', 'conditional-documentSearch-2', 'conditional-documentSearch-3'];
     allConditionals.forEach(id => {
       const element = document.getElementById(id);
-      element.className = id === visibleId 
+      element.className = id === visibleId
         ? 'govuk-radios__conditional'
         : 'govuk-radios__conditional govuk-radios__conditional--hidden';
     });
   }
 
+  // Event listeners for radio buttons
+  document.getElementById('documentSearch-1').addEventListener('click', () => {
+    toggleConditionals('conditional-documentSearch-1');
+  });
+
+  document.getElementById('documentSearch-2').addEventListener('click', () => {
+    toggleConditionals('conditional-documentSearch-2');
+  });
+
+  document.getElementById('documentSearch-3').addEventListener('click', () => {
+    toggleConditionals('conditional-documentSearch-3');
+  });
+
   // Clear all fields and reset radio buttons
-  function clearSearchFields() {
+  function clearSearchFields(event) {
+    event.preventDefault(); // Prevent default link behavior
     resetField('ptdNumberSearch', 'ptd-form-group', 'ptd-error');
     resetField('applicationNumberSearch', 'application-form-group', 'application-error');
     resetField('microchipNumber', 'microchip-form-group', 'microchip-error');
@@ -164,57 +185,31 @@
 
   document.getElementById('clearSearchButton').addEventListener('click', clearSearchFields);
 
-  window.addEventListener('load', () => {
-    if (!window.location.hash) {
-      history.replaceState("", document.title, window.location.pathname + window.location.search);
+  // On form submission, clear irrelevant fields
+  document.getElementById('documentSearchForm').addEventListener('submit', function (event) {
+    const selectedOption = document.querySelector('input[name="documentSearch"]:checked').value;
+    const inputFields = {
+      ptd: document.getElementById('ptdNumberSearch'),
+      application: document.getElementById('applicationNumberSearch'),
+      microchip: document.getElementById('microchipNumber')
+    };
+
+    // Clear values of non-relevant input fields
+    for (let key in inputFields) {
+      if (key !== selectedOption) {
+        inputFields[key].value = '';
+      }
     }
   });
 
-  // Event listeners for radio buttons
-  document.getElementById('documentSearch-1').addEventListener('click', () => {
-    resetField('ptdNumberSearch', 'ptd-form-group', 'ptd-error');
+  // On page load, ensure correct conditional content is displayed
+  document.addEventListener('DOMContentLoaded', function () {
+    toggleConditionals('conditional-documentSearch-' + getSelectedOptionId());
   });
 
-  document.getElementById('documentSearch-2').addEventListener('click', () => {
-    resetField('applicationNumberSearch', 'application-form-group', 'application-error');
-  });
-
-  document.getElementById('documentSearch-3').addEventListener('click', () => {
-    resetField('microchipNumber', 'microchip-form-group', 'microchip-error');
-  });
-
-  // Function to clear validation errors
-  function clearValidationErrors() {
-    document.querySelectorAll('.govuk-error-message').forEach(function(el) {
-      el.remove();
-    });
-    document.querySelectorAll('.govuk-form-group--error').forEach(function(el) {
-      el.classList.remove('govuk-form-group--error');
-    });
-    document.getElementById('errorSummary').innerHTML = '';
+  function getSelectedOptionId() {
+    const selectedOption = document.querySelector('input[name="documentSearch"]:checked').value;
+    return selectedOption === 'ptd' ? '1' : selectedOption === 'application' ? '2' : '3';
   }
-
-  document.addEventListener('DOMContentLoaded', function() {
-    // Clear validation errors on page load if form wasn't submitted
-    if (!sessionStorage.getItem('formSubmitted')) {
-      clearValidationErrors();
-    } else {
-      sessionStorage.removeItem('formSubmitted');
-    }
-
-    // Intercept back button click to clear validation errors
-    document.getElementById('backButton').addEventListener('click', function() {
-      sessionStorage.removeItem('formSubmitted');
-      history.back();
-    });
-  });
-
-  // Form submission event listener
-  document.getElementById('documentSearchForm').addEventListener('submit', function() {
-    // Mark form as submitted and clear previous error messages
-    sessionStorage.setItem('formSubmitted', 'true');
-    clearValidationErrors();
-    
-  });
 </script>
 {% endblock %}

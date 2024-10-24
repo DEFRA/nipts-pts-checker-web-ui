@@ -20,7 +20,7 @@ function updatePolicy (request, h, analytics) {
   cookiesPolicy.analytics = analytics
   cookiesPolicy.confirmed = true
 
-  h.state(onfig.cookieNameCookiePolicy, cookiesPolicy)
+  h.state(config.cookieNameCookiePolicy, cookiesPolicy)
 
   if (!analytics) {
     removeAnalytics(request, h)

@@ -9,25 +9,25 @@
 
         <div class="govuk-checkboxes" data-module="govuk-checkboxes">
             <div class="govuk-checkboxes__item">
-                <input class="govuk-checkboxes__input" id="otherIssuesCommercialRadio" name="otherIssuesCommercialRadio" type="checkbox"
-                    value="on" />
-                <label class="govuk-label govuk-checkboxes__label" for="otherIssuesCommercialRadio">
+                <input class="govuk-checkboxes__input" id="oiFailPotentialCommercial" name="oiFailPotentialCommercial" type="checkbox"
+                    value="true" {% if payload['oiFailPotentialCommercial']=="true" %}checked{% endif %}/>
+                <label class="govuk-label govuk-checkboxes__label" for="oiFailPotentialCommercial">
                     Potential commercial movement
                 </label>
             </div>
 
             <div class="govuk-checkboxes__item">
-                <input class="govuk-checkboxes__input" id="otherIssuesAuthorisedRadio" name="otherIssuesAuthorisedRadio" type="checkbox"
-                    value=on" />
-                <label class="govuk-label govuk-checkboxes__label" for="otherIssuesAuthorisedRadio">
+                <input class="govuk-checkboxes__input" id="oiFailAuthTravellerNoConfirmation" name="oiFailAuthTravellerNoConfirmation" type="checkbox"
+                    value="true" {% if payload['oiFailAuthTravellerNoConfirmation']=="true" %}checked{% endif %}/>
+                <label class="govuk-label govuk-checkboxes__label" for="oiFailAuthTravellerNoConfirmation">
                     Authorised traveller but no confirmation
                 </label>
             </div>
 
             <div class="govuk-checkboxes__item">
-                <input class="govuk-checkboxes__input" id="otherIssuesSomethingRadio" name="otherIssuesSomethingRadio" type="checkbox"
-                    value="on" />
-                <label class="govuk-label govuk-checkboxes__label" for="otherIssuesSomethingRadio">
+                <input class="govuk-checkboxes__input" id="oiFailOther" name="oiFailOther" type="checkbox"
+                    value="true" {% if payload['oiFailOther']=="true" %}checked{% endif %}/>
+                <label class="govuk-label govuk-checkboxes__label" for="oiFailOther">
                     Other reason
                 </label>
                 <div id="somethingRadio-item-hint" class="govuk-hint govuk-radios__hint">
