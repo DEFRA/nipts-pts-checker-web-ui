@@ -18,15 +18,12 @@ describe("Handler", () => {
 
       const mockRequest = {
         yar: {
-          get: jest.fn((key) => {
-              return null;
-          }),
           clear: jest.fn(), // Ensure this is correctly defined
         },
       };
 
       const h = {
-        view: jest.fn((viewPath, data) => {
+        view: jest.fn((viewPath) => {
           return { viewPath, mockData };
         }),
       };

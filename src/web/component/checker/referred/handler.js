@@ -3,7 +3,7 @@ import headerData from "../../../../web/helper/constants.js";
 
 const VIEW_PATH = "componentViews/checker/referred/referredView";
 
-const getReferredChecks = async (request, h) => {
+const getReferredChecks = async (_request, h) => {
   headerData.section = "referred";
 
   const serviceName = `${headerData.checkerTitle}: ${headerData.checkerSubtitle}`;
