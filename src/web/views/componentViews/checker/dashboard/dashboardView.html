@@ -18,6 +18,7 @@
             <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
           Checks
         </h1>
+        <h2 class="govuk-visually-hidden">Checks performed in the past 48 hours</h2>
         </div>
     </div>
 
@@ -62,7 +63,7 @@
                                 </dd>
 
                                 <dd class="govuk-summary-list__actions">
-                                    <a class="govuk-link" href="/checker/referred">View<span class="govuk-visually-hidden"> reported</span></a>
+                                    <a class="govuk-link" href="/checker/referred?routeName={{check.routeName}}">View<span class="govuk-visually-hidden"> reported</span></a>
                                 </dd>
                             </div>
                         </dl>
