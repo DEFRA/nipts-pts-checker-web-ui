@@ -57,9 +57,8 @@ const submitSearch = async (request, h) => {
     } = request.payload;
 
     // Initialize variables to pass to the template
-    let activeTab = documentSearch;
     let error = null;
-    let errorSummary = [];
+    const errorSummary = [];
 
     // Search by PTD Number
     if (documentSearch === "ptd") {
