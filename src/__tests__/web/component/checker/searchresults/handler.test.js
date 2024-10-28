@@ -95,7 +95,7 @@ describe('saveAndContinueHandler', () => {
 
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
 
-    expect(h.view).toHaveBeenCalledWith('componentViews/checker/searchresults/searchResultsView', expect.objectContaining({
+    expect(h.view).toHaveBeenCalledWith(searchResultsView, expect.objectContaining({
       error: errorMessages.passOrFailOption.empty,
       errorSummary: [{ fieldId: 'checklist', message: errorMessages.passOrFailOption.empty }],
       formSubmitted: true,
@@ -109,7 +109,7 @@ describe('saveAndContinueHandler', () => {
 
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
 
-    expect(h.view).toHaveBeenCalledWith('componentViews/checker/searchresults/searchResultsView', expect.objectContaining({
+    expect(h.view).toHaveBeenCalledWith(searchResultsView, expect.objectContaining({
       error: errorMessages.passOrFailOption.empty,
       errorSummary: [{ fieldId: 'checklist', message: errorMessages.passOrFailOption.empty }],
       formSubmitted: true,
@@ -160,7 +160,7 @@ describe('saveAndContinueHandler', () => {
 
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
 
-    expect(h.view).toHaveBeenCalledWith('componentViews/checker/searchresults/searchResultsView', {
+    expect(h.view).toHaveBeenCalledWith(searchResultsView, {
       error: 'An error occurred while processing your request',
       errorSummary: [{ fieldId: 'general', message: 'An unexpected error occurred' }],
     });
