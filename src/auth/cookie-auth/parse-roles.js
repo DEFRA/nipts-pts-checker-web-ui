@@ -1,12 +1,11 @@
 const parseRoles = (rolesToParse) => {
   const roleNames = [];
   const roles = rolesToParse.map((x) => {
-    const parseRoles = x.split(":");
-    roleNames.push(parseRoles[1]);
+    roleNames.push((x.split(":"))[1]);
     return {
-      relationshipId: parseRoles[0],
-      roleName: parseRoles[1],
-      status: parseRoles[2],
+      relationshipId: (x.split(":"))[0],
+      roleName: (x.split(":"))[1],
+      status: (x.split(":"))[2],
     };
   });
 
