@@ -22,7 +22,7 @@ describe("currentSailingMainService", () => {
   });
 
   it("Doesnt fetches data and returns CurrentSailingMainModel with out route", async () => {
-    const mockData = null;
+    const mockData = undefined;
 
     // Mock axios response
     httpService.getAsync.mockResolvedValue({ status: 400, data: mockData });
