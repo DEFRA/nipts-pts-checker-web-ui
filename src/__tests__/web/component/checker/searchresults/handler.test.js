@@ -11,6 +11,7 @@ jest.mock("../../../../../api/services/apiService.js");
 jest.mock("../../../../../web/component/checker/searchresults/validate");
 
 const pageTitleDefault = "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland";
+const searchResultsView = "componentViews/checker/searchresults/searchResultsView";
 
 describe("SearchResultsHandlers", () => {
   describe("getSearchResultsHandler", () => {
@@ -42,7 +43,7 @@ describe("SearchResultsHandlers", () => {
       expect(request.yar.get).toHaveBeenCalledWith("microchipNumber");
       expect(request.yar.get).toHaveBeenCalledWith("data");
       expect(h.view).toHaveBeenCalledWith(
-        "componentViews/checker/searchresults/searchResultsView",
+        searchResultsView,
         {
           microchipNumber: mockMicrochipNumber,
           pageTitle: pageTitleDefault,
@@ -50,7 +51,7 @@ describe("SearchResultsHandlers", () => {
         }
       );
       expect(response.viewPath).toBe(
-        "componentViews/checker/searchresults/searchResultsView"
+        searchResultsView
       );
 
       expect(response.data).toEqual({

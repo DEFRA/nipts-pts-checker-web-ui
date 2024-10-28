@@ -8,8 +8,25 @@ jest.mock("../../../api/services/httpService.js");
 jest.mock("axios");
 jest.mock("moment");
 
+const petOwnerName = "Pet Owner Name change";
+const petOwnerEmail = "siri.kukkala+GB6@capgemini.com";
+const addressLineOne = "CURRIE & BROWN UK LTD  40"
+const addressLineTwo = " HOLBORN VIADUCT";
+
+const issuingAuthorityAddressLineOne = "Pet Travel Section";
+const issuingAuthorityAddressLineTwo = "Eden Bridge House";
+const issuingAuthorityAddressLineThree = "Lowther Street";
+const agencyName = "Animal and Plant Health Agency";
+const signatoryName = "John Smith (APHA) (Signed digitally)";
+
 const baseUrl =
   process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
+
+  const dateOfIssue = "2023-02-01";
+  const multiUseDate = "01/01/2022";
+
+  const applicationNotFoundMessage = "Application not found";
+  const unexpectedErrorMessage = "Unexpected error";
 
 describe("apiService", () => {
   let request;
@@ -48,15 +65,15 @@ describe("apiService", () => {
           travelDocument: {
             travelDocumentReferenceNumber: "GB826TD123",
             travelDocumentId: "td123",
-            dateOfIssue: "2023-02-01",
+            dateOfIssue: dateOfIssue
           },
           petOwner: {
-            name: "Pet Owner Name change",
+            name: petOwnerName,
             telephone: "07894465438",
-            email: "siri.kukkala+GB6@capgemini.com",
+            email: petOwnerEmail,
             address: {
-              addressLineOne: "CURRIE & BROWN UK LTD  40",
-              addressLineTwo: " HOLBORN VIADUCT",
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
               townOrCity: "LONDON",
               county: "",
               postCode: "EC1N 2PB"
@@ -70,7 +87,7 @@ describe("apiService", () => {
         data: mockResponse.data,
       });
       moment.mockImplementation((_date) => ({
-        format: () => "01/01/2022",
+        format: () => multiUseDate,
       }));
 
       const result = await apiService.getApplicationByPTDNumber(
@@ -90,38 +107,38 @@ describe("apiService", () => {
         petBreed: "Beagle",
         documentState: "approved",
         ptdNumber: "GB826TD123",
-        issuedDate: "01/01/2022",
+        issuedDate: multiUseDate,
         microchipNumber: "123456789",
-        microchipDate: "01/01/2022",
+        microchipDate: multiUseDate,
         petSex: "Male",
-        petDoB: "01/01/2022",
+        petDoB: multiUseDate,
         petColour: "Brown",
         petFeaturesDetail: "None",
         applicationId: "app123",
         travelDocumentId: "td123",
-        dateOfIssue: "2023-02-01",
-        petOwnerName: "Pet Owner Name change",
-        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+        dateOfIssue: dateOfIssue,
+        petOwnerName: petOwnerName,
+        petOwnerEmail: petOwnerEmail,
         petOwnerTelephone: "07894465438",
         petOwnerAddress: 
         {
-          addressLineOne: "CURRIE & BROWN UK LTD  40",
-          addressLineTwo: " HOLBORN VIADUCT",
+          addressLineOne: addressLineOne,
+          addressLineTwo: addressLineTwo,
           townOrCity: "LONDON",
           county: "",
           postCode: "EC1N 2PB"
         },
         issuingAuthority:  {
           address: {
-                  addressLineOne: "Pet Travel Section",
-                  addressLineThree: "Lowther Street",
-                  addressLineTwo: "Eden Bridge House",
+                  addressLineOne: issuingAuthorityAddressLineOne,
+                  addressLineThree: issuingAuthorityAddressLineThree,
+                  addressLineTwo: issuingAuthorityAddressLineTwo,
                   county: "",
                   postCode: "CA3 8DX",
                   townOrCity: "Carlisle",
                   },
-          name: "Animal and Plant Health Agency",
-          signature: "John Smith (APHA) (Signed digitally)",
+          name: agencyName,
+          signature: signatoryName,
         },
       });
 
@@ -151,15 +168,15 @@ describe("apiService", () => {
           travelDocument: {
             travelDocumentReferenceNumber: "GB826TD123",
             travelDocumentId: "td123",
-            dateOfIssue: "2023-02-01",
+            dateOfIssue: dateOfIssue
           },
           petOwner: {
-            name: "Pet Owner Name change",
+            name: petOwnerName,
             telephone: "07894465438",
-            email: "siri.kukkala+GB6@capgemini.com",
+            email: petOwnerEmail,
             address: {
-              addressLineOne: "CURRIE & BROWN UK LTD  40",
-              addressLineTwo: " HOLBORN VIADUCT",
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
               townOrCity: "LONDON",
               county: "",
               postCode: "EC1N 2PB"
@@ -173,7 +190,7 @@ describe("apiService", () => {
         data: mockResponse.data,
       });
       moment.mockImplementation((_date) => ({
-        format: () => "01/01/2022",
+        format: () => multiUseDate,
       }));
 
       const result = await apiService.getApplicationByPTDNumber(
@@ -194,36 +211,36 @@ describe("apiService", () => {
         documentState: "revoked",
         ptdNumber: "GB826TD123",
         microchipNumber: "123456789",
-        microchipDate: "01/01/2022",
+        microchipDate: multiUseDate,
         petSex: "Male",
-        petDoB: "01/01/2022",
+        petDoB: multiUseDate,
         petColour: "Brown",
         petFeaturesDetail: "None",
         applicationId: "app123",
         travelDocumentId: "td123",
-        dateOfIssue: "2023-02-01",
-        petOwnerName: "Pet Owner Name change",
+        dateOfIssue: dateOfIssue,
+        petOwnerName: petOwnerName,
         petOwnerTelephone: "07894465438",
-        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+        petOwnerEmail: petOwnerEmail,
         petOwnerAddress: 
         {
-          addressLineOne: "CURRIE & BROWN UK LTD  40",
-          addressLineTwo: " HOLBORN VIADUCT",
+          addressLineOne: addressLineOne,
+          addressLineTwo: addressLineTwo,
           townOrCity: "LONDON",
           county: "",
           postCode: "EC1N 2PB"
         },
         issuingAuthority:  {
           address: {
-                  addressLineOne: "Pet Travel Section",
-                  addressLineThree: "Lowther Street",
-                  addressLineTwo: "Eden Bridge House",
+                  addressLineOne: issuingAuthorityAddressLineOne,
+                  addressLineThree: issuingAuthorityAddressLineThree,
+                  addressLineTwo: issuingAuthorityAddressLineTwo,
                   county: "",
                   postCode: "CA3 8DX",
                   townOrCity: "Carlisle",
                   },
-          name: "Animal and Plant Health Agency",
-          signature: "John Smith (APHA) (Signed digitally)",
+          name: agencyName,
+          signature: signatoryName,
         },
       });
 
@@ -253,15 +270,15 @@ describe("apiService", () => {
           travelDocument: {
             travelDocumentReferenceNumber: "GB826TD123",
             travelDocumentId: "td123",
-            dateOfIssue: "2023-02-01",
+            dateOfIssue: dateOfIssue
           },
           petOwner: {
-            name: "Pet Owner Name change",
+            name: petOwnerName,
             telephone: "07894465438",
-            email: "siri.kukkala+GB6@capgemini.com",
+            email: petOwnerEmail,
             address: {
-              addressLineOne: "CURRIE & BROWN UK LTD  40",
-              addressLineTwo: " HOLBORN VIADUCT",
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
               townOrCity: "LONDON",
               county: "",
               postCode: "EC1N 2PB"
@@ -275,7 +292,7 @@ describe("apiService", () => {
         data: mockResponse.data,
       });
       moment.mockImplementation((_date) => ({
-        format: () => "01/01/2022",
+        format: () => multiUseDate,
       }));
 
       const result = await apiService.getApplicationByPTDNumber(
@@ -295,36 +312,36 @@ describe("apiService", () => {
         petBreed: "Beagle",
         documentState: "rejected",
         microchipNumber: "123456789",
-        microchipDate: "01/01/2022",
+        microchipDate: multiUseDate,
         petSex: "Male",
-        petDoB: "01/01/2022",
+        petDoB: multiUseDate,
         petColour: "Brown",
         petFeaturesDetail: "None",
         applicationId: "app123",
         travelDocumentId: "td123",
-        dateOfIssue: "2023-02-01",
-        petOwnerName: "Pet Owner Name change",
+        dateOfIssue: dateOfIssue,
+        petOwnerName: petOwnerName,
         petOwnerTelephone: "07894465438",
-        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+        petOwnerEmail: petOwnerEmail,
         petOwnerAddress: 
         {
-          addressLineOne: "CURRIE & BROWN UK LTD  40",
-          addressLineTwo: " HOLBORN VIADUCT",
+          addressLineOne: addressLineOne,
+          addressLineTwo: addressLineTwo,
           townOrCity: "LONDON",
           county: "",
           postCode: "EC1N 2PB"
         },
         issuingAuthority:  {
           address: {
-                  addressLineOne: "Pet Travel Section",
-                  addressLineThree: "Lowther Street",
-                  addressLineTwo: "Eden Bridge House",
+                  addressLineOne: issuingAuthorityAddressLineOne,
+                  addressLineThree: issuingAuthorityAddressLineThree,
+                  addressLineTwo: issuingAuthorityAddressLineTwo,
                   county: "",
                   postCode: "CA3 8DX",
                   townOrCity: "Carlisle",
                   },
-          name: "Animal and Plant Health Agency",
-          signature: "John Smith (APHA) (Signed digitally)",
+          name: agencyName,
+          signature: signatoryName,
         },
       });
 
@@ -354,15 +371,15 @@ describe("apiService", () => {
           travelDocument: {
             travelDocumentReferenceNumber: "GB826TD123",
             travelDocumentId: "td123",
-            dateOfIssue: "2023-02-01",
+            dateOfIssue: dateOfIssue
           },
           petOwner: {
-            name: "Pet Owner Name change",
+            name: petOwnerName,
             telephone: "07894465438",
-            email: "siri.kukkala+GB6@capgemini.com",
+            email: petOwnerEmail,
             address: {
-              addressLineOne: "CURRIE & BROWN UK LTD  40",
-              addressLineTwo: " HOLBORN VIADUCT",
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
               townOrCity: "LONDON",
               county: "",
               postCode: "EC1N 2PB"
@@ -376,7 +393,7 @@ describe("apiService", () => {
         data: mockResponse.data,
       });
       moment.mockImplementation((_date) => ({
-        format: () => "01/01/2022",
+        format: () => multiUseDate,
       }));
 
       const result = await apiService.getApplicationByPTDNumber(
@@ -396,36 +413,36 @@ describe("apiService", () => {
         petBreed: "Beagle",
         documentState: "",
         microchipNumber: "123456789",
-        microchipDate: "01/01/2022",
+        microchipDate: multiUseDate,
         petSex: "Male",
-        petDoB: "01/01/2022",
+        petDoB: multiUseDate,
         petColour: "Brown",
         petFeaturesDetail: "None",
         applicationId: "app123",
         travelDocumentId: "td123",
-        dateOfIssue: "2023-02-01",
-        petOwnerName: "Pet Owner Name change",
+        dateOfIssue: dateOfIssue,
+        petOwnerName: petOwnerName,
         petOwnerTelephone: "07894465438",
-        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+        petOwnerEmail: petOwnerEmail,
 		    petOwnerAddress: 
         {
-          addressLineOne: "CURRIE & BROWN UK LTD  40",
-          addressLineTwo: " HOLBORN VIADUCT",
+          addressLineOne: addressLineOne,
+          addressLineTwo: addressLineTwo,
           townOrCity: "LONDON",
           county: "",
           postCode: "EC1N 2PB"
         },
         issuingAuthority:  {
           address: {
-                  addressLineOne: "Pet Travel Section",
-                  addressLineThree: "Lowther Street",
-                  addressLineTwo: "Eden Bridge House",
+                  addressLineOne: issuingAuthorityAddressLineOne,
+                  addressLineThree: issuingAuthorityAddressLineThree,
+                  addressLineTwo: issuingAuthorityAddressLineTwo,
                   county: "",
                   postCode: "CA3 8DX",
                   townOrCity: "Carlisle",
                   },
-          name: "Animal and Plant Health Agency",
-          signature: "John Smith (APHA) (Signed digitally)",
+          name: agencyName,
+          signature: signatoryName,
         },
       });
 
@@ -436,7 +453,7 @@ describe("apiService", () => {
     it("should return error when PTD number is not found", async () => {
       httpService.postAsync.mockResolvedValue({
         status: 404,
-        error: "Application not found",
+        error: applicationNotFoundMessage,
       });
 
       const result = await apiService.getApplicationByPTDNumber(
@@ -467,7 +484,7 @@ describe("apiService", () => {
         "123456",
         request
       );
-      expect(result).toEqual({ error: "Application not found" });
+      expect(result).toEqual({ error: applicationNotFoundMessage });
     });
 
     it("should return error when pet is not found", async () => {
@@ -510,13 +527,13 @@ describe("apiService", () => {
 
 
     it("should return unexpected error when an exception occurs", async () => {
-      httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
+      httpService.postAsync.mockRejectedValue(new Error(unexpectedErrorMessage));
 
       const result = await apiService.getApplicationByPTDNumber(
         "123456",
         request
       );
-      expect(result).toEqual({ error: "Unexpected error" });
+      expect(result).toEqual({ error: unexpectedErrorMessage });
     });
   });
 
@@ -544,15 +561,15 @@ describe("apiService", () => {
           travelDocument: {
             travelDocumentReferenceNumber: "GB826TD123",
             travelDocumentId: "td123",
-            dateOfIssue: "2023-02-01",
+            dateOfIssue: dateOfIssue
           },
           petOwner: {
-            name: "Pet Owner Name change",
+            name: petOwnerName,
             telephone: "07894465438",
-            email: "siri.kukkala+GB6@capgemini.com",
+            email: petOwnerEmail,
             address: {
-              addressLineOne: "CURRIE & BROWN UK LTD  40",
-              addressLineTwo: " HOLBORN VIADUCT",
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
               townOrCity: "LONDON",
               county: "",
               postCode: "EC1N 2PB"
@@ -566,7 +583,7 @@ describe("apiService", () => {
         data: mockResponse.data,
       });
       moment.mockImplementation((_date) => ({
-        format: () => "01/01/2022",
+        format: () => multiUseDate,
       }));
 
       const result = await apiService.getApplicationByApplicationNumber(
@@ -586,38 +603,38 @@ describe("apiService", () => {
         petBreed: "Beagle",
         documentState: "approved",
         ptdNumber: "GB826TD123",
-        issuedDate: "01/01/2022",
+        issuedDate: multiUseDate,
         microchipNumber: "123456789",
-        microchipDate: "01/01/2022",
+        microchipDate: multiUseDate,
         petSex: "Male",
-        petDoB: "01/01/2022",
+        petDoB: multiUseDate,
         petColour: "Brown",
         petFeaturesDetail: "None",
         applicationId: "app123",
         travelDocumentId: "td123",
-        dateOfIssue: "2023-02-01",
-        petOwnerName: "Pet Owner Name change",
+        dateOfIssue: dateOfIssue,
+        petOwnerName: petOwnerName,
         petOwnerTelephone: "07894465438",
-        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+        petOwnerEmail: petOwnerEmail,
         petOwnerAddress: 
             {
-              addressLineOne: "CURRIE & BROWN UK LTD  40",
-              addressLineTwo: " HOLBORN VIADUCT",
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
               townOrCity: "LONDON",
               county: "",
               postCode: "EC1N 2PB"
             },
             issuingAuthority:  {
               address: {
-                      addressLineOne: "Pet Travel Section",
-                      addressLineThree: "Lowther Street",
-                      addressLineTwo: "Eden Bridge House",
+                      addressLineOne: issuingAuthorityAddressLineOne,
+                      addressLineThree: issuingAuthorityAddressLineThree,
+                      addressLineTwo: issuingAuthorityAddressLineTwo,
                       county: "",
                       postCode: "CA3 8DX",
                       townOrCity: "Carlisle",
                       },
-              name: "Animal and Plant Health Agency",
-              signature: "John Smith (APHA) (Signed digitally)",
+              name: agencyName,
+              signature: signatoryName,
             },
       });
 
@@ -647,15 +664,15 @@ describe("apiService", () => {
           travelDocument: {
             travelDocumentReferenceNumber: "GB826TD123",
             travelDocumentId: "td123",
-            dateOfIssue: "2023-02-01",
+            dateOfIssue: dateOfIssue
           },
           petOwner: {
-            name: "Pet Owner Name change",
+            name: petOwnerName,
             telephone: "07894465438",
-            email: "siri.kukkala+GB6@capgemini.com",
+            email: petOwnerEmail,
             address: {
-              addressLineOne: "CURRIE & BROWN UK LTD  40",
-              addressLineTwo: " HOLBORN VIADUCT",
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
               townOrCity: "LONDON",
               county: "",
               postCode: "EC1N 2PB"
@@ -669,7 +686,7 @@ describe("apiService", () => {
         data: mockResponse.data,
       });
       moment.mockImplementation((_date) => ({
-        format: () => "01/01/2022",
+        format: () => multiUseDate,
       }));
 
       const result = await apiService.getApplicationByApplicationNumber(
@@ -690,36 +707,36 @@ describe("apiService", () => {
         ptdNumber: "GB826TD123",
         documentState: "revoked",
         microchipNumber: "123456789",
-        microchipDate: "01/01/2022",
+        microchipDate: multiUseDate,
         petSex: "Male",
-        petDoB: "01/01/2022",
+        petDoB: multiUseDate,
         petColour: "Brown",
         petFeaturesDetail: "None",
         applicationId: "app123",
         travelDocumentId: "td123",
-        dateOfIssue: "2023-02-01",
-        petOwnerName: "Pet Owner Name change",
+        dateOfIssue: dateOfIssue,
+        petOwnerName: petOwnerName,
         petOwnerTelephone: "07894465438",
-        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+        petOwnerEmail: petOwnerEmail,
         petOwnerAddress: 
             {
-              addressLineOne: "CURRIE & BROWN UK LTD  40",
-              addressLineTwo: " HOLBORN VIADUCT",
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
               townOrCity: "LONDON",
               county: "",
               postCode: "EC1N 2PB"
             },
             issuingAuthority:  {
               address: {
-                      addressLineOne: "Pet Travel Section",
-                      addressLineThree: "Lowther Street",
-                      addressLineTwo: "Eden Bridge House",
+                      addressLineOne: issuingAuthorityAddressLineOne,
+                      addressLineThree: issuingAuthorityAddressLineThree,
+                      addressLineTwo: issuingAuthorityAddressLineTwo,
                       county: "",
                       postCode: "CA3 8DX",
                       townOrCity: "Carlisle",
                       },
-              name: "Animal and Plant Health Agency",
-              signature: "John Smith (APHA) (Signed digitally)",
+              name: agencyName,
+              signature: signatoryName,
             },
       });
 
@@ -749,15 +766,15 @@ describe("apiService", () => {
           travelDocument: {
             travelDocumentReferenceNumber: "GB826TD123",
             travelDocumentId: "td123",
-            dateOfIssue: "2023-02-01",
+            dateOfIssue: dateOfIssue
           },
           petOwner: {
-            name: "Pet Owner Name change",
+            name: petOwnerName,
             telephone: "07894465438",
-            email: "siri.kukkala+GB6@capgemini.com",
+            email: petOwnerEmail,
             address: {
-              addressLineOne: "CURRIE & BROWN UK LTD  40",
-              addressLineTwo: " HOLBORN VIADUCT",
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
               townOrCity: "LONDON",
               county: "",
               postCode: "EC1N 2PB"
@@ -771,7 +788,7 @@ describe("apiService", () => {
         data: mockResponse.data,
       });
       moment.mockImplementation((_date) => ({
-        format: () => "01/01/2022",
+        format: () => multiUseDate,
       }));
 
       const result = await apiService.getApplicationByApplicationNumber(
@@ -791,36 +808,36 @@ describe("apiService", () => {
         petBreed: "Beagle",
         documentState: "rejected",
         microchipNumber: "123456789",
-        microchipDate: "01/01/2022",
+        microchipDate: multiUseDate,
         petSex: "Male",
-        petDoB: "01/01/2022",
+        petDoB: multiUseDate,
         petColour: "Brown",
         petFeaturesDetail: "None",
         applicationId: "app123",
         travelDocumentId: "td123",
-        dateOfIssue: "2023-02-01",
-        petOwnerName: "Pet Owner Name change",
+        dateOfIssue: dateOfIssue,
+        petOwnerName: petOwnerName,
         petOwnerTelephone: "07894465438",
-        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+        petOwnerEmail: petOwnerEmail,
         petOwnerAddress: 
             {
-              addressLineOne: "CURRIE & BROWN UK LTD  40",
-              addressLineTwo: " HOLBORN VIADUCT",
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
               townOrCity: "LONDON",
               county: "",
               postCode: "EC1N 2PB"
             },
             issuingAuthority:  {
               address: {
-                      addressLineOne: "Pet Travel Section",
-                      addressLineThree: "Lowther Street",
-                      addressLineTwo: "Eden Bridge House",
+                      addressLineOne: issuingAuthorityAddressLineOne,
+                      addressLineThree: issuingAuthorityAddressLineThree,
+                      addressLineTwo: issuingAuthorityAddressLineTwo,
                       county: "",
                       postCode: "CA3 8DX",
                       townOrCity: "Carlisle",
                       },
-              name: "Animal and Plant Health Agency",
-              signature: "John Smith (APHA) (Signed digitally)",
+              name: agencyName,
+              signature: signatoryName,
             },
       });
 
@@ -850,15 +867,15 @@ describe("apiService", () => {
           travelDocument: {
             travelDocumentReferenceNumber: "GB826TD123",
             travelDocumentId: "td123",
-            dateOfIssue: "2023-02-01",
+            dateOfIssue: dateOfIssue
           },
           petOwner: {
-            name: "Pet Owner Name change",
+            name: petOwnerName,
             telephone: "07894465438",
-            email: "siri.kukkala+GB6@capgemini.com",
+            email: petOwnerEmail,
             address: {
-              addressLineOne: "CURRIE & BROWN UK LTD  40",
-              addressLineTwo: " HOLBORN VIADUCT",
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
               townOrCity: "LONDON",
               county: "",
               postCode: "EC1N 2PB"
@@ -872,7 +889,7 @@ describe("apiService", () => {
         data: mockResponse.data,
       });
       moment.mockImplementation((_date) => ({
-        format: () => "01/01/2022",
+        format: () => multiUseDate,
       }));
 
       const result = await apiService.getApplicationByApplicationNumber(
@@ -892,36 +909,36 @@ describe("apiService", () => {
         petBreed: "Beagle",
         documentState: "",
         microchipNumber: "123456789",
-        microchipDate: "01/01/2022",
+        microchipDate: multiUseDate,
         petSex: "Male",
-        petDoB: "01/01/2022",
+        petDoB: multiUseDate,
         petColour: "Brown",
         petFeaturesDetail: "None",
         applicationId: "app123",
         travelDocumentId: "td123",
-        dateOfIssue: "2023-02-01",
-        petOwnerName: "Pet Owner Name change",
+        dateOfIssue: dateOfIssue,
+        petOwnerName: petOwnerName,
         petOwnerTelephone: "07894465438",
-        petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+        petOwnerEmail: petOwnerEmail,
         petOwnerAddress: 
             {
-              addressLineOne: "CURRIE & BROWN UK LTD  40",
-              addressLineTwo: " HOLBORN VIADUCT",
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
               townOrCity: "LONDON",
               county: "",
               postCode: "EC1N 2PB"
             },
             issuingAuthority:  {
               address: {
-                      addressLineOne: "Pet Travel Section",
-                      addressLineThree: "Lowther Street",
-                      addressLineTwo: "Eden Bridge House",
+                      addressLineOne: issuingAuthorityAddressLineOne,
+                      addressLineThree: issuingAuthorityAddressLineThree,
+                      addressLineTwo: issuingAuthorityAddressLineTwo,
                       county: "",
                       postCode: "CA3 8DX",
                       townOrCity: "Carlisle",
                       },
-              name: "Animal and Plant Health Agency",
-              signature: "John Smith (APHA) (Signed digitally)",
+              name: agencyName,
+              signature: signatoryName,
             },
       });
 
@@ -932,7 +949,7 @@ describe("apiService", () => {
     it("should return error when application number is not found", async () => {
       httpService.postAsync.mockResolvedValue({
         status: 404,
-        error: "Application not found",
+        error: applicationNotFoundMessage,
       });
 
       const result = await apiService.getApplicationByApplicationNumber(
@@ -996,13 +1013,13 @@ describe("apiService", () => {
         "app123",
         request
       );
-      expect(result).toEqual({ error: "Application not found" });
+      expect(result).toEqual({ error: applicationNotFoundMessage });
     });
 
     it("should return error when application number is not found", async () => {
       httpService.postAsync.mockResolvedValue({
         status: 404,
-        error: "Application not found",
+        error: applicationNotFoundMessage,
       });
 
       const result = await apiService.getApplicationByApplicationNumber(
@@ -1013,13 +1030,13 @@ describe("apiService", () => {
     });
 
     it("should return unexpected error when an exception occurs", async () => {
-      httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
+      httpService.postAsync.mockRejectedValue(new Error(unexpectedErrorMessage));
 
       const result = await apiService.getApplicationByApplicationNumber(
         "app123",
         request
       );
-      expect(result).toEqual({ error: "Unexpected error" });
+      expect(result).toEqual({ error: unexpectedErrorMessage });
     });
   });
 

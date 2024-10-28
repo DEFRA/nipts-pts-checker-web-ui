@@ -15,8 +15,14 @@ jest.mock("../../../../../api/services/microchipAppPtdMainService.js");
 jest.mock("../../../../../api/services/apiService.js");
 jest.mock("../../../../../web/component/checker/documentsearch/validate.js");
 
+const microchipNumberErrorMessage = "Enter a microchip number";
+const microchipLengthErrorMessage = "Enter a 15-digit number";
+const applicationNumberErrorMessage =  "Enter 6 characters after 'GB826'";
+
 const pageTitleDefault =
   "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland";
+
+const documentNotFoundView = "componentViews/checker/documentsearch/documentNotFoundView";
 
 describe("DocumentSearchHandlers", () => {
   describe("getDocumentSearch", () => {
@@ -141,7 +147,7 @@ describe("DocumentSearchHandlers", () => {
 
       validateMicrochipNumber.mockReturnValue({
         isValid: false,
-        error: "Enter a microchip number",
+        error: microchipNumberErrorMessage,
       });
 
       await DocumentSearchHandlers.submitSearch(request, h);
@@ -149,9 +155,9 @@ describe("DocumentSearchHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentSearchView",
         {
-          error: "Enter a microchip number",
+          error: microchipNumberErrorMessage,
           errorSummary: [
-            { fieldId: "microchipNumber", message: "Enter a microchip number" },
+            { fieldId: "microchipNumber", message: microchipNumberErrorMessage },
           ],
           activeTab: "microchip",
           formSubmitted: true,
@@ -177,7 +183,7 @@ describe("DocumentSearchHandlers", () => {
 
       validateMicrochipNumber.mockReturnValue({
         isValid: false,
-        error: "Enter a 15-digit number",
+        error: microchipLengthErrorMessage,
       });
 
       await DocumentSearchHandlers.submitSearch(request, h);
@@ -185,9 +191,9 @@ describe("DocumentSearchHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentSearchView",
         {
-          error: "Enter a 15-digit number",
+          error: microchipLengthErrorMessage,
           errorSummary: [
-            { fieldId: "microchipNumber", message: "Enter a 15-digit number" },
+            { fieldId: "microchipNumber", message: microchipLengthErrorMessage },
           ],
           activeTab: "microchip",
           formSubmitted: true,
@@ -220,7 +226,7 @@ describe("DocumentSearchHandlers", () => {
 
       await DocumentSearchHandlers.submitSearch(request, h);
       expect(h.view).toHaveBeenCalledWith(
-        "componentViews/checker/documentsearch/documentNotFoundView",
+        documentNotFoundView,
         {
           pageTitle: pageTitleDefault,
           searchValue: request.payload.microchipNumber,
@@ -285,7 +291,7 @@ describe("DocumentSearchHandlers", () => {
 
       validatePtdNumber.mockReturnValue({
         isValid: false,
-        error: "Enter 6 characters after 'GB826'",
+        error: applicationNumberErrorMessage,
       });
 
       await DocumentSearchHandlers.submitSearch(request, h);
@@ -293,11 +299,11 @@ describe("DocumentSearchHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentSearchView",
         {
-          error: "Enter 6 characters after 'GB826'",
+          error: applicationNumberErrorMessage,
           errorSummary: [
             {
               fieldId: "ptdNumberSearch",
-              message: "Enter 6 characters after 'GB826'",
+              message: applicationNumberErrorMessage,
             },
           ],
           activeTab: "ptd",
@@ -333,7 +339,7 @@ describe("DocumentSearchHandlers", () => {
       await DocumentSearchHandlers.submitSearch(request, h);
 
       expect(h.view).toHaveBeenCalledWith(
-        "componentViews/checker/documentsearch/documentNotFoundView",
+        documentNotFoundView,
         {
           pageTitle: pageTitleDefault,
           searchValue: "GB826" + request.payload.ptdNumberSearch,
@@ -414,7 +420,7 @@ describe("DocumentSearchHandlers", () => {
       await DocumentSearchHandlers.submitSearch(request, h);
 
       expect(h.view).toHaveBeenCalledWith(
-        "componentViews/checker/documentsearch/documentNotFoundView",
+        documentNotFoundView,
         {
           pageTitle: pageTitleDefault,
           searchValue: request.payload.applicationNumberSearch,
