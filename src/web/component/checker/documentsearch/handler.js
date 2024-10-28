@@ -248,10 +248,10 @@ const submitSearch = async (request, h) => {
     return h.redirect(SEARCH_RESULT_VIEW_PATH);
   } catch (error) {
     // Handle unexpected errors
-    let ptdNumberSearch = request.payload.ptdNumberSearch || "";
-    let applicationNumberSearch = request.payload.applicationNumberSearch || "";
-    let microchipNumberSearch = request.payload.microchipNumber || "";
-    let activeTab = request.payload.documentSearch || "ptd";
+    const ptdNumberSearch = request.payload.ptdNumberSearch || "";
+    const applicationNumberSearch = request.payload.applicationNumberSearch || "";
+    const microchipNumberSearch = request.payload.microchipNumber || "";
+    const activeTab = request.payload.documentSearch || "ptd";
 
     return h.view(VIEW_PATH, {
       error: errorProcessingText,
