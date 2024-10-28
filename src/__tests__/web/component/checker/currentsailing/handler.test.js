@@ -7,10 +7,14 @@ import { HttpStatusCode } from "axios";
 jest.mock("../../../../../api/services/currentSailingMainService.js");
 jest.mock("../../../../../web/component/checker/currentsailing/validate.js");
 
+const birkenheadRoute = 'Birkenhead to Belfast (Stena)';
+const cairnryanRoute = 'Cairnryan to Larne (P&O)';
+const lochRyanRoute =  'Loch Ryan to Belfast (Stena)';
+
 const sailingRoutesDefault = [
-  { id: '1', value: 'Birkenhead to Belfast (Stena)', label: 'Birkenhead to Belfast (Stena)' },
-  { id: '2', value: 'Cairnryan to Larne (P&O)', label: 'Cairnryan to Larne (P&O)' },
-  { id: '3', value: 'Loch Ryan to Belfast (Stena)', label: 'Loch Ryan to Belfast (Stena)' }
+  { id: '1', value: birkenheadRoute, label: birkenheadRoute },
+  { id: '2', value: cairnryanRoute, label: cairnryanRoute },
+  { id: '3', value: lochRyanRoute, label: lochRyanRoute }
 ];
 
 describe('Handler', () => {
@@ -149,7 +153,7 @@ describe('submitCurrentSailingSlot', () => {
     const expectedSailingSlot = {
       sailingHour: mockPayload.sailingHour,
       sailingMinutes: mockPayload.sailingMinutes,
-      selectedRoute: { id: '1', value: 'Birkenhead to Belfast (Stena)', label: 'Birkenhead to Belfast (Stena)' },
+      selectedRoute: { id: '1', value: birkenheadRoute, label: birkenheadRoute },
       departureDate,
       selectedRouteOption: routeOptions[0],
       routeFlight: mockPayload.routeFlight,
