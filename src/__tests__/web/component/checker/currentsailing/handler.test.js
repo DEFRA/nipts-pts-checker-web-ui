@@ -320,8 +320,12 @@ describe('submitCurrentSailingSlot', () => {
       yar: {
         set: jest.fn(),
         get: jest.fn((key) => {
-          if (key === 'SailingRoutes') return sailingRoutes;
-          if (key === 'CurrentSailingModel') return currentSailingMainModelData;
+          if (key === 'SailingRoutes') {
+            return sailingRoutes;
+          }
+          if (key === 'CurrentSailingModel') {
+            return currentSailingMainModelData;
+          }
           return null;
         }),
       },
@@ -428,8 +432,12 @@ describe('submitCurrentSailingSlot', () => {
       yar: {
         set: jest.fn(),
         get: jest.fn((key) => {
-          if (key === 'SailingRoutes') return sailingRoutes;
-          if (key === 'CurrentSailingModel') return currentSailingMainModelData;
+          if (key === 'SailingRoutes') {
+            return sailingRoutes;
+          }
+          if (key === 'CurrentSailingModel') {
+            return currentSailingMainModelData;
+          }
           return null;
         }),
       },
@@ -538,8 +546,12 @@ describe('submitCurrentSailingSlot', () => {
       yar: {
         set: jest.fn(),
         get: jest.fn((key) => {
-          if (key === 'SailingRoutes') return sailingRoutes;
-          if (key === 'CurrentSailingModel') return currentSailingMainModelData;
+          if (key === 'SailingRoutes') {
+            return sailingRoutes;
+          }
+          if (key === 'CurrentSailingModel') {
+            return currentSailingMainModelData;
+          }
           return null;
         }),
       },
@@ -647,8 +659,12 @@ describe('submitCurrentSailingSlot', () => {
       yar: {
         set: jest.fn(),
         get: jest.fn((key) => {
-          if (key === 'SailingRoutes') return sailingRoutes;
-          if (key === 'CurrentSailingModel') return currentSailingMainModelData;
+          if (key === 'SailingRoutes') {
+            return sailingRoutes;
+          }
+          if (key === 'CurrentSailingModel') {
+            return currentSailingMainModelData;
+          }
           return null;
         }),
       },
