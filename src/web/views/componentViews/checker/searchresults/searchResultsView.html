@@ -21,11 +21,11 @@
 {% set petOwnerName = data.petOwnerName %}
 {% set petOwnerEmail = data.petOwnerEmail %}
 {% set petOwnerTelephone = data.petOwnerTelephone %}
-{% set petOwnerAddressLineOne = data.petOwnerAddress.addressLineOne %}
-{% set petOwnerAddressLineTwo = data.petOwnerAddress.addressLineTwo %}
-{% set petOwnerAddressTownOrCity = data.petOwnerAddress.townOrCity %}
-{% set petOwnerAddressCounty = data.petOwnerAddress.county %}
-{% set petOwnerAddressPostCode = data.petOwnerAddress.postCode %}
+{% set petOwnerAddressLineOne = data.petOwnerAddress?.addressLineOne | default('') %}
+{% set petOwnerAddressLineTwo = data.petOwnerAddress?.addressLineTwo | default('') %}
+{% set petOwnerAddressTownOrCity = data.petOwnerAddress?.townOrCity | default('') %}
+{% set petOwnerAddressCounty = data.petOwnerAddress?.county | default('') %}
+{% set petOwnerAddressPostCode = data.petOwnerAddress?.postCode | default('') %}
 {% set issuingAuthorityName = data.issuingAuthority.name %}
 {% set issuingAuthorityAddressLineOne = data.issuingAuthority.address.addressLineOne %}
 {% set issuingAuthorityAddressLineTwo = data.issuingAuthority.address.addressLineTwo %}
