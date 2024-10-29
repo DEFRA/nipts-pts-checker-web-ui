@@ -179,8 +179,8 @@
   });
 
   // Clear all fields and reset radio buttons
-  function clearSearchFields(event) {
-    event.preventDefault(); // Prevent default link behavior
+  function clearSearchFields(_event) {
+    _event.preventDefault(); // Prevent default link behavior
     resetField('ptdNumberSearch', 'ptd-form-group', 'ptd-error');
     resetField('applicationNumberSearch', 'application-form-group', 'application-error');
     resetField('microchipNumber', 'microchip-form-group', 'microchip-error');
@@ -191,7 +191,7 @@
   document.getElementById('clearSearchButton').addEventListener('click', clearSearchFields);
 
   // On form submission, clear irrelevant fields
-  document.getElementById('documentSearchForm').addEventListener('submit', function (event) {
+  document.getElementById('documentSearchForm').addEventListener('submit', function (_event) {
     const selectedOption = document.querySelector('input[name="documentSearch"]:checked').value;
     const inputFields = {
       ptd: document.getElementById('ptdNumberSearch'),
@@ -200,7 +200,7 @@
     };
 
     // Clear values of non-relevant input fields
-    for (let key in inputFields) {
+    for (const key in inputFields) {
       if (key !== selectedOption) {
         inputFields[key].value = '';
       }
@@ -214,7 +214,21 @@
 
   function getSelectedOptionId() {
     const selectedOption = document.querySelector('input[name="documentSearch"]:checked').value;
-    return selectedOption === 'ptd' ? '1' : selectedOption === 'application' ? '2' : '3';
+    
+    let result;
+
+    if (selectedOption === 'ptd') {
+        result = '1';
+    } 
+    else if (selectedOption === 'application') {
+       result = '2';
+    } 
+    else {
+        result = '3';
+    }
+
+    return result;
+
   }
 </script>
 {% endblock %}

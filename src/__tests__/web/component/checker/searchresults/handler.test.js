@@ -22,8 +22,12 @@ describe("SearchResultsHandlers", () => {
       const request = {
         yar: {
           get: jest.fn((key) => {
-            if (key === "microchipNumber") return mockMicrochipNumber;
-            if (key === "data") return mockData;
+            if (key === "microchipNumber") {
+              return mockMicrochipNumber;
+            }
+            if (key === "data") {
+              return mockData;
+            }
           }),
         },
       };
