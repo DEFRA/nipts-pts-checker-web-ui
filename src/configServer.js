@@ -21,12 +21,10 @@ const setup = (server) => {
         compile: (src, options) => {
           const template = Nunjucks.compile(src, options.environment);
           return (context) => {
-            // Return the rendered template or an error message
             try {
               return template.render(context);
             } catch (error) {
               console.error('Error rendering template:', error);
-              // Return an error message or a specific error view instead
               return serveStaticErrorPage();
             }
           };
