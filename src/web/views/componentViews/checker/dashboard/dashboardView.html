@@ -1,7 +1,6 @@
 {% extends "./layouts/checkerLayout.html" %}
 
-{% block headContent %}
-{% endblock %}
+{% block headContent %}{% endblock %}
 
 {% block pageTitle %} Home - {{currentSailingSlot.pageTitle}}– GOV.UK {% endblock %}
 
@@ -9,7 +8,7 @@
 
     {% if successConfirmation %}
         <div id="successBanner" class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-6">
-        {% include "./success/successBanner.html" %}
+            {% include "./success/successBanner.html" %}
         </div>
     {% endif %}
 
@@ -18,7 +17,6 @@
             <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
           Checks
         </h1>
-        <h2 class="govuk-visually-hidden">Checks performed in the past 48 hours</h2>
         </div>
     </div>
 
@@ -32,7 +30,7 @@
             {% for check in checks %}
                 <div class="govuk-summary-card">
                     <div class="govuk-summary-card__title-wrapper">
-                        <h3 class="govuk-summary-card__title">
+                        <h2 class="govuk-summary-card__title">
 
                             <p class="govuk-body  govuk-!-margin-bottom-1">
                                 <b>Route:</b>
@@ -41,7 +39,7 @@
                                 <b>Departure:</b>
                                 {{check.departureDate}}
                                 {{check.departureTime}}</p>
-                        </h3>
+                        </h2>
                     </div>
                     <div class="govuk-summary-card__content checker-dashboard">
                         <dl class="govuk-summary-list">
@@ -81,7 +79,9 @@
         // 1 minute
         const MILLISECONDS = 60000;
         setTimeout(() => {
-            window.location.reload();
+            window
+                .location
+                .reload();
         }, MILLISECONDS);
     </script>
 {% endblock %}
