@@ -17,7 +17,7 @@ const getNonComplianceHandler = async (request, h) => {
 
   const statusMapping = {
     approved: "Approved",
-    awaiting: "Awaiting Verification",
+    awaiting: "Awaiting verification",
     revoked: "Revoked",
     rejected: "	Unsuccessful",
   };

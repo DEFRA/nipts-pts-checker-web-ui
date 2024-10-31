@@ -31,7 +31,7 @@ describe("NonComplianceHandlers", () => {
 
       const statusMapping = {
         approved: "Approved",
-        awaiting: "Awaiting Verification",
+        awaiting: "Awaiting verification",
         revoked: "Revoked",
         rejected: "	Unsuccessful",
       };
