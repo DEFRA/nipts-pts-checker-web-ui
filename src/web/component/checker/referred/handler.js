@@ -11,7 +11,6 @@ const getReferredChecks = async (_request, h) => {
   headerData.section = "referred";
 
   const currentSailingSlot = _request.yar.get("currentSailingSlot") || {};
-  currentSailingSlot.currentDate;
   currentSailingSlot.currentDate = new Date().toLocaleDateString("en-GB");
 
   const serviceName = `${headerData.checkerTitle}: ${headerData.checkerSubtitle}`;
@@ -24,7 +23,7 @@ const getReferredChecks = async (_request, h) => {
     )) || [];
   
     let splitDate = Date();
-    if (check.length != 0){
+    if (check.length !== 0){
       const currentDateSplit = check[0].departureDate.split('/');
       const currentTimeSplit = check[0].departureTime.split(':');
       const monthIndex = Number(currentDateSplit[1]) - 1;
@@ -32,7 +31,7 @@ const getReferredChecks = async (_request, h) => {
     }
 
   const spsChecks = 
-  (await spsReferralService.GetSPSReferrals(check[0].routeName, moment(splitDate).toISOString(), _request))|| [];
+  (await spsReferralService.GetSpsReferrals(check[0].routeName, moment(splitDate).toISOString(), _request))|| [];
 
   spsChecks.forEach((item) => {
     switch(item.SPSOutcome) {

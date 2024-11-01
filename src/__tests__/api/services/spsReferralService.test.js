@@ -42,7 +42,7 @@ describe("getReferralData", () => {
        SPSOutcome: "Check Needed"
       });
   
-      const data = await SPSReferralService.GetSPSReferrals(route, sailingDate, request);
+      const data = await SPSReferralService.GetSpsReferrals(route, sailingDate, request);
   
       expect(data[0]).toEqual(expectedData);
     });

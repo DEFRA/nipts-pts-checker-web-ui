@@ -13,7 +13,7 @@ jest.mock("../../../../../api/services/dashboardMainService.js", () => ({
 jest.mock("../../../../../api/services/spsReferralService.js", () => ({
   __esModule: true,
   default: {
-    GetSPSReferrals: jest.fn(),
+    GetSpsReferrals: jest.fn(),
   },
 }));
 
