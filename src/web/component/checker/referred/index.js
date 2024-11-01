@@ -1,4 +1,3 @@
-
 "use strict";
 
 import Routes from "./routes.js";

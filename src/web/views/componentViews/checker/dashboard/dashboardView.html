@@ -1,87 +1,141 @@
 {% extends "./layouts/checkerLayout.html" %}
 
-{% block headContent %}{% endblock %}
+{% block headContent %}
+<!-- Include custom styles directly in the page -->
+<style>
+    .govuk-button--link {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        color: #1d70b8;
+        text-decoration: underline;
+        font: inherit;
+        cursor: pointer;
+    }
+
+    .govuk-button--link:hover,
+    .govuk-button--link:focus {
+        text-decoration: none;
+    }
+
+    /* Style for visited links */
+    .govuk-button--link.visited {
+        color: #4c2c92;
+        /* GOV.UK visited link color */
+    }
+</style>
+{% endblock %}
 
 {% block pageTitle %} Home - {{currentSailingSlot.pageTitle}}– GOV.UK {% endblock %}
 
 {% block content %}
 
-    {% if successConfirmation %}
-        <div id="successBanner" class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-6">
-            {% include "./success/successBanner.html" %}
-        </div>
-    {% endif %}
+{% if successConfirmation %}
+<div id="successBanner" class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-6">
+    {% include "./success/successBanner.html" %}
+</div>
+{% endif %}
 
-    <div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-8">
-        <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
-            <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
-          Checks
+<div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-8">
+    <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
+        <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
+            Checks
         </h1>
-        </div>
     </div>
+</div>
 
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
-            {% if checks | length === 0 %}
-                <p class="govuk-body">No animals have been checked in the past 48 hours.</p>
-            {% endif %}
+        {% if checks | length === 0 %}
+        <p class="govuk-body">No animals have been checked in the past 48 hours.</p>
+        {% endif %}
 
-            {% for check in checks %}
-                <div class="govuk-summary-card">
-                    <div class="govuk-summary-card__title-wrapper">
-                        <h2 class="govuk-summary-card__title">
+        {% for check in checks %}
+        <div class="govuk-summary-card">
+            <div class="govuk-summary-card__title-wrapper">
+                <h2 class="govuk-summary-card__title">
 
-                            <p class="govuk-body  govuk-!-margin-bottom-1">
-                                <b>Route:</b>
-                                {{check.routeName}}</p>
-                            <p class="govuk-body govuk-!-margin-bottom-0">
-                                <b>Departure:</b>
-                                {{check.departureDate}}
-                                {{check.departureTime}}</p>
-                        </h2>
+                    <p class="govuk-body  govuk-!-margin-bottom-1">
+                        <b>Route:</b>
+                        {{ check.routeName }}
+                    </p>
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        <b>Departure:</b>
+                        {{ check.departureDate }}
+                        {{ check.departureTime }}
+                    </p>
+                </h2>
+            </div>
+            <div class="govuk-summary-card__content checker-dashboard">
+                <dl class="govuk-summary-list">
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Pass
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            {{ check.passCount }}
+                        </dd>
                     </div>
-                    <div class="govuk-summary-card__content checker-dashboard">
-                        <dl class="govuk-summary-list">
-                            <div class="govuk-summary-list__row">
-                                <dt class="govuk-summary-list__key">
-                                    Pass
-                                </dt>
-                                <dd class="govuk-summary-list__value">
-                                    {{check.passCount}}
-                                </dd>
-                            </div>
 
-                            <div class="govuk-summary-list__row">
-                                <dt class="govuk-summary-list__key">
-                                    Fail: Referred to SPS
-                                </dt>
-                                <dd class="govuk-summary-list__value">
-                                    {{check.failCount}}
-                                </dd>
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Fail: Referred to SPS
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            {{ check.failCount }}
+                        </dd>
 
-                                <dd class="govuk-summary-list__actions">
-                                    <a class="govuk-link" href="/checker/referred?routeName={{check.routeName}}">View<span class="govuk-visually-hidden"> reported</span></a>
-                                </dd>
-                            </div>
-                        </dl>
+                        <dd class="govuk-summary-list__actions">
+                            <form method="POST" action="/checker/referred" class="referred-form">
+                                <input type="hidden" name="routeName" value="{{ check.routeName }}">
+                                <input type="hidden" name="departureDate" value="{{ check.departureDate }}">
+                                <input type="hidden" name="departureTime" value="{{ check.departureTime }}">
+                                <button type="submit" class="govuk-button--link referred-button"
+                                    data-identifier="referred-{{ loop.index }}">
+                                    View<span class="govuk-visually-hidden"> reported</span>
+                                </button>
+                            </form>
+                        </dd>
                     </div>
-                </div>
-
-            {% endfor %}
-
+                </dl>
+            </div>
         </div>
+
+        {% endfor %}
+
     </div>
+</div>
 {% endblock %}
 
 {% block bodyContent %}
-    <script>
-        // 1 minute
-        const MILLISECONDS = 60000;
-        setTimeout(() => {
-            window
-                .location
-                .reload();
-        }, MILLISECONDS);
-    </script>
+<script>
+    // JavaScript to handle the visited state of 'View' links
+    document.addEventListener('DOMContentLoaded', function () {
+        const referredButtons = document.querySelectorAll('.referred-button');
+
+        referredButtons.forEach(function (button) {
+            const identifier = button.getAttribute('data-identifier');
+
+            // Check if this link was clicked before
+            if (localStorage.getItem(identifier)) {
+                button.classList.add('visited');
+            }
+
+            button.addEventListener('click', function () {
+                // Mark this link as visited
+                localStorage.setItem(identifier, 'true');
+            });
+        });
+    });
+</script>
+
+<script>
+    // 1 minute
+    const MILLISECONDS = 60000;
+    setTimeout(() => {
+        window.location.reload();
+    }, MILLISECONDS);
+</script>
 {% endblock %}
