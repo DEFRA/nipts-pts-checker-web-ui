@@ -32,6 +32,16 @@ const getDashboard = async (request, h) => {
   return h.view(VIEW_PATH, { currentSailingSlot, checks, successConfirmation});
 };
 
+const postReferred = async (request, h) => {
+  const { routeName, departureDate, departureTime } = request.payload;
+  request.yar.set("routeName", routeName);
+  request.yar.set("departureDate", departureDate);
+  request.yar.set("departureTime", departureTime);
+  
+  return h.redirect("/checker/referred");
+};
+
 export const DashboardHandlers = {
   getDashboard,
+  postReferred,
 };

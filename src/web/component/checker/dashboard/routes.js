@@ -11,6 +11,13 @@ const Routes = [
       handler: DashboardHandlers.getDashboard,
     },
   },
+  {
+    method: HttpMethod.POST,
+    path: "/checker/referred",
+    options: {
+      handler: DashboardHandlers.postReferred,
+    },
+  },
 ];
 
 export default Routes;
