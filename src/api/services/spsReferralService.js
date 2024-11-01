@@ -6,7 +6,7 @@ import moment from "moment";
 dotenv.config();
 
 const baseUrl =
-  process.env.BASE_API_URL;
+  process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
 
 if (!baseUrl) {
   throw new Error("BASE_API_URL is not set in environment variables.");
