@@ -12,6 +12,13 @@ const Routes = [
     },
   },
   {
+    method: HttpMethod.GET,
+    path: "/checker/search-results-ptd/{ptdNumber}",
+    options: {
+      handler: SearchResultsHandlers.getSearchResultsPTDHandler,
+    },
+  },
+  {
     method: HttpMethod.POST,
     path: "/checker/search-results",
     options: {

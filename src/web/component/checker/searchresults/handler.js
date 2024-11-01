@@ -16,6 +16,16 @@ const getSearchResultsHandler = async (request, h) => {
   return h.view(VIEW_PATH, { microchipNumber, data, pageTitle });
 };
 
+const getSearchResultsPTDHandler = async (request, h) => {
+  const ptdNumber = request.params.ptdNumber;
+  const data = await apiService.getApplicationByPTDNumber(
+    ptdNumber,
+    request
+  );
+  const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
+  return h.view(VIEW_PATH, { ptdNumber, data, pageTitle });
+};
+
 const saveAndContinueHandler = async (request, h) => {
   try {
     let { checklist } = request.payload;
@@ -111,5 +121,6 @@ const saveAndContinueHandler = async (request, h) => {
 
 export const SearchResultsHandlers = {
   getSearchResultsHandler,
+  getSearchResultsPTDHandler,
   saveAndContinueHandler,
 };
