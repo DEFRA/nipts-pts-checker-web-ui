@@ -56,15 +56,15 @@
 
             {% include "includes/status.html" %}
 
-            {% if data['documentState'] !== "awaiting" %}
+            {% if data['documentState'] !== "awaiting" and data['documentState'] !== "rejected" %}
             <h1 id="documents" class="govuk-heading-l govuk-!-margin-bottom-6">
                 Lifelong pet travel document and declaration
             </h1>
             {% endif %}
 
-            {% if data['documentState'] === "awaiting" %}
+            {% if data['documentState'] === "awaiting" or data['documentState'] === "rejected" %}
             <h1 id="documents" class="govuk-heading-l govuk-!-margin-bottom-6">
-                Lifelong pet travel document and declaration
+                Your application summary
             </h1>
             {% endif %}
 
