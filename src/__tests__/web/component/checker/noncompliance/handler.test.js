@@ -10,6 +10,14 @@ jest.mock("../../../../../api/services/appSettingsService.js");
 jest.mock("../../../../../api/services/apiService.js");
 jest.mock('../../../../../web/component/checker/noncompliance/validate.js');
 
+const genericErrorMessage = "The information wasn't recorded, please try to submit again. If you close the application, the information will be lost. You can printscreen or save the information and submit it later.";
+const awaitingVerification = "Awaiting verification";
+const greenTag = "govuk-tag govuk-tag--green";
+const yellowTag = "govuk-tag govuk-tag--yellow";
+const orangeTag = "govuk-tag govuk-tag--orange";
+const redTag = "govuk-tag govuk-tag--red";
+const departureDate = "12/10/2024";
+
 describe("NonComplianceHandlers", () => {
   describe("getNonComplianceHandler", () => {
     let request, h;
@@ -31,16 +39,16 @@ describe("NonComplianceHandlers", () => {
 
       const statusMapping = {
         approved: "Approved",
-        awaiting: "Awaiting Verification",
+        awaiting: awaitingVerification,
         revoked: "Revoked",
         rejected: "	Unsuccessful",
       };
     
       const statusColourMapping = {
-        approved: "govuk-tag govuk-tag--green",
-        awaiting: "govuk-tag govuk-tag--yellow",
-        revoked: "govuk-tag govuk-tag--orange",
-        rejected: "govuk-tag govuk-tag--red",
+        approved: greenTag,
+        awaiting: yellowTag,
+        revoked: orangeTag,
+        rejected: redTag,
       };
       
       const documentStatus = statusMapping[applicationStatus] || applicationStatus;
@@ -88,20 +96,37 @@ describe("NonComplianceHandlers", () => {
       appSettingsService.getAppSettings.mockResolvedValue({
         someSetting: 'testSetting',
       });
+
     });
 
     it("should render errors when validation fails", async () => {
-      const payload = {
-        microchipNumberRadio: "on",
-        microchipNumber: "invalid_microchip",
-        ptdProblem: "someProblem",
-        passengerType: "foot",
-        outcomeReferred: "",
-        outcomeAdvised: "",
-        outcomeNotTravelling: "",
-        outcomeSPS: "",
-        moreDetail: ""
+      const mockData = { some: "data", documentState: "awaiting" };
+      const applicationStatus = mockData.documentState.toLowerCase().trim();
+      const statusMapping = {
+        approved: "Approved",
+        awaiting: awaitingVerification,
+        revoked: "Revoked",
+        rejected: "	Unsuccessful",
       };
+    
+      const statusColourMapping = {
+        approved: greenTag,
+        awaiting: yellowTag,
+        revoked: orangeTag,
+        rejected: redTag,
+      };
+      
+      const documentStatus = statusMapping[applicationStatus] || applicationStatus;
+      const documentStatusColourMapping = statusColourMapping[applicationStatus] || applicationStatus;
+      request.yar.get.mockReturnValueOnce(mockData);
+  
+      const payload = {
+        mcNotMatch: "true",
+        mcNotMatchActual: "invalid_microchip",
+        relevantComments: relevantComments,
+        passengerTypeId: 1,
+      };
+
 
       const validationResult = {
         isValid: false,
@@ -120,6 +145,9 @@ describe("NonComplianceHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(
         VIEW_PATH,
         expect.objectContaining({
+          data: {"documentState": "awaiting", "some": "data"},
+          documentStatus,
+          documentStatusColourMapping,
           errors: {
             microchipNumber: errorMessages.microchipNumber.specialCharacters, // Adjusted to specialCharacters
           },
@@ -132,40 +160,6 @@ describe("NonComplianceHandlers", () => {
           formSubmitted: true,
           payload,
         })
-      );
-    });
-
-    it("should render no errors when validation passes", async () => {
-      const payload = {
-        microchipNumberRadio: "on",
-        microchipNumber: "123456789012345",
-        ptdProblem: "",
-        passengerType: "foot",
-        outcomeReferred: "",
-        outcomeAdvised: "",
-        outcomeNotTravelling: "",
-        outcomeSPS: "",
-        moreDetail: "", 
-        visualCheckProblem: "on",
-        otherIssuesCommercialRadio: "on",
-        otherIssuesAuthorisedRadio: "on",
-        otherIssuesSomethingRadio: "on",
-        relevantComments: "Test Comments"
-      };
-      request.payload = payload;
-
-      validateNonCompliance.mockReturnValue({
-        isValid: true,
-        errors: [],
-      });
-
-      const mockAppSettings = { setting1: "value1" };
-      appSettingsService.getAppSettings.mockResolvedValue(mockAppSettings);
-
-      await NonComplianceHandlers.postNonComplianceHandler(request, h);
-
-      expect(h.redirect).toHaveBeenCalledWith(
-        "/checker/dashboard"
       );
     });
 
@@ -201,7 +195,7 @@ describe("NonComplianceHandlers", () => {
           data: { applicationId: "testApplicationId", documentState: "approved" },
           IsFailSelected: { value: true },  // Return as an object
           currentSailingSlot: {
-            departureDate: "12/10/2024",
+            departureDate: departureDate,
             sailingHour: "10",
             sailingMinutes: "30",
             selectedRoute: { id: 1 },
@@ -239,7 +233,25 @@ describe("NonComplianceHandlers", () => {
       expect(result).toBe('view response');
     });
 
-    it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true", async () => {
+    it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true but api call return generic error", async () => {
+      const mockedStatusData = { some: "data", documentState: "approved" };
+      const applicationStatus = mockedStatusData.documentState.toLowerCase().trim();
+      const statusMapping = {
+        approved: "Approved",
+        awaiting: awaitingVerification,
+        revoked: "Revoked",
+        rejected: "	Unsuccessful",
+      };
+    
+      const statusColourMapping = {
+        approved: greenTag,
+        awaiting: yellowTag,
+        revoked: orangeTag,
+        rejected: redTag,
+      };
+      
+      const documentStatus = statusMapping[applicationStatus] || applicationStatus;
+      const documentStatusColourMapping = statusColourMapping[applicationStatus] || applicationStatus;      
       const payload = {
         mcNotMatch: "true",
         mcNotMatchActual: "123456789123456",
@@ -256,7 +268,76 @@ describe("NonComplianceHandlers", () => {
           data: { applicationId: "testApplicationId", documentState: "approved" },
           IsFailSelected: { value: true },  // Return as an object
           currentSailingSlot: {
-            departureDate: "12/10/2024",
+            departureDate: departureDate,
+            sailingHour: "10",
+            sailingMinutes: "30",
+            selectedRoute: { id: 1 },
+            selectedRouteOption: { id: 1 },
+          }
+        };
+      
+        return mockData[key] || null;
+      });
+    
+      validateNonCompliance.mockReturnValue({
+        isValid: true,
+        errors: [],
+      });
+    
+      const mockAppSettings = { setting1: "value1" };
+      appSettingsService.getAppSettings.mockResolvedValue(mockAppSettings);
+      apiService.reportNonCompliance.mockResolvedValue({ error: genericErrorMessage });
+    
+      await NonComplianceHandlers.postNonComplianceHandler(request, h);
+    
+      expect(apiService.reportNonCompliance).toHaveBeenCalledWith(
+        expect.objectContaining({
+          applicationId: "testApplicationId",
+          checkOutcome: "Fail",
+          mcNotMatchActual: "123456789123456",
+          relevantComments: relevantComments,
+        }),
+        request
+      );      
+
+      expect(h.view).toHaveBeenCalledWith(
+        VIEW_PATH, {
+          //error: errorMessage,
+          errorSummary: [
+            {
+              fieldId: "unexpected",
+              message: genericErrorMessage,
+              dispalyAs: "text",
+            },
+          ],
+          documentStatus,
+          documentStatusColourMapping,
+          data: { applicationId: "testApplicationId", documentState: "approved" },
+          model: {"setting1": "value1"},
+          formSubmitted: true,
+          payload,
+        }
+      );
+    });
+
+    it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true api call succeeds", async () => {
+      const payload = {
+        mcNotMatch: "true",
+        mcNotMatchActual: "123456789123456",
+        relevantComments: relevantComments,
+      };
+      validateNonCompliance.mockReturnValue({
+        isValid: true,
+        errors: [],
+      });
+
+      request.payload = payload;
+      request.yar.get.mockImplementation((key) => {
+        const mockData = {
+          data: { applicationId: "testApplicationId", documentState: "approved" },
+          IsFailSelected: { value: true },  // Return as an object
+          currentSailingSlot: {
+            departureDate: departureDate,
             sailingHour: "10",
             sailingMinutes: "30",
             selectedRoute: { id: 1 },

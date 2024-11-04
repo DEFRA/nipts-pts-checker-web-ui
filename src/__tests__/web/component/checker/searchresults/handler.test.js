@@ -11,6 +11,7 @@ jest.mock("../../../../../api/services/apiService.js");
 jest.mock("../../../../../web/component/checker/searchresults/validate");
 
 const pageTitleDefault = "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland";
+const searchResultsView = "componentViews/checker/searchresults/searchResultsView";
 
 describe("SearchResultsHandlers", () => {
   describe("getSearchResultsHandler", () => {
@@ -21,8 +22,12 @@ describe("SearchResultsHandlers", () => {
       const request = {
         yar: {
           get: jest.fn((key) => {
-            if (key === "microchipNumber") return mockMicrochipNumber;
-            if (key === "data") return mockData;
+            if (key === "microchipNumber") {
+              return mockMicrochipNumber;
+            }
+            if (key === "data") {
+              return mockData;
+            }
           }),
         },
       };
@@ -42,7 +47,7 @@ describe("SearchResultsHandlers", () => {
       expect(request.yar.get).toHaveBeenCalledWith("microchipNumber");
       expect(request.yar.get).toHaveBeenCalledWith("data");
       expect(h.view).toHaveBeenCalledWith(
-        "componentViews/checker/searchresults/searchResultsView",
+        searchResultsView,
         {
           microchipNumber: mockMicrochipNumber,
           pageTitle: pageTitleDefault,
@@ -50,7 +55,7 @@ describe("SearchResultsHandlers", () => {
         }
       );
       expect(response.viewPath).toBe(
-        "componentViews/checker/searchresults/searchResultsView"
+        searchResultsView
       );
 
       expect(response.data).toEqual({
@@ -94,7 +99,7 @@ describe('saveAndContinueHandler', () => {
 
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
 
-    expect(h.view).toHaveBeenCalledWith('componentViews/checker/searchresults/searchResultsView', expect.objectContaining({
+    expect(h.view).toHaveBeenCalledWith(searchResultsView, expect.objectContaining({
       error: errorMessages.passOrFailOption.empty,
       errorSummary: [{ fieldId: 'checklist', message: errorMessages.passOrFailOption.empty }],
       formSubmitted: true,
@@ -108,7 +113,7 @@ describe('saveAndContinueHandler', () => {
 
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
 
-    expect(h.view).toHaveBeenCalledWith('componentViews/checker/searchresults/searchResultsView', expect.objectContaining({
+    expect(h.view).toHaveBeenCalledWith(searchResultsView, expect.objectContaining({
       error: errorMessages.passOrFailOption.empty,
       errorSummary: [{ fieldId: 'checklist', message: errorMessages.passOrFailOption.empty }],
       formSubmitted: true,
@@ -159,7 +164,7 @@ describe('saveAndContinueHandler', () => {
 
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
 
-    expect(h.view).toHaveBeenCalledWith('componentViews/checker/searchresults/searchResultsView', {
+    expect(h.view).toHaveBeenCalledWith(searchResultsView, {
       error: 'An error occurred while processing your request',
       errorSummary: [{ fieldId: 'general', message: 'An unexpected error occurred' }],
     });

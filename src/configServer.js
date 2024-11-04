@@ -5,6 +5,7 @@ import Nunjucks from "nunjucks";
 import Path from "path";
 import Joi from "joi";
 import headerData from "./web/helper/constants.js";
+import { promises as fs } from 'fs'; // Import fs promises
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -19,7 +20,14 @@ const setup = (server) => {
       html: {
         compile: (src, options) => {
           const template = Nunjucks.compile(src, options.environment);
-          return (context) => template.render(context);
+          return (context) => {
+            try {
+              return template.render(context);
+            } catch (error) {
+              console.error('Error rendering template:', error);
+              return serveStaticErrorPage();
+            }
+          };
         },
         prepare: (options, next) => {
           options.compileOptions.environment = Nunjucks.configure(
@@ -52,7 +60,7 @@ const setup = (server) => {
           path: Path.join(__dirname, "./web"),
         },
       },
-    }
+    },
   });
 
   // Configure validator
@@ -66,23 +74,36 @@ const setup = (server) => {
       auth: false,
       handler: {
         directory: {
-          path: "./web/assets", // Update the path to look for the file in the workspace
+          path: "./web/assets",
           redirectToSlash: true,
           index: true,
         },
       },
-    }
+    },
   });
 
-  // Route to get a 500error
+  // Route to get a 500 error
   server.route({
     method: "GET",
     path: "/500error",
     handler: (_request, _h) => {
-      return _h.view('errors/500error').code(500).takeover();
-    }
-
+      return _h.view('errors/500error').takeover();
+    },
   });
+
+  async function serveStaticErrorPage() {
+    const filePath = Path.join(__dirname, '/web/views/errors/', '500Error.html'); // Use path for cross-platform compatibility
+    try {
+        // Await the readFile result to ensure it's resolved before returning
+        const content = await fs.readFile(filePath, 'utf-8'); 
+        return content; // Return the content of the error page
+    } catch (fileError) {
+        console.error('Error reading static error page:', fileError);
+        // Fallback error message if file read fails
+        return '<h1>Internal Server Error</h1><p>There was an error rendering the page.</p>';
+    }
+}
+
 
   // Global error handling via 'onPreResponse' extension
   server.ext('onPreResponse', (_request, _h) => {

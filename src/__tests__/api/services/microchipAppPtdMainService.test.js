@@ -4,6 +4,17 @@ import httpService from "../../../api/services/httpService";
 
 jest.mock("../../../api/services/httpService");
 
+const petOwnerName = "Pet Owner Name change";
+const petOwnerEmail = "siri.kukkala+GB6@capgemini.com";
+const addressLineOne = "CURRIE & BROWN UK LTD  40";
+const addressLineTwo = " HOLBORN VIADUCT";
+
+const issuingAuthorityAddressLineOne = "Pet Travel Section";
+const issuingAuthorityAddressLineTwo = "Eden Bridge House";
+const issuingAuthorityAddressLineThree = "Lowther Street";
+const agencyName = "Animal and Plant Health Agency";
+const signatoryName = "John Smith (APHA) (Signed digitally)";
+
 describe("getMicrochipData", () => {
   let request;
 
@@ -44,12 +55,12 @@ describe("getMicrochipData", () => {
           dateOfIssue: "2024-06-12T10:26:52.0391239",
         },
         petOwner: {
-          name: "Pet Owner Name change",
+          name: petOwnerName,
           telephone: "07894465438",
-          email: "siri.kukkala+GB6@capgemini.com",
+          email: petOwnerEmail,
           address: {
-            addressLineOne: "CURRIE & BROWN UK LTD  40",
-            addressLineTwo: " HOLBORN VIADUCT",
+            addressLineOne: addressLineOne,
+            addressLineTwo: addressLineTwo,
             townOrCity: "LONDON",
             county: "",
             postCode: "EC1N 2PB"
@@ -77,28 +88,28 @@ describe("getMicrochipData", () => {
       applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
       travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
       dateOfIssue: "2024-06-12T10:26:52.0391239",
-      petOwnerName: "Pet Owner Name change",
+      petOwnerName: petOwnerName,
       petOwnerTelephone: "07894465438",
-      petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+      petOwnerEmail: petOwnerEmail,
       petOwnerAddress: 
       {
-        addressLineOne: "CURRIE & BROWN UK LTD  40",
-        addressLineTwo: " HOLBORN VIADUCT",
+        addressLineOne: addressLineOne,
+        addressLineTwo: addressLineTwo,
         townOrCity: "LONDON",
         county: "",
         postCode: "EC1N 2PB"
       },
       issuingAuthority:  {
         address: {
-                addressLineOne: "Pet Travel Section",
-                addressLineThree: "Lowther Street",
-                addressLineTwo: "Eden Bridge House",
+                addressLineOne: issuingAuthorityAddressLineOne,
+                addressLineThree: issuingAuthorityAddressLineThree,
+                addressLineTwo: issuingAuthorityAddressLineTwo,
                 county: "",
                 postCode: "CA3 8DX",
                 townOrCity: "Carlisle",
                 },
-        name: "Animal and Plant Health Agency",
-        signature: "John Smith (APHA) (Signed digitally)",
+        name: agencyName,
+        signature: signatoryName,
       },
     });
 
@@ -136,10 +147,10 @@ describe("getMicrochipData", () => {
         petOwner: {
           name: "Pet Owner Name change",
           telephone: "07894465438",
-          email: "siri.kukkala+GB6@capgemini.com",
+          email: petOwnerEmail,
           address: {
-            addressLineOne: "CURRIE & BROWN UK LTD  40",
-            addressLineTwo: " HOLBORN VIADUCT",
+            addressLineOne: addressLineOne,
+            addressLineTwo: addressLineTwo,
             townOrCity: "LONDON",
             county: "",
             postCode: "EC1N 2PB"
@@ -166,28 +177,28 @@ describe("getMicrochipData", () => {
       applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
       travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
       dateOfIssue: "2024-06-12T10:26:52.0391239",
-      petOwnerName: "Pet Owner Name change",
+      petOwnerName: petOwnerName,
       petOwnerTelephone: "07894465438",
-      petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+      petOwnerEmail: petOwnerEmail,
       petOwnerAddress: 
       {
-        addressLineOne: "CURRIE & BROWN UK LTD  40",
-        addressLineTwo: " HOLBORN VIADUCT",
+        addressLineOne: addressLineOne,
+        addressLineTwo: addressLineTwo,
         townOrCity: "LONDON",
         county: "",
         postCode: "EC1N 2PB"
       },
       issuingAuthority:  {
         address: {
-                addressLineOne: "Pet Travel Section",
-                addressLineThree: "Lowther Street",
-                addressLineTwo: "Eden Bridge House",
+                addressLineOne: issuingAuthorityAddressLineOne,
+                addressLineThree: issuingAuthorityAddressLineThree,
+                addressLineTwo: issuingAuthorityAddressLineTwo,
                 county: "",
                 postCode: "CA3 8DX",
                 townOrCity: "Carlisle",
                 },
-        name: "Animal and Plant Health Agency",
-        signature: "John Smith (APHA) (Signed digitally)",
+        name: agencyName,
+        signature: signatoryName,
       },
     });
 
@@ -223,12 +234,12 @@ describe("getMicrochipData", () => {
           dateOfIssue: "2024-06-12T10:26:52.0391239",
         },
         petOwner: {
-          name: "Pet Owner Name change",
+          name: petOwnerName,
           telephone: "07894465438",
-          email: "siri.kukkala+GB6@capgemini.com",
+          email: petOwnerEmail,
           address: {
-            addressLineOne: "CURRIE & BROWN UK LTD  40",
-            addressLineTwo: " HOLBORN VIADUCT",
+            addressLineOne: addressLineOne,
+            addressLineTwo: addressLineTwo,
             townOrCity: "LONDON",
             county: "",
             postCode: "EC1N 2PB"
@@ -255,28 +266,28 @@ describe("getMicrochipData", () => {
       applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
       travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
       dateOfIssue: "2024-06-12T10:26:52.0391239",
-      petOwnerName: "Pet Owner Name change",
+      petOwnerName: petOwnerName,
       petOwnerTelephone: "07894465438",
-      petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+      petOwnerEmail: petOwnerEmail,
       petOwnerAddress: 
       {
-        addressLineOne: "CURRIE & BROWN UK LTD  40",
-        addressLineTwo: " HOLBORN VIADUCT",
+        addressLineOne: addressLineOne,
+        addressLineTwo: addressLineTwo,
         townOrCity: "LONDON",
         county: "",
         postCode: "EC1N 2PB"
       },
       issuingAuthority:  {
         address: {
-                addressLineOne: "Pet Travel Section",
-                addressLineThree: "Lowther Street",
-                addressLineTwo: "Eden Bridge House",
+                addressLineOne: issuingAuthorityAddressLineOne,
+                addressLineThree: issuingAuthorityAddressLineThree,
+                addressLineTwo: issuingAuthorityAddressLineTwo,
                 county: "",
                 postCode: "CA3 8DX",
                 townOrCity: "Carlisle",
                 },
-        name: "Animal and Plant Health Agency",
-        signature: "John Smith (APHA) (Signed digitally)",
+        name: agencyName,
+        signature: signatoryName,
       },
     });
 
@@ -312,12 +323,12 @@ describe("getMicrochipData", () => {
           dateOfIssue: "2024-06-12T10:26:52.0391239",
         },
         petOwner: {
-          name: "Pet Owner Name change",
+          name: petOwnerName,
           telephone: "07894465438",
-          email: "siri.kukkala+GB6@capgemini.com",
+          email: petOwnerEmail,
           address: {
-            addressLineOne: "CURRIE & BROWN UK LTD  40",
-            addressLineTwo: " HOLBORN VIADUCT",
+            addressLineOne: addressLineOne,
+            addressLineTwo: addressLineTwo,
             townOrCity: "LONDON",
             county: "",
             postCode: "EC1N 2PB"
@@ -344,28 +355,28 @@ describe("getMicrochipData", () => {
       applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
       travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
       dateOfIssue: "2024-06-12T10:26:52.0391239",
-      petOwnerName: "Pet Owner Name change",
+      petOwnerName: petOwnerName,
       petOwnerTelephone: "07894465438",
-      petOwnerEmail: "siri.kukkala+GB6@capgemini.com",
+      petOwnerEmail: petOwnerEmail,
       petOwnerAddress: 
       {
-        addressLineOne: "CURRIE & BROWN UK LTD  40",
-        addressLineTwo: " HOLBORN VIADUCT",
+        addressLineOne: addressLineOne,
+        addressLineTwo: addressLineTwo,
         townOrCity: "LONDON",
         county: "",
         postCode: "EC1N 2PB"
       },
       issuingAuthority:  {
         address: {
-                addressLineOne: "Pet Travel Section",
-                addressLineThree: "Lowther Street",
-                addressLineTwo: "Eden Bridge House",
+                addressLineOne: issuingAuthorityAddressLineOne,
+                addressLineThree: issuingAuthorityAddressLineThree,
+                addressLineTwo: issuingAuthorityAddressLineTwo,
                 county: "",
                 postCode: "CA3 8DX",
                 townOrCity: "Carlisle",
                 },
-        name: "Animal and Plant Health Agency",
-        signature: "John Smith (APHA) (Signed digitally)",
+        name: agencyName,
+        signature: signatoryName,
       },
     });
 

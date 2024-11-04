@@ -1,0 +1,106 @@
+{% extends "./layouts/checkerLayout.html" %}
+
+{% block headContent %}{% endblock %}
+
+{% block beforeContent %}
+{{ super() }}
+<a href="javascript: history.back();" class="govuk-back-link govuk-!-margin-top-9">Back</a>
+{% endblock %}
+
+{% block pageTitle %} Referred to SPS - {{serviceName}} – GOV.UK {% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+        <span class="govuk-caption-xl">GB checks</span>
+        <h1 class="govuk-heading-xl">Referred to SPS</h1>
+
+        <table class="govuk-table govuk-table--small-text-until-tablet">
+
+            <caption class="govuk-table__caption govuk-table__caption--m">
+                {{ check.routeName }} - {{ check.departureDate }} {{ check.departureTime }}
+            </caption>
+
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">PTD/Reference number</th>
+                    <th scope="col" class="govuk-table__header">Pet</th>
+                    <th scope="col" class="govuk-table__header">Microchip</th>
+                    <th scope="col" class="govuk-table__header">Travel by</th>
+                    <th scope="col" class="govuk-table__header">SPS outcome</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                {% for spsCheck in spsChecks %}
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header"><a
+                            href="#">{{spsCheck.PTDNumber}}</a></th>
+                    <td class="govuk-table__cell">{{spsCheck.PetDescription}}</td>
+                    <td class="govuk-table__cell">{{spsCheck.Microchip}}</td>
+                    <td class="govuk-table__cell">{{spsCheck.TravelBy}}</td>
+                    <td class="govuk-table__cell">
+                        <strong class="govuk-tag govuk-tag--{{spsCheck.classColour}}">
+                            {{spsCheck.SPSOutcome}}
+                        </strong>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination Component -->
+        {% if totalPages > 1 %}
+        <nav class="govuk-pagination" role="navigation" aria-label="Pagination">
+            <ul class="govuk-pagination__list">
+                {% if page > 1 %}
+                <li class="govuk-pagination__prev">
+                    <a class="govuk-link govuk-pagination__link" href="?page={{ page - 1 }}" rel="prev">
+                        <svg class="govuk-pagination__icon govuk-pagination__icon--prev"
+                            xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true"
+                            focusable="false" viewBox="0 0 15 13">
+                            <path
+                                d="M6.89 13 8.31 11.586 4.017 7.293H17v-2H4.103l4.185-3.977L6.91.867 0 7.272l6.89 5.728z" />
+                        </svg>
+                        <span class="govuk-pagination__link-title">
+                            Previous
+                        </span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for p in pages %}
+                <li class="govuk-pagination__item{% if p == page %} govuk-pagination__item--current{% endif %}">
+                    <a class="govuk-link govuk-pagination__link" href="?page={{ p }}" aria-label="Page {{ p }}" {% if
+                        p==page %} aria-current="page" {% endif %}>
+                        {{ p }}
+                    </a>
+                </li>
+                {% endfor %}
+
+                {% if page < totalPages %} <li class="govuk-pagination__next">
+                    <a class="govuk-link govuk-pagination__link" href="?page={{ page + 1 }}" rel="next">
+                        <span class="govuk-pagination__link-title">
+                            Next<span class="govuk-visually-hidden"> page</span>
+                        </span>
+                        <svg class="govuk-pagination__icon govuk-pagination__icon--next"
+                            xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true"
+                            focusable="false" viewBox="0 0 15 13">
+                            <path
+                                d="m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z" />
+                        </svg>
+                    </a>
+                    </li>
+                    {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        <!-- End of Pagination Component -->
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block bodyContent %}{% endblock %}

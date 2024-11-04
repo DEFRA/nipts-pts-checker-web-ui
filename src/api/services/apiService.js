@@ -5,6 +5,8 @@ import httpService from "./httpService.js";
 import { issuingAuthorityModelData } from "../../constants/issuingAuthority.js";
 import moment from "moment";
 
+const errorText = "Error fetching data:";
+
 const buildApiUrl = (endpoint) => {
   let baseUrl =
     process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
@@ -108,7 +110,9 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
       petId: item.pet ? item.pet.petId : undefined,
       petName: item.pet ? item.pet.petName : undefined,
       petSpecies: item.pet ? item.pet.species : undefined,
-      petBreed: item.pet ? item.pet.breedName : undefined,
+      petBreed: item.pet && item.pet.breedName === "Mixed breed or unknown"
+      ? item.pet.additionalBreedInfo
+      : item.pet?.breedName,
       documentState,
       ptdNumber,
       issuedDate: formattedIssuedDate || undefined,
@@ -134,7 +138,7 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
 
     return transformedItem;
   } catch (error) {
-    console.error("Error fetching data:", error.message);
+    console.error(errorText, error.message);
 
     // Check for specific error message and return a structured error
     if (error?.message) {
@@ -219,12 +223,15 @@ const getApplicationByApplicationNumber = async (
 
     const dateOfBirthRaw = item.pet ? item.pet.dateOfBirth : undefined;
     const formattedDateOfBirth = formatDate(dateOfBirthRaw);
+    
 
     const transformedItem = new MicrochipAppPtdMainModel({
       petId: item.pet ? item.pet.petId : undefined,
       petName: item.pet ? item.pet.petName : undefined,
       petSpecies: item.pet ? item.pet.species : undefined,
-      petBreed: item.pet ? item.pet.breedName : undefined,
+      petBreed: item.pet && item.pet.breedName === "Mixed breed or unknown"
+      ? item.pet.breedAdditionalInfo  
+      : item.pet?.breedName,
       documentState,
       ptdNumber,
       issuedDate: formattedIssuedDate || undefined,
@@ -250,7 +257,7 @@ const getApplicationByApplicationNumber = async (
 
     return transformedItem;
   } catch (error) {
-    console.error("Error fetching data:", error.message);
+    console.error(errorText, error.message);
 
     if (error?.message) {
       if (
@@ -284,7 +291,7 @@ const recordCheckOutCome = async (checkOutcome, request) => {
 
     return item.checkSummaryId;
   } catch (error) {
-    console.error("Error fetching data:", error.message);
+    console.error(errorText, error.message);
 
     // Check for specific error message and return a structured error
     if (error?.message) {
@@ -315,7 +322,7 @@ const reportNonCompliance = async (checkOutcome, request) => {
 
     return item.checkSummaryId;
   } catch (error) {
-    console.error("Error fetching data:", error.message);
+    console.error(errorText, error.message);
 
     // Check for specific error message and return a structured error
     if (error?.message) {
@@ -342,7 +349,7 @@ const saveCheckerUser = async (checker, request) => {
 
     return checkerId;
   } catch (error) {
-    console.error("Error fetching data:", error.message);
+    console.error(errorText, error.message);
 
     // Check for specific error message and return a structured error
     if (error?.message) {

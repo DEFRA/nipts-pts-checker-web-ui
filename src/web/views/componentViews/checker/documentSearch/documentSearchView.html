@@ -138,6 +138,11 @@
 </div>
 
 <script>
+
+  const conditionalDocumentSearch1Id = 'conditional-documentSearch-1';
+  const conditionalDocumentSearch2Id = 'conditional-documentSearch-2';
+  const conditionalDocumentSearch3Id = 'conditional-documentSearch-3';
+
   function resetField(inputId, formGroupId, errorId) {
     const inputElement = document.getElementById(inputId);
     inputElement.value = '';
@@ -151,7 +156,7 @@
   }
 
   function toggleConditionals(visibleId) {
-    const allConditionals = ['conditional-documentSearch-1', 'conditional-documentSearch-2', 'conditional-documentSearch-3'];
+    const allConditionals = [conditionalDocumentSearch1Id, conditionalDocumentSearch2Id, conditionalDocumentSearch3Id];
     allConditionals.forEach(id => {
       const element = document.getElementById(id);
       element.className = id === visibleId
@@ -162,31 +167,31 @@
 
   // Event listeners for radio buttons
   document.getElementById('documentSearch-1').addEventListener('click', () => {
-    toggleConditionals('conditional-documentSearch-1');
+    toggleConditionals(conditionalDocumentSearch1Id);
   });
 
   document.getElementById('documentSearch-2').addEventListener('click', () => {
-    toggleConditionals('conditional-documentSearch-2');
+    toggleConditionals(conditionalDocumentSearch2Id);
   });
 
   document.getElementById('documentSearch-3').addEventListener('click', () => {
-    toggleConditionals('conditional-documentSearch-3');
+    toggleConditionals(conditionalDocumentSearch3Id);
   });
 
   // Clear all fields and reset radio buttons
-  function clearSearchFields(event) {
-    event.preventDefault(); // Prevent default link behavior
+  function clearSearchFields(_event) {
+    _event.preventDefault(); // Prevent default link behavior
     resetField('ptdNumberSearch', 'ptd-form-group', 'ptd-error');
     resetField('applicationNumberSearch', 'application-form-group', 'application-error');
     resetField('microchipNumber', 'microchip-form-group', 'microchip-error');
     document.getElementById('documentSearch-1').checked = true;
-    toggleConditionals('conditional-documentSearch-1');
+    toggleConditionals(conditionalDocumentSearch1Id);
   }
 
   document.getElementById('clearSearchButton').addEventListener('click', clearSearchFields);
 
   // On form submission, clear irrelevant fields
-  document.getElementById('documentSearchForm').addEventListener('submit', function (event) {
+  document.getElementById('documentSearchForm').addEventListener('submit', function (_event) {
     const selectedOption = document.querySelector('input[name="documentSearch"]:checked').value;
     const inputFields = {
       ptd: document.getElementById('ptdNumberSearch'),
@@ -195,7 +200,7 @@
     };
 
     // Clear values of non-relevant input fields
-    for (let key in inputFields) {
+    for (const key in inputFields) {
       if (key !== selectedOption) {
         inputFields[key].value = '';
       }
@@ -209,7 +214,21 @@
 
   function getSelectedOptionId() {
     const selectedOption = document.querySelector('input[name="documentSearch"]:checked').value;
-    return selectedOption === 'ptd' ? '1' : selectedOption === 'application' ? '2' : '3';
+    
+    let result;
+
+    if (selectedOption === 'ptd') {
+        result = '1';
+    } 
+    else if (selectedOption === 'application') {
+       result = '2';
+    } 
+    else {
+        result = '3';
+    }
+
+    return result;
+
   }
 </script>
 {% endblock %}

@@ -21,11 +21,11 @@
 {% set petOwnerName = data.petOwnerName %}
 {% set petOwnerEmail = data.petOwnerEmail %}
 {% set petOwnerTelephone = data.petOwnerTelephone %}
-{% set petOwnerAddressLineOne = data.petOwnerAddress.addressLineOne %}
-{% set petOwnerAddressLineTwo = data.petOwnerAddress.addressLineTwo %}
-{% set petOwnerAddressTownOrCity = data.petOwnerAddress.townOrCity %}
-{% set petOwnerAddressCounty = data.petOwnerAddress.county %}
-{% set petOwnerAddressPostCode = data.petOwnerAddress.postCode %}
+{% set petOwnerAddressLineOne = data.petOwnerAddress?.addressLineOne | default('') %}
+{% set petOwnerAddressLineTwo = data.petOwnerAddress?.addressLineTwo | default('') %}
+{% set petOwnerAddressTownOrCity = data.petOwnerAddress?.townOrCity | default('') %}
+{% set petOwnerAddressCounty = data.petOwnerAddress?.county | default('') %}
+{% set petOwnerAddressPostCode = data.petOwnerAddress?.postCode | default('') %}
 {% set issuingAuthorityName = data.issuingAuthority.name %}
 {% set issuingAuthorityAddressLineOne = data.issuingAuthority.address.addressLineOne %}
 {% set issuingAuthorityAddressLineTwo = data.issuingAuthority.address.addressLineTwo %}
@@ -56,15 +56,15 @@
 
             {% include "includes/status.html" %}
 
-            {% if data['documentState'] !== "awaiting" %}
+            {% if data['documentState'] !== "awaiting" and data['documentState'] !== "rejected" %}
             <h1 id="documents" class="govuk-heading-l govuk-!-margin-bottom-6">
                 Lifelong pet travel document and declaration
             </h1>
             {% endif %}
 
-            {% if data['documentState'] === "awaiting" %}
+            {% if data['documentState'] === "awaiting" or data['documentState'] === "rejected" %}
             <h1 id="documents" class="govuk-heading-l govuk-!-margin-bottom-6">
-                Lifelong pet travel document and declaration
+                Your application summary
             </h1>
             {% endif %}
 

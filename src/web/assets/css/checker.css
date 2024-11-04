@@ -1660,10 +1660,13 @@ ul.language-toggle li:first-child {
     display: none; /* Hide spans in mobile */
   }
 
+  .pts-checker-navigation {
+  overflow: hidden; /* Ensure content does not expand the element */
+  }
+
   .pts-checker-navigation span {
     display: none; /* Hide spans in mobile */
   }
-
   .pts-checker-header .pet-declaration-logos .govuk-grid-column-one-half:first-child,
   .pts-checker-header .pet-declaration-logos .govuk-grid-column-one-quarter:first-child {
     display: none; /* Hide specific columns on smaller screens */
@@ -1692,7 +1695,6 @@ body.pts-management {
   left: 0;
   right: 0;
   z-index: 100;
-  height: 90px;
   width: 100%;
   filter: drop-shadow(rgba(0, 0, 0, 0.15) 8px -8px 6px);
   box-sizing: border-box;
@@ -1711,7 +1713,7 @@ body.pts-management {
 
 .pts-checker-navigation ul li {
   display: inline-block;
-  padding: 20px;
+  padding: 10px;
   text-align: center;
   box-sizing: border-box;
 }
