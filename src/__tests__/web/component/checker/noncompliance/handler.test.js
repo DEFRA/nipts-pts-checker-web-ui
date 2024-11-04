@@ -10,6 +10,8 @@ jest.mock("../../../../../api/services/appSettingsService.js");
 jest.mock("../../../../../api/services/apiService.js");
 jest.mock('../../../../../web/component/checker/noncompliance/validate.js');
 
+const genericErrorMessage = "The information wasn't recorded, please try to submit again. If you close the application, the information will be lost. You can printscreen or save the information and submit it later.";
+
 describe("NonComplianceHandlers", () => {
   describe("getNonComplianceHandler", () => {
     let request, h;
@@ -225,7 +227,99 @@ describe("NonComplianceHandlers", () => {
       expect(result).toBe('view response');
     });
 
-    it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true", async () => {
+    it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true but api call return generic error", async () => {
+      const mockData = { some: "data", documentState: "approved" };
+      const applicationStatus = mockData.documentState.toLowerCase().trim();
+      const statusMapping = {
+        approved: "Approved",
+        awaiting: "Awaiting verification",
+        revoked: "Revoked",
+        rejected: "	Unsuccessful",
+      };
+    
+      const statusColourMapping = {
+        approved: "govuk-tag govuk-tag--green",
+        awaiting: "govuk-tag govuk-tag--yellow",
+        revoked: "govuk-tag govuk-tag--orange",
+        rejected: "govuk-tag govuk-tag--red",
+      };
+      
+      const documentStatus = statusMapping[applicationStatus] || applicationStatus;
+      const documentStatusColourMapping = statusColourMapping[applicationStatus] || applicationStatus;
+      
+      const payload = {
+        mcNotMatch: "true",
+        mcNotMatchActual: "123456789123456",
+        relevantComments: relevantComments,
+      };
+      validateNonCompliance.mockReturnValue({
+        isValid: true,
+        errors: [],
+      });
+
+      request.payload = payload;
+      request.yar.get.mockImplementation((key) => {
+        const mockData = {
+          data: { applicationId: "testApplicationId", documentState: "approved" },
+          IsFailSelected: { value: true },  // Return as an object
+          currentSailingSlot: {
+            departureDate: "12/10/2024",
+            sailingHour: "10",
+            sailingMinutes: "30",
+            selectedRoute: { id: 1 },
+            selectedRouteOption: { id: 1 },
+          }
+        };
+      
+        return mockData[key] || null;
+      });
+    
+      validateNonCompliance.mockReturnValue({
+        isValid: true,
+        errors: [],
+      });
+    
+      const mockAppSettings = { setting1: "value1" };
+      appSettingsService.getAppSettings.mockResolvedValue(mockAppSettings);
+      apiService.reportNonCompliance.mockResolvedValue({ error: genericErrorMessage });
+    
+      await NonComplianceHandlers.postNonComplianceHandler(request, h);
+    
+      expect(apiService.reportNonCompliance).toHaveBeenCalledWith(
+        expect.objectContaining({
+          applicationId: "testApplicationId",
+          checkOutcome: "Fail",
+          mcNotMatchActual: "123456789123456",
+          relevantComments: relevantComments,
+        }),
+        request
+      );
+      
+
+      expect(h.view).toHaveBeenCalledWith(
+        VIEW_PATH, {
+          //error: errorMessage,
+          errorSummary: [
+            {
+              fieldId: "unexpected",
+              message: genericErrorMessage,
+              dispalyAs: "text",
+            },
+          ],
+          documentStatus,
+          documentStatusColourMapping,
+          data: { applicationId: "testApplicationId", documentState: "approved" },
+          model: {"setting1": "value1"},
+          formSubmitted: true,
+          payload,
+        }
+      );
+
+      h.view();
+
+    });
+
+    it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true api call succeeds", async () => {
       const payload = {
         mcNotMatch: "true",
         mcNotMatchActual: "123456789123456",
