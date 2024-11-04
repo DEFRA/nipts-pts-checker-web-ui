@@ -1,10 +1,10 @@
+"use strict";
+
 import { ReferredHandlers } from "../../../../../web/component/checker/referred/handler.js";
 import spsReferralMainService from "../../../../../api/services/spsReferralMainService.js";
 import headerData from "../../../../../web/helper/constants.js";
 
-
 jest.mock("../../../../../api/services/spsReferralMainService.js");
-
 
 const referredView = "componentViews/checker/referred/referredView";
 

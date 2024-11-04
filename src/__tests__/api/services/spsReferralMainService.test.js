@@ -10,8 +10,15 @@ describe("GetSpsReferrals", () => {
   const date = "2024-11-05";
   const timeWindowInHours = 2;
   const formattedDate = moment(date).toISOString();
+  let request;
 
   beforeEach(() => {
+    // Mock request object with headers
+    request = {
+      headers: {
+        authorization: "Bearer mockToken",
+      },
+    };
     jest.clearAllMocks();
   });
 
@@ -51,14 +58,15 @@ describe("GetSpsReferrals", () => {
     const data = await spsService.GetSpsReferrals(
       route,
       date,
-      timeWindowInHours
+      timeWindowInHours,
+      request
     );
 
     expect(data).toEqual(expectedData);
     expect(httpService.postAsync).toHaveBeenCalledWith(
       expect.stringContaining("/Checker/getSpsCheckDetailsByRoute"),
-      { route, SailingDate: formattedDate },
-      timeWindowInHours
+      { route, SailingDate: formattedDate, timeWindowInHours },
+      request // Pass the request object as the third parameter
     );
   });
 
@@ -69,10 +77,16 @@ describe("GetSpsReferrals", () => {
     const result = await spsService.GetSpsReferrals(
       route,
       date,
-      timeWindowInHours
+      timeWindowInHours,
+      request
     );
 
     expect(result).toEqual({ error: apiError.error });
+    expect(httpService.postAsync).toHaveBeenCalledWith(
+      expect.stringContaining("/Checker/getSpsCheckDetailsByRoute"),
+      { route, SailingDate: formattedDate, timeWindowInHours },
+      request
+    );
   });
 
   it("should throw an error if response data structure is invalid", async () => {
@@ -80,15 +94,27 @@ describe("GetSpsReferrals", () => {
     httpService.postAsync.mockResolvedValue(apiResponse);
 
     await expect(
-      spsService.GetSpsReferrals(route, date, timeWindowInHours)
+      spsService.GetSpsReferrals(route, date, timeWindowInHours, request)
     ).rejects.toThrow("Unexpected response structure");
+
+    expect(httpService.postAsync).toHaveBeenCalledWith(
+      expect.stringContaining("/Checker/getSpsCheckDetailsByRoute"),
+      { route, SailingDate: formattedDate, timeWindowInHours },
+      request
+    );
   });
 
   it("should handle unexpected errors gracefully", async () => {
     httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
 
     await expect(
-      spsService.GetSpsReferrals(route, date, timeWindowInHours)
+      spsService.GetSpsReferrals(route, date, timeWindowInHours, request)
     ).rejects.toThrow("Unexpected error");
+
+    expect(httpService.postAsync).toHaveBeenCalledWith(
+      expect.stringContaining("/Checker/getSpsCheckDetailsByRoute"),
+      { route, SailingDate: formattedDate, timeWindowInHours },
+      request
+    );
   });
 });

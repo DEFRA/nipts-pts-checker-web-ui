@@ -33,9 +33,15 @@ const getReferredChecks = async (request, h) => {
     (await spsReferralMainService.GetSpsReferrals(
       routeName,
       departureDateTime,
-      process.env.DASHBOARD_START_HOUR || "-47"
+      process.env.DASHBOARD_START_HOUR * -1 || "47",
+      request
     )) || [];
 
+  // Redirect if there are no spsChecks
+  if (spsChecks.length === 0) {
+    return h.redirect("/checker/referred");
+  }
+  
   // Assign class colors based on outcome
   spsChecks.forEach((item) => {
     switch (item.SPSOutcome) {
