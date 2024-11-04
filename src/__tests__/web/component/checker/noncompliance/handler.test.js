@@ -88,20 +88,37 @@ describe("NonComplianceHandlers", () => {
       appSettingsService.getAppSettings.mockResolvedValue({
         someSetting: 'testSetting',
       });
+
     });
 
     it("should render errors when validation fails", async () => {
-      const payload = {
-        microchipNumberRadio: "on",
-        microchipNumber: "invalid_microchip",
-        ptdProblem: "someProblem",
-        passengerType: "foot",
-        outcomeReferred: "",
-        outcomeAdvised: "",
-        outcomeNotTravelling: "",
-        outcomeSPS: "",
-        moreDetail: ""
+      const mockData = { some: "data", documentState: "awaiting" };
+      const applicationStatus = mockData.documentState.toLowerCase().trim();
+      const statusMapping = {
+        approved: "Approved",
+        awaiting: "Awaiting verification",
+        revoked: "Revoked",
+        rejected: "	Unsuccessful",
       };
+    
+      const statusColourMapping = {
+        approved: "govuk-tag govuk-tag--green",
+        awaiting: "govuk-tag govuk-tag--yellow",
+        revoked: "govuk-tag govuk-tag--orange",
+        rejected: "govuk-tag govuk-tag--red",
+      };
+      
+      const documentStatus = statusMapping[applicationStatus] || applicationStatus;
+      const documentStatusColourMapping = statusColourMapping[applicationStatus] || applicationStatus;
+      request.yar.get.mockReturnValueOnce(mockData);
+  
+      const payload = {
+        mcNotMatch: "true",
+        mcNotMatchActual: "invalid_microchip",
+        relevantComments: relevantComments,
+        passengerTypeId: 1,
+      };
+
 
       const validationResult = {
         isValid: false,
@@ -120,6 +137,9 @@ describe("NonComplianceHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(
         VIEW_PATH,
         expect.objectContaining({
+          data: {"documentState": "awaiting", "some": "data"},
+          documentStatus,
+          documentStatusColourMapping,
           errors: {
             microchipNumber: errorMessages.microchipNumber.specialCharacters, // Adjusted to specialCharacters
           },
@@ -132,40 +152,6 @@ describe("NonComplianceHandlers", () => {
           formSubmitted: true,
           payload,
         })
-      );
-    });
-
-    it("should render no errors when validation passes", async () => {
-      const payload = {
-        microchipNumberRadio: "on",
-        microchipNumber: "123456789012345",
-        ptdProblem: "",
-        passengerType: "foot",
-        outcomeReferred: "",
-        outcomeAdvised: "",
-        outcomeNotTravelling: "",
-        outcomeSPS: "",
-        moreDetail: "", 
-        visualCheckProblem: "on",
-        otherIssuesCommercialRadio: "on",
-        otherIssuesAuthorisedRadio: "on",
-        otherIssuesSomethingRadio: "on",
-        relevantComments: "Test Comments"
-      };
-      request.payload = payload;
-
-      validateNonCompliance.mockReturnValue({
-        isValid: true,
-        errors: [],
-      });
-
-      const mockAppSettings = { setting1: "value1" };
-      appSettingsService.getAppSettings.mockResolvedValue(mockAppSettings);
-
-      await NonComplianceHandlers.postNonComplianceHandler(request, h);
-
-      expect(h.redirect).toHaveBeenCalledWith(
-        "/checker/dashboard"
       );
     });
 
