@@ -88,7 +88,9 @@ const getMicrochipData = async (microchipNumber, request) => {
       petId: item.pet ? item.pet.petId : undefined,
       petName: item.pet ? item.pet.petName : undefined,
       petSpecies: item.pet ? item.pet.species : undefined,
-      petBreed: item.pet ? item.pet.breedName : undefined,
+      petBreed: item.pet && item.pet.breedName === "Mixed breed or unknown"
+      ? item.pet.breedAdditionalInfo 
+      : item.pet?.breedName,
       documentState,
       ptdNumber,
       issuedDate: formattedIssuedDate || undefined,
