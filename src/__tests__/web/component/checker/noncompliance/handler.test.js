@@ -11,6 +11,12 @@ jest.mock("../../../../../api/services/apiService.js");
 jest.mock('../../../../../web/component/checker/noncompliance/validate.js');
 
 const genericErrorMessage = "The information wasn't recorded, please try to submit again. If you close the application, the information will be lost. You can printscreen or save the information and submit it later.";
+const awaitingVerification = "Awaiting verification";
+const greenTag = "govuk-tag govuk-tag--green";
+const yellowTag = "govuk-tag govuk-tag--yellow";
+const orangeTag = "govuk-tag govuk-tag--orange";
+const redTag = "govuk-tag govuk-tag--red";
+const departureDate = "12/10/2024";
 
 describe("NonComplianceHandlers", () => {
   describe("getNonComplianceHandler", () => {
@@ -33,16 +39,16 @@ describe("NonComplianceHandlers", () => {
 
       const statusMapping = {
         approved: "Approved",
-        awaiting: "Awaiting verification",
+        awaiting: awaitingVerification,
         revoked: "Revoked",
         rejected: "	Unsuccessful",
       };
     
       const statusColourMapping = {
-        approved: "govuk-tag govuk-tag--green",
-        awaiting: "govuk-tag govuk-tag--yellow",
-        revoked: "govuk-tag govuk-tag--orange",
-        rejected: "govuk-tag govuk-tag--red",
+        approved: greenTag,
+        awaiting: yellowTag,
+        revoked: orangeTag,
+        rejected: redTag,
       };
       
       const documentStatus = statusMapping[applicationStatus] || applicationStatus;
@@ -98,16 +104,16 @@ describe("NonComplianceHandlers", () => {
       const applicationStatus = mockData.documentState.toLowerCase().trim();
       const statusMapping = {
         approved: "Approved",
-        awaiting: "Awaiting verification",
+        awaiting: awaitingVerification,
         revoked: "Revoked",
         rejected: "	Unsuccessful",
       };
     
       const statusColourMapping = {
-        approved: "govuk-tag govuk-tag--green",
-        awaiting: "govuk-tag govuk-tag--yellow",
-        revoked: "govuk-tag govuk-tag--orange",
-        rejected: "govuk-tag govuk-tag--red",
+        approved: greenTag,
+        awaiting: yellowTag,
+        revoked: orangeTag,
+        rejected: redTag,
       };
       
       const documentStatus = statusMapping[applicationStatus] || applicationStatus;
@@ -189,7 +195,7 @@ describe("NonComplianceHandlers", () => {
           data: { applicationId: "testApplicationId", documentState: "approved" },
           IsFailSelected: { value: true },  // Return as an object
           currentSailingSlot: {
-            departureDate: "12/10/2024",
+            departureDate: departureDate,
             sailingHour: "10",
             sailingMinutes: "30",
             selectedRoute: { id: 1 },
@@ -228,25 +234,24 @@ describe("NonComplianceHandlers", () => {
     });
 
     it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true but api call return generic error", async () => {
-      const mockData = { some: "data", documentState: "approved" };
-      const applicationStatus = mockData.documentState.toLowerCase().trim();
+      const mockedStatusData = { some: "data", documentState: "approved" };
+      const applicationStatus = mockedStatusData.documentState.toLowerCase().trim();
       const statusMapping = {
         approved: "Approved",
-        awaiting: "Awaiting verification",
+        awaiting: awaitingVerification,
         revoked: "Revoked",
         rejected: "	Unsuccessful",
       };
     
       const statusColourMapping = {
-        approved: "govuk-tag govuk-tag--green",
-        awaiting: "govuk-tag govuk-tag--yellow",
-        revoked: "govuk-tag govuk-tag--orange",
-        rejected: "govuk-tag govuk-tag--red",
+        approved: greenTag,
+        awaiting: yellowTag,
+        revoked: orangeTag,
+        rejected: redTag,
       };
       
       const documentStatus = statusMapping[applicationStatus] || applicationStatus;
-      const documentStatusColourMapping = statusColourMapping[applicationStatus] || applicationStatus;
-      
+      const documentStatusColourMapping = statusColourMapping[applicationStatus] || applicationStatus;      
       const payload = {
         mcNotMatch: "true",
         mcNotMatchActual: "123456789123456",
@@ -263,7 +268,7 @@ describe("NonComplianceHandlers", () => {
           data: { applicationId: "testApplicationId", documentState: "approved" },
           IsFailSelected: { value: true },  // Return as an object
           currentSailingSlot: {
-            departureDate: "12/10/2024",
+            departureDate: departureDate,
             sailingHour: "10",
             sailingMinutes: "30",
             selectedRoute: { id: 1 },
@@ -293,8 +298,7 @@ describe("NonComplianceHandlers", () => {
           relevantComments: relevantComments,
         }),
         request
-      );
-      
+      );      
 
       expect(h.view).toHaveBeenCalledWith(
         VIEW_PATH, {
@@ -314,9 +318,6 @@ describe("NonComplianceHandlers", () => {
           payload,
         }
       );
-
-      h.view();
-
     });
 
     it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true api call succeeds", async () => {
@@ -336,7 +337,7 @@ describe("NonComplianceHandlers", () => {
           data: { applicationId: "testApplicationId", documentState: "approved" },
           IsFailSelected: { value: true },  // Return as an object
           currentSailingSlot: {
-            departureDate: "12/10/2024",
+            departureDate: departureDate,
             sailingHour: "10",
             sailingMinutes: "30",
             selectedRoute: { id: 1 },
