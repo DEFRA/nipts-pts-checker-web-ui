@@ -10,24 +10,24 @@ const VIEW_PATH = "componentViews/checker/noncompliance/noncomplianceView";
 
 const genericErrorMessage = "The information wasn't recorded, please try to submit again. If you close the application, the information will be lost. You can printscreen or save the information and submit it later.";
 
+const statusMapping = {
+  approved: "Approved",
+  awaiting: "Awaiting verification",
+  revoked: "Revoked",
+  rejected: "	Unsuccessful",
+};
+
+const statusColourMapping = {
+  approved: "govuk-tag govuk-tag--green",
+  awaiting: "govuk-tag govuk-tag--yellow",
+  revoked: "govuk-tag govuk-tag--orange",
+  rejected: "govuk-tag govuk-tag--red",
+};
+
 const getNonComplianceHandler = async (request, h) => {
   const data = request.yar.get("data");
   const appSettings = await appSettingsService.getAppSettings();
   const model = { ...appSettings };
-
-  const statusMapping = {
-    approved: "Approved",
-    awaiting: "Awaiting verification",
-    revoked: "Revoked",
-    rejected: "	Unsuccessful",
-  };
-
-  const statusColourMapping = {
-    approved: "govuk-tag govuk-tag--green",
-    awaiting: "govuk-tag govuk-tag--yellow",
-    revoked: "govuk-tag govuk-tag--orange",
-    rejected: "govuk-tag govuk-tag--red",
-  };
 
   const applicationStatus = data.documentState.toLowerCase().trim();
   const documentStatus = statusMapping[applicationStatus] || applicationStatus;
@@ -56,6 +56,11 @@ const postNonComplianceHandler = async (request, h) => {
 
     console.log("Validation Result:", validationResult);
     const data = request.yar.get("data");
+    const applicationStatus = data.documentState.toLowerCase().trim();
+    const documentStatus = statusMapping[applicationStatus] || applicationStatus;
+    const documentStatusColourMapping =
+      statusColourMapping[applicationStatus] || applicationStatus;
+
     if (!validationResult.isValid) {
       const errors = {};
       const errorSummary = [];
@@ -66,8 +71,8 @@ const postNonComplianceHandler = async (request, h) => {
 
         // Only process microchipNumber errors if the checkbox is selected
         if (
-          fieldId === "microchipNumber" &&
-          payload.microchipNumberRadio !== "on"
+          fieldId === "mcNotMatchActual" &&
+          payload.mcNotMatch !== "true"
         ) {
           // Skip this error
           return;
@@ -90,6 +95,8 @@ const postNonComplianceHandler = async (request, h) => {
       // If there are errors after filtering, render the view with errors
       if (Object.keys(errors).length > 0) {
         return h.view(VIEW_PATH, {
+          documentStatus,
+          documentStatusColourMapping,
           data,
           model,
           errors,
@@ -115,6 +122,8 @@ const postNonComplianceHandler = async (request, h) => {
                 dispalyAs: "text",
               },
             ],
+            documentStatus,
+            documentStatusColourMapping,
             data,
             model,
             formSubmitted: true,
@@ -133,8 +142,14 @@ const postNonComplianceHandler = async (request, h) => {
     const data = request.yar.get("data");
     const appSettings = await appSettingsService.getAppSettings();
     const model = { ...appSettings };
+    const applicationStatus = data.documentState.toLowerCase().trim();
+    const documentStatus = statusMapping[applicationStatus] || applicationStatus;
+    const documentStatusColourMapping =
+      statusColourMapping[applicationStatus] || applicationStatus;
 
     return h.view(VIEW_PATH, {
+      documentStatus,
+      documentStatusColourMapping,
       data,
       model,
       errorSummary: [
