@@ -142,8 +142,14 @@ const postNonComplianceHandler = async (request, h) => {
     const data = request.yar.get("data");
     const appSettings = await appSettingsService.getAppSettings();
     const model = { ...appSettings };
+    const applicationStatus = data.documentState.toLowerCase().trim();
+    const documentStatus = statusMapping[applicationStatus] || applicationStatus;
+    const documentStatusColourMapping =
+      statusColourMapping[applicationStatus] || applicationStatus;
 
     return h.view(VIEW_PATH, {
+      documentStatus,
+      documentStatusColourMapping,
       data,
       model,
       errorSummary: [
