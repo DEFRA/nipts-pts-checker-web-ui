@@ -21,11 +21,6 @@
 {% set petOwnerName = data.petOwnerName %}
 {% set petOwnerEmail = data.petOwnerEmail %}
 {% set petOwnerTelephone = data.petOwnerTelephone %}
-{% set petOwnerAddressLineOne = data.petOwnerAddress?.addressLineOne | default('') %}
-{% set petOwnerAddressLineTwo = data.petOwnerAddress?.addressLineTwo | default('') %}
-{% set petOwnerAddressTownOrCity = data.petOwnerAddress?.townOrCity | default('') %}
-{% set petOwnerAddressCounty = data.petOwnerAddress?.county | default('') %}
-{% set petOwnerAddressPostCode = data.petOwnerAddress?.postCode | default('') %}
 {% set issuingAuthorityName = data.issuingAuthority.name %}
 {% set issuingAuthorityAddressLineOne = data.issuingAuthority.address.addressLineOne %}
 {% set issuingAuthorityAddressLineTwo = data.issuingAuthority.address.addressLineTwo %}
@@ -37,7 +32,7 @@
 
 {% block content %}
 <div class="govuk-grid-row govuk-!-margin-bottom-9 govuk-!-margin-top-4">    
-    <div class="govuk-grid-column-full govuk-!-margin-top-0""> 
+    <div class="govuk-grid-column-full govuk-!-margin-top-0"> 
         <div id="errorSummary" class="govuk-grid-column-three-quarters">
             {% if formSubmitted %}
             {% include "./errors/displayErrorSummary.html" %}
@@ -312,23 +307,25 @@
                                 Address
                             </dt>
                             <dd class="govuk-summary-list__value">
-                                {%if petOwnerAddressLineOne.trim() !== '' %}
-                                    {{ petOwnerAddressLineOne }}
+                                {% if data.petOwnerAddress.addressLineOne !== ''%}
+                                    {{ data.petOwnerAddress.addressLineOne }}
                                     <br class="pet-br-print">
-                                {% endif %} 
-                                {%if petOwnerAddressLineTwo.trim() !== '' %}
-                                    {{ petOwnerAddressLineTwo }}
+                                {% endif%}
+                                {% if data.petOwnerAddress.addressLineTwo !== ''%}
+                                    {{ data.petOwnerAddress.addressLineTwo }}   
                                     <br class="pet-br-print">
-                                {% endif %}
-                                {%if petOwnerAddressTownOrCity.trim() !== '' %}                             
-                                    {{ petOwnerAddressTownOrCity }}
+                                {% endif %}                    
+                                {% if data.petOwnerAddress.townOrCity !== ''%}
+                                    {{ data.petOwnerAddress.townOrCity }}   
                                     <br class="pet-br-print">
-                                {% endif %}
-                                {%if petOwnerAddressCounty.trim() !== '' %}                             
-                                    {{ petOwnerAddressCounty }}
+                                {% endif %}        
+                                {% if data.petOwnerAddress.county !== ''%}
+                                    {{ data.petOwnerAddress.county }}   
                                     <br class="pet-br-print">
-                                {% endif %}
-                                {{ petOwnerAddressPostCode }}
+                                {% endif %}       
+                                {% if data.petOwnerAddress.postCode !== ''%}
+                                    {{ data.petOwnerAddress.postCode }}   
+                                {% endif %}                      
                             </dd>
                         </div>
                         <div class="govuk-summary-list__row">
