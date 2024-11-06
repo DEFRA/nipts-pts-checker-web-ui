@@ -33,7 +33,7 @@ const getReferredChecks = async (request, h) => {
     (await spsReferralMainService.GetSpsReferrals(
       routeName,
       departureDateTime,
-      process.env.DASHBOARD_START_HOUR * -1 || "47",
+      process.env.DASHBOARD_START_HOUR * -1 || "48",
       request
     )) || [];
 
