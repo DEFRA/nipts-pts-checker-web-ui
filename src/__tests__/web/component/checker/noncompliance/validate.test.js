@@ -28,8 +28,8 @@ describe("Validation Functions", () => {
 
     test("should return error when microchipNumber is empty", () => {
       const payload = {
-        microchipNumberRadio: "on",
-        microchipNumber: "",
+        mcNotMatch: "true",
+        mcNotMatchActual: "",
         ptdProblem: "someProblem",
         passengerType: "foot"
       };
@@ -38,15 +38,15 @@ describe("Validation Functions", () => {
       expect(result.errors).toEqual([
         {
           message: errorMessages.microchipNumber.empty,
-          path: ["microchipNumber"],
+          path: ["mcNotMatchActual"],
         },
       ]);
     });
 
     test("should return error when microchipNumber contains letters", () => {
       const payload = {
-        microchipNumberRadio: "on",
-        microchipNumber: "12345678901234A",
+        mcNotMatch: "true",
+        mcNotMatchActual: "12345678901234A",
         ptdProblem: "someProblem",
         passengerType: "foot"
       };
@@ -55,15 +55,15 @@ describe("Validation Functions", () => {
       expect(result.errors).toEqual([
         {
           message: errorMessages.microchipNumber.letters,
-          path: ["microchipNumber"],
+          path: ["mcNotMatchActual"],
         },
       ]);
     });
 
     test("should return error when microchipNumber contains special characters", () => {
       const payload = {
-        microchipNumberRadio: "on",
-        microchipNumber: "12345678901234!",
+        mcNotMatch: "true",
+        mcNotMatchActual: "12345678901234!",
         ptdProblem: "someProblem",
         passengerType: "foot"
       };
@@ -72,15 +72,15 @@ describe("Validation Functions", () => {
       expect(result.errors).toEqual([
         {
           message: errorMessages.microchipNumber.specialCharacters,
-          path: ["microchipNumber"],
+          path: ["mcNotMatchActual"],
         },
       ]);
     });
 
     test("should return error when microchipNumber is not 15 digits", () => {
       const payload = {
-        microchipNumberRadio: "on",
-        microchipNumber: "12345678901234",
+        mcNotMatch: "true",
+        mcNotMatchActual: "12345678901234",
         ptdProblem: "someProblem",
         passengerType: "foot"
       };
@@ -89,7 +89,7 @@ describe("Validation Functions", () => {
       expect(result.errors).toEqual([
         {
           message: errorMessages.microchipNumber.length,
-          path: ["microchipNumber"],
+          path: ["mcNotMatchActual"],
         },
       ]);
     });

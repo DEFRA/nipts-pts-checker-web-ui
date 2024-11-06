@@ -5,9 +5,9 @@ import errorMessages from "./errorMessages.js";
 const microchipNumberLength = 15;
 
 const nonComplianceSchema = Joi.object({
-  microchipNumberRadio: Joi.any(),
-  microchipNumber: Joi.when("microchipNumberRadio", {
-    is: Joi.valid("on"),
+  mcNotMatch: Joi.any(),
+  mcNotMatchActual: Joi.when("mcNotMatch", {
+    is: Joi.valid("true"),
     then: Joi.any().custom((value, helpers) => {
       const val = value || "";
       const trimmedValue = val.trim();
