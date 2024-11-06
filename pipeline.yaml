@@ -46,8 +46,8 @@ extends:
         -DEFRA_ID_SIGNOUT_URI "https://your-account.cpdev.cui.defra.gov.uk/idphub/b2c/b2c_1a_cui_cpdev_signupsignin/signout"
         -DEFRA_KEYVAULT_NAME "$(environment)trd$(nc-function-infrastructure-lower)$(nc-resource-keyvault-lower)1001"
         -MAGIC_PASSWORD_ENABLED "Yes"
-        -DASHBOARD_START_HOUR "-47"
-        -DASHBOARD_END_HOUR "25"
+        -DASHBOARD_START_HOUR "-48"
+        -DASHBOARD_END_HOUR "24"
       tst: >-
         -PORT "8080"
         -HOST "0.0.0.0"
@@ -58,8 +58,8 @@ extends:
         -DEFRA_ID_SIGNOUT_URI "https://your-account.cpdev.cui.defra.gov.uk/idphub/b2c/b2c_1a_cui_cpdev_signupsignin/signout"
         -DEFRA_KEYVAULT_NAME "$(environment)trd$(nc-function-infrastructure-lower)$(nc-resource-keyvault-lower)1001"
         -MAGIC_PASSWORD_ENABLED "Yes"
-        -DASHBOARD_START_HOUR "-47"
-        -DASHBOARD_END_HOUR "25"
+        -DASHBOARD_START_HOUR "-48"
+        -DASHBOARD_END_HOUR "24"
       snd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
@@ -70,8 +70,8 @@ extends:
         -DEFRA_ID_SIGNOUT_URI "https://your-account.cpdev.cui.defra.gov.uk/idphub/b2c/b2c_1a_cui_cpdev_signupsignin/signout"
         -DEFRA_KEYVAULT_NAME "$(environment)trd$(nc-function-infrastructure-lower)$(nc-resource-keyvault-lower)1001"
         -MAGIC_PASSWORD_ENABLED "Yes"
-        -DASHBOARD_START_HOUR "-47"
-        -DASHBOARD_END_HOUR "25"
+        -DASHBOARD_START_HOUR "-48"
+        -DASHBOARD_END_HOUR "24"
       pre: >-
         -PORT "8080"
         -HOST "0.0.0.0"
@@ -82,8 +82,8 @@ extends:
         -DEFRA_ID_SIGNOUT_URI "https://your-account.$(environment).cui.defra.gov.uk/idphub/b2c/b2c_1a_cui_signupsignin/signout"
         -DEFRA_KEYVAULT_NAME "$(environment)trd$(nc-function-infrastructure-lower)$(nc-resource-keyvault-lower)1001"
         -MAGIC_PASSWORD_ENABLED "Yes"
-        -DASHBOARD_START_HOUR "-47"
-        -DASHBOARD_END_HOUR "25"
+        -DASHBOARD_START_HOUR "-48"
+        -DASHBOARD_END_HOUR "24"
       prd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
@@ -94,8 +94,8 @@ extends:
         -DEFRA_ID_SIGNOUT_URI "https://your-account.defra.gov.uk/idphub/b2c/b2c_1a_cui_signupsignin/signout"
         -DEFRA_KEYVAULT_NAME "$(environment)trd$(nc-function-infrastructure-lower)$(nc-resource-keyvault-lower)1001"
         -MAGIC_PASSWORD_ENABLED "Yes"
-        -DASHBOARD_START_HOUR "-47"
-        -DASHBOARD_END_HOUR "25"
+        -DASHBOARD_START_HOUR "-48"
+        -DASHBOARD_END_HOUR "24"
     runSonarScan: true
     #runVulnerabilityScan: true
     #skipOwaspScan: false
