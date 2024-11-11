@@ -29,6 +29,10 @@ const baseUrl =
   const applicationNotFoundMessage = "Application not found";
   const unexpectedErrorMessage = "Unexpected error";
 
+  const getOrganisationRoute = "/Checker/getOrganisation";
+  const organisationId = "9245A7BB-F2A4-4BD7-AD9F-08DC32FA7B20";
+  const unexpectedResponseStructure = "Unexpected response structure";
+
 describe("apiService", () => {
   let request;
 
@@ -1066,7 +1070,7 @@ describe("apiService", () => {
 
       const result = await apiService.recordCheckOutCome(checkOutcome);
 
-      expect(result).toEqual({ error: "Unexpected response structure" });
+      expect(result).toEqual({ error: unexpectedResponseStructure });
     });
   });
 
@@ -1095,25 +1099,24 @@ describe("apiService", () => {
 
       const result = await apiService.saveCheckerUser(checkOutcome);
 
-      expect(result).toEqual({ error: "Unexpected response structure" });
+      expect(result).toEqual({ error: unexpectedResponseStructure });
     });
   });
 
   describe("getOrganisation", () => {
 
     it("should fetch data and map it to OrganisationMainModel", async () => {
-      const organisationId = "9245A7BB-F2A4-4BD7-AD9F-08DC32FA7B20";
       const requestData =   { organisationId: organisationId };
       const apiResponse = {
         data: 
           {
-            Id: "9245A7BB-F2A4-4BD7-AD9F-08DC32FA7B20",
-            Name: "Golden Retriever, friendly and playful",
-            Location: "NI",
-            ExternalId: null,
-            ActiveFrom: "11/11/2024",
-            ActiveTo: null,
-            IsActive: true,
+            id: organisationId,
+            name: "Golden Retriever, friendly and playful",
+            location: "NI",
+            externalId: null,
+            activeFrom: "11/11/2024",
+            activeTo: null,
+            isActive: true,
           }
       };
 
@@ -1137,16 +1140,15 @@ describe("apiService", () => {
         request
       );
   
-      //expect(data).toEqual(expectedData);
+      expect(data).toEqual(expectedData);
       expect(httpService.postAsync).toHaveBeenCalledWith(
-        expect.stringContaining("/Checker/getOrganisation"),
+        expect.stringContaining(getOrganisationRoute),
          requestData,
         request // Pass the request object as the third parameter
       );
     });
   
     it("should return an error if the API returns an error", async () => {
-      const organisationId = "9245A7BB-F2A4-4BD7-AD9F-08DC32FA7B20";
       const requestData =   { organisationId: organisationId };
       const apiError = { error: "Not Found" };
       httpService.postAsync.mockResolvedValue(apiError);
@@ -1158,40 +1160,39 @@ describe("apiService", () => {
   
       expect(result).toEqual({ error: apiError.error });
       expect(httpService.postAsync).toHaveBeenCalledWith(
-        expect.stringContaining("/Checker/getOrganisation"),
+        expect.stringContaining(getOrganisationRoute),
         requestData,
         request
       );
     });
 
     it("should throw an error if response data structure is invalid", async () => {
-      const organisationId = "9245A7BB-F2A4-4BD7-AD9F-08DC32FA7B20";
+      
       const requestData =   { organisationId: organisationId };
       const apiResponse = { data: "Invalid Data Structure" };
       httpService.postAsync.mockResolvedValue(apiResponse);
   
       await expect(
         apiService.getOrganisation(organisationId, request)
-      ).rejects.toThrow("Unexpected response structure");
+      ).rejects.toThrow(unexpectedResponseStructure);
   
       expect(httpService.postAsync).toHaveBeenCalledWith(
-        expect.stringContaining("/Checker/getOrganisation"),
+        expect.stringContaining(getOrganisationRoute),
         requestData,
         request
       );
     });
 
     it("should handle unexpected errors gracefully", async () => {
-      const organisationId = "9245A7BB-F2A4-4BD7-AD9F-08DC32FA7B20";
       const requestData =   { organisationId: organisationId };
-      httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
+      httpService.postAsync.mockRejectedValue(new Error(unexpectedErrorMessage));
   
       await expect(
         apiService.getOrganisation(organisationId, request)
-      ).rejects.toThrow("Unexpected error");
+      ).rejects.toThrow(unexpectedErrorMessage);
   
       expect(httpService.postAsync).toHaveBeenCalledWith(
-        expect.stringContaining("/Checker/getOrganisation"),
+        expect.stringContaining(getOrganisationRoute),
         requestData,
         request
       );

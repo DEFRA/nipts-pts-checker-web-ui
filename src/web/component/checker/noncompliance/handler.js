@@ -177,19 +177,14 @@ const postNonComplianceHandler = async (request, h) => {
   async function saveReportNonCompliance(payload, data) {
     try{    
     const isGBCheck = request.yar.get("isGBCheck");
-    let { dateTimeString, routeId, routeOptionId, flightNumber } = getJourneyDetails(request, isGBCheck);
+    let { dateTimeString, routeId, routeOptionId, flightNumber } = getJourneyDetails(isGBCheck);
 
     // Call the helper function to create the checkOutcome object
-    const checkerId = request.yar.get("checkerId");
-    const gbcheckSummaryId = request.yar.get("checkSummaryId");
-
     const checkOutcome = createCheckOutcome(
       data,
       payload,
       isGBCheck,
       dateTimeString,
-      checkerId,
-      gbcheckSummaryId,
       routeId,
       routeOptionId,
       flightNumber
@@ -225,12 +220,13 @@ const postNonComplianceHandler = async (request, h) => {
     payload,
     isGBCheck,
     dateTimeString,
-    checkerId,
-    gbcheckSummaryId,
     routeId,
     routeOptionId,
     flightNumber
   ) {
+    const checkerId = request.yar.get("checkerId");
+    const gbcheckSummaryId = request.yar.get("checkSummaryId");
+
     return {
       applicationId: data.applicationId,
       checkOutcome: CheckOutcomeConstants.Fail,
@@ -258,7 +254,7 @@ const postNonComplianceHandler = async (request, h) => {
     };
   }
 
-  function getJourneyDetails(request, isGBCheck) {
+  function getJourneyDetails(isGBCheck) {
     //Pass Journey Details from Session Stored in Header "currentSailingSlot"
     const currentSailingSlot = request.yar.get("currentSailingSlot") || {};
     let currentDate = currentSailingSlot.departureDate
@@ -268,21 +264,21 @@ const postNonComplianceHandler = async (request, h) => {
     let dateTimeString = `${currentDate}T${currentSailingSlot.sailingHour}:${currentSailingSlot.sailingMinutes}:00Z`;
   
     let routeId = currentSailingSlot?.selectedRoute?.id ?? null;
-    let routeOptionId = currentSailingSlot.selectedRouteOption.id;
-    let flightNumber = currentSailingSlot.routeFlight || null;
+    const routeOptionId = currentSailingSlot.selectedRouteOption.id;
+    const flightNumber = currentSailingSlot.routeFlight || null;
     
     //When Approval is of Type NI and RouteOption selected is of Type Ferry then
     //Pass Journey details by extracting from specific table as opposed to Session Stored in Header "currentSailingSlot"
     if(!isGBCheck && routeOptionId === CurrentSailingRouteOptions[0].id)
     {
        routeId = request.yar.get("routeId");
-       let gbCheckCurrentDate = request.yar.get("departureDate");
+       const gbCheckCurrentDate = request.yar.get("departureDate");
        currentDate = gbCheckCurrentDate
           .split("/")
           .reverse()
           .join("-");
 
-       let gbDepartureTime = request.yar.get("departureTime");
+       const gbDepartureTime = request.yar.get("departureTime");
        const sailingHour = gbDepartureTime.split(":")[0];
        const sailingMinutes = gbDepartureTime.split(":")[1];
 
