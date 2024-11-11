@@ -1,13 +1,13 @@
-class OrganisationMainModel {
-  constructor(data) {
-    this.Id = data.Id;
-    this.Name = data.Name;
-    this.Location = data.Location;
-    this.ExternalId = data.ExternalId;
-    this.ActiveFrom = data.ActiveFrom;
-    this.ActiveTo = data.ActiveTo;
-    this.IsActive = data.IsActive;
-  }
+function OrganisationMainModel(data) {
+  return {
+    Id: data.Id,
+    Name: data.Name,
+    Location: data.Location,
+    ExternalId: data.ExternalId,
+    ActiveFrom: data.ActiveFrom,
+    ActiveTo: data.ActiveTo,
+    IsActive: data.IsActive
+  };
 }
 
 export { OrganisationMainModel };
