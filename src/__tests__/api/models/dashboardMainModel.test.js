@@ -1,5 +1,4 @@
 import {
-    CurrentSailingMainModel,
     DashboardMainModel
     } from "../../../api/models/dashboardMainModel.js";;
   
