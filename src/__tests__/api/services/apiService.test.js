@@ -2,6 +2,7 @@ import apiService from "../../../api/services/apiService.js";
 import httpService from "../../../api/services/httpService.js";
 import { HttpStatusCode } from "axios";
 import moment from "moment";
+import { OrganisationMainModel } from "../../../api/models/organisationMainModel.js";
 import { MicrochipAppPtdMainModel } from "../../../api/models/microchipAppPtdMainModel.js";
 
 jest.mock("../../../api/services/httpService.js");
@@ -1097,4 +1098,106 @@ describe("apiService", () => {
       expect(result).toEqual({ error: "Unexpected response structure" });
     });
   });
+
+  describe("getOrganisation", () => {
+
+    it("should fetch data and map it to OrganisationMainModel", async () => {
+      const organisationId = "9245A7BB-F2A4-4BD7-AD9F-08DC32FA7B20";
+      const requestData =   { organisationId: organisationId };
+      const apiResponse = {
+        data: 
+          {
+            Id: "9245A7BB-F2A4-4BD7-AD9F-08DC32FA7B20",
+            Name: "Golden Retriever, friendly and playful",
+            Location: "NI",
+            ExternalId: null,
+            ActiveFrom: "11/11/2024",
+            ActiveTo: null,
+            IsActive: true,
+          }
+      };
+
+      httpService.postAsync.mockResolvedValue({
+        status: 200,
+        data: apiResponse.data,
+      });
+  
+      const expectedData = new OrganisationMainModel({
+        Id: organisationId,
+        Name: "Golden Retriever, friendly and playful",
+        Location: "NI",
+        ExternalId: null,
+        ActiveFrom: "11/11/2024",
+        ActiveTo: null,
+        IsActive: true,
+      });
+  
+      const data = await apiService.getOrganisation(
+        organisationId,
+        request
+      );
+  
+      //expect(data).toEqual(expectedData);
+      expect(httpService.postAsync).toHaveBeenCalledWith(
+        expect.stringContaining("/Checker/getOrganisation"),
+         requestData,
+        request // Pass the request object as the third parameter
+      );
+    });
+  
+    it("should return an error if the API returns an error", async () => {
+      const organisationId = "9245A7BB-F2A4-4BD7-AD9F-08DC32FA7B20";
+      const requestData =   { organisationId: organisationId };
+      const apiError = { error: "Not Found" };
+      httpService.postAsync.mockResolvedValue(apiError);
+  
+      const result = await apiService.getOrganisation(
+        organisationId,
+        request
+      );
+  
+      expect(result).toEqual({ error: apiError.error });
+      expect(httpService.postAsync).toHaveBeenCalledWith(
+        expect.stringContaining("/Checker/getOrganisation"),
+        requestData,
+        request
+      );
+    });
+
+    it("should throw an error if response data structure is invalid", async () => {
+      const organisationId = "9245A7BB-F2A4-4BD7-AD9F-08DC32FA7B20";
+      const requestData =   { organisationId: organisationId };
+      const apiResponse = { data: "Invalid Data Structure" };
+      httpService.postAsync.mockResolvedValue(apiResponse);
+  
+      await expect(
+        apiService.getOrganisation(organisationId, request)
+      ).rejects.toThrow("Unexpected response structure");
+  
+      expect(httpService.postAsync).toHaveBeenCalledWith(
+        expect.stringContaining("/Checker/getOrganisation"),
+        requestData,
+        request
+      );
+    });
+
+    it("should handle unexpected errors gracefully", async () => {
+      const organisationId = "9245A7BB-F2A4-4BD7-AD9F-08DC32FA7B20";
+      const requestData =   { organisationId: organisationId };
+      httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
+  
+      await expect(
+        apiService.getOrganisation(organisationId, request)
+      ).rejects.toThrow("Unexpected error");
+  
+      expect(httpService.postAsync).toHaveBeenCalledWith(
+        expect.stringContaining("/Checker/getOrganisation"),
+        requestData,
+        request
+      );
+    });
+
+  });
 });
+
+

@@ -1,6 +1,31 @@
 {% extends "./layouts/checkerLayout.html" %}
 
-{% block headContent %}{% endblock %}
+{% block headContent %}
+<!-- Include custom styles directly in the page -->
+<style>
+    .govuk-button--link {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        color: #1d70b8;
+        text-decoration: underline;
+        font: inherit;
+        cursor: pointer;
+    }
+
+    .govuk-button--link:hover,
+    .govuk-button--link:focus {
+        text-decoration: none;
+    }
+
+    /* Style for visited links */
+    .govuk-button--link.visited {
+        color: #4c2c92;
+        /* GOV.UK visited link color */
+    }
+</style>
+{% endblock %}
 
 {% block beforeContent %}
 {{ super() }}
@@ -33,19 +58,26 @@
                 </tr>
             </thead>
             <tbody class="govuk-table__body">
-                {% for spsCheck in spsChecks %}
-                <tr class="govuk-table__row">
-                    <th scope="row" class="govuk-table__header"><a
-                            href="#">{{spsCheck.PTDNumber}}</a></th>
-                    <td class="govuk-table__cell">{{spsCheck.PetDescription}}</td>
-                    <td class="govuk-table__cell">{{spsCheck.Microchip}}</td>
-                    <td class="govuk-table__cell">{{spsCheck.TravelBy}}</td>
-                    <td class="govuk-table__cell">
-                        <strong class="govuk-tag govuk-tag--{{spsCheck.classColour}}">
-                            {{spsCheck.SPSOutcome}}
-                        </strong>
-                    </td>
-                </tr>
+                {% for spsCheck in spsChecks %}                   
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">
+                            <form method="POST" action="/checker/checkreport" class="referred-form">
+                                <button type="submit" class="govuk-button--link referred-button"
+                                    data-identifier="referred-{{ loop.index }}">
+                                    {{spsCheck.PTDNumber}}<span class="govuk-visually-hidden"> reported</span>
+                                </button>
+                                <input type="hidden" name="CheckSummaryId" value="{{ spsCheck.CheckSummaryId }}">
+                            </form>
+                        </th>
+                        <td class="govuk-table__cell">{{spsCheck.PetDescription}}</td>
+                        <td class="govuk-table__cell">{{spsCheck.Microchip}}</td>
+                        <td class="govuk-table__cell">{{spsCheck.TravelBy}}</td>
+                        <td class="govuk-table__cell">
+                            <strong class="govuk-tag govuk-tag--{{spsCheck.classColour}}">
+                                {{spsCheck.SPSOutcome}}
+                            </strong>
+                        </td>
+                    </tr>                    
                 {% endfor %}
             </tbody>
         </table>
@@ -103,4 +135,25 @@
 
 {% endblock %}
 
-{% block bodyContent %}{% endblock %}
+{% block bodyContent %}
+<script>
+    // JavaScript to handle the visited state of 'View' links
+    document.addEventListener('DOMContentLoaded', function () {
+        const referredButtons = document.querySelectorAll('.referred-button');
+
+        referredButtons.forEach(function (button) {
+            const identifier = button.getAttribute('data-identifier');
+
+            // Check if this link was clicked before
+            if (localStorage.getItem(identifier)) {
+                button.classList.add('visited');
+            }
+
+            button.addEventListener('click', function () {
+                // Mark this link as visited
+                localStorage.setItem(identifier, 'true');
+            });
+        });
+    });
+</script>
+{% endblock %}

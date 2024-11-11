@@ -1,5 +1,6 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 import { HttpStatusCode } from "axios";
+import { OrganisationMainModel } from "../models/organisationMainModel.js";
 import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js";
 import httpService from "./httpService.js";
 import { issuingAuthorityModelData } from "../../constants/issuingAuthority.js";
@@ -360,11 +361,47 @@ const saveCheckerUser = async (checker, request) => {
   }
 };
 
+const getOrganisation = async (organisationId, request) => {
+  try {
+    const data =   { organisationId: organisationId };
+    const url = buildApiUrl("Checker/getOrganisation");
+    const response = await httpService.postAsync(url, data, request);
+
+    // Check for errors in the response
+    if (response?.error) {
+      return { error: response.error };
+    }
+
+    const organisationResposne = response.data;
+    if (!organisationResposne || typeof organisationResposne !== "object") {
+      throw new Error(unexpectedResponseErrorText);
+    }
+
+    // Map each item to OrganisationMainModel
+    const organisation = new OrganisationMainModel({
+        Id: organisationResposne.id,
+        Name: organisationResposne.name,
+        Location: organisationResposne.location,
+        ExternalId: organisationResposne.externalId, 
+        ActiveFrom: organisationResposne.activeFrom,
+        ActiveTo: organisationResposne.activeTo,
+        IsActive: organisationResposne.isActive,
+      });
+
+    return organisation;
+  } catch (error) {
+    console.error(errorText, error.message);
+
+    throw error;
+  }
+};
+
 
 export default {
   getApplicationByPTDNumber,
   getApplicationByApplicationNumber,
   recordCheckOutCome,
   reportNonCompliance,
-  saveCheckerUser
+  saveCheckerUser,
+  getOrganisation
 };

@@ -96,6 +96,14 @@ const getReferredChecks = async (request, h) => {
   });
 };
 
+const postCheckReport = async (request, h) => {
+  const { CheckSummaryId } = request.payload;
+  request.yar.set("checkSummaryId", CheckSummaryId);
+
+  return h.redirect("/checker/referred");
+};
+
 export const ReferredHandlers = {
   getReferredChecks,
+  postCheckReport,
 };
