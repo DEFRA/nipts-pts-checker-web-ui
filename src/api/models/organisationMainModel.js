@@ -9,5 +9,5 @@ class OrganisationMainModel {
     this.IsActive = data.IsActive;
   }
 }
-  
+
 export { OrganisationMainModel };
