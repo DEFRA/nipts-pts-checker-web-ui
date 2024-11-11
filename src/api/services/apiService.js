@@ -1,6 +1,6 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 import { HttpStatusCode } from "axios";
-import { OrganisationMainModel } from "../models/organisationMainModel.js";
+import { organisationMainModel } from "../models/organisationMainModel.js";
 import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js";
 import httpService from "./httpService.js";
 import { issuingAuthorityModelData } from "../../constants/issuingAuthority.js";
@@ -378,7 +378,7 @@ const getOrganisation = async (organisationId, request) => {
     }
 
     // Map each item to OrganisationMainModel
-    const organisation = new OrganisationMainModel({
+    const organisation = organisationMainModel({
         Id: organisationResposne.id,
         Name: organisationResposne.name,
         Location: organisationResposne.location,

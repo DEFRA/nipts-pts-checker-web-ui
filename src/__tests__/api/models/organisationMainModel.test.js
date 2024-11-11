@@ -1,9 +1,9 @@
-import { OrganisationMainModel } from "../../../api/models/organisationMainModel.js";
+import { organisationMainModel } from "../../../api/models/organisationMainModel.js";
 
 describe("OrganisationMainModel", () => {
   describe("setValues for OrganisationMainModel", () => {
     it("should return correct data", () => {
-      const result = new OrganisationMainModel({
+      const result = organisationMainModel({
         Id: "9245A7BB-F2A4-4BD7-AD9F-08DC32FA7B20",
         Name: "Golden Retriever, friendly and playful",
         Location: "NI",

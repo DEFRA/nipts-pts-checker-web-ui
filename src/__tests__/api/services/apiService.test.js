@@ -2,7 +2,7 @@ import apiService from "../../../api/services/apiService.js";
 import httpService from "../../../api/services/httpService.js";
 import { HttpStatusCode } from "axios";
 import moment from "moment";
-import { OrganisationMainModel } from "../../../api/models/organisationMainModel.js";
+import { organisationMainModel } from "../../../api/models/organisationMainModel.js";
 import { MicrochipAppPtdMainModel } from "../../../api/models/microchipAppPtdMainModel.js";
 
 jest.mock("../../../api/services/httpService.js");
@@ -1125,7 +1125,7 @@ describe("apiService", () => {
         data: apiResponse.data,
       });
   
-      const expectedData = new OrganisationMainModel({
+      const expectedData = organisationMainModel({
         Id: organisationId,
         Name: "Golden Retriever, friendly and playful",
         Location: "NI",
@@ -1146,6 +1146,7 @@ describe("apiService", () => {
          requestData,
         request // Pass the request object as the third parameter
       );
+
     });
   
     it("should return an error if the API returns an error", async () => {

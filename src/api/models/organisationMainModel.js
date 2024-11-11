@@ -1,4 +1,4 @@
-function OrganisationMainModel(data) {
+function organisationMainModel(data) {
   return {
     Id: data.Id,
     Name: data.Name,
@@ -10,4 +10,4 @@ function OrganisationMainModel(data) {
   };
 }
 
-export { OrganisationMainModel };
+export { organisationMainModel };
