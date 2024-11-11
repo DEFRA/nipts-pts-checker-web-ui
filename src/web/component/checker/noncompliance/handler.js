@@ -177,7 +177,7 @@ const postNonComplianceHandler = async (request, h) => {
   async function saveReportNonCompliance(payload, data) {
     try{    
     const isGBCheck = request.yar.get("isGBCheck");
-    let { dateTimeString, routeId, routeOptionId, flightNumber } = getJourneyDetails(isGBCheck);
+    const { dateTimeString, routeId, routeOptionId, flightNumber } = getJourneyDetails(isGBCheck);
 
     // Call the helper function to create the checkOutcome object
     const checkOutcome = createCheckOutcome(

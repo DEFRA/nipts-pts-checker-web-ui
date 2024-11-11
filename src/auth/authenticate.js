@@ -50,22 +50,24 @@ const authenticate = async (request) => {
     if(organisation.organisationId !== "")
     {
       organisationId = organisation.organisationId;
-      const userOrganisation = await apiService.getOrganisation(organisationId, request);
-      if(userOrganisation !== null)
-      {
-        switch (true) {
-          case userOrganisation.Location.toLowerCase().includes('gb'):
-              isGBCheck = true;
-              break;
-          case userOrganisation.Location.toLowerCase().includes('ni'):
-              isGBCheck = false;
-              break;
-          default:
-              // Optionally handle other cases
-              break;
-        }
+    }
+
+    const userOrganisation = await apiService.getOrganisation(organisationId, request);
+    if(userOrganisation !== null)
+    {
+      switch (true) {
+        case userOrganisation.Location.toLowerCase().includes('gb'):
+            isGBCheck = true;
+            break;
+        case userOrganisation.Location.toLowerCase().includes('ni'):
+            isGBCheck = false;
+            break;
+        default:
+            // Optionally handle other cases
+            break;
       }
     }
+    
 
     const checker = {
       id: accessToken.sub,
