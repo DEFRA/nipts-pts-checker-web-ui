@@ -1,5 +1,6 @@
 class DashboardMainModel {
   constructor(data) {
+    this.routeId = data.routeId;
     this.routeName = data.routeName;
     this.operatorName = data.operatorName;
     this.departurePort = data.departurePort;

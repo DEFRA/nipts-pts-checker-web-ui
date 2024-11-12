@@ -6,6 +6,7 @@ class SpsReferralMainModel {
     this.TravelBy = data.TravelBy;
     this.SPSOutcome = data.SPSOutcome;
     this.classColour = data.classColour;
+    this.CheckSummaryId = data.CheckSummaryId;
   }
 }
 

@@ -40,6 +40,7 @@ const getCheckOutcomes = async (startHour, endHour, request) => {
     // Map each item to DashboardMainModel
     const dashboardItems = items.map((item) => {
       return new DashboardMainModel({
+        routeId: item.routeId,
         routeName: item.routeName,
         operatorName: item.operatorName,
         departurePort: item.departurePort,

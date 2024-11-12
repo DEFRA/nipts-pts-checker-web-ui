@@ -33,7 +33,8 @@ const getDashboard = async (request, h) => {
 };
 
 const postReferred = async (request, h) => {
-  const { routeName, departureDate, departureTime } = request.payload;
+  const { routeId, routeName, departureDate, departureTime } = request.payload;
+  request.yar.set("routeId", routeId);
   request.yar.set("routeName", routeName);
   request.yar.set("departureDate", departureDate);
   request.yar.set("departureTime", departureTime);

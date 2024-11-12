@@ -9,6 +9,7 @@ import sessionKeys from "../session/keys.js";
 import cookieAuthentication from "./cookie-auth/cookie-auth.js";
 import { InvalidStateError } from "../exceptions/index.js";
 import apiService from "../api/services/apiService.js";
+import userService from "../api/services/userService.js";
 
 const authenticate = async (request) => {
   if (!state.verify(request)) {
@@ -41,19 +42,51 @@ const authenticate = async (request) => {
   
   // Add or update checker user
   try {
+    
+    const organisation = userService.getUserOrganisation(request);
+
+    let organisationId = null;
+    let isGBCheck = null;
+    if(organisation.organisationId !== "")
+    {
+      organisationId = organisation.organisationId;
+    }
+
+    const userOrganisation = await apiService.getOrganisation(organisationId, request);
+    if(userOrganisation !== null)
+    {
+      switch (true) {
+        case userOrganisation.Location.toLowerCase().includes('gb'):
+            isGBCheck = true;
+            break;
+        case userOrganisation.Location.toLowerCase().includes('ni'):
+            isGBCheck = false;
+            break;
+        default:
+            // Optionally handle other cases
+            break;
+      }
+    }
+    
+
     const checker = {
       id: accessToken.sub,
       firstName: accessToken.firstName,
       lastName: accessToken.lastName,
       roleId: null,
+      organisationId,
     };
 
     await apiService.saveCheckerUser(checker, request);
+    request.yar.set("isGBCheck", isGBCheck);
     request.yar.set("checkerId", accessToken.sub);
     session.setToken(request, sessionKeys.tokens.sso, "");
 
   } catch (error) {
     console.error("Error saving checker user:", error);
+
+    // Rethrow the error
+    throw error;
   }
 
   return accessToken;
