@@ -254,9 +254,13 @@ const postNonComplianceHandler = async (request, h) => {
     };
   }
 
+  function getDefaultCurrentSailing() {
+    return request.yar.get("currentSailingSlot") || {};
+  }
+
   function getJourneyDetails(isGBCheck) {
     //Pass Journey Details from Session Stored in Header "currentSailingSlot"
-    const currentSailingSlot = request.yar.get("currentSailingSlot") || {};
+    const currentSailingSlot = getDefaultCurrentSailing();
     let currentDate = currentSailingSlot.departureDate
       .split("/")
       .reverse()
