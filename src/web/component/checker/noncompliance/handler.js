@@ -268,7 +268,7 @@ const postNonComplianceHandler = async (request, h) => {
   
     let routeId = currentSailingSlot?.selectedRoute?.id ?? null;
     const routeOptionId = currentSailingSlot.selectedRouteOption.id;
-    const flightNumber = currentSailingSlot.routeFlight || null;    
+    const flightNumber = currentSailingSlot?.routeFlight ?? null;    
     if(routeOptionId === CurrentSailingRouteOptions[1].id)
     {
       request.yar.clear("checkSummaryId");
