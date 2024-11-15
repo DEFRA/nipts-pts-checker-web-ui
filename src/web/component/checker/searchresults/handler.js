@@ -92,6 +92,14 @@ const saveAndContinueHandler = async (request, h) => {
         }
       
       request.yar.clear("IsFailSelected");
+
+      // Clear individual keys
+      request.yar.clear("routeId");
+      request.yar.clear("routeName");
+      request.yar.clear("departureDate");
+      request.yar.clear("departureTime");
+      request.yar.clear("checkSummaryId");
+
       request.yar.set("successConfirmation", true);
       return h.redirect("/checker/document-search");
     }

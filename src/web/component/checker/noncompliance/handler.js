@@ -254,33 +254,52 @@ const postNonComplianceHandler = async (request, h) => {
     };
   }
 
+  function getDefaultCurrentSailing() {
+    return request.yar.get("currentSailingSlot") || {};
+  }
+
   function getJourneyDetails(isGBCheck) {
     //Pass Journey Details from Session Stored in Header "currentSailingSlot"
-    const currentSailingSlot = request.yar.get("currentSailingSlot") || {};
+    const currentSailingSlot = getDefaultCurrentSailing();
     let currentDate = currentSailingSlot.departureDate
       .split("/")
       .reverse()
       .join("-");
-    let dateTimeString = `${currentDate}T${currentSailingSlot.sailingHour}:${currentSailingSlot.sailingMinutes}:00Z`;
+    
+    let sailingHour = currentSailingSlot.sailingHour;
+    let sailingMinutes = currentSailingSlot.sailingMinutes;
+    let dateTimeString = `${currentDate}T${sailingHour}:${sailingMinutes}:00Z`;
   
     let routeId = currentSailingSlot?.selectedRoute?.id ?? null;
     const routeOptionId = currentSailingSlot.selectedRouteOption.id;
-    const flightNumber = currentSailingSlot.routeFlight || null;
-    
-    //When Approval is of Type NI and RouteOption selected is of Type Ferry then
-    //Pass Journey details by extracting from specific table as opposed to Session Stored in Header "currentSailingSlot"
+    const flightNumber = currentSailingSlot?.routeFlight ?? null;    
+    if(routeOptionId === CurrentSailingRouteOptions[1].id)
+    {
+      request.yar.clear("checkSummaryId");
+    }
+
+    //When Approval is of Type NI and RouteOption selected is of Type Ferry
+    //If Journey details are available by cliciking view link and selecting the GB referral on UI(this sets in session)
+    //If available from view link and GB referral on UI session pass session values, 
+    //else use the default currentsailings session[this covers search or scan route]
     if(!isGBCheck && routeOptionId === CurrentSailingRouteOptions[0].id)
     {
-       routeId = request.yar.get("routeId");
-       const gbCheckCurrentDate = request.yar.get("departureDate");
-       currentDate = gbCheckCurrentDate
-          .split("/")
-          .reverse()
-          .join("-");
+       const referredRouteId = request.yar.get("routeId");
+       const referredCheckCurrentDate = request.yar.get("departureDate");
+       const referreDepartureTime = request.yar.get("departureTime");
+       const referredCheckSummaryId = request.yar.get("checkSummaryId");
 
-       const gbDepartureTime = request.yar.get("departureTime");
-       const sailingHour = gbDepartureTime.split(":")[0];
-       const sailingMinutes = gbDepartureTime.split(":")[1];
+       if(referredRouteId && referredCheckCurrentDate && referreDepartureTime && referredCheckSummaryId)
+       {  
+          routeId = referredRouteId;       
+          currentDate = referredCheckCurrentDate
+              .split("/")
+              .reverse()
+              .join("-");
+          
+          sailingHour = referreDepartureTime.split(":")[0];
+          sailingMinutes = referreDepartureTime.split(":")[1];
+       }
 
        dateTimeString = `${currentDate}T${sailingHour}:${sailingMinutes}:00Z`;
     }
