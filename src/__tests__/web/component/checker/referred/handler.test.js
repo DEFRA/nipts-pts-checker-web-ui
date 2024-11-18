@@ -162,4 +162,35 @@ describe("ReferredHandlers", () => {
       });
     });
   });
+
+  describe("postCheckReport", () => {
+    it("should set CheckSummaryId in request.yar and redirect to /checker/referred", async () => {
+      // Mock request object
+      const request = {
+        payload: {
+          CheckSummaryId: "12345",
+        },
+        yar: {
+          set: jest.fn(), // Mock the set method
+        },
+      };
+  
+      // Mock h object with a redirect method
+      const h = {
+        redirect: jest.fn().mockReturnValue("redirected"), // Mock redirect method to return a value
+      };
+  
+      const result = await ReferredHandlers.postCheckReport(request, h);
+  
+      // Assert that request.yar.set was called with the correct arguments
+      expect(request.yar.set).toHaveBeenCalledWith("checkSummaryId", "12345");
+  
+      // Assert that h.redirect was called with the correct URL
+      expect(h.redirect).toHaveBeenCalledWith("/checker/referred");
+  
+      // Assert that the function returns the correct redirect response
+      expect(result).toBe("redirected");
+    });
+  });
+
 });

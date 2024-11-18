@@ -17,6 +17,10 @@ const yellowTag = "govuk-tag govuk-tag--yellow";
 const orangeTag = "govuk-tag govuk-tag--orange";
 const redTag = "govuk-tag govuk-tag--red";
 const departureDate = "12/10/2024";
+const departuerDateForSPS = "13/10/2024";
+const departuerTimeForSPS = "17:30";
+const sailingTimeSPS = "2024-10-13T17:30:00Z";
+
 
 describe("NonComplianceHandlers", () => {
   describe("getNonComplianceHandler", () => {
@@ -320,7 +324,7 @@ describe("NonComplianceHandlers", () => {
       );
     });
 
-    it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true api call succeeds", async () => {
+    it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true api call succeeds and isGBCheck", async () => {
       const payload = {
         mcNotMatch: "true",
         mcNotMatchActual: "123456789123456",
@@ -342,7 +346,8 @@ describe("NonComplianceHandlers", () => {
             sailingMinutes: "30",
             selectedRoute: { id: 1 },
             selectedRouteOption: { id: 1 },
-          }
+          },
+          isGBCheck: true,
         };
       
         return mockData[key] || null;
@@ -371,6 +376,80 @@ describe("NonComplianceHandlers", () => {
     
       expect(h.redirect).toHaveBeenCalledWith("/checker/dashboard");
     });
+
+    it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true api call succeeds and isSpsCheck", async () => {
+      const payload = {
+        mcNotMatch: "true",
+        mcNotMatchActual: "123456789123456",
+        relevantComments: relevantComments,
+        spsOutcome: 'true',
+        spsOutcomeDetails: "Sps Outcome details",
+      };
+      validateNonCompliance.mockReturnValue({
+        isValid: true,
+        errors: [],
+      });
+
+      request.payload = payload;
+      request.yar.get.mockImplementation((key) => {
+        const mockData = {
+          data: { applicationId: "testApplicationId", documentState: "approved" },
+          IsFailSelected: true,  // Return as an object
+          currentSailingSlot: {
+            departureDate: departureDate,
+            sailingHour: "10",
+            sailingMinutes: "30",
+            selectedRoute: { id: 1 },
+            selectedRouteOption: { id: '1' },
+          },
+          isGBCheck: false,
+          routeId: 2,
+          routeName: "sps check Route",
+          departureDate: departuerDateForSPS,
+          departureTime: departuerTimeForSPS,
+          checkSummaryId: "1234567",
+          checkerId: "123",
+        };      
+        return mockData[key] || null;
+      });
+   
+      validateNonCompliance.mockReturnValue({
+        isValid: true,
+        errors: [],
+      });
     
+      const mockAppSettings = { setting1: "value1" };
+      appSettingsService.getAppSettings.mockResolvedValue(mockAppSettings);
+      apiService.reportNonCompliance.mockResolvedValue({});
+    
+      await NonComplianceHandlers.postNonComplianceHandler(request, h);
+    
+      expect(apiService.reportNonCompliance).toHaveBeenCalledWith(
+        expect.objectContaining({
+          applicationId: "testApplicationId",
+          checkOutcome: "Fail",
+          mcNotMatchActual: "123456789123456",
+          relevantComments: relevantComments,
+          routeId: 2,
+          gBCheckId:  "1234567",
+          checkerId: "123",
+          spsOutcome: true,
+          spsOutcomeDetails: "Sps Outcome details",
+          sailingOption: '1',
+          sailingTime: sailingTimeSPS,          
+        }),
+        request
+      );
+    
+      expect(request.yar.clear).toHaveBeenCalledWith("routeId");
+      expect(request.yar.clear).toHaveBeenCalledWith("routeName");
+      expect(request.yar.clear).toHaveBeenCalledWith("departureDate");
+      expect(request.yar.clear).toHaveBeenCalledWith("departureTime");
+      expect(request.yar.clear).toHaveBeenCalledWith("checkSummaryId");
+      expect(request.yar.clear).toHaveBeenCalledWith("IsFailSelected");
+
+      expect(h.redirect).toHaveBeenCalledWith("/checker/dashboard");
+    });
   });
 });
+
