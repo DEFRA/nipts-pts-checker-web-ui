@@ -36,7 +36,7 @@ const microchipNumberSchema = Joi.string()
   .messages({
     "any.required": errorMessages.microchipNumber.empty,
     "string.empty": errorMessages.microchipNumber.empty,
-    "string.length": errorMessages.microchipNumber.invalid,
+    "string.length": errorMessages.microchipNumber.length,
     "string.pattern.base": errorMessages.microchipNumber.invalid,
   });
 
