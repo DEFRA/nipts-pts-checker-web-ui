@@ -22,6 +22,7 @@ describe("errorMessages", () => {
   test("should contain the correct error messages for microchip number", () => {
     expect(errorMessages.microchipNumber).toEqual({
       empty: "Enter a microchip number",
+      length: "Enter 15-digit number",
       invalid: "Enter a 15-digit number, using only numbers",
     });
   });
