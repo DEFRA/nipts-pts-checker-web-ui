@@ -164,7 +164,7 @@ describe("ReferredHandlers", () => {
   });
 
   describe("postCheckReport", () => {
-    it("should set CheckSummaryId in request.yar and redirect to /checker/referred", async () => {
+    it("should set CheckSummaryId in request.yar and redirect to /checker/checkreportdetails", async () => {
       // Mock request object
       const request = {
         payload: {
@@ -186,7 +186,7 @@ describe("ReferredHandlers", () => {
       expect(request.yar.set).toHaveBeenCalledWith("checkSummaryId", "12345");
   
       // Assert that h.redirect was called with the correct URL
-      expect(h.redirect).toHaveBeenCalledWith("/checker/referred");
+      expect(h.redirect).toHaveBeenCalledWith("/checker/checkreportdetails");
   
       // Assert that the function returns the correct redirect response
       expect(result).toBe("redirected");
