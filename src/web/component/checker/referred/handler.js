@@ -100,7 +100,7 @@ const postCheckReport = async (request, h) => {
   const { CheckSummaryId } = request.payload;
   request.yar.set("checkSummaryId", CheckSummaryId);
 
-  return h.redirect("/checker/referred");
+  return h.redirect("/checker/checkreportdetails");
 };
 
 export const ReferredHandlers = {
