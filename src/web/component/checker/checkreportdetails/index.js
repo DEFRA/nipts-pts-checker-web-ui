@@ -7,7 +7,7 @@ function register(server) {
 
   server.route(Routes);
 
-  server.log("info", "Plugin registered: checkreportdetails");
+  server.log("info", "Plugin registered: CheckReportDetails");
 }
 
 export default {

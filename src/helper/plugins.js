@@ -9,7 +9,7 @@ import DocumentSearch from "../web/component/checker/documentsearch/index.js";
 import SearchResults from "../web/component/checker/searchresults/index.js";
 import NonCompliance from "../web/component/checker/noncompliance/index.js";
 import Referred from "../web/component/checker/referred/index.js";
-import Checkreportdetails from "../web/component/checker/checkreportdetails/index.js";
+import CheckReportDetails from "../web/component/checker/checkreportdetails/index.js";
 import MagicPassword from "../web/component/checker/magicPassword/index.js";
 import SignIn from "../web/component/checker/SignIn/index.js";
 import SignOut from "../web/component/checker/SignOut/index.js";
@@ -80,7 +80,7 @@ const pluginList = [
     plugin: Referred,
   },
   {
-    plugin: Checkreportdetails,
+    plugin: CheckReportDetails,
   },
   {
     plugin: AuthPlugin,
