@@ -1,7 +1,6 @@
 import { AppConfigurationClient } from "@azure/app-configuration";
 
 const connectionString = process.env.AZURE_APPCONFIG_CONNECTION_STRING || "Endpoint=(.*);Id=(.*);Secret=(.*)";
-;
 
 const client = new AppConfigurationClient(connectionString);
 
