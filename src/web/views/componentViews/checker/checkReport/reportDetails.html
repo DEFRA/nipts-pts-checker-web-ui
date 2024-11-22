@@ -1,0 +1,28 @@
+{% extends "layouts/checkerLayout.html" %}
+
+{% block pageTitle %} GB Check Report - {{ model.ptsTitle }}:{{ model.ptsSubTitle }} – GOV.UK {% endblock %}
+
+{% block beforeContent %}
+<a href="javascript: history.back();" class="govuk-back-link govuk-!-margin-top-9" id="backButton">Back</a>
+{% endblock %}
+
+
+{% block content %}
+<form action="/spsCheck">
+
+    <h1 class="govuk-heading-xl">GB check report</h1>
+    
+    <h2 class="govuk-heading-m">Outcome</h2>
+
+    <h2 class="govuk-heading-m">Check details</h2>
+    
+</form>
+
+<script>
+if(window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+  }
+
+</script>
+
+{% endblock %}
