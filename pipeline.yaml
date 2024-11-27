@@ -50,8 +50,8 @@ extends:
         -DASHBOARD_END_HOUR "24"
         -AZURE_CONFIGURATION_SERVER "trdinfac1001.azconfig.io"
         -AZURE_CONFIGURATION_SERVER_ENV "$(environment)"
-        -AZURE_CONFIGURATION_SERVER_ID "$(Clientid)"
-        -AZURE_CONFIGURATION_SERVER_SECRET "$(ClientSecret)"
+        -AZURE_CONFIGURATION_SERVER_ID "$(AdoSpClientId)"
+        -AZURE_CONFIGURATION_SERVER_SECRET "$(AdoSpClientSecret)"
       tst: >-
         -PORT "8080"
         -HOST "0.0.0.0"
@@ -66,8 +66,8 @@ extends:
         -DASHBOARD_END_HOUR "24"
         -AZURE_CONFIGURATION_SERVER "trdinfac1001.azconfig.io"
         -AZURE_CONFIGURATION_SERVER_ENV "$(environment)"
-        -AZURE_CONFIGURATION_SERVER_ID "$(Clientid)"
-        -AZURE_CONFIGURATION_SERVER_SECRET "$(ClientSecret)"
+        -AZURE_CONFIGURATION_SERVER_ID "$(AdoSpClientId)"
+        -AZURE_CONFIGURATION_SERVER_SECRET "$(AdoSpClientSecret)"
       snd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
@@ -82,8 +82,8 @@ extends:
         -DASHBOARD_END_HOUR "24"
         -AZURE_CONFIGURATION_SERVER "trdinfac1001.azconfig.io"
         -AZURE_CONFIGURATION_SERVER_ENV "$(environment)"
-        -AZURE_CONFIGURATION_SERVER_ID "$(Clientid)"
-        -AZURE_CONFIGURATION_SERVER_SECRET "$(ClientSecret)"
+        -AZURE_CONFIGURATION_SERVER_ID "$(AdoSpClientId)"
+        -AZURE_CONFIGURATION_SERVER_SECRET "$(AdoSpClientSecret)"
       pre: >-
         -PORT "8080"
         -HOST "0.0.0.0"
@@ -114,8 +114,8 @@ extends:
         -DASHBOARD_END_HOUR "24"
         -AZURE_CONFIGURATION_SERVER "trdinfac1001.azconfig.io"
         -AZURE_CONFIGURATION_SERVER_ENV "$(environment)"
-        -AZURE_CONFIGURATION_SERVER_ID "$(Clientid)"
-        -AZURE_CONFIGURATION_SERVER_SECRET "$(ClientSecret)"
+        -AZURE_CONFIGURATION_SERVER_ID "$(AdoSpClientId)"
+        -AZURE_CONFIGURATION_SERVER_SECRET "$(AdoSpClientSecret)"
     runSonarScan: true
     #runVulnerabilityScan: true
     #skipOwaspScan: false
