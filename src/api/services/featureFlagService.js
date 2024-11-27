@@ -33,11 +33,7 @@ const isFeatureEnabled = async (featureName) => {
     const featureFlag = featureFlags.get(featureName);
 
     // Check if the feature flag exists and if it's enabled (assuming the value is 'true' or 'enabled')
-    if (featureFlag && featureFlag.enabled === true) {
-      return true;
-    } else {
-      return false;
-    }
+    return featureFlag && featureFlag.enabled === true;
   } catch (error) {
     console.error("Error checking feature flag:", error.message);
     return false;
