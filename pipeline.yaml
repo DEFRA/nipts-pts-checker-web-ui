@@ -117,6 +117,5 @@ extends:
         -AZURE_CONFIGURATION_SERVER_ID "$(Clientid)"
         -AZURE_CONFIGURATION_SERVER_SECRET "$(ClientSecret)"
     runSonarScan: true
-    keyVaultName: '$(environment)trdinfkv1001'
     #runVulnerabilityScan: true
     #skipOwaspScan: false
