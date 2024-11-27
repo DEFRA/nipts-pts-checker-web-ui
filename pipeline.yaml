@@ -98,8 +98,8 @@ extends:
         -DASHBOARD_END_HOUR "24"
         -AZURE_CONFIGURATION_SERVER "trdinfac1001.azconfig.io"
         -AZURE_CONFIGURATION_SERVER_ENV "$(environment)"
-        -AZURE_CONFIGURATION_SERVER_ID "$(Clientid)"
-        -AZURE_CONFIGURATION_SERVER_SECRET "$(ClientSecret)"
+        -AZURE_CONFIGURATION_SERVER_ID "$(AdoSpClientId)"
+        -AZURE_CONFIGURATION_SERVER_SECRET "$(AdoSpClientSecret)"
       prd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
@@ -117,5 +117,6 @@ extends:
         -AZURE_CONFIGURATION_SERVER_ID "$(Clientid)"
         -AZURE_CONFIGURATION_SERVER_SECRET "$(ClientSecret)"
     runSonarScan: true
+    keyVaultName: '$(environment)trdinfkv1001'
     #runVulnerabilityScan: true
     #skipOwaspScan: false
