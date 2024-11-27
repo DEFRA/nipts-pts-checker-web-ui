@@ -1,15 +1,23 @@
 import { AppConfigurationClient } from "@azure/app-configuration";
+import { DefaultAzureCredential } from "@azure/identity";
 
-const connectionString = process.env.AZURE_CONFIGURATION_SERVER_ENV &&
-                         process.env.AZURE_CONFIGURATION_SERVER &&
-                         process.env.AZURE_CONFIGURATION_SERVER_ID &&
-                         process.env.AZURE_CONFIGURATION_SERVER_SECRET
-  ? `Endpoint=https://${process.env.AZURE_CONFIGURATION_SERVER_ENV}${process.env.AZURE_CONFIGURATION_SERVER};Id=${process.env.AZURE_CONFIGURATION_SERVER_ID};Secret=${process.env.AZURE_CONFIGURATION_SERVER_SECRET}`
-  : "Endpoint=(.*);Id=(.*);Secret=(.*)";
+const ENABLE_CONFIGURATION_SERVER = process.env.ENABLE_CONFIGURATION_SERVER === "true";
 
+let client;
 
-
-const client = new AppConfigurationClient(connectionString);
+if (ENABLE_CONFIGURATION_SERVER) {
+  // Use Managed Identity (MI) authentication if ENABLE_CONFIGURATION_SERVER is true
+  const credential = new DefaultAzureCredential();
+  const configServer = process.env.AZURE_CONFIGURATION_SERVER;
+  if (!configServer) {
+    throw new Error("AZURE_CONFIGURATION_SERVER is not set but required when ENABLE_CONFIGURATION_SERVER is true.");
+  }
+  client = new AppConfigurationClient(configServer, credential);
+} else {
+  // Use connection string for local user (fallback mode)
+  const connectionString = process.env.AZURE_CONFIGURATION_SERVER_ENDPOINT || "Endpoint=(.*);Id=(.*);Secret=(.*)";
+  client = new AppConfigurationClient(connectionString);
+}
 
 const initializeFeatureFlags = async () => {
   const featureFlags = new Map();
@@ -29,7 +37,7 @@ const initializeFeatureFlags = async () => {
 
 const isFeatureEnabled = async (featureName) => {
   try {
-    const featureFlags = await initializeFeatureFlags(); // Initialize feature flags
+    const featureFlags = await initializeFeatureFlags();
     const featureFlag = featureFlags.get(featureName);
 
     // Check if the feature flag exists and if it's enabled (assuming the value is 'true' or 'enabled')
