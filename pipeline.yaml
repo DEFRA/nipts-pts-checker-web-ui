@@ -48,10 +48,8 @@ extends:
         -MAGIC_PASSWORD_ENABLED "Yes"
         -DASHBOARD_START_HOUR "-48"
         -DASHBOARD_END_HOUR "24"
-        -AZURE_CONFIGURATION_SERVER "trdinfac1001.azconfig.io"
-        -AZURE_CONFIGURATION_SERVER_ENV "$(environment)"
-        -AZURE_CONFIGURATION_SERVER_ID "$(AdoSpClientId)"
-        -AZURE_CONFIGURATION_SERVER_SECRET "$(AdoSpClientSecret)"
+        -ENABLE_CONFIGURATION_SERVER = true
+        -AZURE_CONFIGURATION_SERVER = https://$(environment)trd$(nc-function-infrastructure-lower)ac1001.azconfig.io
       tst: >-
         -PORT "8080"
         -HOST "0.0.0.0"
@@ -64,10 +62,8 @@ extends:
         -MAGIC_PASSWORD_ENABLED "Yes"
         -DASHBOARD_START_HOUR "-48"
         -DASHBOARD_END_HOUR "24"
-        -AZURE_CONFIGURATION_SERVER "trdinfac1001.azconfig.io"
-        -AZURE_CONFIGURATION_SERVER_ENV "$(environment)"
-        -AZURE_CONFIGURATION_SERVER_ID "$(AdoSpClientId)"
-        -AZURE_CONFIGURATION_SERVER_SECRET "$(AdoSpClientSecret)"
+        -ENABLE_CONFIGURATION_SERVER = true
+        -AZURE_CONFIGURATION_SERVER = https://$(environment)trd$(nc-function-infrastructure-lower)ac1001.azconfig.io
       snd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
@@ -80,10 +76,8 @@ extends:
         -MAGIC_PASSWORD_ENABLED "Yes"
         -DASHBOARD_START_HOUR "-48"
         -DASHBOARD_END_HOUR "24"
-        -AZURE_CONFIGURATION_SERVER "trdinfac1001.azconfig.io"
-        -AZURE_CONFIGURATION_SERVER_ENV "$(environment)"
-        -AZURE_CONFIGURATION_SERVER_ID "$(AdoSpClientId)"
-        -AZURE_CONFIGURATION_SERVER_SECRET "$(AdoSpClientSecret)"
+        -ENABLE_CONFIGURATION_SERVER = true
+        -AZURE_CONFIGURATION_SERVER = https://$(environment)trd$(nc-function-infrastructure-lower)ac1001.azconfig.io
       pre: >-
         -PORT "8080"
         -HOST "0.0.0.0"
@@ -96,10 +90,8 @@ extends:
         -MAGIC_PASSWORD_ENABLED "Yes"
         -DASHBOARD_START_HOUR "-48"
         -DASHBOARD_END_HOUR "24"
-        -AZURE_CONFIGURATION_SERVER "trdinfac1001.azconfig.io"
-        -AZURE_CONFIGURATION_SERVER_ENV "$(environment)"
-        -AZURE_CONFIGURATION_SERVER_ID "$(AdoSpClientId)"
-        -AZURE_CONFIGURATION_SERVER_SECRET "$(AdoSpClientSecret)"
+        -ENABLE_CONFIGURATION_SERVER = true
+        -AZURE_CONFIGURATION_SERVER = https://$(environment)trd$(nc-function-infrastructure-lower)ac1001.azconfig.io
       prd: >-
         -PORT "8080"
         -HOST "0.0.0.0"
@@ -112,10 +104,8 @@ extends:
         -MAGIC_PASSWORD_ENABLED "Yes"
         -DASHBOARD_START_HOUR "-48"
         -DASHBOARD_END_HOUR "24"
-        -AZURE_CONFIGURATION_SERVER "trdinfac1001.azconfig.io"
-        -AZURE_CONFIGURATION_SERVER_ENV "$(environment)"
-        -AZURE_CONFIGURATION_SERVER_ID "$(AdoSpClientId)"
-        -AZURE_CONFIGURATION_SERVER_SECRET "$(AdoSpClientSecret)"
+        -ENABLE_CONFIGURATION_SERVER = true
+        -AZURE_CONFIGURATION_SERVER = https://$(environment)trd$(nc-function-infrastructure-lower)ac1001.azconfig.io
     runSonarScan: true
     #runVulnerabilityScan: true
     #skipOwaspScan: false
