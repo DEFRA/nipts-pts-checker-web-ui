@@ -38,7 +38,7 @@ const microchipNumberSchema = Joi.string()
     "string.empty": errorMessages.microchipNumber.empty,
     "string.length": errorMessages.microchipNumber.length,
     "string.pattern.base": errorMessages.microchipNumber.invalid,
-  });
+  }); 
 
 const validatePtdNumber = (ptdNumber) => {
   const { error } = ptdNumberSchema.validate(ptdNumber);
@@ -65,8 +65,6 @@ const validateMicrochipNumber = (microchipNumber) => {
   // Otherwise, return the first error
   return { isValid: false, error: error.details[0].message };
 };
-
-
 
 const validateApplicationNumber = (applicationNumber) => {
   const { error } = applicationNumberSchema.validate(applicationNumber, {
