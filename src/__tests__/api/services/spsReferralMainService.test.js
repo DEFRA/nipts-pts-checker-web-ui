@@ -31,6 +31,7 @@ describe("GetSpsReferrals", () => {
           microchip: "987654321012345",
           travelBy: "Car",
           spsOutcome: "Approved",
+          checkSummaryId: "9245A7BB-F2A4-4BD7-AD9F-08DC32FA7B20",
         },
         {
           ptdNumber: "67890",
@@ -38,6 +39,7 @@ describe("GetSpsReferrals", () => {
           microchip: "987654321098765",
           travelBy: "Plane",
           spsOutcome: "Pending",
+          checkSummaryId: "9245A7BB-F2A4-4BD7-AD9F-08DC32FA7B20",
         },
       ],
     };
@@ -52,6 +54,7 @@ describe("GetSpsReferrals", () => {
           Microchip: item.microchip,
           TravelBy: item.travelBy,
           SPSOutcome: item.spsOutcome,
+          CheckSummaryId: item.checkSummaryId,
         })
     );
 

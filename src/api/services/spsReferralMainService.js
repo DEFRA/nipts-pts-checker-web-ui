@@ -40,6 +40,7 @@ const GetSpsReferrals = async (route, date, timeWindowInHours, request) => {
         Microchip: item.microchip,
         TravelBy: item.travelBy,
         SPSOutcome: item.spsOutcome,
+        CheckSummaryId: item.checkSummaryId,
       });
     });
 

@@ -24,8 +24,8 @@ const getDashboard = async (request, h) => {
   // get checks
   const checks =
     (await dashboardMainService.getCheckOutcomes(
-      process.env.DASHBOARD_START_HOUR || "-47",
-      process.env.DASHBOARD_END_HOUR || "25",
+      process.env.DASHBOARD_START_HOUR || "-48",
+      process.env.DASHBOARD_END_HOUR || "24",
       request
     )) || [];
 
@@ -33,7 +33,8 @@ const getDashboard = async (request, h) => {
 };
 
 const postReferred = async (request, h) => {
-  const { routeName, departureDate, departureTime } = request.payload;
+  const { routeId, routeName, departureDate, departureTime } = request.payload;
+  request.yar.set("routeId", routeId);
   request.yar.set("routeName", routeName);
   request.yar.set("departureDate", departureDate);
   request.yar.set("departureTime", departureTime);

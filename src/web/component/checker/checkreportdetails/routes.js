@@ -6,18 +6,18 @@ import HttpMethod from "../../../../constants/httpMethod.js";
 const Routes = [
   {
     method: HttpMethod.GET,
-    path: "/checker/referred",
+    path: "/checker/checkreportdetails",
     options: {
-      handler: ReferredHandlers.getReferredChecks,
+      handler: ReferredHandlers.getCheckDetails,
     },
   },
   {
     method: HttpMethod.POST,
-    path: "/checker/checkreport",
+    path: "/checker/checkreportdetails",
     options: {
-      handler: ReferredHandlers.postCheckReport,
+      handler: ReferredHandlers.getCheckDetails,
     },
-  },
+  }
 ];
 
 export default Routes;

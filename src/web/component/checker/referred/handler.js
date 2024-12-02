@@ -33,7 +33,7 @@ const getReferredChecks = async (request, h) => {
     (await spsReferralMainService.GetSpsReferrals(
       routeName,
       departureDateTime,
-      process.env.DASHBOARD_START_HOUR * -1 || "47",
+      process.env.DASHBOARD_START_HOUR * -1 || "48",
       request
     )) || [];
 
@@ -44,14 +44,14 @@ const getReferredChecks = async (request, h) => {
   
   // Assign class colors based on outcome
   spsChecks.forEach((item) => {
-    switch (item.SPSOutcome) {
-      case "Check Needed":
+    switch (item.SPSOutcome.toLowerCase()) {
+      case "check needed":
         item.classColour = "blue";
         break;
-      case "Allowed":
+      case "allowed":
         item.classColour = "green";
         break;
-      case "Not Allowed":
+      case "not allowed":
         item.classColour = "red";
         break;
     }
@@ -96,6 +96,14 @@ const getReferredChecks = async (request, h) => {
   });
 };
 
+const postCheckReport = async (request, h) => {
+  const { CheckSummaryId } = request.payload;
+  request.yar.set("checkSummaryId", CheckSummaryId);
+
+  return h.redirect("/checker/checkreportdetails");
+};
+
 export const ReferredHandlers = {
   getReferredChecks,
+  postCheckReport,
 };

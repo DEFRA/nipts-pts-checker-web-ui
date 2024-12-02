@@ -11,6 +11,7 @@ const errorMessages = {
   },
   microchipNumber: {
     empty: "Enter a microchip number",
+    length: "Enter a 15-digit number",
     invalid: "Enter a 15-digit number, using only numbers",
   },
 };

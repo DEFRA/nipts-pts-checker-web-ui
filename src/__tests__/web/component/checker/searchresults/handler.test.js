@@ -123,6 +123,7 @@ describe('saveAndContinueHandler', () => {
   it('should return to document search if checks pass', async () => {
     request.payload.checklist = 'Pass';
     request.payload.microchipNumber = "123456789012345";
+   
     request.yar.get
                 .mockReturnValueOnce({ documentState: 'active' })
                 .mockReturnValueOnce({
@@ -131,8 +132,11 @@ describe('saveAndContinueHandler', () => {
                   sailingMinutes: '30',
                   selectedRoute: { id: 'route123' },
                   selectedRouteOption: { id: 'option456' },
-                  routeFlight: 'FL1234',
-                });
+                  routeFlight: 'FL1234',                  
+                })
+                .mockReturnValueOnce({ IsFailSelected: true });
+
+    request.yar.clear = jest.fn();
 
     apiService.recordCheckOutCome.mockResolvedValueOnce({
       status: 'success', // You can set the status or result to whatever your function expects

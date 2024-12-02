@@ -20,19 +20,19 @@
                     Address
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    {%if data['petOwnerAddress'].addressLineOne.trim() !== '' %}
+                    {%if  data['petOwnerAddress'].addressLineOne !== '' %}
                         <p> {{data['petOwnerAddress'].addressLineOne}}</p>
                     {% endif %}
                     
-                    {%if data['petOwnerAddress'].addressLineTwo.trim() !== '' %}
+                    {%if data['petOwnerAddress'].addressLineTwo !== '' %}
                     <p> {{data['petOwnerAddress'].addressLineTwo}}</p>
                     {% endif %}
 
-                    {%if data['petOwnerAddress'].townOrCity.trim() !== '' %}
+                    {%if data['petOwnerAddress'].townOrCity !== '' %}
                     <p> {{data['petOwnerAddress'].townOrCity}}</p>
                     {% endif %}
 
-                    {%if data['petOwnerAddress'].postCode.trim() !== '' %}
+                    {%if  data['petOwnerAddress'].postCode !== '' %}
                     <p> {{data['petOwnerAddress'].postCode}}</p>
                     {% endif %}
                 </dd>            
