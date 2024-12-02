@@ -16,9 +16,7 @@
                             Reference number
                         </dt>
                         <dd class="govuk-summary-list__value">
-                            <span class="ptd-part">{{ data['ptdNumber'][:5] }}</span>
-                            <span class="ptd-part">{{ data['ptdNumber'][5:8] }}</span>
-                            <span class="ptd-part">{{ data['ptdNumber'][8:] }}</span>
+                            {{ data['ptdFormatted'] if data['ptdFormatted'] else ""}}
                         </dd>
                     </div>
                     <div class="govuk-summary-list__row">

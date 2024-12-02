@@ -28,6 +28,14 @@ const statusColourMapping = {
 
 const getNonComplianceHandler = async (request, h) => {
   const data = request.yar.get("data");
+
+  if (data && data.ptdNumber) {
+    const padded = data.ptdNumber.padStart(11, '0');
+    data.ptdFormatted = `${padded.slice(0, 5)} ${padded.slice(5, 8)} ${padded.slice(8)}`;
+  } else {
+    data.ptdFormatted = "";
+  } 
+
   const appSettings = await appSettingsService.getAppSettings();
   const model = { ...appSettings };
 
