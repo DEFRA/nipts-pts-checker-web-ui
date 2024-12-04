@@ -33,7 +33,7 @@ extends:
     forceDevDeploy: ${{ parameters.forceDevDeploy }}
     deployToSecondary: ${{ parameters.deployToSecondary}}
     appProject: PTS
-    appInstanceNumber: $(nc-region-id)24
+    appInstanceNumber: $(nc-region-id)04
     appName: DEFRA_nipts-pts-checker-web-ui
     appSettingsEnv:
       dev: >-
