@@ -153,6 +153,12 @@
     if (errorElement) {
       errorElement.remove();
     }
+
+    const errorSummary = document.getElementById('errorSummary');
+    if (errorSummary) {
+        errorSummary.style.display = 'none';
+    }
+    
   }
 
   function toggleConditionals(visibleId) {
