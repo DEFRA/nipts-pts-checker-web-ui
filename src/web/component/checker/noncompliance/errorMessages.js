@@ -11,7 +11,7 @@ export default {
       "The microchip number is associated with another lifelong pet travel document",
   },
   passengerType: {
-    empty: "Select a type of passenger",
+    empty: "Select the type of passenger",
   },
   vehicleRegistration: {
     empty: "Enter a vehicle registration",

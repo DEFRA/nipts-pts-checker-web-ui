@@ -20,7 +20,7 @@
                type="radio" 
                value="1" 
                {% if payload['passengerType'] == '1' %}checked{% endif %}>
-        <label class="govuk-label govuk-radios__label" for="footPassenger">Foot passenger</label>
+        <label class="govuk-label govuk-radios__label" for="footPassenger">Ferry foot passenger</label>
       </div>
 
       <div class="govuk-radios__item">
@@ -30,7 +30,17 @@
                type="radio" 
                value="2" 
                {% if payload['passengerType'] == '2' %}checked{% endif %}>
-        <label class="govuk-label govuk-radios__label" for="vehiclePassenger">Vehicle</label>
+        <label class="govuk-label govuk-radios__label" for="vehiclePassenger">Vehicle on ferry</label>
+      </div>
+
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" 
+               id="airlinePassenger" 
+               name="passengerType" 
+               type="radio" 
+               value="3" 
+               {% if payload['passengerType'] == '3' %}checked{% endif %}>
+        <label class="govuk-label govuk-radios__label" for="airlinePassenger">Airline</label>
       </div>
     </div>
   </fieldset>
