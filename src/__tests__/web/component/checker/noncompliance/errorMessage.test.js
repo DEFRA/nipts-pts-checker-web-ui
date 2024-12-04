@@ -3,13 +3,13 @@ import errorMessages from "../../../../../web/component/checker/noncompliance/er
 describe("errorMessages", () => {
   test("should contain the correct error messages for microchipNumber", () => {
     expect(errorMessages.microchipNumber).toEqual({
-      empty: "Enter a microchip number",
+      empty: "Enter the 15-digit microchip number",
       incorrectFormat:
         "Enter your pet's microchip number in the correct format",
-      length: "Enter your pet's 15-digit microchip number",
-      letters: "Enter a 15-digit number, using only numbers",
+      length: "Enter the 15-digit microchip number, using only numbers",
+      letters: "Enter the 15-digit microchip number, using only numbers",
       specialCharacters:
-        "Enter your pet's 15-digit microchip number - do not use spaces or special characters like hyphens or dashes",
+        "Enter the 15-digit microchip number, using only numbers",
       wrongMicrochip:
         "The microchip number is associated with another lifelong pet travel document",
     });
