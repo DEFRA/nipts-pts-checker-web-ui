@@ -1,15 +1,14 @@
 import errorMessages from "../../../../../web/component/checker/noncompliance/errorMessages.js";
-
+const errorMessage = "Enter the 15-digit microchip number, using only numbers";
 describe("errorMessages", () => {
   test("should contain the correct error messages for microchipNumber", () => {
     expect(errorMessages.microchipNumber).toEqual({
       empty: "Enter the 15-digit microchip number",
       incorrectFormat:
         "Enter your pet's microchip number in the correct format",
-      length: "Enter the 15-digit microchip number, using only numbers",
-      letters: "Enter the 15-digit microchip number, using only numbers",
-      specialCharacters:
-        "Enter the 15-digit microchip number, using only numbers",
+      length: errorMessage,
+      letters: errorMessage,
+      specialCharacters: errorMessage,
       wrongMicrochip:
         "The microchip number is associated with another lifelong pet travel document",
     });
