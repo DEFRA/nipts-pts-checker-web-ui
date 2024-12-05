@@ -12,6 +12,7 @@ jest.mock("../../../../../web/component/checker/searchresults/validate");
 
 const pageTitleDefault = "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland";
 const searchResultsView = "componentViews/checker/searchresults/searchResultsView";
+const redirectPath = '/checker/non-compliance';
 
 describe("SearchResultsHandlers", () => {
   describe("getSearchResultsHandler", () => {
@@ -157,7 +158,32 @@ describe('saveAndContinueHandler', () => {
 
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
 
-    expect(h.redirect).toHaveBeenCalledWith('/checker/non-compliance');
+    expect(h.redirect).toHaveBeenCalledWith(redirectPath);
+  });
+
+  it('should return to non compliance if documentState Rejected', async () => {
+    request.payload.checklist = 'Fail';
+    request.payload.microchipNumber = "123456789012345"
+    request.yar.get.mockReturnValueOnce({ documentState: 'rejected' });
+    validatePassOrFail.mockReturnValueOnce({ isValid: true });
+
+    await SearchResultsHandlers.saveAndContinueHandler(request, h);
+
+    expect(h.redirect).toHaveBeenCalledWith(redirectPath);
+    expect(request.payload.checklist).toEqual('Fail');
+  });
+
+
+  it('should return to non compliance if documentState awaiting', async () => {
+    request.payload.checklist = 'Fail';
+    request.payload.microchipNumber = "123456789012345"
+    request.yar.get.mockReturnValueOnce({ documentState: 'awaiting' });
+    validatePassOrFail.mockReturnValueOnce({ isValid: true });
+
+    await SearchResultsHandlers.saveAndContinueHandler(request, h);
+
+    expect(h.redirect).toHaveBeenCalledWith(redirectPath);
+    expect(request.payload.checklist).toEqual('Fail');
   });
 
   it('should handle unexpected errors', async () => {
