@@ -22,7 +22,7 @@ const saveAndContinueHandler = async (request, h) => {
     let { checklist } = request.payload;
 
     const data = request.yar.get("data");
-    if (data.documentState === "rejected" || data.documentState === "revoked") {
+    if (data.documentState === "rejected" || data.documentState === "revoked" || data.documentState === "awaiting") {
       checklist = CheckOutcomeConstants.Fail;
     }
 
