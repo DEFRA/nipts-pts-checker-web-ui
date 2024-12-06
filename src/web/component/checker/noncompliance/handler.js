@@ -41,7 +41,7 @@ const getNonComplianceHandler = async (request, h) => {
     : "";
 
 
-  const appSettings = await appSettingsService.getAppSettings();
+  const appSettings = appSettingsService.getAppSettings();
   const model = { ...appSettings };
 
   const applicationStatus = data.documentState.toLowerCase().trim();
@@ -66,7 +66,7 @@ const postNonComplianceHandler = async (request, h) => {
   try {
     const payload = request.payload;
     const validationResult = validateNonCompliance(payload);
-    const appSettings = await appSettingsService.getAppSettings();
+    const appSettings = appSettingsService.getAppSettings();
     const model = { ...appSettings };
 
     console.log("Validation Result:", validationResult);
@@ -162,7 +162,7 @@ const postNonComplianceHandler = async (request, h) => {
     console.error("Unexpected Error:", error);
 
     const data = request.yar.get("data");
-    const appSettings = await appSettingsService.getAppSettings();
+    const appSettings = appSettingsService.getAppSettings();
     const model = { ...appSettings };
     const applicationStatus = data.documentState.toLowerCase().trim();
     const documentStatus = statusMapping[applicationStatus] || applicationStatus;

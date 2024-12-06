@@ -54,6 +54,8 @@ const getReferredChecks = async (request, h) => {
       case "not allowed":
         item.classColour = "red";
         break;
+      default:
+        break;
     }
   });
 
