@@ -9,7 +9,7 @@ const VIEW_PATH = "componentViews/checker/home/view";
 
 const getHome = async (request, h) => {
   headerData.section = "home"
-  const appSettings = await appSettingsService.getAppSettings();
+  const appSettings = appSettingsService.getAppSettings();
   const loginUrl = requestAuthorizationCodeUrl(session, request);
 
   const model = { ...appSettings, loginUrl: loginUrl };
