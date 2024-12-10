@@ -51,7 +51,28 @@ const GetSpsReferrals = async (route, date, timeWindowInHours, request) => {
   }
 };
 
-// Export the function
+const GetCompleteCheckDetails = async (identifier, request) => {
+  try {
+    const response = await httpService.postAsync(
+      `${baseUrl}/Checker/getCompleteCheckDetails`,
+      { identifier },
+      request
+    );
+
+    if (response?.error) {
+      throw new Error(response.error);
+    }
+
+    return response?.data || null;
+  } catch (error) {
+    console.error("Error in GetCompleteCheckDetails:", error);
+    throw error;
+  }
+};
+
+
+
 export default {
   GetSpsReferrals,
+  GetCompleteCheckDetails
 };

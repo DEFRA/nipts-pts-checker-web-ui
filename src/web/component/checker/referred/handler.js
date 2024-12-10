@@ -99,11 +99,23 @@ const getReferredChecks = async (request, h) => {
 };
 
 const postCheckReport = async (request, h) => {
-  const { CheckSummaryId } = request.payload;
-  request.yar.set("checkSummaryId", CheckSummaryId);
+  const { CheckSummaryId, PTDNumber, ApplicationNumber } = request.payload;
+
+  if (PTDNumber) {
+    request.yar.set("identifier", PTDNumber); // Set PTDNumber as identifier
+  } else if (ApplicationNumber) {
+    request.yar.set("identifier", ApplicationNumber); // Set ApplicationNumber as identifier
+  } else if (CheckSummaryId) {
+    request.yar.set("identifier", CheckSummaryId); // Set CheckSummaryId as identifier
+  } else {
+    return h
+      .response("Invalid request payload. Missing identifiers.")
+      .code(400);
+  }
 
   return h.redirect("/checker/checkreportdetails");
 };
+
 
 export const ReferredHandlers = {
   getReferredChecks,
