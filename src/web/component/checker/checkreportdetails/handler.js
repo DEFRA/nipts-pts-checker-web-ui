@@ -77,27 +77,38 @@ async function conductSpsCheck(request, h) {
     const identifier = request.yar.get("identifier");
 
     if (!identifier) {
-      console.error("Identifier is not available in yar.");
       return h.response({ error: "Identifier is required" }).code(400);
     }
 
-    const responseData = await apiService.getApplicationByPTDNumber(
-      identifier,
-      request
-    );
-
-    if (!responseData) {
-      console.error("No data found for the provided identifier.");
-      return h.response("No data found for the provided identifier").code(404);
+    let responseData;
+    if (identifier.startsWith("GB8268")) {
+      responseData = await apiService.getApplicationByPTDNumber(
+        identifier,
+        request
+      );
+      if (!responseData) {
+        return h
+          .response("No data found for the provided PTD number")
+          .code(404);
+      }
+      request.yar.set("ptdNumber", identifier);
+    } else {
+      responseData = await apiService.getApplicationByApplicationNumber(
+        identifier,
+        request
+      );
+      if (!responseData) {
+        return h
+          .response("No data found for the provided application number")
+          .code(404);
+      }
+      request.yar.set("applicationNumber", identifier);
     }
 
-    const ptdNumber = responseData.ptdNumber || "Unknown";
-    request.yar.set("ptdNumber", ptdNumber);
     request.yar.set("data", responseData);
 
     return h.redirect("/checker/search-results");
   } catch (error) {
-    console.error("Error in conductSpsCheck:", error);
     return h
       .response({ error: "Internal Server Error", details: error.message })
       .code(500);
