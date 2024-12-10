@@ -18,11 +18,14 @@ describe("register function", () => {
 
   it("should call server.route with Routes", () => {
     plugin.register(server);
-    expect(server.route).toHaveBeenCalled();
+    expect(server.route).toHaveBeenCalledWith(expect.any(Array));
   });
 
   it('should call server.log with "info" and "Plugin registered: CheckReportDetails"', () => {
     plugin.register(server);
-    expect(server.log).toHaveBeenCalledWith("info", "Plugin registered: CheckReportDetails");
+    expect(server.log).toHaveBeenCalledWith(
+      "info",
+      "Plugin registered: CheckReportDetails"
+    );
   });
 });

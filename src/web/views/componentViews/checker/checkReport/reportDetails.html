@@ -1,116 +1,107 @@
 {% extends "layouts/checkerLayout.html" %}
 
-{% block pageTitle %} GB Check Report - {{ model.ptsTitle }}:{{ model.ptsSubTitle }} – GOV.UK {% endblock %}
+{% block pageTitle %} GB Check Report - {{ checkDetails.reference }} – GOV.UK {% endblock %}
 
 {% block beforeContent %}
 <a href="javascript: history.back();" class="govuk-back-link govuk-!-margin-top-9" id="backButton">Back</a>
 {% endblock %}
 
-
 {% block content %}
-<form action="/spsCheck">
+  <h1 class="govuk-heading-xl">GB check report</h1>
 
-    <h1 class="govuk-heading-xl">GB check report</h1>
+  <h2 class="govuk-heading-m">Outcome</h2>
 
-    <h2 class="govuk-heading-m">Outcome</h2>
+  <dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Check outcome</dt>
+      <dd class="govuk-summary-list__value">
+        <ul class="govuk-list govuk-list--bullet">
+          {% for outcome in checkDetails.checkOutcome %}
+          <li>{{ outcome }}</li>
+          {% endfor %}
+        </ul>
+      </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Reason for referral</dt>
+      <dd class="govuk-summary-list__value">
+        <ul class="govuk-list govuk-list--bullet">
+          {% for reason in checkDetails.reasonForReferral %}
+          <li>{{ reason }}</li>
+          {% endfor %}
+        </ul>
+      </dd>
+    </div>
+  {% if checkDetails.microchipNumber %}
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">Microchip number found in scan</dt>
+    <dd class="govuk-summary-list__value">
+      <p class="govuk-body">{{ checkDetails.microchipNumber }}</p>
+    </dd>
+  </div>
+  {% endif %}
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Additional comments</dt>
+      <dd class="govuk-summary-list__value">
+        {% if checkDetails.additionalComments %}
+        <ul class="govuk-list govuk-list--bullet">
+          {% for comment in checkDetails.additionalComments %}
+          <li>{{ comment }}</li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="govuk-body">None</p>
+        {% endif %}
+      </dd>
+    </div>
+  </dl>
 
-    {% if isCheckOutcomeDetailsEnabled %}
-    <dl class="govuk-summary-list">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Check outcome
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <p class="govuk-body"></p>
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Reason for referral
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <p class="govuk-body"></p>
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Microchip number found in scan
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <p class="govuk-body"></p>
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Additional comments
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <p class="govuk-body">
-          </p>
-        </dd>
-      </div>
-    </dl>
-    {% endif %}
-    
-    <h2 class="govuk-heading-m">Check details</h2>
+  <h2 class="govuk-heading-m">Check details</h2>
 
-    
-    {% if isCheckOutcomeDetailsEnabled %}
-    <dl class="govuk-summary-list">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          GB checker’s name
-        </dt>
-        <dd class="govuk-summary-list__value">
-          
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Date and time checked
-        </dt>
-        <dd class="govuk-summary-list__value">
-          
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Route
-        </dt>
-        <dd class="govuk-summary-list__value">
-          
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Scheduled departure date
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <p class="govuk-body"></p>
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Scheduled departure time
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <p class="govuk-body"></p>
-        </dd>
-      </div>
-    </dl>
-  
+  <dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">GB checker’s name</dt>
+      <dd class="govuk-summary-list__value">
+        {{ checkDetails.gbCheckerName }}
+      </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Date and time checked</dt>
+      <dd class="govuk-summary-list__value">
+        {{ checkDetails.dateTimeChecked }}
+      </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Route</dt>
+      <dd class="govuk-summary-list__value">
+        {{ checkDetails.route }}
+      </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Scheduled departure date</dt>
+      <dd class="govuk-summary-list__value">
+        <p class="govuk-body">{{ checkDetails.scheduledDepartureDate }}</p>
+      </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Scheduled departure time</dt>
+      <dd class="govuk-summary-list__value">
+        <p class="govuk-body">{{ checkDetails.scheduledDepartureTime }}</p>
+      </dd>
+    </div>
+  </dl>
+
+  <form action="/checker/conduct-sps-check" method="POST">
     <button type="submit" class="govuk-button" data-module="govuk-button" data-govuk-button-init="">
       Conduct an SPS check
     </button>
-    {% endif %}
-    
-</form>
+  </form>
+
 
 <script>
-if(window.history.replaceState) {
+  if (window.history.replaceState) {
     window.history.replaceState(null, null, window.location.href);
   }
-
 </script>
 
 {% endblock %}

@@ -121,3 +121,90 @@ describe("GetSpsReferrals", () => {
     );
   });
 });
+
+describe("GetCompleteCheckDetails", () => {
+  const identifier = "12345";
+  let request;
+
+  beforeEach(() => {
+    request = {
+      headers: {
+        authorization: "Bearer mockToken",
+      },
+    };
+    jest.clearAllMocks();
+  });
+
+  it("should fetch data and return it as is when API responds successfully", async () => {
+    const apiResponse = {
+      data: {
+        ptdNumber: "PTD12345",
+        applicationReference: "APP67890",
+        petDetails: {
+          petName: "Buddy",
+          petType: "Dog",
+        },
+      },
+    };
+
+    httpService.postAsync.mockResolvedValue(apiResponse);
+
+    const result = await spsService.GetCompleteCheckDetails(
+      identifier,
+      request
+    );
+
+    expect(result).toEqual(apiResponse.data);
+    expect(httpService.postAsync).toHaveBeenCalledWith(
+      expect.stringContaining("/Checker/getCompleteCheckDetails"),
+      { identifier },
+      request
+    );
+  });
+
+  it("should throw an error if the API returns an error in response", async () => {
+    const apiError = { error: "Not Found" };
+    httpService.postAsync.mockResolvedValue(apiError);
+
+    await expect(
+      spsService.GetCompleteCheckDetails(identifier, request)
+    ).rejects.toThrow("Not Found");
+
+    expect(httpService.postAsync).toHaveBeenCalledWith(
+      expect.stringContaining("/Checker/getCompleteCheckDetails"),
+      { identifier },
+      request
+    );
+  });
+
+  it("should return null if API response data is null or undefined", async () => {
+    const apiResponse = { data: null };
+    httpService.postAsync.mockResolvedValue(apiResponse);
+
+    const result = await spsService.GetCompleteCheckDetails(
+      identifier,
+      request
+    );
+
+    expect(result).toBeNull();
+    expect(httpService.postAsync).toHaveBeenCalledWith(
+      expect.stringContaining("/Checker/getCompleteCheckDetails"),
+      { identifier },
+      request
+    );
+  });
+
+  it("should handle unexpected errors gracefully", async () => {
+    httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
+
+    await expect(
+      spsService.GetCompleteCheckDetails(identifier, request)
+    ).rejects.toThrow("Unexpected error");
+
+    expect(httpService.postAsync).toHaveBeenCalledWith(
+      expect.stringContaining("/Checker/getCompleteCheckDetails"),
+      { identifier },
+      request
+    );
+  });
+});

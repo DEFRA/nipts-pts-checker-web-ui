@@ -1,6 +1,4 @@
-"use strict";
-
-import { ReferredHandlers } from "./handler.js";
+import { CheckReportHandlers as ReferredHandlers } from "./handler.js";
 import HttpMethod from "../../../../constants/httpMethod.js";
 
 const Routes = [
@@ -13,11 +11,11 @@ const Routes = [
   },
   {
     method: HttpMethod.POST,
-    path: "/checker/checkreportdetails",
+    path: "/checker/conduct-sps-check",
     options: {
-      handler: ReferredHandlers.getCheckDetails,
+      handler: ReferredHandlers.conductSpsCheck,
     },
-  }
+  },
 ];
 
 export default Routes;
