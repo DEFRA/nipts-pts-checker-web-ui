@@ -15,23 +15,36 @@
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">Check outcome</dt>
       <dd class="govuk-summary-list__value">
+        {% if checkDetails.checkOutcome|length > 1 %}
         <ul class="govuk-list govuk-list--bullet">
           {% for outcome in checkDetails.checkOutcome %}
           <li>{{ outcome }}</li>
           {% endfor %}
         </ul>
+        {% else %}
+        <p class="govuk-body">
+          {{ checkDetails.checkOutcome[0] if checkDetails.checkOutcome else "None" }}
+        </p>
+        {% endif %}
       </dd>
     </div>
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">Reason for referral</dt>
       <dd class="govuk-summary-list__value">
+        {% if checkDetails.reasonForReferral|length > 1 %}
         <ul class="govuk-list govuk-list--bullet">
           {% for reason in checkDetails.reasonForReferral %}
           <li>{{ reason }}</li>
           {% endfor %}
         </ul>
+        {% else %}
+        <p class="govuk-body">
+          {{ checkDetails.reasonForReferral[0] if checkDetails.reasonForReferral else "None" }}
+        </p>
+        {% endif %}
       </dd>
     </div>
+
   {% if checkDetails.microchipNumber %}
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">Microchip number found in scan</dt>
@@ -40,20 +53,23 @@
     </dd>
   </div>
   {% endif %}
-    <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">Additional comments</dt>
-      <dd class="govuk-summary-list__value">
-        {% if checkDetails.additionalComments %}
-        <ul class="govuk-list govuk-list--bullet">
-          {% for comment in checkDetails.additionalComments %}
-          <li>{{ comment }}</li>
-          {% endfor %}
-        </ul>
-        {% else %}
-        <p class="govuk-body">None</p>
-        {% endif %}
-      </dd>
-    </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">Additional comments</dt>
+    <dd class="govuk-summary-list__value">
+      {% if checkDetails.additionalComments|length > 1 %}
+      <ul class="govuk-list govuk-list--bullet">
+        {% for comment in checkDetails.additionalComments %}
+        <li>{{ comment }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="govuk-body">
+        {{ checkDetails.additionalComments[0] if checkDetails.additionalComments else "None" }}
+      </p>
+      {% endif %}
+    </dd>
+  </div>
+
   </dl>
 
   <h2 class="govuk-heading-m">Check details</h2>
