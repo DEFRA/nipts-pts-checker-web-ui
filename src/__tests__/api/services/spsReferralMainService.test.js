@@ -124,6 +124,9 @@ describe("GetSpsReferrals", () => {
 
 describe("GetCompleteCheckDetails", () => {
   const identifier = "12345";
+  const routeName = "TestRoute";
+  const date = "2024-12-25";
+  const scheduleTime = "10:30:00";
   let request;
 
   beforeEach(() => {
@@ -144,6 +147,9 @@ describe("GetCompleteCheckDetails", () => {
           petName: "Buddy",
           petType: "Dog",
         },
+        routeName: "TestRoute",
+        date: "2024-12-25",
+        scheduledTime: "10:30:00",
       },
     };
 
@@ -151,13 +157,21 @@ describe("GetCompleteCheckDetails", () => {
 
     const result = await spsService.GetCompleteCheckDetails(
       identifier,
+      routeName,
+      date,
+      scheduleTime,
       request
     );
 
     expect(result).toEqual(apiResponse.data);
     expect(httpService.postAsync).toHaveBeenCalledWith(
       expect.stringContaining("/Checker/getCompleteCheckDetails"),
-      { identifier },
+      {
+        identifier,
+        routeName,
+        date: "2024-12-25",
+        scheduledTime: "10:30:00",
+      },
       request
     );
   });
@@ -167,12 +181,23 @@ describe("GetCompleteCheckDetails", () => {
     httpService.postAsync.mockResolvedValue(apiError);
 
     await expect(
-      spsService.GetCompleteCheckDetails(identifier, request)
+      spsService.GetCompleteCheckDetails(
+        identifier,
+        routeName,
+        date,
+        scheduleTime,
+        request
+      )
     ).rejects.toThrow("Not Found");
 
     expect(httpService.postAsync).toHaveBeenCalledWith(
       expect.stringContaining("/Checker/getCompleteCheckDetails"),
-      { identifier },
+      {
+        identifier,
+        routeName,
+        date: "2024-12-25",
+        scheduledTime: "10:30:00",
+      },
       request
     );
   });
@@ -183,13 +208,21 @@ describe("GetCompleteCheckDetails", () => {
 
     const result = await spsService.GetCompleteCheckDetails(
       identifier,
+      routeName,
+      date,
+      scheduleTime,
       request
     );
 
     expect(result).toBeNull();
     expect(httpService.postAsync).toHaveBeenCalledWith(
       expect.stringContaining("/Checker/getCompleteCheckDetails"),
-      { identifier },
+      {
+        identifier,
+        routeName,
+        date: "2024-12-25",
+        scheduledTime: "10:30:00",
+      },
       request
     );
   });
@@ -198,13 +231,25 @@ describe("GetCompleteCheckDetails", () => {
     httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
 
     await expect(
-      spsService.GetCompleteCheckDetails(identifier, request)
+      spsService.GetCompleteCheckDetails(
+        identifier,
+        routeName,
+        date,
+        scheduleTime,
+        request
+      )
     ).rejects.toThrow("Unexpected error");
 
     expect(httpService.postAsync).toHaveBeenCalledWith(
       expect.stringContaining("/Checker/getCompleteCheckDetails"),
-      { identifier },
+      {
+        identifier,
+        routeName,
+        date: "2024-12-25",
+        scheduledTime: "10:30:00",
+      },
       request
     );
   });
 });
+

@@ -51,11 +51,29 @@ const GetSpsReferrals = async (route, date, timeWindowInHours, request) => {
   }
 };
 
-const GetCompleteCheckDetails = async (identifier, request) => {
+const GetCompleteCheckDetails = async (
+  identifier,
+  routeName,
+  date,
+  scheduleTime,
+  request
+) => {
+  const formattedDate = date ? moment(date).format("YYYY-MM-DD") : null;
+  const formattedTime = scheduleTime
+    ? moment(scheduleTime, "HH:mm:ss").format("HH:mm:ss")
+    : null;
+
   try {
+    const payload = {
+      identifier,
+      routeName: routeName || null,
+      date: formattedDate,
+      scheduledTime: formattedTime,
+    };
+
     const response = await httpService.postAsync(
       `${baseUrl}/Checker/getCompleteCheckDetails`,
-      { identifier },
+      payload,
       request
     );
 
@@ -69,7 +87,6 @@ const GetCompleteCheckDetails = async (identifier, request) => {
     throw error;
   }
 };
-
 
 
 export default {
