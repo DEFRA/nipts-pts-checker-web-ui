@@ -6,54 +6,62 @@ import apiService from "../../../../../api/services/apiService.js";
 jest.mock("../../../../../api/services/spsReferralMainService.js");
 jest.mock("../../../../../api/services/apiService.js");
 
-const VIEW_PATH = "componentViews/checker/checkReport/reportDetails";
-
 describe("CheckReportHandlers", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   describe("getCheckDetails", () => {
-    afterEach(() => {
-      jest.clearAllMocks();
+    it("should return 404 when no data is found for the provided CheckSummaryId", async () => {
+      const mockRequest = {
+        yar: {
+          get: jest.fn().mockReturnValue(["invalid-guid"]),
+        },
+      };
+
+      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(null);
+
+      const h = {
+        response: jest.fn().mockReturnThis(),
+        code: jest.fn(),
+      };
+
+      await CheckReportHandlers.getCheckDetails(mockRequest, h);
+
+      expect(h.response).toHaveBeenCalledWith(
+        "No data found for the provided CheckSummaryId"
+      );
+      expect(h.code).toHaveBeenCalledWith(404);
     });
 
- 
+    it("should return 500 when there is an error in GetCompleteCheckDetails", async () => {
+      const mockRequest = {
+        yar: {
+          get: jest.fn().mockReturnValue(["valid-guid"]),
+        },
+      };
 
-     it("should return 500 on error", async () => {
-       const mockRequest = {
-         yar: {
-           get: jest.fn((key) => {
-             if (key === "identifier") return "test-identifier";
-             if (key === "routeName") return "Test Route";
-             if (key === "departureDate") return "2024-12-25";
-             if (key === "departureTime") return "10:30:00";
-           }),
-         },
-       };
+      spsReferralMainService.GetCompleteCheckDetails.mockRejectedValue(
+        new Error("Test error")
+      );
 
-       spsReferralMainService.GetCompleteCheckDetails.mockRejectedValue(
-         new Error("Test error")
-       );
+      const h = {
+        response: jest.fn().mockReturnThis(),
+        code: jest.fn(),
+      };
 
-       const h = {
-         response: jest.fn().mockReturnThis(),
-         code: jest.fn(),
-       };
+      await CheckReportHandlers.getCheckDetails(mockRequest, h);
 
-       await CheckReportHandlers.getCheckDetails(mockRequest, h);
-
-       expect(h.response).toHaveBeenCalledWith({
-         error: "Internal Server Error",
-         details: "Test error",
-       });
-       expect(h.code).toHaveBeenCalledWith(500);
-     });
+      expect(h.response).toHaveBeenCalledWith({
+        error: "Internal Server Error",
+        details: "Test error",
+      });
+      expect(h.code).toHaveBeenCalledWith(500);
+    });
   });
 
-
   describe("conductSpsCheck", () => {
-    it("should return 400 when identifier is not available in yar", async () => {
+    it("should return 400 when identifier is missing in yar", async () => {
       const mockRequest = {
         yar: {
           get: jest.fn().mockReturnValue(undefined),

@@ -183,7 +183,10 @@ describe("ReferredHandlers", () => {
       const result = await ReferredHandlers.postCheckReport(request, h);
   
       // Assert that request.yar.set was called with the correct arguments
-      expect(request.yar.set).toHaveBeenCalledWith("identifier", "12345");
+      expect(request.yar.set).toHaveBeenCalledWith(
+        "SelectedCheckSummaryId",
+        "12345"
+      );
   
       // Assert that h.redirect was called with the correct URL
       expect(h.redirect).toHaveBeenCalledWith("/checker/checkreportdetails");
