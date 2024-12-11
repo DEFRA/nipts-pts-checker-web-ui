@@ -1,54 +1,22 @@
-"use strict";
-
 import spsReferralMainService from "../../../../api/services/spsReferralMainService.js";
 import apiService from "../../../../api/services/apiService.js";
 
 const VIEW_PATH = "componentViews/checker/checkReport/reportDetails";
 
+
 async function getCheckDetails(request, h) {
   try {
-    const identifier = request.yar.get("identifier");
-    const routeName = request.yar.get("routeName");
-    const departureDate = request.yar.get("departureDate");
-    const departureTime = request.yar.get("departureTime");
-
-    if (!identifier || !routeName || !departureDate || !departureTime) {
-      console.error("Missing required parameters in session data.");
-      return h.response({ error: "Missing required parameters." }).code(400);
-    }
-
-    // Combine and format date and time
-    const departureDateTimeString = `${departureDate} ${departureTime}`;
-    const departureDateTime = new Date(
-      departureDateTimeString.replace(
-        /(\d{2})\/(\d{2})\/(\d{4})/,
-        "$2/$1/$3" // Convert DD/MM/YYYY to MM/DD/YYYY for compatibility
-      )
-    );
-
-    if (isNaN(departureDateTime.getTime())) {
-      console.error("Invalid departure date or time.");
-      return h.response({ error: "Invalid departure date or time." }).code(400);
-    }
-
-    const formattedDepartureDate = departureDateTime
-      .toISOString()
-      .split("T")[0]; // YYYY-MM-DD
-    const formattedDepartureTime = departureDateTime
-      .toISOString()
-      .split("T")[1]
-      .slice(0, 5); // HH:mm
+    let checkSummaryId = request.yar.get("SelectedCheckSummaryId");
 
     const checkDetails = await spsReferralMainService.GetCompleteCheckDetails(
-      identifier,
-      routeName,
-      formattedDepartureDate,
-      formattedDepartureTime,
+      checkSummaryId[0],
       request
     );
 
     if (!checkDetails) {
-      return h.response("No data found for the provided identifier").code(404);
+      return h
+        .response("No data found for the provided CheckSummaryId")
+        .code(404);
     }
 
     const formatDate = (date) =>
@@ -109,7 +77,7 @@ async function conductSpsCheck(request, h) {
     }
 
     let responseData;
-    if (identifier.startsWith("GB8268")) {
+    if (identifier.startsWith("GB826")) {
       responseData = await apiService.getApplicationByPTDNumber(
         identifier,
         request
