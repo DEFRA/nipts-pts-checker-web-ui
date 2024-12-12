@@ -105,7 +105,7 @@ const getReferredChecks = async (request, h) => {
     const PTD_PREFIX_LENGTH = 5;
     const PTD_MID_LENGTH = 8;
  
-    let PTDNumberFormatted = PTDNumber
+    const PTDNumberFormatted = PTDNumber
       ? `${PTDNumber.padStart(PTD_LENGTH, '0').slice(0, PTD_PREFIX_LENGTH)} ` +
         `${PTDNumber.padStart(PTD_LENGTH, '0').slice(PTD_PREFIX_LENGTH, PTD_MID_LENGTH)} ` +
         `${PTDNumber.padStart(PTD_LENGTH, '0').slice(PTD_MID_LENGTH)}`
