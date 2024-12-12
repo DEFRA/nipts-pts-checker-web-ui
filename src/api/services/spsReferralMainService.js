@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import httpService from "./httpService.js";
 import moment from "moment";
 
+
 dotenv.config();
 
 const baseUrl =
@@ -51,7 +52,29 @@ const GetSpsReferrals = async (route, date, timeWindowInHours, request) => {
   }
 };
 
-// Export the function
+
+const GetCompleteCheckDetails = async (checkSummaryId, request) => {
+  try {
+    const response = await httpService.postAsync(
+      `${baseUrl}/Checker/getCompleteCheckDetails`,
+      { checkSummaryId: checkSummaryId },
+      request
+    );
+
+    if (response?.error) {
+      throw new Error(response.error);
+    }
+
+    return response?.data || null;
+  } catch (error) {
+    console.error("Error in GetCompleteCheckDetails:", error);
+    throw error;
+  }
+};
+
+
+
 export default {
   GetSpsReferrals,
+  GetCompleteCheckDetails
 };

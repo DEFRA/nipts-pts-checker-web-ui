@@ -99,11 +99,19 @@ const getReferredChecks = async (request, h) => {
 };
 
 const postCheckReport = async (request, h) => {
-  const { CheckSummaryId } = request.payload;
-  request.yar.set("checkSummaryId", CheckSummaryId);
+  const { CheckSummaryId, PTDNumber, ApplicationNumber } = request.payload;
+
+   if (PTDNumber) {
+     request.yar.set("identifier", PTDNumber);
+   } else if (ApplicationNumber) {
+     request.yar.set("identifier", ApplicationNumber); 
+   } 
+
+  request.yar.set("SelectedCheckSummaryId", CheckSummaryId); 
 
   return h.redirect("/checker/checkreportdetails");
 };
+
 
 export const ReferredHandlers = {
   getReferredChecks,
