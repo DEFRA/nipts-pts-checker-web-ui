@@ -54,7 +54,7 @@ const nonComplianceSchema = Joi.object({
   }),
   spsOutcome: Joi.when("isGBCheck", {
     is: true,
-    then: Joi.boolean().custom((value, helpers) => {
+    then: Joi.boolean().custom((_value, helpers) => {
         return helpers.message(errorMessages.spsOutcome.incorrectSelection);
     }),
     otherwise: Joi.boolean()
@@ -76,12 +76,11 @@ const nonComplianceSchema = Joi.object({
           return helpers.message(errorMessages.gbOutcome.required);
       }
     }
-    else {
-        if(gbRefersToDAERAOrSPS || gbAdviseNoTravel || gbPassengerSaysNoTravel)
-        {
+    else if(gbRefersToDAERAOrSPS || gbAdviseNoTravel || gbPassengerSaysNoTravel)
+    {
           return helpers.message(errorMessages.gbOutcome.incorrectSelection);
-        }
     }
+
     return value;
   })
 })

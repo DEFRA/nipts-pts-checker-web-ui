@@ -129,7 +129,6 @@ describe("postNonComplianceHandler", () => {
     
     const documentStatus = statusMapping[applicationStatus] || applicationStatus;
     const documentStatusColourMapping = statusColourMapping[applicationStatus] || applicationStatus;
-    request.yar.get.mockReturnValueOnce(mockData);
 
     const payload = {
       mcNotMatch: "true",
@@ -147,7 +146,6 @@ describe("postNonComplianceHandler", () => {
      validateNonCompliance.mockReturnValue(validationResult);
 
 
-    request.payload = payload;
     request.payload = payload;
     request.yar.get.mockImplementation((key) => {
       const mockData = {
