@@ -69,19 +69,12 @@ const nonComplianceSchema = Joi.object({
   isGBCheck: Joi.boolean().custom((value, helpers) => {
     const context = helpers.state.ancestors[0] || {}; // Default to empty object if context is undefined
     const { isGBCheck, gbRefersToDAERAOrSPS, gbAdviseNoTravel, gbPassengerSaysNoTravel } = context;
-    if(isGBCheck)
-    {
-      if(!gbRefersToDAERAOrSPS && !gbAdviseNoTravel && !gbPassengerSaysNoTravel)
-      {
-          return helpers.message(errorMessages.gbOutcome.required);
+    if (isGBCheck) {
+      if (!gbRefersToDAERAOrSPS && !gbAdviseNoTravel && !gbPassengerSaysNoTravel) {
+        return helpers.message(errorMessages.gbOutcome.required);
       }
-    }
-    else
-    {
-      if(gbRefersToDAERAOrSPS || gbAdviseNoTravel || gbPassengerSaysNoTravel)
-      {
-        return helpers.message(errorMessages.gbOutcome.incorrectSelection);
-      }
+    } else if (gbRefersToDAERAOrSPS || gbAdviseNoTravel || gbPassengerSaysNoTravel) {
+      return helpers.message(errorMessages.gbOutcome.incorrectSelection);
     }
     return value;
   })
