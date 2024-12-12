@@ -65,6 +65,7 @@ const getNonComplianceHandler = async (request, h) => {
 const postNonComplianceHandler = async (request, h) => {
   try {
     const payload = request.payload;
+    payload.isGBCheck = request.yar.get("isGBCheck");
     const validationResult = validateNonCompliance(payload);
     const appSettings = appSettingsService.getAppSettings();
     const model = { ...appSettings };
@@ -83,20 +84,6 @@ const postNonComplianceHandler = async (request, h) => {
       validationResult.errors.forEach((err) => {
         const fieldId = err.path.join("_");
         const message = err.message;
-
-        // Only process microchipNumber errors if the checkbox is selected
-        if (
-          fieldId === "mcNotMatchActual" &&
-          payload.mcNotMatch !== "true"
-        ) {
-          // Skip this error
-          return;
-        }
-
-        // Skip errors for fields that are optional
-        if (fieldId === "microchipNumberRadio" || fieldId === "ptdProblem") {
-          return;
-        }
 
         // Handle any unexpected errors
         if (!fieldId) {
