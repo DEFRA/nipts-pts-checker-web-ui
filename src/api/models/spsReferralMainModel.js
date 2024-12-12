@@ -1,6 +1,7 @@
 class SpsReferralMainModel {
   constructor(data) {
     this.PTDNumber = data.PTDNumber;
+    this.PTDNumberFormatted = data.PTDNumber;
     this.PetDescription = data.PetDescription;
     this.Microchip = data.Microchip;
     this.TravelBy = data.TravelBy;

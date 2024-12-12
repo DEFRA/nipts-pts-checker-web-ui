@@ -70,7 +70,7 @@
                                 <form method="POST" action="/checker/checkreport" class="referred-form">
                                     <button type="submit" class="govuk-button--link referred-button"
                                         data-identifier="referred-{{ loop.index }}">
-                                        {{spsCheck.PTDNumber}}<span class="govuk-visually-hidden"> reported</span>
+                                        {{spsCheck.PTDNumberFormatted}}<span class="govuk-visually-hidden"> reported</span>
                                     </button>
                                     <input type="hidden" name="CheckSummaryId" value="{{ spsCheck.CheckSummaryId }}">
                                     <input type="hidden" name="CheckSummaryId" value="{{ spsCheck.CheckSummaryId }}">
