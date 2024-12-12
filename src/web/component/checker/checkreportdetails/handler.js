@@ -6,10 +6,10 @@ const VIEW_PATH = "componentViews/checker/checkReport/reportDetails";
 
 async function getCheckDetails(request, h) {
   try {
-    let checkSummaryId = request.yar.get("SelectedCheckSummaryId");
+    let checkSummaryId = request.yar.get("checkSummaryId");
 
     const checkDetails = await spsReferralMainService.GetCompleteCheckDetails(
-      checkSummaryId[0],
+      checkSummaryId,
       request
     );
 

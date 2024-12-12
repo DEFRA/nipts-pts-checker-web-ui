@@ -184,7 +184,7 @@ describe("ReferredHandlers", () => {
   
       // Assert that request.yar.set was called with the correct arguments
       expect(request.yar.set).toHaveBeenCalledWith(
-        "SelectedCheckSummaryId",
+        "checkSummaryId",
         "12345"
       );
   

@@ -107,7 +107,7 @@ const postCheckReport = async (request, h) => {
      request.yar.set("identifier", ApplicationNumber); 
    } 
 
-  request.yar.set("SelectedCheckSummaryId", CheckSummaryId); 
+    request.yar.set("checkSummaryId", CheckSummaryId);
 
   return h.redirect("/checker/checkreportdetails");
 };
