@@ -7,8 +7,8 @@ const microchipNumberLength = 15;
 const nonComplianceSchema = Joi.object({
   mcNotMatch: Joi.any(),
   mcNotMatchActual: Joi.when("mcNotMatch", {
-    is: Joi.valid("true"),
-    then: Joi.any().custom((value, helpers) => {
+    is: "true",
+    then: Joi.string().custom((value, helpers) => {
       const val = value || "";
       const trimmedValue = val.trim();
 
@@ -39,7 +39,12 @@ const nonComplianceSchema = Joi.object({
 
       // If all checks pass, return the trimmed value
       return trimmedValue;
-    }),
+    })
+    .required()
+      .messages({
+        'string.empty':  errorMessages.microchipNumber.empty,
+        'any.required': errorMessages.microchipNumber.empty,
+      }),
     otherwise: Joi.optional(),
   }),
   ptdProblem: Joi.any().optional(),
@@ -47,7 +52,44 @@ const nonComplianceSchema = Joi.object({
     'string.empty': errorMessages.passengerType.empty,
     'any.required': errorMessages.passengerType.empty,
   }),
-}).unknown(true);
+  spsOutcome: Joi.when("isGBCheck", {
+    is: true,
+    then: Joi.boolean().custom((value, helpers) => {
+        return helpers.message(errorMessages.spsOutcome.incorrectSelection);
+    }),
+    otherwise: Joi.boolean()
+      .required()
+      .messages({
+        "any.required": errorMessages.spsOutcome.required,
+      }),
+  }),
+  gbRefersToDAERAOrSPS: Joi.boolean().optional(),
+  gbAdviseNoTravel: Joi.boolean().optional(),
+  gbPassengerSaysNoTravel: Joi.boolean().optional(),
+  isGBCheck: Joi.boolean().custom((value, helpers) => {
+    const context = helpers.state.ancestors[0] || {}; // Default to empty object if context is undefined
+    const { isGBCheck, gbRefersToDAERAOrSPS, gbAdviseNoTravel, gbPassengerSaysNoTravel } = context;
+    if(isGBCheck)
+    {
+      if(!gbRefersToDAERAOrSPS && !gbAdviseNoTravel && !gbPassengerSaysNoTravel)
+      {
+          return helpers.message(errorMessages.gbOutcome.required);
+      }
+    }
+    else {
+        if(gbRefersToDAERAOrSPS || gbAdviseNoTravel || gbPassengerSaysNoTravel)
+        {
+          return helpers.message(errorMessages.gbOutcome.incorrectSelection);
+        }
+    }
+    return value;
+  })
+})
+.or("mcNotMatch", "mcNotFound", "vcNotMatchPTD", "oiFailPotentialCommercial", "oiFailAuthTravellerNoConfirmation", "oiFailOther")
+.messages({
+  "object.missing": errorMessages.missingReason.empty,
+})
+.unknown(true);
 
 const validateNonCompliance = (payload) => {
   const { error } = nonComplianceSchema.validate(payload, {
@@ -59,10 +101,17 @@ const validateNonCompliance = (payload) => {
 
   if (error) {
     errors = error.details.map((err) => {
-      return {
+      const customError = {
         message: err.message,
         path: err.path,
       };
+
+      // Add fieldId for "object.missing" error specifically
+      if (err.type === "object.missing") {
+        customError.path[0] = "missingReason"; // Include relevant field IDs
+      }
+
+      return customError;
     });
   }
 

@@ -136,6 +136,7 @@ describe("postNonComplianceHandler", () => {
       mcNotMatchActual: "invalid_microchip",
       relevantComments: relevantComments,
       passengerTypeId: 1,
+      isGBCheck: true,
     };
 
 
@@ -147,6 +148,23 @@ describe("postNonComplianceHandler", () => {
 
 
     request.payload = payload;
+    request.payload = payload;
+    request.yar.get.mockImplementation((key) => {
+      const mockData = {
+        data: { "documentState": "awaiting", "some": "data" },
+        IsFailSelected: { value: true },  // Return as an object
+        currentSailingSlot: {
+          departureDate: departureDate,
+          sailingHour: "10",
+          sailingMinutes: "30",
+          selectedRoute: { id: 1 },
+          selectedRouteOption: { id: 1 },
+        },
+        isGBCheck: true,
+      };
+    
+      return mockData[key] || null;
+    });
     const mockAppSettings = { setting1: "value1" };
     appSettingsService.getAppSettings.mockResolvedValue(mockAppSettings);
 
