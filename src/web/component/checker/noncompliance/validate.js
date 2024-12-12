@@ -75,6 +75,8 @@ const nonComplianceSchema = Joi.object({
       }
     } else if (gbRefersToDAERAOrSPS || gbAdviseNoTravel || gbPassengerSaysNoTravel) {
       return helpers.message(errorMessages.gbOutcome.incorrectSelection);
+    }else {
+      return value;
     }
     return value;
   })
