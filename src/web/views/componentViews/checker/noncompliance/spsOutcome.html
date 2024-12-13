@@ -14,11 +14,11 @@
         </span>
       {% endif %}
     </div>
-    <div id="spsOutcome" class="govuk-radios" data-module="govuk-radios">
+    <div class="govuk-radios" data-module="govuk-radios">
       <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="spsOutcome-Allowed" name="spsOutcome" type="radio" value="true" aria-labelledby="allowed"
+        <input class="govuk-radios__input" id="spsOutcome" name="spsOutcome" type="radio" value="true" aria-labelledby="allowed"
         {% if  payload['spsOutcome']=="true" %}checked{% endif %}>
-        <label class="govuk-label govuk-radios__label" id="allowed" for="spsOutcome-Allowed">
+        <label class="govuk-label govuk-radios__label" id="allowed" for="spsOutcome">
           Allowed to travel under Windsor Framework
         </label>
       </div>

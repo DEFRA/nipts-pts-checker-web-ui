@@ -56,7 +56,7 @@
                 </div>
               </div>
               {% endif %}
-              <div id="missingReason" class="govuk-form-group {% if errors['missingReason'] %}govuk-form-group--error{% endif %}">
+              <div class="govuk-form-group {% if errors['missingReason'] %}govuk-form-group--error{% endif %}">
                 <!-- Display error message inline if the non compliance reason is not selected -->
                 {% if errors['missingReason'] %}
                 <p id="missingReasonError" class="govuk-error-message">
@@ -103,25 +103,6 @@
 </div>
 
 <script>
-  function resetField(formGroupId, errorId) {
-    document.getElementById('errorSummary').hidden = true;
-    document.getElementById(formGroupId).classList.remove("govuk-form-group--error");
-    
-    const errorElement = document.getElementById(errorId);
-    if (errorElement) {
-      errorElement.remove();
-    }
-  }
-
-  // Event listeners for radio buttons
-  document.getElementById('footPassenger').addEventListener('click', () => {
-    resetField('passengerFormGroup', 'passengerError');
-  });
-
-  document.getElementById('vehiclePassenger').addEventListener('click', () => {
-    resetField('passengerFormGroup', 'passengerError');
-  });
-
   document.addEventListener('DOMContentLoaded', function() {
   // Intercept back button click to clear validation errors
   document.getElementById('backButton').addEventListener('click', function(_event) {
@@ -130,7 +111,7 @@
     });
 
   // Select the checkboxes and radios
-  const gbCheckboxes = document.querySelectorAll('#gbRefersToDAERAOrSPS, #gbAdviseNoTravel, #gbPassengerSaysNoTravel');
+  const gbCheckboxes = document.querySelectorAll('input[name="gbRefersToDAERAOrSPS"], #gbAdviseNoTravel, #gbPassengerSaysNoTravel');
   const spsRadios = document.querySelectorAll('input[name="spsOutcome"]');
 
   // Function to clear the SPS radio buttons
