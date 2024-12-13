@@ -8,6 +8,8 @@ jest.mock("../../../../../api/services/spsReferralMainService.js");
 
 const referredView = "componentViews/checker/referred/referredView";
 const checkNeeded = "Check Needed";
+const notAllowed = "Not Allowed";
+const allowed = "Allowed";
 
 describe("ReferredHandlers", () => {
   afterEach(() => {
@@ -33,8 +35,8 @@ describe("ReferredHandlers", () => {
     it("should return view with spsChecks and pagination when session data exists", async () => {
       const mockSpsChecks = [
         { SPSOutcome: checkNeeded },
-        { SPSOutcome: "Allowed" },
-        { SPSOutcome: "Not Allowed" },
+        { SPSOutcome: allowed },
+        { SPSOutcome: notAllowed },
       ];
 
       spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
@@ -70,8 +72,8 @@ describe("ReferredHandlers", () => {
         },
         spsChecks: [
           { SPSOutcome: checkNeeded, classColour: "blue" },
-          { SPSOutcome: "Allowed", classColour: "green" },
-          { SPSOutcome: "Not Allowed", classColour: "red" },
+          { SPSOutcome: allowed, classColour: "green" },
+          { SPSOutcome: notAllowed, classColour: "red" },
         ],
         page: 1,
         totalPages: 1,
@@ -80,7 +82,7 @@ describe("ReferredHandlers", () => {
     });
 
     it("should handle pagination correctly", async () => {
-      const mockSpsChecks = new Array(25).fill({ SPSOutcome: "Allowed" });
+      const mockSpsChecks = new Array(25).fill({ SPSOutcome: allowed });
       spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
 
       const mockRequest = {
@@ -121,8 +123,8 @@ describe("ReferredHandlers", () => {
     it("should assign class colors correctly based on SPSOutcome", async () => {
       const mockSpsChecks = [
         { SPSOutcome: checkNeeded},
-        { SPSOutcome: "Allowed" },
-        { SPSOutcome: "Not Allowed" },
+        { SPSOutcome: allowed },
+        { SPSOutcome: notAllowed },
       ];
       spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
 
@@ -154,8 +156,8 @@ describe("ReferredHandlers", () => {
         },
         spsChecks: [
           { SPSOutcome: checkNeeded, classColour: "blue" },
-          { SPSOutcome: "Allowed", classColour: "green" },
-          { SPSOutcome: "Not Allowed", classColour: "red" },
+          { SPSOutcome: allowed, classColour: "green" },
+          { SPSOutcome: notAllowed, classColour: "red" },
         ],
         page: 1,
         totalPages: 1,
