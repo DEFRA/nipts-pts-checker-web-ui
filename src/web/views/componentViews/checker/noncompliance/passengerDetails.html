@@ -12,15 +12,15 @@
         </span>
       {% endif %}
     </div>
-    <div class="govuk-radios" data-module="govuk-radios" id="passengerType">
+    <div class="govuk-radios" data-module="govuk-radios">
       <div class="govuk-radios__item">
         <input class="govuk-radios__input" 
-               id="footPassenger" 
+               id="passengerType" 
                name="passengerType" 
                type="radio" 
                value="1" 
                {% if payload['passengerType'] == '1' %}checked{% endif %}>
-        <label class="govuk-label govuk-radios__label" for="footPassenger">Ferry foot passenger</label>
+        <label class="govuk-label govuk-radios__label" for="passengerType">Ferry foot passenger</label>
       </div>
 
       <div class="govuk-radios__item">

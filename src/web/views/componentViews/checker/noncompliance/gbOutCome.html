@@ -15,11 +15,11 @@
         </span>
       {% endif %}
     </div>
-    <div id="isGBCheck" class="govuk-checkboxes" data-module="govuk-checkboxes">
+    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
       <div class="govuk-checkboxes__item">
-        <input class="govuk-checkboxes__input" id="gbRefersToDAERAOrSPS" name="gbRefersToDAERAOrSPS" type="checkbox" value="true"
+        <input class="govuk-checkboxes__input" id="isGBCheck" name="gbRefersToDAERAOrSPS" type="checkbox" value="true"
         {% if payload['gbRefersToDAERAOrSPS']=="true" %}checked{% endif %}>
-        <label class="govuk-label govuk-checkboxes__label" for="gbRefersToDAERAOrSPS">
+        <label class="govuk-label govuk-checkboxes__label" for="isGBCheck">
           Passenger referred to DAERA/SPS at NI port
         </label>
       </div>
