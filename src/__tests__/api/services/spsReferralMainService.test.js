@@ -5,6 +5,10 @@ import moment from "moment";
 
 jest.mock("../../../api/services/httpService");
 
+const routeToValidate = "/Checker/getSpsCheckDetailsByRoute";
+const unexpectedError = "Unexpected error";
+const getCompleteCheckDetails = "/Checker/getCompleteCheckDetails";
+
 describe("GetSpsReferrals", () => {
   const route = "TestRoute";
   const date = "2024-11-05";
@@ -67,7 +71,7 @@ describe("GetSpsReferrals", () => {
 
     expect(data).toEqual(expectedData);
     expect(httpService.postAsync).toHaveBeenCalledWith(
-      expect.stringContaining("/Checker/getSpsCheckDetailsByRoute"),
+      expect.stringContaining(routeToValidate),
       { route, SailingDate: formattedDate, timeWindowInHours },
       request // Pass the request object as the third parameter
     );
@@ -86,7 +90,7 @@ describe("GetSpsReferrals", () => {
 
     expect(result).toEqual({ error: apiError.error });
     expect(httpService.postAsync).toHaveBeenCalledWith(
-      expect.stringContaining("/Checker/getSpsCheckDetailsByRoute"),
+      expect.stringContaining(routeToValidate),
       { route, SailingDate: formattedDate, timeWindowInHours },
       request
     );
@@ -101,21 +105,21 @@ describe("GetSpsReferrals", () => {
     ).rejects.toThrow("Unexpected response structure");
 
     expect(httpService.postAsync).toHaveBeenCalledWith(
-      expect.stringContaining("/Checker/getSpsCheckDetailsByRoute"),
+      expect.stringContaining(routeToValidate),
       { route, SailingDate: formattedDate, timeWindowInHours },
       request
     );
   });
 
   it("should handle unexpected errors gracefully", async () => {
-    httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
+    httpService.postAsync.mockRejectedValue(new Error(unexpectedError));
 
     await expect(
       spsService.GetSpsReferrals(route, date, timeWindowInHours, request)
-    ).rejects.toThrow("Unexpected error");
+    ).rejects.toThrow(unexpectedError);
 
     expect(httpService.postAsync).toHaveBeenCalledWith(
-      expect.stringContaining("/Checker/getSpsCheckDetailsByRoute"),
+      expect.stringContaining(routeToValidate),
       { route, SailingDate: formattedDate, timeWindowInHours },
       request
     );
@@ -123,10 +127,6 @@ describe("GetSpsReferrals", () => {
 });
 
 describe("GetCompleteCheckDetails", () => {
-  const identifier = "12345";
-  const routeName = "TestRoute";
-  const date = "2024-12-25";
-  const scheduleTime = "10:30:00";
   let request;
 
   beforeEach(() => {
@@ -163,7 +163,7 @@ describe("GetCompleteCheckDetails", () => {
 
             expect(result).toEqual(apiResponse.data);
             expect(httpService.postAsync).toHaveBeenCalledWith(
-                expect.stringContaining("/Checker/getCompleteCheckDetails"),
+                expect.stringContaining(getCompleteCheckDetails),
                 { checkSummaryId },
                 request
             );
@@ -179,7 +179,7 @@ describe("GetCompleteCheckDetails", () => {
             ).rejects.toThrow("Not Found");
 
             expect(httpService.postAsync).toHaveBeenCalledWith(
-                expect.stringContaining("/Checker/getCompleteCheckDetails"),
+                expect.stringContaining(getCompleteCheckDetails),
                 { checkSummaryId },
                 request
             );
@@ -197,7 +197,7 @@ describe("GetCompleteCheckDetails", () => {
 
             expect(result).toBeNull();
             expect(httpService.postAsync).toHaveBeenCalledWith(
-                expect.stringContaining("/Checker/getCompleteCheckDetails"),
+                expect.stringContaining(getCompleteCheckDetails),
                 { checkSummaryId },
                 request
             );
@@ -205,14 +205,14 @@ describe("GetCompleteCheckDetails", () => {
 
         it('should handle unexpected errors gracefully', async () => {
             const checkSummaryId = "12345";
-            httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
+            httpService.postAsync.mockRejectedValue(new Error(unexpectedError));
 
             await expect(
                 spsService.GetCompleteCheckDetails(checkSummaryId, request)
-            ).rejects.toThrow("Unexpected error");
+            ).rejects.toThrow(unexpectedError);
 
             expect(httpService.postAsync).toHaveBeenCalledWith(
-                expect.stringContaining("/Checker/getCompleteCheckDetails"),
+                expect.stringContaining(getCompleteCheckDetails),
                 { checkSummaryId },
                 request
             );

@@ -6,6 +6,12 @@ import apiService from "../../../../../api/services/apiService.js";
 jest.mock("../../../../../api/services/spsReferralMainService.js");
 jest.mock("../../../../../api/services/apiService.js");
 
+const testError = "Test error";
+const internalServerError = "Internal Server Error";
+const errorCode404 = 404;
+const errorCode500 = 500;
+const errorCode400 = 400;
+
 describe("CheckReportHandlers", () => {
   afterEach(() => {
     jest.clearAllMocks();
@@ -31,7 +37,7 @@ describe("CheckReportHandlers", () => {
       expect(h.response).toHaveBeenCalledWith(
         "No data found for the provided CheckSummaryId"
       );
-      expect(h.code).toHaveBeenCalledWith(404);
+      expect(h.code).toHaveBeenCalledWith(errorCode404);
     });
 
     it("should return 500 when there is an error in GetCompleteCheckDetails", async () => {
@@ -42,7 +48,7 @@ describe("CheckReportHandlers", () => {
       };
 
       spsReferralMainService.GetCompleteCheckDetails.mockRejectedValue(
-        new Error("Test error")
+        new Error(testError)
       );
 
       const h = {
@@ -53,10 +59,10 @@ describe("CheckReportHandlers", () => {
       await CheckReportHandlers.getCheckDetails(mockRequest, h);
 
       expect(h.response).toHaveBeenCalledWith({
-        error: "Internal Server Error",
-        details: "Test error",
+        error: internalServerError,
+        details: testError,
       });
-      expect(h.code).toHaveBeenCalledWith(500);
+      expect(h.code).toHaveBeenCalledWith(errorCode500);
     });
   });
 
@@ -78,7 +84,7 @@ describe("CheckReportHandlers", () => {
       expect(h.response).toHaveBeenCalledWith({
         error: "Identifier is required",
       });
-      expect(h.code).toHaveBeenCalledWith(400);
+      expect(h.code).toHaveBeenCalledWith(errorCode400);
     });
 
     it("should handle PTD number and redirect when data is found", async () => {
@@ -160,7 +166,7 @@ describe("CheckReportHandlers", () => {
       expect(h.response).toHaveBeenCalledWith(
         "No data found for the provided PTD number"
       );
-      expect(h.code).toHaveBeenCalledWith(404);
+      expect(h.code).toHaveBeenCalledWith(errorCode404);
     });
 
     it("should return 404 when no data is found for application number", async () => {
@@ -182,7 +188,7 @@ describe("CheckReportHandlers", () => {
       expect(h.response).toHaveBeenCalledWith(
         "No data found for the provided application number"
       );
-      expect(h.code).toHaveBeenCalledWith(404);
+      expect(h.code).toHaveBeenCalledWith(errorCode404);
     });
 
     it("should return 500 on error for PTD number", async () => {
@@ -193,7 +199,7 @@ describe("CheckReportHandlers", () => {
       };
 
       apiService.getApplicationByPTDNumber.mockRejectedValue(
-        new Error("Test error")
+        new Error(testError)
       );
 
       const h = {
@@ -204,10 +210,10 @@ describe("CheckReportHandlers", () => {
       await CheckReportHandlers.conductSpsCheck(mockRequest, h);
 
       expect(h.response).toHaveBeenCalledWith({
-        error: "Internal Server Error",
-        details: "Test error",
+        error: internalServerError,
+        details: testError,
       });
-      expect(h.code).toHaveBeenCalledWith(500);
+      expect(h.code).toHaveBeenCalledWith(errorCode500);
     });
 
     it("should return 500 on error for application number", async () => {
@@ -218,7 +224,7 @@ describe("CheckReportHandlers", () => {
       };
 
       apiService.getApplicationByApplicationNumber.mockRejectedValue(
-        new Error("Test error")
+        new Error(testError)
       );
 
       const h = {
@@ -229,10 +235,10 @@ describe("CheckReportHandlers", () => {
       await CheckReportHandlers.conductSpsCheck(mockRequest, h);
 
       expect(h.response).toHaveBeenCalledWith({
-        error: "Internal Server Error",
-        details: "Test error",
+        error: internalServerError,
+        details: testError,
       });
-      expect(h.code).toHaveBeenCalledWith(500);
+      expect(h.code).toHaveBeenCalledWith(errorCode500);
     });
   });
 });
