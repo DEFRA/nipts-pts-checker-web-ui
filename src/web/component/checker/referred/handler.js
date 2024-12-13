@@ -59,7 +59,11 @@ const getReferredChecks = async (request, h) => {
     }
   });
 
-  spsChecks.PTDNumberFormatted = formatPTDNumber(spsChecks.PTDNumber);
+  spsChecks.forEach((item) => {
+    if (item.PTDNumber.startsWith("GB")) {
+      item.PTDNumberFormatted = formatPTDNumber(item.PTDNumber);
+    }    
+  });
 
   // Implement pagination
   const page = parseInt(request.query.page) || 1; // Get page number from query parameter, default to 1
