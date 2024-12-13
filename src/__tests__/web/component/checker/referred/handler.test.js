@@ -7,6 +7,7 @@ import headerData from "../../../../../web/helper/constants.js";
 jest.mock("../../../../../api/services/spsReferralMainService.js");
 
 const referredView = "componentViews/checker/referred/referredView";
+const checkNeeded = "Check Needed";
 
 describe("ReferredHandlers", () => {
   afterEach(() => {
@@ -31,7 +32,7 @@ describe("ReferredHandlers", () => {
 
     it("should return view with spsChecks and pagination when session data exists", async () => {
       const mockSpsChecks = [
-        { SPSOutcome: "Check Needed" },
+        { SPSOutcome: checkNeeded },
         { SPSOutcome: "Allowed" },
         { SPSOutcome: "Not Allowed" },
       ];
@@ -68,7 +69,7 @@ describe("ReferredHandlers", () => {
           departureTime: "12:00",
         },
         spsChecks: [
-          { SPSOutcome: "Check Needed", classColour: "blue" },
+          { SPSOutcome: checkNeeded, classColour: "blue" },
           { SPSOutcome: "Allowed", classColour: "green" },
           { SPSOutcome: "Not Allowed", classColour: "red" },
         ],
@@ -119,7 +120,7 @@ describe("ReferredHandlers", () => {
 
     it("should assign class colors correctly based on SPSOutcome", async () => {
       const mockSpsChecks = [
-        { SPSOutcome: "Check Needed" },
+        { SPSOutcome: checkNeeded},
         { SPSOutcome: "Allowed" },
         { SPSOutcome: "Not Allowed" },
       ];
@@ -152,7 +153,7 @@ describe("ReferredHandlers", () => {
           departureTime: "12:00",
         },
         spsChecks: [
-          { SPSOutcome: "Check Needed", classColour: "blue" },
+          { SPSOutcome: checkNeeded, classColour: "blue" },
           { SPSOutcome: "Allowed", classColour: "green" },
           { SPSOutcome: "Not Allowed", classColour: "red" },
         ],

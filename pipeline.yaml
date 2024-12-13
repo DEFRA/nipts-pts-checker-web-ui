@@ -98,7 +98,7 @@ extends:
         -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
         -ACCOUNT_MANAGEMENT_URL "https://your-account.defra.gov.uk/management/account-management"
         -NODE_ENV  "production"
-        -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.azure.defra.cloud/signin-oidc"
+        -DEFRA_ID_REDIRECT_URI "https://$(environment)-check-a-pet-from-gb-to-ni.service.gov.uk/signin-oidc"
         -DEFRA_ID_SIGNOUT_URI "https://your-account.defra.gov.uk/idphub/b2c/b2c_1a_cui_signupsignin/signout"
         -DEFRA_KEYVAULT_NAME "$(environment)trd$(nc-function-infrastructure-lower)$(nc-resource-keyvault-lower)1001"
         -MAGIC_PASSWORD_ENABLED "Yes"
