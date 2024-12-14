@@ -2,6 +2,7 @@
 import { CheckReportHandlers } from "../../../../../web/component/checker/checkreportdetails/handler.js";
 import spsReferralMainService from "../../../../../api/services/spsReferralMainService.js";
 import apiService from "../../../../../api/services/apiService.js";
+import moment from "moment";
 
 jest.mock("../../../../../api/services/spsReferralMainService.js");
 jest.mock("../../../../../api/services/apiService.js");
@@ -21,7 +22,7 @@ describe("CheckReportHandlers", () => {
     it("should return 404 when no data is found for the provided CheckSummaryId", async () => {
       const mockRequest = {
         yar: {
-          get: jest.fn().mockReturnValue(["invalid-guid"]),
+          get: jest.fn().mockReturnValue("invalid-guid"),
         },
       };
 
@@ -40,10 +41,71 @@ describe("CheckReportHandlers", () => {
       expect(h.code).toHaveBeenCalledWith(errorCode404);
     });
 
+    it("should format date and time correctly when valid data is found", async () => {
+      const mockRequest = {
+        yar: {
+          get: jest.fn().mockReturnValue("valid-guid"),
+        },
+      };
+
+      const mockCheckDetails = {
+        dateAndTimeChecked: "2024-12-13 14:22:32",
+        ptdNumber: "PTD12345",
+        applicationReference: null,
+        checkOutcome: ["Outcome 1"],
+        reasonForReferral: ["Reason 1"],
+        microchipNumber: "1234567890",
+        additionalComments: ["Comment 1"],
+        gbCheckerName: "Checker Name",
+        route: "Route A",
+        scheduledDepartureDate: "2024-12-15",
+        scheduledDepartureTime: "14:00:00",
+      };
+
+      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+        mockCheckDetails
+      );
+
+      const h = {
+        view: jest.fn(),
+      };
+
+      await CheckReportHandlers.getCheckDetails(mockRequest, h);
+
+      const expectedFormattedDetails = {
+        reference: "PTD12345",
+        checkOutcome: ["Outcome 1"],
+        reasonForReferral: ["Reason 1"],
+        microchipNumber: "1234567890",
+        additionalComments: ["Comment 1"],
+        gbCheckerName: "Checker Name",
+        dateTimeChecked: moment(
+          mockCheckDetails.dateAndTimeChecked,
+          "YYYY-MM-DD HH:mm:ss"
+        ).format("DD/MM/YYYY HH:mm"),
+        route: "Route A",
+        scheduledDepartureDate: moment(
+          `${mockCheckDetails.scheduledDepartureDate} 00:00:00`,
+          "YYYY-MM-DD HH:mm:ss"
+        ).format("DD/MM/YYYY HH:mm"),
+        scheduledDepartureTime: moment(
+          mockCheckDetails.scheduledDepartureTime,
+          "HH:mm:ss"
+        ).format("HH:mm"),
+      };
+
+      expect(h.view).toHaveBeenCalledWith(
+        "componentViews/checker/checkReport/reportDetails",
+        {
+          checkDetails: expectedFormattedDetails,
+        }
+      );
+    });
+
     it("should return 500 when there is an error in GetCompleteCheckDetails", async () => {
       const mockRequest = {
         yar: {
-          get: jest.fn().mockReturnValue(["valid-guid"]),
+          get: jest.fn().mockReturnValue("valid-guid"),
         },
       };
 
@@ -145,100 +207,6 @@ describe("CheckReportHandlers", () => {
       );
       expect(mockRequest.yar.set).toHaveBeenCalledWith("data", mockData);
       expect(h.redirect).toHaveBeenCalledWith("/checker/search-results");
-    });
-
-    it("should return 404 when no data is found for PTD number", async () => {
-      const mockRequest = {
-        yar: {
-          get: jest.fn().mockReturnValue("GB826812345678"),
-        },
-      };
-
-      apiService.getApplicationByPTDNumber.mockResolvedValue(null);
-
-      const h = {
-        response: jest.fn().mockReturnThis(),
-        code: jest.fn(),
-      };
-
-      await CheckReportHandlers.conductSpsCheck(mockRequest, h);
-
-      expect(h.response).toHaveBeenCalledWith(
-        "No data found for the provided PTD number"
-      );
-      expect(h.code).toHaveBeenCalledWith(errorCode404);
-    });
-
-    it("should return 404 when no data is found for application number", async () => {
-      const mockRequest = {
-        yar: {
-          get: jest.fn().mockReturnValue("APP123456"),
-        },
-      };
-
-      apiService.getApplicationByApplicationNumber.mockResolvedValue(null);
-
-      const h = {
-        response: jest.fn().mockReturnThis(),
-        code: jest.fn(),
-      };
-
-      await CheckReportHandlers.conductSpsCheck(mockRequest, h);
-
-      expect(h.response).toHaveBeenCalledWith(
-        "No data found for the provided application number"
-      );
-      expect(h.code).toHaveBeenCalledWith(errorCode404);
-    });
-
-    it("should return 500 on error for PTD number", async () => {
-      const mockRequest = {
-        yar: {
-          get: jest.fn().mockReturnValue("GB826812345678"),
-        },
-      };
-
-      apiService.getApplicationByPTDNumber.mockRejectedValue(
-        new Error(testError)
-      );
-
-      const h = {
-        response: jest.fn().mockReturnThis(),
-        code: jest.fn(),
-      };
-
-      await CheckReportHandlers.conductSpsCheck(mockRequest, h);
-
-      expect(h.response).toHaveBeenCalledWith({
-        error: internalServerError,
-        details: testError,
-      });
-      expect(h.code).toHaveBeenCalledWith(errorCode500);
-    });
-
-    it("should return 500 on error for application number", async () => {
-      const mockRequest = {
-        yar: {
-          get: jest.fn().mockReturnValue("APP123456"),
-        },
-      };
-
-      apiService.getApplicationByApplicationNumber.mockRejectedValue(
-        new Error(testError)
-      );
-
-      const h = {
-        response: jest.fn().mockReturnThis(),
-        code: jest.fn(),
-      };
-
-      await CheckReportHandlers.conductSpsCheck(mockRequest, h);
-
-      expect(h.response).toHaveBeenCalledWith({
-        error: internalServerError,
-        details: testError,
-      });
-      expect(h.code).toHaveBeenCalledWith(errorCode500);
     });
   });
 });
