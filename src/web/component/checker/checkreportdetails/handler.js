@@ -21,9 +21,19 @@ async function getCheckDetails(request, h) {
 
     const formatDateTime = (dateTime) => {
       return dateTime
-        ? moment(dateTime, "YYYY-MM-DD HH:mm:ss").format("DD/MM/YYYY HH:mm")
+        ? moment(dateTime, ["YYYY-MM-DD HH:mm:ss", "YYYY-MM-DD"]).format(
+            "DD/MM/YYYY HH:mm"
+          )
         : "Not available";
     };
+
+    const formatScheduledDate = (date) => {
+      return date ? moment(date).format("DD/MM/YYYY") : "Not available";
+    };
+
+    const shouldDisplayMicrochip = checkDetails.reasonForReferral?.some(
+      (reason) => reason === "Microchip number does not match the PTD"
+    );
 
     const formattedCheckDetails = {
       reference:
@@ -32,14 +42,16 @@ async function getCheckDetails(request, h) {
         "No reference",
       checkOutcome: checkDetails.checkOutcome || [],
       reasonForReferral: checkDetails.reasonForReferral || [],
-      microchipNumber: checkDetails.microchipNumber || null,
+      microchipNumber: shouldDisplayMicrochip
+        ? checkDetails.microchipNumber
+        : null,
       additionalComments: checkDetails.additionalComments || ["None"],
       gbCheckerName: checkDetails.gbCheckerName || "Unknown",
       dateTimeChecked: formatDateTime(checkDetails.dateAndTimeChecked),
       route: checkDetails.route || "Not specified",
-      scheduledDepartureDate: formatDateTime(
-        `${checkDetails.scheduledDepartureDate} 00:00:00`
-      ), 
+      scheduledDepartureDate: formatScheduledDate(
+        checkDetails.scheduledDepartureDate
+      ),
       scheduledDepartureTime: checkDetails.scheduledDepartureTime
         ? moment(checkDetails.scheduledDepartureTime, "HH:mm:ss").format(
             "HH:mm"

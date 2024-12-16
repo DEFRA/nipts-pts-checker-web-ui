@@ -41,7 +41,7 @@ describe("CheckReportHandlers", () => {
       expect(h.code).toHaveBeenCalledWith(errorCode404);
     });
 
-    it("should format date and time correctly when valid data is found", async () => {
+    it("should display microchip number when reason for referral includes microchip mismatch", async () => {
       const mockRequest = {
         yar: {
           get: jest.fn().mockReturnValue("valid-guid"),
@@ -52,8 +52,8 @@ describe("CheckReportHandlers", () => {
         dateAndTimeChecked: "2024-12-13 14:22:32",
         ptdNumber: "PTD12345",
         applicationReference: null,
-        checkOutcome: ["Outcome 1"],
-        reasonForReferral: ["Reason 1"],
+        checkOutcome: ["Passenger referred to DAERA/SPS at NI port"],
+        reasonForReferral: ["Microchip number does not match the PTD"],
         microchipNumber: "1234567890",
         additionalComments: ["Comment 1"],
         gbCheckerName: "Checker Name",
@@ -74,24 +74,113 @@ describe("CheckReportHandlers", () => {
 
       const expectedFormattedDetails = {
         reference: "PTD12345",
-        checkOutcome: ["Outcome 1"],
-        reasonForReferral: ["Reason 1"],
+        checkOutcome: ["Passenger referred to DAERA/SPS at NI port"],
+        reasonForReferral: ["Microchip number does not match the PTD"],
         microchipNumber: "1234567890",
         additionalComments: ["Comment 1"],
         gbCheckerName: "Checker Name",
-        dateTimeChecked: moment(
-          mockCheckDetails.dateAndTimeChecked,
-          "YYYY-MM-DD HH:mm:ss"
-        ).format("DD/MM/YYYY HH:mm"),
+        dateTimeChecked: "13/12/2024 14:22",
         route: "Route A",
-        scheduledDepartureDate: moment(
-          `${mockCheckDetails.scheduledDepartureDate} 00:00:00`,
-          "YYYY-MM-DD HH:mm:ss"
-        ).format("DD/MM/YYYY HH:mm"),
-        scheduledDepartureTime: moment(
-          mockCheckDetails.scheduledDepartureTime,
-          "HH:mm:ss"
-        ).format("HH:mm"),
+        scheduledDepartureDate: "15/12/2024",
+        scheduledDepartureTime: "14:00",
+      };
+
+      expect(h.view).toHaveBeenCalledWith(
+        "componentViews/checker/checkReport/reportDetails",
+        {
+          checkDetails: expectedFormattedDetails,
+        }
+      );
+    });
+
+    it("should not display microchip number when reason for referral does not include microchip mismatch", async () => {
+      const mockRequest = {
+        yar: {
+          get: jest.fn().mockReturnValue("valid-guid"),
+        },
+      };
+
+      const mockCheckDetails = {
+        dateAndTimeChecked: "2024-12-13 14:22:32",
+        ptdNumber: "PTD12345",
+        applicationReference: null,
+        checkOutcome: ["Passenger referred to DAERA/SPS at NI port"],
+        reasonForReferral: ["Potential commercial movement"],
+        microchipNumber: "1234567890",
+        additionalComments: ["Comment 1"],
+        gbCheckerName: "Checker Name",
+        route: "Route A",
+        scheduledDepartureDate: "2024-12-15",
+        scheduledDepartureTime: "14:00:00",
+      };
+
+      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+        mockCheckDetails
+      );
+
+      const h = {
+        view: jest.fn(),
+      };
+
+      await CheckReportHandlers.getCheckDetails(mockRequest, h);
+
+      const expectedFormattedDetails = {
+        reference: "PTD12345",
+        checkOutcome: ["Passenger referred to DAERA/SPS at NI port"],
+        reasonForReferral: ["Potential commercial movement"],
+        microchipNumber: null,
+        additionalComments: ["Comment 1"],
+        gbCheckerName: "Checker Name",
+        dateTimeChecked: "13/12/2024 14:22",
+        route: "Route A",
+        scheduledDepartureDate: "15/12/2024",
+        scheduledDepartureTime: "14:00",
+      };
+
+      expect(h.view).toHaveBeenCalledWith(
+        "componentViews/checker/checkReport/reportDetails",
+        {
+          checkDetails: expectedFormattedDetails,
+        }
+      );
+    });
+
+    it("should handle missing dates and times gracefully", async () => {
+      const mockRequest = {
+        yar: {
+          get: jest.fn().mockReturnValue("valid-guid"),
+        },
+      };
+
+      const mockCheckDetails = {
+        ptdNumber: "PTD12345",
+        checkOutcome: ["Passenger referred to DAERA/SPS at NI port"],
+        reasonForReferral: ["Potential commercial movement"],
+        gbCheckerName: "Checker Name",
+        route: "Route A",
+      };
+
+      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+        mockCheckDetails
+      );
+
+      const h = {
+        view: jest.fn(),
+      };
+
+      await CheckReportHandlers.getCheckDetails(mockRequest, h);
+
+      const expectedFormattedDetails = {
+        reference: "PTD12345",
+        checkOutcome: ["Passenger referred to DAERA/SPS at NI port"],
+        reasonForReferral: ["Potential commercial movement"],
+        microchipNumber: null,
+        additionalComments: ["None"],
+        gbCheckerName: "Checker Name",
+        dateTimeChecked: "Not available",
+        route: "Route A",
+        scheduledDepartureDate: "Not available",
+        scheduledDepartureTime: "Not available",
       };
 
       expect(h.view).toHaveBeenCalledWith(
@@ -207,6 +296,52 @@ describe("CheckReportHandlers", () => {
       );
       expect(mockRequest.yar.set).toHaveBeenCalledWith("data", mockData);
       expect(h.redirect).toHaveBeenCalledWith("/checker/search-results");
+    });
+
+    it("should return 404 when no data found for PTD number", async () => {
+      const mockRequest = {
+        yar: {
+          get: jest.fn().mockReturnValue("GB826812345678"),
+          set: jest.fn(),
+        },
+      };
+
+      apiService.getApplicationByPTDNumber.mockResolvedValue(null);
+
+      const h = {
+        response: jest.fn().mockReturnThis(),
+        code: jest.fn(),
+      };
+
+      await CheckReportHandlers.conductSpsCheck(mockRequest, h);
+
+      expect(h.response).toHaveBeenCalledWith(
+        "No data found for the provided PTD number"
+      );
+      expect(h.code).toHaveBeenCalledWith(errorCode404);
+    });
+
+    it("should return 404 when no data found for application number", async () => {
+      const mockRequest = {
+        yar: {
+          get: jest.fn().mockReturnValue("APP123456"),
+          set: jest.fn(),
+        },
+      };
+
+      apiService.getApplicationByApplicationNumber.mockResolvedValue(null);
+
+      const h = {
+        response: jest.fn().mockReturnThis(),
+        code: jest.fn(),
+      };
+
+      await CheckReportHandlers.conductSpsCheck(mockRequest, h);
+
+      expect(h.response).toHaveBeenCalledWith(
+        "No data found for the provided application number"
+      );
+      expect(h.code).toHaveBeenCalledWith(errorCode404);
     });
   });
 });
