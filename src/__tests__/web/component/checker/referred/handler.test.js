@@ -12,6 +12,7 @@ const notAllowed = "Not Allowed";
 const allowed = "Allowed";
 const ptdNum = "GB826223445";
 const ptdFormatted = "GB826 223 445";
+const numArrayElements = 25;
 
 describe("ReferredHandlers", () => {
   afterEach(() => {
@@ -50,11 +51,11 @@ describe("ReferredHandlers", () => {
             if (key === "departureDate") return "01/01/2023";
             if (key === "departureTime") return "12:00";
             if (key === "currentSailingSlot") return { slot: "morning" };
-            if (key === "spsChecks") return [
+            if (key === "spsChecks") return { spsChecks : [
               { SPSOutcome: checkNeeded, classColour: "blue", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
               { SPSOutcome: allowed, classColour: "green", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted  },
               { SPSOutcome: notAllowed, classColour: "red", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted  },
-            ];
+            ]};
             return null;
           }),
         },
@@ -89,7 +90,7 @@ describe("ReferredHandlers", () => {
     });
 
     it("should handle pagination correctly", async () => {
-      const mockSpsChecks = new Array(25).fill({ SPSOutcome: allowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted });
+      const mockSpsChecks = new Array(numArrayElements).fill({ SPSOutcome: allowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted });
       spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
 
       const mockRequest = {
