@@ -7,6 +7,7 @@ import {
   validatePassOrFail,
 } from "./validate.js";
 
+
 const VIEW_PATH = "componentViews/checker/searchresults/searchResultsView";
 
 const getSearchResultsHandler = async (request, h) => {
@@ -21,7 +22,7 @@ const saveAndContinueHandler = async (request, h) => {
     let { checklist } = request.payload;
 
     const data = request.yar.get("data");
-    if (data.documentState === "rejected" || data.documentState === "revoked") {
+    if (data.documentState === "rejected" || data.documentState === "revoked" || data.documentState === "awaiting") {
       checklist = CheckOutcomeConstants.Fail;
     }
 
@@ -47,10 +48,8 @@ const saveAndContinueHandler = async (request, h) => {
         const currentSailingSlot = request.yar.get("currentSailingSlot") || {};
         const currentDate = currentSailingSlot.departureDate.split("/").reverse().join("-");
         const dateTimeString = `${currentDate}T${currentSailingSlot.sailingHour}:${currentSailingSlot.sailingMinutes}:00Z`;
-
         
-        //TODO need to get GB/SPS check basing on Org ID and set 
-        //isGBCheck
+        const isGBCheck = request.yar.get("isGBCheck");
         const checkerId = request.yar.get("checkerId");
         const checkOutcome = {
           applicationId: data.applicationId,
@@ -60,7 +59,7 @@ const saveAndContinueHandler = async (request, h) => {
           sailingTime: dateTimeString,
           sailingOption: currentSailingSlot.selectedRouteOption.id,
           flightNumber: currentSailingSlot.routeFlight || null,
-          isGBCheck: true,
+          isGBCheck: isGBCheck,
         };
 
         const responseData = await apiService.recordCheckOutCome(
@@ -92,7 +91,15 @@ const saveAndContinueHandler = async (request, h) => {
           });
         }
       
-      request.yar.set("IsFailSelected", false);
+      request.yar.clear("IsFailSelected");
+
+      // Clear individual keys
+      request.yar.clear("routeId");
+      request.yar.clear("routeName");
+      request.yar.clear("departureDate");
+      request.yar.clear("departureTime");
+      request.yar.clear("checkSummaryId");
+
       request.yar.set("successConfirmation", true);
       return h.redirect("/checker/document-search");
     }

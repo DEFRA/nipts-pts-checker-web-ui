@@ -14,26 +14,31 @@ const getDashboard = async (request, h) => {
     DashboardMainModel.dashboardMainModelData.pageTitle;
 
   let successConfirmation = request.yar.get("successConfirmation");
-  if(successConfirmation === null)
-  {
+  if (successConfirmation === null) {
     successConfirmation = false;
   }
 
   request.yar.clear("successConfirmation");
 
-  // get checks
-  const checks =
-    (await dashboardMainService.getCheckOutcomes(
-      process.env.DASHBOARD_START_HOUR || "-48",
-      process.env.DASHBOARD_END_HOUR || "24",
-      request
-    )) || [];
-
-  return h.view(VIEW_PATH, { currentSailingSlot, checks, successConfirmation});
+  let checks = [];
+  const response = await dashboardMainService.getCheckOutcomes(
+    process.env.DASHBOARD_START_HOUR || "-48",
+    process.env.DASHBOARD_END_HOUR || "24",
+    request
+  );
+  
+  if (Array.isArray(response)) {
+    checks = response;
+  } else {
+    console.error("Unexpected checks response: ", response.error.error);
+  }
+  
+  return h.view(VIEW_PATH, { currentSailingSlot, checks, successConfirmation });
 };
 
 const postReferred = async (request, h) => {
-  const { routeName, departureDate, departureTime } = request.payload;
+  const { routeId, routeName, departureDate, departureTime } = request.payload;
+  request.yar.set("routeId", routeId);
   request.yar.set("routeName", routeName);
   request.yar.set("departureDate", departureDate);
   request.yar.set("departureTime", departureTime);

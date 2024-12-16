@@ -48,7 +48,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-        {% if checks | length === 0 %}
+        {% if (checks | default([])) | length == 0 %}
         <p class="govuk-body">No animals have been checked in the past 48 hours.</p>
         {% endif %}
 
@@ -89,6 +89,7 @@
 
                         <dd class="govuk-summary-list__actions">
                             <form method="POST" action="/checker/referred" class="referred-form">
+                                <input type="hidden" name="routeId" value="{{ check.routeId }}">
                                 <input type="hidden" name="routeName" value="{{ check.routeName }}">
                                 <input type="hidden" name="departureDate" value="{{ check.departureDate }}">
                                 <input type="hidden" name="departureTime" value="{{ check.departureTime }}">
@@ -137,5 +138,9 @@
     setTimeout(() => {
         window.location.reload();
     }, MILLISECONDS);
+
+    if(window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+  }
 </script>
 {% endblock %}

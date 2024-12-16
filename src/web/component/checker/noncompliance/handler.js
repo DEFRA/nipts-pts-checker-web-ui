@@ -5,6 +5,8 @@ import { validateNonCompliance } from "./validate.js";
 import { CheckOutcomeConstants } from "../../../../constants/checkOutcomeConstant.js";
 import errorMessages from "./errorMessages.js";
 import apiService from "../../../../api/services/apiService.js";
+import { CurrentSailingRouteOptions } from "../../../../constants/currentSailingConstant.js";
+
 
 const VIEW_PATH = "componentViews/checker/noncompliance/noncomplianceView";
 
@@ -26,7 +28,20 @@ const statusColourMapping = {
 
 const getNonComplianceHandler = async (request, h) => {
   const data = request.yar.get("data");
-  const appSettings = await appSettingsService.getAppSettings();
+
+
+  const PTD_LENGTH = 11; 
+  const PTD_PREFIX_LENGTH = 5;
+  const PTD_MID_LENGTH = 8;
+
+  data.ptdFormatted = data?.ptdNumber 
+    ? `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(0, PTD_PREFIX_LENGTH)} ` +
+      `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(PTD_PREFIX_LENGTH, PTD_MID_LENGTH)} ` +
+      `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(PTD_MID_LENGTH)}`
+    : "";
+
+
+  const appSettings = appSettingsService.getAppSettings();
   const model = { ...appSettings };
 
   const applicationStatus = data.documentState.toLowerCase().trim();
@@ -50,8 +65,9 @@ const getNonComplianceHandler = async (request, h) => {
 const postNonComplianceHandler = async (request, h) => {
   try {
     const payload = request.payload;
+    payload.isGBCheck = request.yar.get("isGBCheck");
     const validationResult = validateNonCompliance(payload);
-    const appSettings = await appSettingsService.getAppSettings();
+    const appSettings = appSettingsService.getAppSettings();
     const model = { ...appSettings };
 
     console.log("Validation Result:", validationResult);
@@ -68,20 +84,6 @@ const postNonComplianceHandler = async (request, h) => {
       validationResult.errors.forEach((err) => {
         const fieldId = err.path.join("_");
         const message = err.message;
-
-        // Only process microchipNumber errors if the checkbox is selected
-        if (
-          fieldId === "mcNotMatchActual" &&
-          payload.mcNotMatch !== "true"
-        ) {
-          // Skip this error
-          return;
-        }
-
-        // Skip errors for fields that are optional
-        if (fieldId === "microchipNumberRadio" || fieldId === "ptdProblem") {
-          return;
-        }
 
         // Handle any unexpected errors
         if (!fieldId) {
@@ -108,8 +110,6 @@ const postNonComplianceHandler = async (request, h) => {
     }
 
     if (request.yar.get("IsFailSelected")) {
-      setNonComplianceSession(payload);
-
         const responseData = await saveReportNonCompliance(payload, data);
         if (responseData?.error) {
           //const errorMessage = errorMessages.serviceError.message;
@@ -132,15 +132,24 @@ const postNonComplianceHandler = async (request, h) => {
         }
     }
 
-    request.yar.set("IsFailSelected", false);
+    request.yar.clear("IsFailSelected");
+    
+    // Clear individual keys
+    request.yar.clear("routeId");
+    request.yar.clear("routeName");
+    request.yar.clear("departureDate");
+    request.yar.clear("departureTime");
+    request.yar.clear("checkSummaryId");
+
     // Redirect to the dashboard
     request.yar.set("successConfirmation", true);
+
     return h.redirect("/checker/dashboard");
   } catch (error) {
     console.error("Unexpected Error:", error);
 
     const data = request.yar.get("data");
-    const appSettings = await appSettingsService.getAppSettings();
+    const appSettings = appSettingsService.getAppSettings();
     const model = { ...appSettings };
     const applicationStatus = data.documentState.toLowerCase().trim();
     const documentStatus = statusMapping[applicationStatus] || applicationStatus;
@@ -166,36 +175,19 @@ const postNonComplianceHandler = async (request, h) => {
   }
 
   async function saveReportNonCompliance(payload, data) {
-
-    try{
-    const currentSailingSlot = request.yar.get("currentSailingSlot") || {};
-    const currentDate = currentSailingSlot.departureDate
-      .split("/")
-      .reverse()
-      .join("-");
-    const dateTimeString = `${currentDate}T${currentSailingSlot.sailingHour}:${currentSailingSlot.sailingMinutes}:00Z`;
-
-    //TODO need to get GB/SPS check basing on Org ID and set
-    //isGBCheck, checkerId
-    const isGBCheck = true;
-    if (isGBCheck) {
-      payload.spsOutcome = null;
-      payload.spsOutcomeDetails = null;
-    } else {
-      payload.gbRefersToDAERAOrSPS = null;
-      payload.gbAdviseNoTravel = null;
-      payload.gbPassengerSaysNoTravel = null;
-    }
+    try{    
+    const isGBCheck = request.yar.get("isGBCheck");
+    const { dateTimeString, routeId, routeOptionId, flightNumber } = getJourneyDetails(isGBCheck);
 
     // Call the helper function to create the checkOutcome object
-    const checkerId = request.yar.get("checkerId");
     const checkOutcome = createCheckOutcome(
       data,
       payload,
-      currentSailingSlot,
       isGBCheck,
       dateTimeString,
-      checkerId
+      routeId,
+      routeOptionId,
+      flightNumber
     );
 
     const responseData = await apiService.reportNonCompliance(
@@ -212,100 +204,107 @@ const postNonComplianceHandler = async (request, h) => {
   }
   }
 
-  function toBooleanOrNull(value) {
-    return value === "true" ? true : null;
+  function toBooleanOrNull(value, defaultValue) {
+    return value === "true" ? true : defaultValue;
   }
 
   // Helper function to safely get a payload property or null
   function getPayloadValue(payload, key) {
-    return payload?.[key] ?? null;
+    const value = payload?.[key];
+    return value === '' ? null : value ?? null;
   }
 
   // Refactor checkOutcome construction
   function createCheckOutcome(
     data,
     payload,
-    currentSailingSlot,
     isGBCheck,
     dateTimeString,
-    checkerId
+    routeId,
+    routeOptionId,
+    flightNumber
   ) {
+    const checkerId = request.yar.get("checkerId");
+    const gbcheckSummaryId = request.yar.get("checkSummaryId");
+
     return {
       applicationId: data.applicationId,
       checkOutcome: CheckOutcomeConstants.Fail,
       checkerId: checkerId ?? null,
-      routeId: currentSailingSlot?.selectedRoute?.id ?? null,
+      routeId: routeId,
       sailingTime: dateTimeString,
-      sailingOption: currentSailingSlot.selectedRouteOption.id,
-      flightNumber: currentSailingSlot.routeFlight || null,
+      sailingOption: routeOptionId,
+      flightNumber: flightNumber,
       isGBCheck: isGBCheck,
-      mcNotMatch: toBooleanOrNull(payload?.mcNotMatch),
+      mcNotMatch: toBooleanOrNull(payload?.mcNotMatch, null),
       mcNotMatchActual: getPayloadValue(payload, "mcNotMatchActual"),
-      mcNotFound: toBooleanOrNull(payload?.mcNotFound),
+      mcNotFound: toBooleanOrNull(payload?.mcNotFound, null),
       vcNotMatchPTD: toBooleanOrNull(payload?.vcNotMatchPTD),
-      oiFailPotentialCommercial: toBooleanOrNull(
-        payload?.oiFailPotentialCommercial
-      ),
-      oiFailAuthTravellerNoConfirmation: toBooleanOrNull(
-        payload?.oiFailAuthTravellerNoConfirmation
-      ),
-      oiFailOther: toBooleanOrNull(payload?.oiFailOther),
+      oiFailPotentialCommercial: toBooleanOrNull(payload?.oiFailPotentialCommercial, null),
+      oiFailAuthTravellerNoConfirmation: toBooleanOrNull(payload?.oiFailAuthTravellerNoConfirmation, null),
+      oiFailOther: toBooleanOrNull(payload?.oiFailOther, null),
       passengerTypeId: getPayloadValue(payload, "passengerType"),
       relevantComments: getPayloadValue(payload, "relevantComments"),
-      gbRefersToDAERAOrSPS: toBooleanOrNull(payload?.gbRefersToDAERAOrSPS),
-      gbAdviseNoTravel: toBooleanOrNull(payload?.gbAdviseNoTravel),
-      gbPassengerSaysNoTravel: toBooleanOrNull(
-        payload?.gbPassengerSaysNoTravel
-      ),
-      spsOutcome: getPayloadValue(payload, "spsOutcome"),
+      gbRefersToDAERAOrSPS: toBooleanOrNull(payload?.gbRefersToDAERAOrSPS, null),
+      gbAdviseNoTravel: toBooleanOrNull(payload?.gbAdviseNoTravel, null),
+      gbPassengerSaysNoTravel: toBooleanOrNull(payload?.gbPassengerSaysNoTravel, null),
+      spsOutcome: toBooleanOrNull(payload?.spsOutcome, isGBCheck? null: false),
       spsOutcomeDetails: getPayloadValue(payload, "spsOutcomeDetails"),
+      gBCheckId: gbcheckSummaryId ?? null,
     };
   }
 
-  function setNonComplianceSession(payload) {
-    const reportNoncomplianceData =
-      request.yar.get("reportNoncomplianceData") || [];
-    // Proceed with further logic if validation passes
-    if (payload.mcNotMatch === "true") {
-      reportNoncomplianceData["mcNotMatch"] = payload.mcNotMatch;
-      reportNoncomplianceData["mcNotMatchActual"] = payload.mcNotMatchActual;
+  function getDefaultCurrentSailing() {
+    return request.yar.get("currentSailingSlot") || {};
+  }
+
+  function getJourneyDetails(isGBCheck) {
+    //Pass Journey Details from Session Stored in Header "currentSailingSlot"
+    const currentSailingSlot = getDefaultCurrentSailing();
+    let currentDate = currentSailingSlot.departureDate
+      .split("/")
+      .reverse()
+      .join("-");
+    
+    let sailingHour = currentSailingSlot.sailingHour;
+    let sailingMinutes = currentSailingSlot.sailingMinutes;
+    let dateTimeString = `${currentDate}T${sailingHour}:${sailingMinutes}:00Z`;
+  
+    let routeId = currentSailingSlot?.selectedRoute?.id ?? null;
+    const routeOptionId = currentSailingSlot.selectedRouteOption.id;
+    const flightNumber = currentSailingSlot?.routeFlight ?? null;    
+    if(routeOptionId === CurrentSailingRouteOptions[1].id)
+    {
+      request.yar.clear("checkSummaryId");
     }
 
-    if (payload.vcNotMatchPTD === "true") {
-      reportNoncomplianceData["vcNotMatchPTD"] = payload.vcNotMatchPTD;
+    //When Approval is of Type NI and RouteOption selected is of Type Ferry
+    //If Journey details are available by cliciking view link and selecting the GB referral on UI(this sets in session)
+    //If available from view link and GB referral on UI session pass session values, 
+    //else use the default currentsailings session[this covers search or scan route]
+    if(!isGBCheck && routeOptionId === CurrentSailingRouteOptions[0].id)
+    {
+       const referredRouteId = request.yar.get("routeId");
+       const referredCheckCurrentDate = request.yar.get("departureDate");
+       const referreDepartureTime = request.yar.get("departureTime");
+       const referredCheckSummaryId = request.yar.get("checkSummaryId");
+
+       if(referredRouteId && referredCheckCurrentDate && referreDepartureTime && referredCheckSummaryId)
+       {  
+          routeId = referredRouteId;       
+          currentDate = referredCheckCurrentDate
+              .split("/")
+              .reverse()
+              .join("-");
+          
+          sailingHour = referreDepartureTime.split(":")[0];
+          sailingMinutes = referreDepartureTime.split(":")[1];
+       }
+
+       dateTimeString = `${currentDate}T${sailingHour}:${sailingMinutes}:00Z`;
     }
 
-    if (payload.oiFailPotentialCommercial === "true") {
-      reportNoncomplianceData["oiFailPotentialCommercial"] =
-        payload.oiFailPotentialCommercial;
-    }
-
-    if (payload.oiFailAuthTravellerNoConfirmation === "true") {
-      reportNoncomplianceData["oiFailAuthTravellerNoConfirmation"] =
-        payload.oiFailAuthTravellerNoConfirmation;
-    }
-
-    if (payload.oiFailOther === "true") {
-      reportNoncomplianceData["oiFailOther"] = payload.oiFailOther;
-    }
-
-    // Proceed with further logic if validation passes
-    if (payload.relevantComments.length > 0) {
-      reportNoncomplianceData["relevantComments"] = payload.relevantComments;
-    }
-
-    reportNoncomplianceData["passengerType"] = payload.passengerType;
-
-    reportNoncomplianceData["gbRefersToDAERAOrSPS"] =
-      payload.gbRefersToDAERAOrSPS;
-    reportNoncomplianceData["gbAdviseNoTravel"] = payload.gbAdviseNoTravel;
-    reportNoncomplianceData["gbPassengerSaysNoTravel"] =
-      payload.gbPassengerSaysNoTravel;
-
-    reportNoncomplianceData["spsOutcome"] = payload.spsOutcome;
-    reportNoncomplianceData["spsOutcomeDetails"] = payload.spsOutcomeDetails;
-
-    request.yar.set("reportNoncomplianceData", reportNoncomplianceData);
+    return { dateTimeString, routeId, routeOptionId, flightNumber };
   }
 };
 
@@ -313,3 +312,6 @@ export const NonComplianceHandlers = {
   getNonComplianceHandler,
   postNonComplianceHandler,
 };
+
+
+

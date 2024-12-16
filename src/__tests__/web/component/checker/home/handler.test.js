@@ -15,7 +15,7 @@ describe("HomeHandlers", () => {
       };
       const mockLoginUrl = "/auth/login";
 
-      appSettingsService.getAppSettings.mockResolvedValue(mockedData);
+      appSettingsService.getAppSettings.mockReturnValue(mockedData);
       requestAuthorizationCodeUrl.mockReturnValue(mockLoginUrl);
 
       const mockView = jest.fn();

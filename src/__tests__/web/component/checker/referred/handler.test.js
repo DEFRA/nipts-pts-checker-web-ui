@@ -7,6 +7,12 @@ import headerData from "../../../../../web/helper/constants.js";
 jest.mock("../../../../../api/services/spsReferralMainService.js");
 
 const referredView = "componentViews/checker/referred/referredView";
+const checkNeeded = "Check Needed";
+const notAllowed = "Not Allowed";
+const allowed = "Allowed";
+const ptdNum = "GB826223445";
+const ptdFormatted = "GB826 223 445";
+const numArrayElements = 25;
 
 describe("ReferredHandlers", () => {
   afterEach(() => {
@@ -31,13 +37,13 @@ describe("ReferredHandlers", () => {
 
     it("should return view with spsChecks and pagination when session data exists", async () => {
       const mockSpsChecks = [
-        { SPSOutcome: "Check Needed" },
-        { SPSOutcome: "Allowed" },
-        { SPSOutcome: "Not Allowed" },
+        { SPSOutcome: checkNeeded, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: allowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
       ];
 
       spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
-
+      
       const mockRequest = {
         yar: {
           get: jest.fn().mockImplementation((key) => {
@@ -45,6 +51,11 @@ describe("ReferredHandlers", () => {
             if (key === "departureDate") return "01/01/2023";
             if (key === "departureTime") return "12:00";
             if (key === "currentSailingSlot") return { slot: "morning" };
+            if (key === "spsChecks") return { spsChecks : [
+              { SPSOutcome: checkNeeded, classColour: "blue", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+              { SPSOutcome: allowed, classColour: "green", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted  },
+              { SPSOutcome: notAllowed, classColour: "red", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted  },
+            ]};
             return null;
           }),
         },
@@ -68,9 +79,9 @@ describe("ReferredHandlers", () => {
           departureTime: "12:00",
         },
         spsChecks: [
-          { SPSOutcome: "Check Needed", classColour: "blue" },
-          { SPSOutcome: "Allowed", classColour: "green" },
-          { SPSOutcome: "Not Allowed", classColour: "red" },
+          { SPSOutcome: checkNeeded, classColour: "blue", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+          { SPSOutcome: allowed, classColour: "green", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+          { SPSOutcome: notAllowed, classColour: "red", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
         ],
         page: 1,
         totalPages: 1,
@@ -79,7 +90,7 @@ describe("ReferredHandlers", () => {
     });
 
     it("should handle pagination correctly", async () => {
-      const mockSpsChecks = new Array(25).fill({ SPSOutcome: "Allowed" });
+      const mockSpsChecks = new Array(numArrayElements).fill({ SPSOutcome: allowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted });
       spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
 
       const mockRequest = {
@@ -119,9 +130,9 @@ describe("ReferredHandlers", () => {
 
     it("should assign class colors correctly based on SPSOutcome", async () => {
       const mockSpsChecks = [
-        { SPSOutcome: "Check Needed" },
-        { SPSOutcome: "Allowed" },
-        { SPSOutcome: "Not Allowed" },
+        { SPSOutcome: checkNeeded, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: allowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
       ];
       spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
 
@@ -152,9 +163,9 @@ describe("ReferredHandlers", () => {
           departureTime: "12:00",
         },
         spsChecks: [
-          { SPSOutcome: "Check Needed", classColour: "blue" },
-          { SPSOutcome: "Allowed", classColour: "green" },
-          { SPSOutcome: "Not Allowed", classColour: "red" },
+          { SPSOutcome: checkNeeded, classColour: "blue", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+          { SPSOutcome: allowed, classColour: "green", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+          { SPSOutcome: notAllowed, classColour: "red", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
         ],
         page: 1,
         totalPages: 1,
@@ -162,4 +173,38 @@ describe("ReferredHandlers", () => {
       });
     });
   });
+
+  describe("postCheckReport", () => {
+    it("should set CheckSummaryId in request.yar and redirect to /checker/checkreportdetails", async () => {
+      // Mock request object
+      const request = {
+        payload: {
+          CheckSummaryId: "12345",
+        },
+        yar: {
+          set: jest.fn(), // Mock the set method
+        },
+      };
+  
+      // Mock h object with a redirect method
+      const h = {
+        redirect: jest.fn().mockReturnValue("redirected"), // Mock redirect method to return a value
+      };
+  
+      const result = await ReferredHandlers.postCheckReport(request, h);
+  
+      // Assert that request.yar.set was called with the correct arguments
+      expect(request.yar.set).toHaveBeenCalledWith(
+        "checkSummaryId",
+        "12345"
+      );
+  
+      // Assert that h.redirect was called with the correct URL
+      expect(h.redirect).toHaveBeenCalledWith("/checker/checkreportdetails");
+  
+      // Assert that the function returns the correct redirect response
+      expect(result).toBe("redirected");
+    });
+  });
+
 });
