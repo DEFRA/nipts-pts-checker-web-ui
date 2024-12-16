@@ -7,6 +7,9 @@ import headerData from "../../../../../web/helper/constants.js";
 jest.mock("../../../../../api/services/spsReferralMainService.js");
 
 const referredView = "componentViews/checker/referred/referredView";
+const checkNeeded = "Check Needed";
+const notAllowed = "Not Allowed";
+const allowed = "Allowed";
 
 describe("ReferredHandlers", () => {
   afterEach(() => {
