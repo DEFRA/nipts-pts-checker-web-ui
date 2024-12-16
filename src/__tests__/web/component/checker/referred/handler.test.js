@@ -31,13 +31,13 @@ describe("ReferredHandlers", () => {
 
     it("should return view with spsChecks and pagination when session data exists", async () => {
       const mockSpsChecks = [
-        { SPSOutcome: "Check Needed" },
-        { SPSOutcome: "Allowed" },
-        { SPSOutcome: "Not Allowed" },
+        { SPSOutcome: "Check Needed", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826223445" },
+        { SPSOutcome: "Allowed", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826223445" },
+        { SPSOutcome: "Not Allowed", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826223445" },
       ];
 
       spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
-
+      
       const mockRequest = {
         yar: {
           get: jest.fn().mockImplementation((key) => {
@@ -45,6 +45,11 @@ describe("ReferredHandlers", () => {
             if (key === "departureDate") return "01/01/2023";
             if (key === "departureTime") return "12:00";
             if (key === "currentSailingSlot") return { slot: "morning" };
+            if (key === "spsChecks") return [
+              { SPSOutcome: "Check Needed", classColour: "blue", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826223445" },
+              { SPSOutcome: "Allowed", classColour: "green", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826223445"  },
+              { SPSOutcome: "Not Allowed", classColour: "red", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826223445"  },
+            ];
             return null;
           }),
         },
@@ -68,9 +73,9 @@ describe("ReferredHandlers", () => {
           departureTime: "12:00",
         },
         spsChecks: [
-          { SPSOutcome: "Check Needed", classColour: "blue" },
-          { SPSOutcome: "Allowed", classColour: "green" },
-          { SPSOutcome: "Not Allowed", classColour: "red" },
+          { SPSOutcome: "Check Needed", classColour: "blue", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" },
+          { SPSOutcome: "Allowed", classColour: "green", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" },
+          { SPSOutcome: "Not Allowed", classColour: "red", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" },
         ],
         page: 1,
         totalPages: 1,
@@ -79,7 +84,7 @@ describe("ReferredHandlers", () => {
     });
 
     it("should handle pagination correctly", async () => {
-      const mockSpsChecks = new Array(25).fill({ SPSOutcome: "Allowed" });
+      const mockSpsChecks = new Array(25).fill({ SPSOutcome: "Allowed", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" });
       spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
 
       const mockRequest = {
@@ -119,9 +124,9 @@ describe("ReferredHandlers", () => {
 
     it("should assign class colors correctly based on SPSOutcome", async () => {
       const mockSpsChecks = [
-        { SPSOutcome: "Check Needed" },
-        { SPSOutcome: "Allowed" },
-        { SPSOutcome: "Not Allowed" },
+        { SPSOutcome: "Check Needed", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" },
+        { SPSOutcome: "Allowed", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" },
+        { SPSOutcome: "Not Allowed", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" },
       ];
       spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
 
@@ -152,9 +157,9 @@ describe("ReferredHandlers", () => {
           departureTime: "12:00",
         },
         spsChecks: [
-          { SPSOutcome: "Check Needed", classColour: "blue" },
-          { SPSOutcome: "Allowed", classColour: "green" },
-          { SPSOutcome: "Not Allowed", classColour: "red" },
+          { SPSOutcome: "Check Needed", classColour: "blue", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" },
+          { SPSOutcome: "Allowed", classColour: "green", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" },
+          { SPSOutcome: "Not Allowed", classColour: "red", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" },
         ],
         page: 1,
         totalPages: 1,
