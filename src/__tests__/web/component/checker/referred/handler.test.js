@@ -10,6 +10,8 @@ const referredView = "componentViews/checker/referred/referredView";
 const checkNeeded = "Check Needed";
 const notAllowed = "Not Allowed";
 const allowed = "Allowed";
+const ptdNum = "GB826223445";
+const ptdFormatted = "GB826 223 445";
 
 describe("ReferredHandlers", () => {
   afterEach(() => {
@@ -34,9 +36,9 @@ describe("ReferredHandlers", () => {
 
     it("should return view with spsChecks and pagination when session data exists", async () => {
       const mockSpsChecks = [
-        { SPSOutcome: "Check Needed", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826223445" },
-        { SPSOutcome: "Allowed", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826223445" },
-        { SPSOutcome: "Not Allowed", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826223445" },
+        { SPSOutcome: checkNeeded, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: allowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
       ];
 
       spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
@@ -49,9 +51,9 @@ describe("ReferredHandlers", () => {
             if (key === "departureTime") return "12:00";
             if (key === "currentSailingSlot") return { slot: "morning" };
             if (key === "spsChecks") return [
-              { SPSOutcome: "Check Needed", classColour: "blue", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826223445" },
-              { SPSOutcome: "Allowed", classColour: "green", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826223445"  },
-              { SPSOutcome: "Not Allowed", classColour: "red", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826223445"  },
+              { SPSOutcome: checkNeeded, classColour: "blue", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+              { SPSOutcome: allowed, classColour: "green", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted  },
+              { SPSOutcome: notAllowed, classColour: "red", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted  },
             ];
             return null;
           }),
@@ -76,9 +78,9 @@ describe("ReferredHandlers", () => {
           departureTime: "12:00",
         },
         spsChecks: [
-          { SPSOutcome: "Check Needed", classColour: "blue", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" },
-          { SPSOutcome: "Allowed", classColour: "green", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" },
-          { SPSOutcome: "Not Allowed", classColour: "red", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" },
+          { SPSOutcome: checkNeeded, classColour: "blue", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+          { SPSOutcome: allowed, classColour: "green", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+          { SPSOutcome: notAllowed, classColour: "red", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
         ],
         page: 1,
         totalPages: 1,
@@ -87,7 +89,7 @@ describe("ReferredHandlers", () => {
     });
 
     it("should handle pagination correctly", async () => {
-      const mockSpsChecks = new Array(25).fill({ SPSOutcome: "Allowed", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" });
+      const mockSpsChecks = new Array(25).fill({ SPSOutcome: allowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted });
       spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
 
       const mockRequest = {
@@ -127,9 +129,9 @@ describe("ReferredHandlers", () => {
 
     it("should assign class colors correctly based on SPSOutcome", async () => {
       const mockSpsChecks = [
-        { SPSOutcome: "Check Needed", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" },
-        { SPSOutcome: "Allowed", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" },
-        { SPSOutcome: "Not Allowed", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" },
+        { SPSOutcome: checkNeeded, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: allowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
       ];
       spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
 
@@ -160,9 +162,9 @@ describe("ReferredHandlers", () => {
           departureTime: "12:00",
         },
         spsChecks: [
-          { SPSOutcome: "Check Needed", classColour: "blue", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" },
-          { SPSOutcome: "Allowed", classColour: "green", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" },
-          { SPSOutcome: "Not Allowed", classColour: "red", PTDNumber: "GB826223445", PTDNumberFormatted: "GB826 223 445" },
+          { SPSOutcome: checkNeeded, classColour: "blue", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+          { SPSOutcome: allowed, classColour: "green", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+          { SPSOutcome: notAllowed, classColour: "red", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
         ],
         page: 1,
         totalPages: 1,
