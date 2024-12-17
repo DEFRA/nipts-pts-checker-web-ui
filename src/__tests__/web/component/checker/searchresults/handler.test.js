@@ -99,15 +99,12 @@ describe("SearchResultsHandlers", () => {
       request = {
         yar: {
           get: jest.fn((key) => {
-            if (key === "microchipNumber") {
-              return mockMicrochipNumber;
-            }
-            if (key === "data") {
-              return mockData;
-            }
-            if (key === "nonComplianceToSearchResults") {
-              return nonComplianceToSearchResults;
-            }
+            const mockValues = {
+              microchipNumber: mockMicrochipNumber,
+              data: mockData,
+              nonComplianceToSearchResults: nonComplianceToSearchResults,
+            };
+            return mockValues[key] || null; // Default return value is `null`
           }),
           clear: jest.fn(), // Ensure `clear` is included here
         },
