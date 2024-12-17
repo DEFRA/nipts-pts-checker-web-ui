@@ -473,3 +473,43 @@ describe("postNonComplianceHandler", () => {
   });
 });
 
+
+describe("postNonComplianceBackHandler", () => {
+  let request, h;
+
+  beforeEach(() => {
+    request = {
+      yar: {
+        get: jest.fn(),
+        set: jest.fn(),
+        clear: jest.fn(),
+      },
+    };
+    h = {
+      view: jest.fn().mockReturnValue('view response'),
+      redirect: jest.fn().mockReturnValue('redirect response'),
+    };
+
+    // Mock the appSettingsService response
+    appSettingsService.getAppSettings.mockReturnValue({
+      someSetting: 'testSetting',
+    });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should set 'nonComplianceToSearchResults' to true and redirect to '/checker/search-results'", async () => {
+    // Call the handler
+    await NonComplianceHandlers.postNonComplianceBackHandler(request, h);
+
+    // Assert yar.set was called correctly
+    expect(request.yar.set).toHaveBeenCalledWith("nonComplianceToSearchResults", true);
+
+    // Assert redirect was called with the correct path
+    expect(h.redirect).toHaveBeenCalledWith("/checker/search-results");
+  });
+
+});
+
