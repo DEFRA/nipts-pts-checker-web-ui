@@ -26,4 +26,16 @@ describe("Routes", () => {
       NonComplianceHandlers.postNonComplianceHandler
     );
   });
+
+  it("should have a POST route for /checker/non-compliance-back", () => {
+    const foundRoute = Routes.find(
+      (route) =>
+        route.path === "/checker/non-compliance-back" && route.method === "POST"
+    );
+
+    expect(foundRoute).toBeDefined();
+    expect(foundRoute.options.handler).toBe(
+      NonComplianceHandlers.postNonComplianceBackHandler
+    );
+  });
 });

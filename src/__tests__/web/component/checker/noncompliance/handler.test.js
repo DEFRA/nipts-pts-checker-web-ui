@@ -6,6 +6,8 @@ import { validateNonCompliance } from '../../../../../web/component/checker/nonc
 
 const VIEW_PATH = "componentViews/checker/noncompliance/noncomplianceView";
 const relevantComments = "Relevant Comments";
+const viewresponse = 'view response';
+
 //jest.mock("../../../../../api/services/appSettingsService.js");
 // Mock the appSettingsService at the top of the test file
 jest.mock("../../../../../api/services/appSettingsService", () => ({
@@ -99,7 +101,7 @@ describe("postNonComplianceHandler", () => {
       },
     };
     h = {
-      view: jest.fn().mockReturnValue('view response'),
+      view: jest.fn().mockReturnValue(viewresponse),
       redirect: jest.fn().mockReturnValue('redirect response'),
     };
 
@@ -255,7 +257,7 @@ describe("postNonComplianceHandler", () => {
         payload: request.payload,
       })
     );
-    expect(result).toBe('view response');
+    expect(result).toBe(viewresponse);
   });
 
   it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true but api call return generic error", async () => {
@@ -471,5 +473,45 @@ describe("postNonComplianceHandler", () => {
 
     expect(h.redirect).toHaveBeenCalledWith("/checker/dashboard");
   });
+});
+
+
+describe("postNonComplianceBackHandler", () => {
+  let request, h;
+
+  beforeEach(() => {
+    request = {
+      yar: {
+        get: jest.fn(),
+        set: jest.fn(),
+        clear: jest.fn(),
+      },
+    };
+    h = {
+      view: jest.fn().mockReturnValue(viewresponse),
+      redirect: jest.fn().mockReturnValue('redirect response'),
+    };
+
+    // Mock the appSettingsService response
+    appSettingsService.getAppSettings.mockReturnValue({
+      someSetting: 'testSetting',
+    });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should set 'nonComplianceToSearchResults' to true and redirect to '/checker/search-results'", async () => {
+    // Call the handler
+    await NonComplianceHandlers.postNonComplianceBackHandler(request, h);
+
+    // Assert yar.set was called correctly
+    expect(request.yar.set).toHaveBeenCalledWith("nonComplianceToSearchResults", true);
+
+    // Assert redirect was called with the correct path
+    expect(h.redirect).toHaveBeenCalledWith("/checker/search-results");
+  });
+
 });
 

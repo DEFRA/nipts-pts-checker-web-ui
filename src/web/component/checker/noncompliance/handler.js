@@ -308,9 +308,15 @@ const postNonComplianceHandler = async (request, h) => {
   }
 };
 
+const postNonComplianceBackHandler = async (request, h) => {
+  request.yar.set("nonComplianceToSearchResults", true);
+  return h.redirect("/checker/search-results");
+};
+
 export const NonComplianceHandlers = {
   getNonComplianceHandler,
   postNonComplianceHandler,
+  postNonComplianceBackHandler,
 };
 
 

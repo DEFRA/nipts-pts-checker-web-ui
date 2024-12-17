@@ -14,7 +14,14 @@ const getSearchResultsHandler = async (request, h) => {
   const microchipNumber = request.yar.get("microchipNumber");
   const data = request.yar.get("data");
   const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
-  return h.view(VIEW_PATH, { microchipNumber, data, pageTitle });
+  let checklist = {};
+  const nonComplianceToSearchResults = request.yar.get("nonComplianceToSearchResults");
+  if(nonComplianceToSearchResults)
+  {
+    checklist = CheckOutcomeConstants.Fail;
+    request.yar.clear("nonComplianceToSearchResults");
+  } 
+  return h.view(VIEW_PATH, { microchipNumber, data, pageTitle, checklist });
 };
 
 const saveAndContinueHandler = async (request, h) => {

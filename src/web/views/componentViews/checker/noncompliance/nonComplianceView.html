@@ -1,9 +1,21 @@
 {% extends "layouts/checkerLayout.html" %}
 
 {% block pageTitle %} Report non-compliance - {{ model.ptsTitle }}:{{ model.ptsSubTitle }} – GOV.UK {% endblock %}
+{% block headContent %}
+<!-- Include custom styles directly in the page -->
+<style>
+    .govuk-button--link {
+      border: none;      
+      text-decoration: underline;
+      cursor: pointer;
+    }
+</style>
+{% endblock %}
 
 {% block beforeContent %}
-<a href="javascript:void(0);" class="govuk-back-link govuk-!-margin-top-9" id="backButton">Back</a>
+<form id="nonComplianceBackForm" action="/checker/non-compliance-back" method="POST">
+  <button type="submit" class="govuk-back-link govuk-button--link">Back</button>
+</form>
 {% endblock %}
 
 {% set microchipNumber = data.microchipNumber %}
@@ -104,11 +116,7 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-  // Intercept back button click to clear validation errors
-  document.getElementById('backButton').addEventListener('click', function(_event) {
-    sessionStorage.removeItem('formSubmitted');
-    history.back();
-    });
+
 
   // Select the checkboxes and radios
   const gbCheckboxes = document.querySelectorAll('input[name="gbRefersToDAERAOrSPS"], #gbAdviseNoTravel, #gbPassengerSaysNoTravel');
