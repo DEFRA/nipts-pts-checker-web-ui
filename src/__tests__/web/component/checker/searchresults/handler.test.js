@@ -154,9 +154,6 @@ describe("SearchResultsHandlers", () => {
 
 
   describe('saveAndContinueHandler', () => {
-    let request;
-    let h;
-
     beforeEach(() => {
       request = {
         payload: {},

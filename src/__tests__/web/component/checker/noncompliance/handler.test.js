@@ -6,6 +6,8 @@ import { validateNonCompliance } from '../../../../../web/component/checker/nonc
 
 const VIEW_PATH = "componentViews/checker/noncompliance/noncomplianceView";
 const relevantComments = "Relevant Comments";
+const viewresponse = 'view response';
+
 //jest.mock("../../../../../api/services/appSettingsService.js");
 // Mock the appSettingsService at the top of the test file
 jest.mock("../../../../../api/services/appSettingsService", () => ({
@@ -99,7 +101,7 @@ describe("postNonComplianceHandler", () => {
       },
     };
     h = {
-      view: jest.fn().mockReturnValue('view response'),
+      view: jest.fn().mockReturnValue(viewresponse),
       redirect: jest.fn().mockReturnValue('redirect response'),
     };
 
@@ -255,7 +257,7 @@ describe("postNonComplianceHandler", () => {
         payload: request.payload,
       })
     );
-    expect(result).toBe('view response');
+    expect(result).toBe(viewresponse);
   });
 
   it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true but api call return generic error", async () => {
@@ -486,7 +488,7 @@ describe("postNonComplianceBackHandler", () => {
       },
     };
     h = {
-      view: jest.fn().mockReturnValue('view response'),
+      view: jest.fn().mockReturnValue(viewresponse),
       redirect: jest.fn().mockReturnValue('redirect response'),
     };
 
