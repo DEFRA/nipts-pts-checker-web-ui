@@ -35,6 +35,15 @@ async function getCheckDetails(request, h) {
       (reason) => reason === "Microchip number does not match the PTD"
     );
 
+    
+    const hasValidComments = (comments) => {
+      if (!comments || !Array.isArray(comments)) return false;
+      return comments.some(
+        (comment) =>
+          comment && typeof comment === "string" && comment.trim() !== ""
+      );
+    };
+
     const formattedCheckDetails = {
       reference:
         checkDetails.ptdNumber ||
@@ -45,7 +54,9 @@ async function getCheckDetails(request, h) {
       microchipNumber: shouldDisplayMicrochip
         ? checkDetails.microchipNumber
         : null,
-      additionalComments: checkDetails.additionalComments || ["None"],
+      additionalComments: hasValidComments(checkDetails.additionalComments)
+        ? checkDetails.additionalComments
+        : ["None"],
       gbCheckerName: checkDetails.gbCheckerName || "Unknown",
       dateTimeChecked: formatDateTime(checkDetails.dateAndTimeChecked),
       route: checkDetails.route || "Not specified",
