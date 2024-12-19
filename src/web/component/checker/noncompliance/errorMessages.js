@@ -1,15 +1,18 @@
 "use strict";
 const errorMessage = "Enter the 15-digit microchip number, using only numbers";
+const spaceErrorMessage =
+  "Enter your pet's 15-digit microchip number - do not use spaces or special characters like hyphens or dashes";
+
 export default {
   missingReason: {
-    empty : "Select at least one reason for non-compliance"
+    empty: "Select at least one reason for non-compliance",
   },
   microchipNumber: {
     empty: "Enter the 15-digit microchip number",
     incorrectFormat: "Enter your pet's microchip number in the correct format",
     length: errorMessage,
     letters: errorMessage,
-    specialCharacters: errorMessage,
+    specialCharacters: spaceErrorMessage,
     wrongMicrochip:
       "The microchip number is associated with another lifelong pet travel document",
   },
@@ -29,6 +32,5 @@ export default {
   gbOutcome: {
     incorrectSelection: "You cannot select a GB outcome",
     required: "Select at least one GB outcome",
-  }
-  // Add other error messages as needed
+  },
 };
