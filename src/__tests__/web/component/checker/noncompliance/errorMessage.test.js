@@ -1,8 +1,7 @@
 import errorMessages from "../../../../../web/component/checker/noncompliance/errorMessages.js";
 
 const errorMessage = "Enter the 15-digit microchip number, using only numbers";
-const spaceErrorMessage =
-  "Enter your pet's 15-digit microchip number - do not use spaces or special characters like hyphens or dashes";
+
 
 describe("errorMessages", () => {
   test("should contain the correct error messages for microchipNumber", () => {
@@ -12,7 +11,7 @@ describe("errorMessages", () => {
         "Enter your pet's microchip number in the correct format",
       length: errorMessage,
       letters: errorMessage,
-      specialCharacters: spaceErrorMessage,
+      specialCharacters: errorMessage,
       wrongMicrochip:
         "The microchip number is associated with another lifelong pet travel document",
     });

@@ -1,7 +1,6 @@
 "use strict";
 const errorMessage = "Enter the 15-digit microchip number, using only numbers";
-const spaceErrorMessage =
-  "Enter your pet's 15-digit microchip number - do not use spaces or special characters like hyphens or dashes";
+
 
 export default {
   missingReason: {
@@ -12,7 +11,7 @@ export default {
     incorrectFormat: "Enter your pet's microchip number in the correct format",
     length: errorMessage,
     letters: errorMessage,
-    specialCharacters: spaceErrorMessage,
+    specialCharacters: errorMessage,
     wrongMicrochip:
       "The microchip number is associated with another lifelong pet travel document",
   },

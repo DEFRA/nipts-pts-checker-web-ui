@@ -11,11 +11,11 @@ const ptdNumberSchema = Joi.string()
     "any.required": errorMessages.ptdNumber.empty,
     "string.empty": errorMessages.ptdNumber.empty,
   })
-  .pattern(/^[a-fA-F0-9]+$/)
   .length(ptdNumberLength)
+  .pattern(/^[a-fA-F0-9]+$/)
   .messages({
-    "string.pattern.base": errorMessages.ptdNumber.invalid,
     "string.length": errorMessages.ptdNumber.length,
+    "string.pattern.base": errorMessages.ptdNumber.invalid,
   });
 
 const applicationNumberSchema = Joi.string()
