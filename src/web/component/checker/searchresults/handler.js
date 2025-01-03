@@ -13,6 +13,17 @@ const VIEW_PATH = "componentViews/checker/searchresults/searchResultsView";
 const getSearchResultsHandler = async (request, h) => {
   const microchipNumber = request.yar.get("microchipNumber");
   const data = request.yar.get("data");
+
+  const PTD_LENGTH = 11; 
+  const PTD_PREFIX_LENGTH = 5;
+  const PTD_MID_LENGTH = 8;
+
+  data.ptdFormatted = data?.ptdNumber 
+  ? `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(0, PTD_PREFIX_LENGTH)} ` +
+    `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(PTD_PREFIX_LENGTH, PTD_MID_LENGTH)} ` +
+    `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(PTD_MID_LENGTH)}`
+  : "";
+
   const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
   let checklist = {};
   const nonComplianceToSearchResults = request.yar.get("nonComplianceToSearchResults");
