@@ -54,7 +54,15 @@ const getReferredChecks = async (request, h) => {
       case "not allowed":
         item.classColour = "red";
         break;
+      default:
+        break;
     }
+  });
+
+  spsChecks.forEach((item) => {
+    if (item.PTDNumber.startsWith("GB")) {
+      item.PTDNumberFormatted = formatPTDNumber(item.PTDNumber);
+    }    
   });
 
   // Implement pagination
@@ -94,14 +102,38 @@ const getReferredChecks = async (request, h) => {
     totalPages,
     pages,
   });
+
+  // Format PTD number
+  function formatPTDNumber(PTDNumber) {
+    const PTD_LENGTH = 11;
+    const PTD_PREFIX_LENGTH = 5;
+    const PTD_MID_LENGTH = 8;
+ 
+    const PTDNumberFormatted = PTDNumber
+      ? `${PTDNumber.padStart(PTD_LENGTH, '0').slice(0, PTD_PREFIX_LENGTH)} ` +
+        `${PTDNumber.padStart(PTD_LENGTH, '0').slice(PTD_PREFIX_LENGTH, PTD_MID_LENGTH)} ` +
+        `${PTDNumber.padStart(PTD_LENGTH, '0').slice(PTD_MID_LENGTH)}`
+      : "";
+
+      return PTDNumberFormatted;
+  }
 };
 
 const postCheckReport = async (request, h) => {
-  const { CheckSummaryId } = request.payload;
-  request.yar.set("checkSummaryId", CheckSummaryId);
+  const { CheckSummaryId, PTDNumber, ApplicationNumber } = request.payload;
+
+   if (PTDNumber) {
+     request.yar.set("identifier", PTDNumber);
+   } else if (ApplicationNumber) {
+     request.yar.set("identifier", ApplicationNumber); 
+   } 
+
+    request.yar.set("checkSummaryId", CheckSummaryId);
 
   return h.redirect("/checker/checkreportdetails");
 };
+
+
 
 export const ReferredHandlers = {
   getReferredChecks,

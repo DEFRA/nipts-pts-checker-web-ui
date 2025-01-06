@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% set ptdNumber = data.ptdNumber %}
+{% set ptdFormatted = data.ptdFormatted %}
 {% set issuedDate = data.issuedDate %}
 {% set microchipNumber = data.microchipNumber %}
 {% set microchipDate = data.microchipDate %}
@@ -76,7 +77,7 @@
                                 PTD number
                             </dt>
                             <dd class="govuk-summary-list__value">
-                                {{ ptdNumber }}
+                                {{ ptdFormatted }}
                             </dd>
                         </div>
                         <div class="govuk-summary-list__row">
@@ -368,7 +369,7 @@
                         no risks identified
                     </li>
                 </ul>
-                {% if data['documentState'] !== 'rejected' and data['documentState'] !== 'revoked' %}
+                {% if data['documentState'] !== 'rejected' and data['documentState'] !== 'revoked' and data['documentState'] !== 'awaiting' %}
                 <div>
                     
                     <div id="radio-check-error" class="govuk-form-group {% if error %}govuk-form-group--error{%
@@ -418,7 +419,11 @@
         <div class="govuk-grid-row govuk-!-static-margin-top-4">
             <div class="govuk-grid-column-one-half">
                 <button type="submit" class="govuk-button" data-module="govuk-button" id="saveAndContinue">
-                    Save and continue
+                    {% if data['documentState'] !== 'approved' %}
+                        Continue
+                    {% else %}
+                        Save and continue
+                    {% endif %}
                 </button>
             </div>
         </div>

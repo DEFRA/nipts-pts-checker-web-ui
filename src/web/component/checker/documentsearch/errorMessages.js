@@ -2,7 +2,8 @@ const errorMessages = {
   ptdNumber: {
     empty: "Enter a PTD number",
     length: "Enter 6 characters after 'GB826'",
-    invalid: "Enter 6 characters after 'GB826', using only the letters A to F and numbers",
+    invalid:
+      "Enter 6 characters after 'GB826', using only letters A to F and numbers",
   },
   applicationNumber: {
     empty: "Enter an application number",

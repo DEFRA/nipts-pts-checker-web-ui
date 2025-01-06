@@ -28,7 +28,20 @@ const statusColourMapping = {
 
 const getNonComplianceHandler = async (request, h) => {
   const data = request.yar.get("data");
-  const appSettings = await appSettingsService.getAppSettings();
+
+
+  const PTD_LENGTH = 11; 
+  const PTD_PREFIX_LENGTH = 5;
+  const PTD_MID_LENGTH = 8;
+
+  data.ptdFormatted = data?.ptdNumber 
+    ? `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(0, PTD_PREFIX_LENGTH)} ` +
+      `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(PTD_PREFIX_LENGTH, PTD_MID_LENGTH)} ` +
+      `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(PTD_MID_LENGTH)}`
+    : "";
+
+
+  const appSettings = appSettingsService.getAppSettings();
   const model = { ...appSettings };
 
   const applicationStatus = data.documentState.toLowerCase().trim();
@@ -52,8 +65,9 @@ const getNonComplianceHandler = async (request, h) => {
 const postNonComplianceHandler = async (request, h) => {
   try {
     const payload = request.payload;
+    payload.isGBCheck = request.yar.get("isGBCheck");
     const validationResult = validateNonCompliance(payload);
-    const appSettings = await appSettingsService.getAppSettings();
+    const appSettings = appSettingsService.getAppSettings();
     const model = { ...appSettings };
 
     console.log("Validation Result:", validationResult);
@@ -70,20 +84,6 @@ const postNonComplianceHandler = async (request, h) => {
       validationResult.errors.forEach((err) => {
         const fieldId = err.path.join("_");
         const message = err.message;
-
-        // Only process microchipNumber errors if the checkbox is selected
-        if (
-          fieldId === "mcNotMatchActual" &&
-          payload.mcNotMatch !== "true"
-        ) {
-          // Skip this error
-          return;
-        }
-
-        // Skip errors for fields that are optional
-        if (fieldId === "microchipNumberRadio" || fieldId === "ptdProblem") {
-          return;
-        }
 
         // Handle any unexpected errors
         if (!fieldId) {
@@ -149,7 +149,7 @@ const postNonComplianceHandler = async (request, h) => {
     console.error("Unexpected Error:", error);
 
     const data = request.yar.get("data");
-    const appSettings = await appSettingsService.getAppSettings();
+    const appSettings = appSettingsService.getAppSettings();
     const model = { ...appSettings };
     const applicationStatus = data.documentState.toLowerCase().trim();
     const documentStatus = statusMapping[applicationStatus] || applicationStatus;
@@ -308,9 +308,15 @@ const postNonComplianceHandler = async (request, h) => {
   }
 };
 
+const postNonComplianceBackHandler = async (request, h) => {
+  request.yar.set("nonComplianceToSearchResults", true);
+  return h.redirect("/checker/search-results");
+};
+
 export const NonComplianceHandlers = {
   getNonComplianceHandler,
   postNonComplianceHandler,
+  postNonComplianceBackHandler,
 };
 
 

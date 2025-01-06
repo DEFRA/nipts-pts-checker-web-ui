@@ -11,11 +11,11 @@ const ptdNumberSchema = Joi.string()
     "any.required": errorMessages.ptdNumber.empty,
     "string.empty": errorMessages.ptdNumber.empty,
   })
-  .pattern(/^[a-fA-F0-9]+$/)
   .length(ptdNumberLength)
+  .pattern(/^[a-fA-F0-9]+$/)
   .messages({
-    "string.pattern.base": errorMessages.ptdNumber.invalid,
     "string.length": errorMessages.ptdNumber.length,
+    "string.pattern.base": errorMessages.ptdNumber.invalid,
   });
 
 const applicationNumberSchema = Joi.string()
@@ -31,14 +31,14 @@ const applicationNumberSchema = Joi.string()
 
 const microchipNumberSchema = Joi.string()
   .length(microchipNumberLength)
-  .pattern(/^\d{15}$/)
+  .pattern(/^\d+$/)
   .required()
   .messages({
     "any.required": errorMessages.microchipNumber.empty,
     "string.empty": errorMessages.microchipNumber.empty,
     "string.length": errorMessages.microchipNumber.length,
     "string.pattern.base": errorMessages.microchipNumber.invalid,
-  });
+  }); 
 
 const validatePtdNumber = (ptdNumber) => {
   const { error } = ptdNumberSchema.validate(ptdNumber);
@@ -48,7 +48,23 @@ const validatePtdNumber = (ptdNumber) => {
   };
 };
 
-
+const validateMicrochipNumber = (microchipNumber) => {
+  const { error } = microchipNumberSchema.validate(microchipNumber, {
+    abortEarly: false,
+  });
+  if (!error) {
+    return { isValid: true, error: null };
+  }
+  // Prioritize pattern error over length error
+  const patternError = error.details.find(
+    (detail) => detail.type === "string.pattern.base"
+  );
+  if (patternError) {
+    return { isValid: false, error: patternError.message };
+  }
+  // Otherwise, return the first error
+  return { isValid: false, error: error.details[0].message };
+};
 
 const validateApplicationNumber = (applicationNumber) => {
   const { error } = applicationNumberSchema.validate(applicationNumber, {
@@ -66,15 +82,6 @@ const validateApplicationNumber = (applicationNumber) => {
   }
   // Otherwise, return the first error
   return { isValid: false, error: error.details[0].message };
-};
-
-
-const validateMicrochipNumber = (microchipNumber) => {
-  const { error } = microchipNumberSchema.validate(microchipNumber);
-  return {
-    isValid: !error,
-    error: error ? error.details[0].message : null,
-  };
 };
 
 export {

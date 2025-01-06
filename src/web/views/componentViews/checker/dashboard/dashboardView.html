@@ -48,7 +48,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-        {% if checks | length === 0 %}
+        {% if (checks | default([])) | length == 0 %}
         <p class="govuk-body">No animals have been checked in the past 48 hours.</p>
         {% endif %}
 

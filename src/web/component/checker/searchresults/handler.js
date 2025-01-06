@@ -13,8 +13,26 @@ const VIEW_PATH = "componentViews/checker/searchresults/searchResultsView";
 const getSearchResultsHandler = async (request, h) => {
   const microchipNumber = request.yar.get("microchipNumber");
   const data = request.yar.get("data");
+
+  const PTD_LENGTH = 11; 
+  const PTD_PREFIX_LENGTH = 5;
+  const PTD_MID_LENGTH = 8;
+
+  data.ptdFormatted = data?.ptdNumber 
+  ? `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(0, PTD_PREFIX_LENGTH)} ` +
+    `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(PTD_PREFIX_LENGTH, PTD_MID_LENGTH)} ` +
+    `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(PTD_MID_LENGTH)}`
+  : "";
+
   const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
-  return h.view(VIEW_PATH, { microchipNumber, data, pageTitle });
+  let checklist = {};
+  const nonComplianceToSearchResults = request.yar.get("nonComplianceToSearchResults");
+  if(nonComplianceToSearchResults)
+  {
+    checklist = CheckOutcomeConstants.Fail;
+    request.yar.clear("nonComplianceToSearchResults");
+  } 
+  return h.view(VIEW_PATH, { microchipNumber, data, pageTitle, checklist });
 };
 
 const saveAndContinueHandler = async (request, h) => {
@@ -22,7 +40,7 @@ const saveAndContinueHandler = async (request, h) => {
     let { checklist } = request.payload;
 
     const data = request.yar.get("data");
-    if (data.documentState === "rejected" || data.documentState === "revoked") {
+    if (data.documentState === "rejected" || data.documentState === "revoked" || data.documentState === "awaiting") {
       checklist = CheckOutcomeConstants.Fail;
     }
 

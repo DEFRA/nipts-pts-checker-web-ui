@@ -5,6 +5,10 @@ import moment from "moment";
 
 jest.mock("../../../api/services/httpService");
 
+const routeToValidate = "/Checker/getSpsCheckDetailsByRoute";
+const unexpectedError = "Unexpected error";
+const getCompleteCheckDetails = "/Checker/getCompleteCheckDetails";
+
 describe("GetSpsReferrals", () => {
   const route = "TestRoute";
   const date = "2024-11-05";
@@ -67,7 +71,7 @@ describe("GetSpsReferrals", () => {
 
     expect(data).toEqual(expectedData);
     expect(httpService.postAsync).toHaveBeenCalledWith(
-      expect.stringContaining("/Checker/getSpsCheckDetailsByRoute"),
+      expect.stringContaining(routeToValidate),
       { route, SailingDate: formattedDate, timeWindowInHours },
       request // Pass the request object as the third parameter
     );
@@ -86,7 +90,7 @@ describe("GetSpsReferrals", () => {
 
     expect(result).toEqual({ error: apiError.error });
     expect(httpService.postAsync).toHaveBeenCalledWith(
-      expect.stringContaining("/Checker/getSpsCheckDetailsByRoute"),
+      expect.stringContaining(routeToValidate),
       { route, SailingDate: formattedDate, timeWindowInHours },
       request
     );
@@ -101,23 +105,118 @@ describe("GetSpsReferrals", () => {
     ).rejects.toThrow("Unexpected response structure");
 
     expect(httpService.postAsync).toHaveBeenCalledWith(
-      expect.stringContaining("/Checker/getSpsCheckDetailsByRoute"),
+      expect.stringContaining(routeToValidate),
       { route, SailingDate: formattedDate, timeWindowInHours },
       request
     );
   });
 
   it("should handle unexpected errors gracefully", async () => {
-    httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
+    httpService.postAsync.mockRejectedValue(new Error(unexpectedError));
 
     await expect(
       spsService.GetSpsReferrals(route, date, timeWindowInHours, request)
-    ).rejects.toThrow("Unexpected error");
+    ).rejects.toThrow(unexpectedError);
 
     expect(httpService.postAsync).toHaveBeenCalledWith(
-      expect.stringContaining("/Checker/getSpsCheckDetailsByRoute"),
+      expect.stringContaining(routeToValidate),
       { route, SailingDate: formattedDate, timeWindowInHours },
       request
     );
   });
 });
+
+describe("GetCompleteCheckDetails", () => {
+  let request;
+
+  beforeEach(() => {
+    request = {
+      headers: {
+        authorization: "Bearer mockToken",
+      },
+    };
+    jest.clearAllMocks();
+  });
+
+          it('should fetch complete check details successfully', async () => {
+            const checkSummaryId = "12345";
+            const apiResponse = {
+                data: {
+                    checkOutcome: ["Outcome 1", "Outcome 2"],
+                    reasonForReferral: ["Referral Reason"],
+                    microchipNumber: "9876543210",
+                    additionalComments: ["Comment 1", "Comment 2"],
+                    gbCheckerName: "John Doe",
+                    dateAndTimeChecked: "2024-12-11 10:30:00",
+                    route: "Test Route",
+                    scheduledDepartureDate: "2024-12-11",
+                    scheduledDepartureTime: "10:30:00",
+                },
+            };
+
+            httpService.postAsync.mockResolvedValue(apiResponse);
+
+            const result = await spsService.GetCompleteCheckDetails(
+                checkSummaryId,
+                request
+            );
+
+            expect(result).toEqual(apiResponse.data);
+            expect(httpService.postAsync).toHaveBeenCalledWith(
+                expect.stringContaining(getCompleteCheckDetails),
+                { checkSummaryId },
+                request
+            );
+        });
+
+        it('should throw an error if API returns an error', async () => {
+            const checkSummaryId = "12345";
+            const apiError = { error: "Not Found" };
+            httpService.postAsync.mockResolvedValue(apiError);
+
+            await expect(
+                spsService.GetCompleteCheckDetails(checkSummaryId, request)
+            ).rejects.toThrow("Not Found");
+
+            expect(httpService.postAsync).toHaveBeenCalledWith(
+                expect.stringContaining(getCompleteCheckDetails),
+                { checkSummaryId },
+                request
+            );
+        });
+
+        it('should return null if API response data is null', async () => {
+            const checkSummaryId = "12345";
+            const apiResponse = { data: null };
+            httpService.postAsync.mockResolvedValue(apiResponse);
+
+            const result = await spsService.GetCompleteCheckDetails(
+                checkSummaryId,
+                request
+            );
+
+            expect(result).toBeNull();
+            expect(httpService.postAsync).toHaveBeenCalledWith(
+                expect.stringContaining(getCompleteCheckDetails),
+                { checkSummaryId },
+                request
+            );
+        });
+
+        it('should handle unexpected errors gracefully', async () => {
+            const checkSummaryId = "12345";
+            httpService.postAsync.mockRejectedValue(new Error(unexpectedError));
+
+            await expect(
+                spsService.GetCompleteCheckDetails(checkSummaryId, request)
+            ).rejects.toThrow(unexpectedError);
+
+            expect(httpService.postAsync).toHaveBeenCalledWith(
+                expect.stringContaining(getCompleteCheckDetails),
+                { checkSummaryId },
+                request
+            );
+        });
+    
+});
+
