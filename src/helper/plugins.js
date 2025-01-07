@@ -19,6 +19,7 @@ import AuthPlugin from "../plugins/auth-plugin.js";
 import HeaderPlugin from "../plugins/header.js";
 import MagicPasswordPlugin from "../plugins/magic-password.js";
 import CurrentSailingSlotPlugin from "../plugins/currentsailingslot.js";
+import Scan from "../web/component/checker/scan/index.js";
 import config from "../config/index.js";
 
 const pluginList = [
@@ -108,6 +109,9 @@ const pluginList = [
   },
   {
     plugin: CurrentSailingSlotPlugin,
+  },
+  {
+    plugin: Scan,
   },
 ];
 

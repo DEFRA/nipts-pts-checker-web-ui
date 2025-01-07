@@ -1,11 +1,11 @@
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import Path from "path";
 import Vision from "@hapi/vision";
 import Nunjucks from "nunjucks";
-import Path from "path";
 import Joi from "joi";
 import headerData from "./web/helper/constants.js";
-import { promises as fs } from 'fs'; // Import fs promises
+import { promises as fs } from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -14,6 +14,9 @@ const setup = (server) => {
   // View configuration
   const viewsPath = Path.resolve(__dirname, "./web/views");
   const includesPath = Path.resolve(viewsPath, "includes");
+
+  console.log("Views path:", viewsPath);
+  console.log("Includes path:", includesPath);
 
   server.views({
     engines: {
@@ -24,7 +27,7 @@ const setup = (server) => {
             try {
               return template.render(context);
             } catch (error) {
-              console.error('Error rendering template:', error);
+              console.error("Error rendering template:", error);
               return serveStaticErrorPage();
             }
           };
@@ -50,6 +53,27 @@ const setup = (server) => {
     context: { headerData },
   });
 
+  
+  const webAssetsPath = Path.join(__dirname, "./web/assets");
+
+  server.route({
+    method: "GET",
+    path: "/web/assets/{param*}",
+    options: {
+      auth: false,
+      handler: {
+        directory: {
+          path: webAssetsPath,
+          redirectToSlash: true,
+          index: true,
+        },
+      },
+    },
+  });
+
+  
+  const webPath = Path.join(__dirname, "./web");
+  
   server.route({
     method: "GET",
     path: "/{param*}",
@@ -57,7 +81,7 @@ const setup = (server) => {
       auth: false,
       handler: {
         directory: {
-          path: Path.join(__dirname, "./web"),
+          path: webPath,
         },
       },
     },
@@ -66,59 +90,43 @@ const setup = (server) => {
   // Configure validator
   server.validator(Joi);
 
-  // Add a route to serve static files from the 'assets' directory
-  server.route({
-    method: "GET",
-    path: "/web/assets/{param*}",
-    options: {
-      auth: false,
-      handler: {
-        directory: {
-          path: "./web/assets",
-          redirectToSlash: true,
-          index: true,
-        },
-      },
-    },
-  });
-
   // Route to get a 500 error
   server.route({
     method: "GET",
     path: "/500error",
     handler: (_request, _h) => {
-      return _h.view('errors/500error').takeover();
+      return _h.view("errors/500error").takeover();
     },
   });
 
   async function serveStaticErrorPage() {
-    const filePath = Path.join(__dirname, '/web/views/errors/', '500Error.html'); // Use path for cross-platform compatibility
+    const filePath = Path.join(
+      __dirname,
+      "/web/views/errors/",
+      "500Error.html"
+    );
     try {
-        // Await the readFile result to ensure it's resolved before returning
-        const content = await fs.readFile(filePath, 'utf-8'); 
-        return content; // Return the content of the error page
+      const content = await fs.readFile(filePath, "utf-8");
+      return content;
     } catch (fileError) {
-        console.error('Error reading static error page:', fileError);
-        // Fallback error message if file read fails
-        return '<h1>Internal Server Error</h1><p>There was an error rendering the page.</p>';
+      console.error("Error reading static error page:", fileError);
+      return "<h1>Internal Server Error</h1><p>There was an error rendering the page.</p>";
     }
-}
-
+  }
 
   // Global error handling via 'onPreResponse' extension
-  server.ext('onPreResponse', (_request, _h) => {
+  server.ext("onPreResponse", (_request, _h) => {
     const response = _request.response;
 
     // Check if the response is an error (500 level)
     if (response.isBoom && response.output.statusCode === 500) {
       // Render the 500Error.html template
-      return _h.redirect('/500error').takeover();
+      return _h.redirect("/500error").takeover();
     }
 
     // If it's not a 500 error, continue as normal
     return _h.continue;
   });
-
 };
 
 export default {
