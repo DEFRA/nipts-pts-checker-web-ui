@@ -119,7 +119,7 @@ const saveAndContinueHandler = async (request, h) => {
       request.yar.clear("checkSummaryId");
 
       request.yar.set("successConfirmation", true);
-      return h.redirect("/checker/document-search");
+      return h.redirect("/checker/dashboard");
     }
 
     request.yar.set("IsFailSelected", true);

@@ -226,7 +226,7 @@ describe("SearchResultsHandlers", () => {
 
       await SearchResultsHandlers.saveAndContinueHandler(request, h);
 
-      expect(h.redirect).toHaveBeenCalledWith('/checker/document-search');
+      expect(h.redirect).toHaveBeenCalledWith('/checker/dashboard');
     });
 
     it('should return to non compliance if checks fail', async () => {
