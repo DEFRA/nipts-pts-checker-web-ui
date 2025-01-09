@@ -66,7 +66,7 @@ const getReferredChecks = async (request, h) => {
   });
 
   // Implement pagination
-  const page = parseInt(request.query.page) || 1; // Get page number from query parameter, default to 1
+  const page = parseInt(request.query.page || request.query.nextPage || request.query.previousPage) || 1; // Get page number from query parameter, default to 1
   const pageSize = 10; // Number of records per page
 
   const totalRecords = spsChecks.length;
