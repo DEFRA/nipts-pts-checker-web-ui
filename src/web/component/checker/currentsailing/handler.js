@@ -94,11 +94,12 @@ const submitCurrentSailingSlot = async (request, h) => {
       if(!validateSailingHourResult.isValid)
       {
         errorSummaryMessage = validateSailingHourResult.error;
+        errorSummary.push({ fieldId: "sailingHour", message: errorSummaryMessage });
       }
       else{
         errorSummaryMessage = validateSailingMinutesResult.error;
+        errorSummary.push({ fieldId: "sailingMinutes", message: errorSummaryMessage });
       }
-      errorSummary.push({ fieldId: "sailingHour", message: errorSummaryMessage });
       isValid = false;
     }
 
