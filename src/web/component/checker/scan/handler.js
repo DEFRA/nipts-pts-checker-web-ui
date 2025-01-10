@@ -1,8 +1,10 @@
 "use strict";
+import headerData from "../../../../web/helper/constants.js";
 
 const VIEW_PATH = "componentViews/checker/scan/scanView";
 
 const getScan = async (request, h) => {
+  headerData.section = "scan"
   return h.view(VIEW_PATH);
 };
 
