@@ -18,6 +18,13 @@ const ScanRoutes = [
       handler: ScanHandlers.postScan,
     },
   },
+  {
+    method: HttpMethod.GET,
+    path: "/checker/scan/not-found",
+    options: {
+      handler: ScanHandlers.getScanNotFound,
+    },
+  },
 ];
 
 export default ScanRoutes;

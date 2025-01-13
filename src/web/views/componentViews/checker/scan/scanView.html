@@ -2,31 +2,7 @@
 
 {% block headContent %}
 <script src="/web/assets/javascripts/html5-qrcode.min.js"></script>
-<style>
-    #qr-reader {
-        width: 100%;
-        max-width: 500px;
-        margin: 0 auto;
-    }
-
-    #qr-reader__dashboard_section_csr {
-        text-align: center;
-    }
-
-    #qr-reader__dashboard_section_csr button {
-        margin: 10px;
-    }
-
-    .camera-access-prompt {
-        text-align: left;
-        margin-top: 20px;
-    }
-
-    .camera-access-denied {
-        color: red;
-        margin-top: 20px;
-    }
-</style>
+<link href="/web/assets/css/scan.css" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block pageTitle %}Scan QR Code - {{currentSailingSlot.pageTitle}} – GOV.UK{% endblock %}
@@ -50,6 +26,11 @@
         </div>
         <div id="camera-access-denied" class="camera-access-denied" style="display: none;">
             <p class="govuk-body">Camera access is blocked. Please allow camera access to scan QR codes.</p>
+        </div>
+        <div class="flash-button">
+            <button id="toggle-flash" class="govuk-button govuk-button--flash" data-module="govuk-button">
+                Turn flash on
+            </button>
         </div>
         <div id="qr-reader" style="display: none;"></div>
         <div id="qr-reader-results"></div>
