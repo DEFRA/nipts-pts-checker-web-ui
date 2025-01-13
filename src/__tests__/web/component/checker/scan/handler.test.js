@@ -7,9 +7,7 @@ describe("Scan Handlers", () => {
     it("should return the scan view", async () => {
       const mockRequest = {};
       const mockH = {
-        view: jest.fn((viewPath) => {
-          return { viewPath };
-        }),
+        view: jest.fn((viewPath) => ({ viewPath })),
       };
 
       const response = await ScanHandlers.getScan(mockRequest, mockH);
@@ -24,20 +22,13 @@ describe("Scan Handlers", () => {
   describe("postScan", () => {
     it("should redirect to search results for valid PTD", async () => {
       const mockRequest = {
-        payload: {
-          qrCodeData: "GB826ABCD12",
-        },
-        yar: {
-          set: jest.fn(),
-        },
+        payload: { qrCodeData: "GB826ABCD12" },
+        yar: { set: jest.fn() },
       };
       const mockH = {
-        redirect: jest.fn((path) => {
-          return { path };
-        }),
+        redirect: jest.fn((path) => ({ path })),
       };
 
-      // Mock the API response
       apiService.getApplicationByPTDNumber.mockResolvedValue({
         ptdNumber: "GB826ABCD12",
         issuedDate: "2023-10-01",
@@ -63,17 +54,11 @@ describe("Scan Handlers", () => {
 
     it("should redirect to search results for valid Application Ref", async () => {
       const mockRequest = {
-        payload: {
-          qrCodeData: "ABCD1234",
-        },
-        yar: {
-          set: jest.fn(),
-        },
+        payload: { qrCodeData: "ABCD1234" },
+        yar: { set: jest.fn() },
       };
       const mockH = {
-        redirect: jest.fn((path) => {
-          return { path };
-        }),
+        redirect: jest.fn((path) => ({ path })),
       };
 
       apiService.getApplicationByApplicationNumber.mockResolvedValue({
@@ -98,16 +83,13 @@ describe("Scan Handlers", () => {
         petName: "Buddy",
       });
     }, 10000);
+
     it("should return not found view for invalid QR code", async () => {
       const mockRequest = {
-        payload: {
-          qrCodeData: "invalid",
-        },
+        payload: { qrCodeData: "invalid" },
       };
       const mockH = {
-        view: jest.fn((viewPath, data) => {
-          return { viewPath, data };
-        }),
+        view: jest.fn((viewPath, data) => ({ viewPath, data })),
       };
 
       const response = await ScanHandlers.postScan(mockRequest, mockH);
