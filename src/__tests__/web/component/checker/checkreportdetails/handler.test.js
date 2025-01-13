@@ -13,6 +13,9 @@ const errorCode404 = 404;
 const errorCode500 = 500;
 const errorCode400 = 400;
 
+const validGuid = "valid-guid";
+const checkOutcome = "Passenger referred to DAERA/SPS at NI port";
+
 describe("CheckReportHandlers", () => {
   afterEach(() => {
     jest.clearAllMocks();
@@ -44,7 +47,7 @@ describe("CheckReportHandlers", () => {
     it("should display microchip number when reason for referral includes microchip mismatch", async () => {
       const mockRequest = {
         yar: {
-          get: jest.fn().mockReturnValue("valid-guid"),
+          get: jest.fn().mockReturnValue(validGuid),
         },
       };
 
@@ -52,7 +55,7 @@ describe("CheckReportHandlers", () => {
         dateAndTimeChecked: "2024-12-13 14:22:32",
         ptdNumber: "PTD12345",
         applicationReference: null,
-        checkOutcome: ["Passenger referred to DAERA/SPS at NI port"],
+        checkOutcome: [checkOutcome],
         reasonForReferral: ["Microchip number does not match the PTD"],
         microchipNumber: "1234567890",
         additionalComments: ["Comment 1"],
@@ -74,7 +77,7 @@ describe("CheckReportHandlers", () => {
 
       const expectedFormattedDetails = {
         reference: "PTD12345",
-        checkOutcome: ["Passenger referred to DAERA/SPS at NI port"],
+        checkOutcome: [checkOutcome],
         reasonForReferral: ["Microchip number does not match the PTD"],
         microchipNumber: "1234567890",
         additionalComments: ["Comment 1"],
@@ -96,7 +99,7 @@ describe("CheckReportHandlers", () => {
     it("should not display microchip number when reason for referral does not include microchip mismatch", async () => {
       const mockRequest = {
         yar: {
-          get: jest.fn().mockReturnValue("valid-guid"),
+          get: jest.fn().mockReturnValue(validGuid),
         },
       };
 
@@ -104,7 +107,7 @@ describe("CheckReportHandlers", () => {
         dateAndTimeChecked: "2024-12-13 14:22:32",
         ptdNumber: "PTD12345",
         applicationReference: null,
-        checkOutcome: ["Passenger referred to DAERA/SPS at NI port"],
+        checkOutcome: [checkOutcome],
         reasonForReferral: ["Potential commercial movement"],
         microchipNumber: "1234567890",
         additionalComments: ["Comment 1"],
@@ -126,7 +129,7 @@ describe("CheckReportHandlers", () => {
 
       const expectedFormattedDetails = {
         reference: "PTD12345",
-        checkOutcome: ["Passenger referred to DAERA/SPS at NI port"],
+        checkOutcome: [checkOutcome],
         reasonForReferral: ["Potential commercial movement"],
         microchipNumber: null,
         additionalComments: ["Comment 1"],
@@ -148,13 +151,13 @@ describe("CheckReportHandlers", () => {
     it("should handle missing dates and times gracefully", async () => {
       const mockRequest = {
         yar: {
-          get: jest.fn().mockReturnValue("valid-guid"),
+          get: jest.fn().mockReturnValue(validGuid),
         },
       };
 
       const mockCheckDetails = {
         ptdNumber: "PTD12345",
-        checkOutcome: ["Passenger referred to DAERA/SPS at NI port"],
+        checkOutcome: [checkOutcome],
         reasonForReferral: ["Potential commercial movement"],
         gbCheckerName: "Checker Name",
         route: "Route A",
@@ -172,7 +175,7 @@ describe("CheckReportHandlers", () => {
 
       const expectedFormattedDetails = {
         reference: "PTD12345",
-        checkOutcome: ["Passenger referred to DAERA/SPS at NI port"],
+        checkOutcome: [checkOutcome],
         reasonForReferral: ["Potential commercial movement"],
         microchipNumber: null,
         additionalComments: ["None"],
@@ -194,7 +197,7 @@ describe("CheckReportHandlers", () => {
     it("should return 500 when there is an error in GetCompleteCheckDetails", async () => {
       const mockRequest = {
         yar: {
-          get: jest.fn().mockReturnValue("valid-guid"),
+          get: jest.fn().mockReturnValue(validGuid),
         },
       };
 
