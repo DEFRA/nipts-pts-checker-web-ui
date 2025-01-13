@@ -10,7 +10,7 @@ const NOT_FOUND_VIEW_PATH =
   "componentViews/checker/documentsearch/documentNotFoundView";
 
 const getScan = async (request, h) => {
-  headerData.section = "scan"
+  headerData.section  = "scan"
   return h.view(VIEW_PATH);
 };
 
