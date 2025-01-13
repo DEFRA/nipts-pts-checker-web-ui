@@ -1,17 +1,23 @@
 "use strict";
 import headerData from "../../../../web/helper/constants.js";
-
 import apiService from "../../../../api/services/apiService.js";
 import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
 
 const VIEW_PATH = "componentViews/checker/scan/scanView";
 const SEARCH_RESULT_VIEW_PATH = "/checker/search-results";
-const NOT_FOUND_VIEW_PATH =
-  "componentViews/checker/documentsearch/documentNotFoundView";
+const NOT_FOUND_VIEW_PATH = "componentViews/checker/scan/scanNotFoundView";
+const errorProcessingText = "An error occurred while processing your request";
 
 const getScan = async (request, h) => {
-  headerData.section  = "scan"
+  headerData.section = "scan";
   return h.view(VIEW_PATH);
+};
+
+const getScanNotFound = async (request, h) => {
+  headerData.section = "scan";
+  return h.view(NOT_FOUND_VIEW_PATH, {
+    pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
+  });
 };
 
 const postScan = async (request, h) => {
@@ -29,22 +35,13 @@ const postScan = async (request, h) => {
       );
 
       if (responseData.error) {
-        if (responseData.error === "not_found") {
-          return h.view(NOT_FOUND_VIEW_PATH, {
-            searchValue: ptdNumber,
-            pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
-          });
-        } else {
-          return h.view(NOT_FOUND_VIEW_PATH, {
-            searchValue: qrCodeData,
-            pageTitle: "Scan QR Code",
-          });
-        }
+        return h.redirect(
+          `/checker/scan/not-found?searchValue=${encodeURIComponent(ptdNumber)}`
+        );
       }
 
       request.yar.set("ptdNumber", ptdNumber);
       request.yar.set("data", responseData);
-
       return h.redirect(SEARCH_RESULT_VIEW_PATH);
     } else if (isApplicationRef) {
       const applicationNumber = qrCodeData;
@@ -54,38 +51,30 @@ const postScan = async (request, h) => {
       );
 
       if (responseData.error) {
-        if (responseData.error === "not_found") {
-          return h.view(NOT_FOUND_VIEW_PATH, {
-            searchValue: applicationNumber,
-            pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
-          });
-        } else {
-          return h.view(NOT_FOUND_VIEW_PATH, {
-            searchValue: qrCodeData,
-            pageTitle: "Scan QR Code",
-          });
-        }
+        return h.redirect(
+          `/checker/scan/not-found?searchValue=${encodeURIComponent(
+            applicationNumber
+          )}`
+        );
       }
 
       request.yar.set("applicationNumber", applicationNumber);
       request.yar.set("data", responseData);
-
       return h.redirect(SEARCH_RESULT_VIEW_PATH);
     } else {
-      return h.view(NOT_FOUND_VIEW_PATH, {
-        searchValue: qrCodeData,
-        pageTitle: "Scan QR Code",
-      });
+      return h.redirect(
+        `/checker/scan/not-found?searchValue=${encodeURIComponent(qrCodeData)}`
+      );
     }
   } catch (error) {
-    return h.view(NOT_FOUND_VIEW_PATH, {
-      searchValue: qrCodeData,
-      pageTitle: "Scan QR Code",
-    });
+    return h.redirect(
+      `/checker/scan/not-found?searchValue=${encodeURIComponent(qrCodeData)}`
+    );
   }
 };
 
 export const ScanHandlers = {
   getScan,
+  getScanNotFound,
   postScan,
 };

@@ -143,10 +143,6 @@ class QRScanner {
   async handleQRCodeSuccess(decodedText) {
     try {
       await this.stopScanner();
-      const qrReaderElement = document.getElementById("qr-reader");
-      if (qrReaderElement) {
-        qrReaderElement.style.border = "3px solid green";
-      }
 
       const response = await fetch("/checker/scan", {
         method: "POST",
@@ -156,11 +152,9 @@ class QRScanner {
         body: JSON.stringify({ qrCodeData: decodedText }),
       });
 
-      if (response.ok) {
-        window.location.href = "/checker/search-results";
-      }
+      window.location.href = response.url;
     } catch (error) {
-      console.error("Error handling QR code success:", error);
+      window.location.href = "/checker/scan";
     }
   }
 

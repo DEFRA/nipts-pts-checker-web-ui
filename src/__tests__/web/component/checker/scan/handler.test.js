@@ -1,13 +1,22 @@
 import { ScanHandlers } from "../../../../../web/component/checker/scan/handler.js";
 import apiService from "../../../../../api/services/apiService.js";
+import headerData from "../../../../../web/helper/constants.js";
+import DashboardMainModel from "../../../../../constants/dashBoardConstant.js";
 
 jest.mock("../../../../../api/services/apiService.js");
+jest.mock("../../../../../web/helper/constants.js");
+jest.mock("../../../../../constants/dashBoardConstant.js", () => ({
+  __esModule: true,
+  default: {
+    dashboardMainModelData: {
+      pageTitle: "Pet Travel Scheme Test",
+    },
+  },
+}));
 
 const SEARCH_RESULTS_PATH = "/checker/search-results";
-const NOT_FOUND_VIEW_PATH =
-  "componentViews/checker/documentsearch/documentNotFoundView";
 const SCAN_VIEW_PATH = "componentViews/checker/scan/scanView";
-const PAGE_TITLE = "Scan QR Code";
+const NOT_FOUND_VIEW_PATH = "componentViews/checker/scan/scanNotFoundView";
 
 const mockData = {
   issuedDate: "2023-10-01",
@@ -16,8 +25,12 @@ const mockData = {
 };
 
 describe("Scan Handlers", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe("getScan", () => {
-    it("should return the scan view", async () => {
+    it("should return the scan view and set section", async () => {
       const mockRequest = {};
       const mockH = {
         view: jest.fn((viewPath) => ({ viewPath })),
@@ -27,6 +40,24 @@ describe("Scan Handlers", () => {
 
       expect(response.viewPath).toBe(SCAN_VIEW_PATH);
       expect(mockH.view).toHaveBeenCalledWith(SCAN_VIEW_PATH);
+      expect(headerData.section).toBe("scan");
+    });
+  });
+
+  describe("getScanNotFound", () => {
+    it("should return the not found view with correct data", async () => {
+      const mockRequest = {};
+      const mockH = {
+        view: jest.fn((viewPath, data) => ({ viewPath, data })),
+      };
+
+      const response = await ScanHandlers.getScanNotFound(mockRequest, mockH);
+
+      expect(response.viewPath).toBe(NOT_FOUND_VIEW_PATH);
+      expect(response.data).toEqual({
+        pageTitle: "Pet Travel Scheme Test",
+      });
+      expect(headerData.section).toBe("scan");
     });
   });
 
@@ -50,10 +81,33 @@ describe("Scan Handlers", () => {
       expect(mockH.redirect).toHaveBeenCalledWith(SEARCH_RESULTS_PATH);
       expect(mockRequest.yar.set).toHaveBeenCalledWith("ptdNumber", ptdNumber);
       expect(mockRequest.yar.set).toHaveBeenCalledWith("data", ptdData);
-    }, 10000);
+    });
+
+    it("should handle PTD not found error", async () => {
+      const ptdNumber = "GB826ABCD12";
+      const mockRequest = {
+        payload: { qrCodeData: ptdNumber },
+        yar: { set: jest.fn() },
+      };
+      const mockH = {
+        redirect: jest.fn((path) => ({ path })),
+      };
+
+      const errorResponse = { error: "not_found" };
+      apiService.getApplicationByPTDNumber.mockResolvedValue(errorResponse);
+
+      const response = await ScanHandlers.postScan(mockRequest, mockH);
+
+      expect(response.path).toBe(
+        `/checker/scan/not-found?searchValue=${ptdNumber}`
+      );
+      expect(mockH.redirect).toHaveBeenCalledWith(
+        `/checker/scan/not-found?searchValue=${ptdNumber}`
+      );
+    });
 
     it("should redirect to search results for valid Application Ref", async () => {
-      const applicationNumber = "ABCD1234";
+      const applicationNumber = "ABCD12345";
       const mockRequest = {
         payload: { qrCodeData: applicationNumber },
         yar: { set: jest.fn() },
@@ -74,23 +128,73 @@ describe("Scan Handlers", () => {
         applicationNumber
       );
       expect(mockRequest.yar.set).toHaveBeenCalledWith("data", appData);
-    }, 10000);
+    });
 
-    it("should return not found view for invalid QR code", async () => {
+    it("should handle Application Ref not found error", async () => {
+      const applicationNumber = "ABCD12345";
       const mockRequest = {
-        payload: { qrCodeData: "invalid" },
+        payload: { qrCodeData: applicationNumber },
+        yar: { set: jest.fn() },
       };
       const mockH = {
-        view: jest.fn((viewPath, data) => ({ viewPath, data })),
+        redirect: jest.fn((path) => ({ path })),
+      };
+
+      const errorResponse = { error: "not_found" };
+      apiService.getApplicationByApplicationNumber.mockResolvedValue(
+        errorResponse
+      );
+
+      const response = await ScanHandlers.postScan(mockRequest, mockH);
+
+      expect(response.path).toBe(
+        `/checker/scan/not-found?searchValue=${applicationNumber}`
+      );
+      expect(mockH.redirect).toHaveBeenCalledWith(
+        `/checker/scan/not-found?searchValue=${applicationNumber}`
+      );
+    });
+
+    it("should handle invalid QR code format", async () => {
+      const invalidQR = "invalid";
+      const mockRequest = {
+        payload: { qrCodeData: invalidQR },
+      };
+      const mockH = {
+        redirect: jest.fn((path) => ({ path })),
       };
 
       const response = await ScanHandlers.postScan(mockRequest, mockH);
 
-      expect(response.viewPath).toBe(NOT_FOUND_VIEW_PATH);
-      expect(response.data).toEqual({
-        searchValue: "invalid",
-        pageTitle: PAGE_TITLE,
-      });
+      expect(response.path).toBe(
+        `/checker/scan/not-found?searchValue=${invalidQR}`
+      );
+      expect(mockH.redirect).toHaveBeenCalledWith(
+        `/checker/scan/not-found?searchValue=${invalidQR}`
+      );
+    });
+
+    it("should handle API errors", async () => {
+      const ptdNumber = "GB826ABCD12";
+      const mockRequest = {
+        payload: { qrCodeData: ptdNumber },
+      };
+      const mockH = {
+        redirect: jest.fn((path) => ({ path })),
+      };
+
+      apiService.getApplicationByPTDNumber.mockRejectedValue(
+        new Error("API Error")
+      );
+
+      const response = await ScanHandlers.postScan(mockRequest, mockH);
+
+      expect(response.path).toBe(
+        `/checker/scan/not-found?searchValue=${ptdNumber}`
+      );
+      expect(mockH.redirect).toHaveBeenCalledWith(
+        `/checker/scan/not-found?searchValue=${ptdNumber}`
+      );
     });
   });
 });
