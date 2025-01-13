@@ -1,6 +1,19 @@
 import { ScanHandlers } from "../../../../../web/component/checker/scan/handler.js";
 import apiService from "../../../../../api/services/apiService.js";
+
 jest.mock("../../../../../api/services/apiService.js");
+
+const SEARCH_RESULTS_PATH = "/checker/search-results";
+const NOT_FOUND_VIEW_PATH =
+  "componentViews/checker/documentsearch/documentNotFoundView";
+const SCAN_VIEW_PATH = "componentViews/checker/scan/scanView";
+const PAGE_TITLE = "Scan QR Code";
+
+const mockData = {
+  issuedDate: "2023-10-01",
+  microchipNumber: "123456789",
+  petName: "Buddy",
+};
 
 describe("Scan Handlers", () => {
   describe("getScan", () => {
@@ -12,76 +25,55 @@ describe("Scan Handlers", () => {
 
       const response = await ScanHandlers.getScan(mockRequest, mockH);
 
-      expect(response.viewPath).toBe("componentViews/checker/scan/scanView");
-      expect(mockH.view).toHaveBeenCalledWith(
-        "componentViews/checker/scan/scanView"
-      );
+      expect(response.viewPath).toBe(SCAN_VIEW_PATH);
+      expect(mockH.view).toHaveBeenCalledWith(SCAN_VIEW_PATH);
     });
   });
 
   describe("postScan", () => {
     it("should redirect to search results for valid PTD", async () => {
+      const ptdNumber = "GB826ABCD12";
       const mockRequest = {
-        payload: { qrCodeData: "GB826ABCD12" },
+        payload: { qrCodeData: ptdNumber },
         yar: { set: jest.fn() },
       };
       const mockH = {
         redirect: jest.fn((path) => ({ path })),
       };
 
-      apiService.getApplicationByPTDNumber.mockResolvedValue({
-        ptdNumber: "GB826ABCD12",
-        issuedDate: "2023-10-01",
-        microchipNumber: "123456789",
-        petName: "Buddy",
-      });
+      const ptdData = { ptdNumber, ...mockData };
+      apiService.getApplicationByPTDNumber.mockResolvedValue(ptdData);
 
       const response = await ScanHandlers.postScan(mockRequest, mockH);
 
-      expect(response.path).toBe("/checker/search-results");
-      expect(mockH.redirect).toHaveBeenCalledWith("/checker/search-results");
-      expect(mockRequest.yar.set).toHaveBeenCalledWith(
-        "ptdNumber",
-        "GB826ABCD12"
-      );
-      expect(mockRequest.yar.set).toHaveBeenCalledWith("data", {
-        ptdNumber: "GB826ABCD12",
-        issuedDate: "2023-10-01",
-        microchipNumber: "123456789",
-        petName: "Buddy",
-      });
+      expect(response.path).toBe(SEARCH_RESULTS_PATH);
+      expect(mockH.redirect).toHaveBeenCalledWith(SEARCH_RESULTS_PATH);
+      expect(mockRequest.yar.set).toHaveBeenCalledWith("ptdNumber", ptdNumber);
+      expect(mockRequest.yar.set).toHaveBeenCalledWith("data", ptdData);
     }, 10000);
 
     it("should redirect to search results for valid Application Ref", async () => {
+      const applicationNumber = "ABCD1234";
       const mockRequest = {
-        payload: { qrCodeData: "ABCD1234" },
+        payload: { qrCodeData: applicationNumber },
         yar: { set: jest.fn() },
       };
       const mockH = {
         redirect: jest.fn((path) => ({ path })),
       };
 
-      apiService.getApplicationByApplicationNumber.mockResolvedValue({
-        applicationNumber: "ABCD1234",
-        issuedDate: "2023-10-01",
-        microchipNumber: "123456789",
-        petName: "Buddy",
-      });
+      const appData = { applicationNumber, ...mockData };
+      apiService.getApplicationByApplicationNumber.mockResolvedValue(appData);
 
       const response = await ScanHandlers.postScan(mockRequest, mockH);
 
-      expect(response.path).toBe("/checker/search-results");
-      expect(mockH.redirect).toHaveBeenCalledWith("/checker/search-results");
+      expect(response.path).toBe(SEARCH_RESULTS_PATH);
+      expect(mockH.redirect).toHaveBeenCalledWith(SEARCH_RESULTS_PATH);
       expect(mockRequest.yar.set).toHaveBeenCalledWith(
         "applicationNumber",
-        "ABCD1234"
+        applicationNumber
       );
-      expect(mockRequest.yar.set).toHaveBeenCalledWith("data", {
-        applicationNumber: "ABCD1234",
-        issuedDate: "2023-10-01",
-        microchipNumber: "123456789",
-        petName: "Buddy",
-      });
+      expect(mockRequest.yar.set).toHaveBeenCalledWith("data", appData);
     }, 10000);
 
     it("should return not found view for invalid QR code", async () => {
@@ -94,12 +86,10 @@ describe("Scan Handlers", () => {
 
       const response = await ScanHandlers.postScan(mockRequest, mockH);
 
-      expect(response.viewPath).toBe(
-        "componentViews/checker/documentsearch/documentNotFoundView"
-      );
+      expect(response.viewPath).toBe(NOT_FOUND_VIEW_PATH);
       expect(response.data).toEqual({
         searchValue: "invalid",
-        pageTitle: "Scan QR Code",
+        pageTitle: PAGE_TITLE,
       });
     });
   });
