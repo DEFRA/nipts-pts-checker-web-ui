@@ -24,6 +24,16 @@ const mockData = {
   petName: "Buddy",
 };
 
+const setupMockRequest = (payload = {}) => ({
+  payload,
+  yar: { set: jest.fn() },
+});
+
+const setupMockH = () => ({
+  view: jest.fn((viewPath, data) => ({ viewPath, data })),
+  redirect: jest.fn((path) => ({ path })),
+});
+
 describe("Scan Handlers", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -31,10 +41,8 @@ describe("Scan Handlers", () => {
 
   describe("getScan", () => {
     it("should return the scan view and set section", async () => {
-      const mockRequest = {};
-      const mockH = {
-        view: jest.fn((viewPath) => ({ viewPath })),
-      };
+      const mockRequest = setupMockRequest();
+      const mockH = setupMockH();
 
       const response = await ScanHandlers.getScan(mockRequest, mockH);
 
@@ -46,10 +54,8 @@ describe("Scan Handlers", () => {
 
   describe("getScanNotFound", () => {
     it("should return the not found view with correct data", async () => {
-      const mockRequest = {};
-      const mockH = {
-        view: jest.fn((viewPath, data) => ({ viewPath, data })),
-      };
+      const mockRequest = setupMockRequest();
+      const mockH = setupMockH();
 
       const response = await ScanHandlers.getScanNotFound(mockRequest, mockH);
 
@@ -61,16 +67,11 @@ describe("Scan Handlers", () => {
     });
   });
 
-  describe("postScan", () => {
-    it("should redirect to search results for valid PTD", async () => {
+  describe("postScan - PTD Tests", () => {
+    const testValidPTD = async () => {
       const ptdNumber = "GB826ABCD12";
-      const mockRequest = {
-        payload: { qrCodeData: ptdNumber },
-        yar: { set: jest.fn() },
-      };
-      const mockH = {
-        redirect: jest.fn((path) => ({ path })),
-      };
+      const mockRequest = setupMockRequest({ qrCodeData: ptdNumber });
+      const mockH = setupMockH();
 
       const ptdData = { ptdNumber, ...mockData };
       apiService.getApplicationByPTDNumber.mockResolvedValue(ptdData);
@@ -81,17 +82,12 @@ describe("Scan Handlers", () => {
       expect(mockH.redirect).toHaveBeenCalledWith(SEARCH_RESULTS_PATH);
       expect(mockRequest.yar.set).toHaveBeenCalledWith("ptdNumber", ptdNumber);
       expect(mockRequest.yar.set).toHaveBeenCalledWith("data", ptdData);
-    });
+    };
 
-    it("should handle PTD not found error", async () => {
+    const testPTDNotFound = async () => {
       const ptdNumber = "GB826ABCD12";
-      const mockRequest = {
-        payload: { qrCodeData: ptdNumber },
-        yar: { set: jest.fn() },
-      };
-      const mockH = {
-        redirect: jest.fn((path) => ({ path })),
-      };
+      const mockRequest = setupMockRequest({ qrCodeData: ptdNumber });
+      const mockH = setupMockH();
 
       const errorResponse = { error: "not_found" };
       apiService.getApplicationByPTDNumber.mockResolvedValue(errorResponse);
@@ -104,17 +100,17 @@ describe("Scan Handlers", () => {
       expect(mockH.redirect).toHaveBeenCalledWith(
         `/checker/scan/not-found?searchValue=${ptdNumber}`
       );
-    });
+    };
 
-    it("should redirect to search results for valid Application Ref", async () => {
+    it("should redirect to search results for valid PTD", testValidPTD);
+    it("should handle PTD not found error", testPTDNotFound);
+  });
+
+  describe("postScan - Application Ref Tests", () => {
+    const testValidApplicationRef = async () => {
       const applicationNumber = "ABCD12345";
-      const mockRequest = {
-        payload: { qrCodeData: applicationNumber },
-        yar: { set: jest.fn() },
-      };
-      const mockH = {
-        redirect: jest.fn((path) => ({ path })),
-      };
+      const mockRequest = setupMockRequest({ qrCodeData: applicationNumber });
+      const mockH = setupMockH();
 
       const appData = { applicationNumber, ...mockData };
       apiService.getApplicationByApplicationNumber.mockResolvedValue(appData);
@@ -128,17 +124,12 @@ describe("Scan Handlers", () => {
         applicationNumber
       );
       expect(mockRequest.yar.set).toHaveBeenCalledWith("data", appData);
-    });
+    };
 
-    it("should handle Application Ref not found error", async () => {
+    const testApplicationRefNotFound = async () => {
       const applicationNumber = "ABCD12345";
-      const mockRequest = {
-        payload: { qrCodeData: applicationNumber },
-        yar: { set: jest.fn() },
-      };
-      const mockH = {
-        redirect: jest.fn((path) => ({ path })),
-      };
+      const mockRequest = setupMockRequest({ qrCodeData: applicationNumber });
+      const mockH = setupMockH();
 
       const errorResponse = { error: "not_found" };
       apiService.getApplicationByApplicationNumber.mockResolvedValue(
@@ -153,16 +144,23 @@ describe("Scan Handlers", () => {
       expect(mockH.redirect).toHaveBeenCalledWith(
         `/checker/scan/not-found?searchValue=${applicationNumber}`
       );
-    });
+    };
 
-    it("should handle invalid QR code format", async () => {
+    it(
+      "should redirect to search results for valid Application Ref",
+      testValidApplicationRef
+    );
+    it(
+      "should handle Application Ref not found error",
+      testApplicationRefNotFound
+    );
+  });
+
+  describe("postScan - Error Cases", () => {
+    const testInvalidQRCode = async () => {
       const invalidQR = "invalid";
-      const mockRequest = {
-        payload: { qrCodeData: invalidQR },
-      };
-      const mockH = {
-        redirect: jest.fn((path) => ({ path })),
-      };
+      const mockRequest = setupMockRequest({ qrCodeData: invalidQR });
+      const mockH = setupMockH();
 
       const response = await ScanHandlers.postScan(mockRequest, mockH);
 
@@ -172,16 +170,12 @@ describe("Scan Handlers", () => {
       expect(mockH.redirect).toHaveBeenCalledWith(
         `/checker/scan/not-found?searchValue=${invalidQR}`
       );
-    });
+    };
 
-    it("should handle API errors", async () => {
+    const testAPIError = async () => {
       const ptdNumber = "GB826ABCD12";
-      const mockRequest = {
-        payload: { qrCodeData: ptdNumber },
-      };
-      const mockH = {
-        redirect: jest.fn((path) => ({ path })),
-      };
+      const mockRequest = setupMockRequest({ qrCodeData: ptdNumber });
+      const mockH = setupMockH();
 
       apiService.getApplicationByPTDNumber.mockRejectedValue(
         new Error("API Error")
@@ -195,6 +189,9 @@ describe("Scan Handlers", () => {
       expect(mockH.redirect).toHaveBeenCalledWith(
         `/checker/scan/not-found?searchValue=${ptdNumber}`
       );
-    });
+    };
+
+    it("should handle invalid QR code format", testInvalidQRCode);
+    it("should handle API errors", testAPIError);
   });
 });

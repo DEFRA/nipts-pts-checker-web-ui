@@ -6,14 +6,13 @@ import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
 const VIEW_PATH = "componentViews/checker/scan/scanView";
 const SEARCH_RESULT_VIEW_PATH = "/checker/search-results";
 const NOT_FOUND_VIEW_PATH = "componentViews/checker/scan/scanNotFoundView";
-const errorProcessingText = "An error occurred while processing your request";
 
-const getScan = async (request, h) => {
+const getScan = async (_request, h) => {
   headerData.section = "scan";
   return h.view(VIEW_PATH);
 };
 
-const getScanNotFound = async (request, h) => {
+const getScanNotFound = async (_request, h) => {
   headerData.section = "scan";
   return h.view(NOT_FOUND_VIEW_PATH, {
     pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
