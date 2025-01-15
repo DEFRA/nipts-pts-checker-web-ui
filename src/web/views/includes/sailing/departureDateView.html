@@ -1,4 +1,4 @@
-<div class="govuk-form-group {% if errorDepartureDate %}govuk-form-group--error{% endif %}">
+<div class="govuk-form-group {% if errorDepartureDate or errorDateRangeDate %}govuk-form-group--error{% endif %}">
     <fieldset class="govuk-fieldset" role="group" aria-describedby="departure-date-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
         <h2 class="govuk-fieldset__heading">
@@ -15,6 +15,12 @@
             }}</span> {{errorDepartureDate}}
         </p>
         {% endif %}
+        {% if errorDateRangeDate %}
+        <p class="govuk-error-message">
+          <span class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError
+            }}</span> {{errorDateRangeDate}}
+        </p>
+        {% endif %}
       </div>
       <div class="govuk-date-input" id="departure-date">
         <div class="govuk-date-input__item">
@@ -22,7 +28,7 @@
             <label class="govuk-label govuk-date-input__label" for="departureDateDay">
               {{currentSailingMainModelData.dayText}}
             </label>
-            <input class="govuk-input {% if errorDepartureDate %} govuk-input--error {% endif %} govuk-date-input__input govuk-input--width-2" id="departureDateDay" name="departureDateDay" type="text" inputmode="numeric" value="{{departureDateDay}}">
+            <input class="govuk-input {% if errorDepartureDate or errorDateRangeDate %} govuk-input--error {% endif %} govuk-date-input__input govuk-input--width-2" id="departureDateDay" name="departureDateDay" type="text" inputmode="numeric" value="{{departureDateDay}}">
           </div>
         </div>
         <div class="govuk-date-input__item">
@@ -30,7 +36,7 @@
             <label class="govuk-label govuk-date-input__label" for="departureDateMonth">
               {{currentSailingMainModelData.monthText}}
             </label>
-            <input class="govuk-input {% if errorDepartureDate %} govuk-input--error {% endif %} govuk-date-input__input govuk-input--width-2" id="departureDateMonth" name="departureDateMonth" type="text" inputmode="numeric" value="{{departureDateMonth}}">
+            <input class="govuk-input {% if errorDepartureDate or errorDateRangeDate %} govuk-input--error {% endif %} govuk-date-input__input govuk-input--width-2" id="departureDateMonth" name="departureDateMonth" type="text" inputmode="numeric" value="{{departureDateMonth}}">
           </div>
         </div>
         <div class="govuk-date-input__item">
@@ -38,7 +44,7 @@
             <label class="govuk-label govuk-date-input__label" for="departureDateYear">
               {{currentSailingMainModelData.yearText}}
             </label>
-            <input class="govuk-input {% if errorDepartureDate %} govuk-input--error {% endif %} govuk-date-input__input govuk-input--width-4" id="departureDateYear" name="departureDateYear" type="text" inputmode="numeric" value="{{departureDateYear}}">
+            <input class="govuk-input {% if errorDepartureDate or errorDateRangeDate %} govuk-input--error {% endif %} govuk-date-input__input govuk-input--width-4" id="departureDateYear" name="departureDateYear" type="text" inputmode="numeric" value="{{departureDateYear}}">
           </div>
         </div>
       </div>
