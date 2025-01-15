@@ -18,7 +18,8 @@
                id="passengerType" 
                name="passengerType" 
                type="radio" 
-               value="1" 
+               value="1"
+               aria-label="Ferry foot passenger" 
                {% if payload['passengerType'] == '1' %}checked{% endif %}>
         <label class="govuk-label govuk-radios__label" for="passengerType">Ferry foot passenger</label>
       </div>
@@ -28,7 +29,8 @@
                id="vehiclePassenger" 
                name="passengerType" 
                type="radio" 
-               value="2" 
+               value="2"
+               aria-label="Vehicle on ferry" 
                {% if payload['passengerType'] == '2' %}checked{% endif %}>
         <label class="govuk-label govuk-radios__label" for="vehiclePassenger">Vehicle on ferry</label>
       </div>
@@ -38,7 +40,8 @@
                id="airlinePassenger" 
                name="passengerType" 
                type="radio" 
-               value="3" 
+               value="3"
+               aria-label="Airline" 
                {% if payload['passengerType'] == '3' %}checked{% endif %}>
         <label class="govuk-label govuk-radios__label" for="airlinePassenger">Airline</label>
       </div>

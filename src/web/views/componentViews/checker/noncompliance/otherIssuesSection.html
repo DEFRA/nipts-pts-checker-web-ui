@@ -10,6 +10,7 @@
         <div class="govuk-checkboxes" data-module="govuk-checkboxes">
             <div class="govuk-checkboxes__item">
                 <input class="govuk-checkboxes__input" id="oiFailPotentialCommercial" name="oiFailPotentialCommercial" type="checkbox"
+                aria-label="Potential commercial movement"
                     value="true" {% if payload['oiFailPotentialCommercial']=="true" %}checked{% endif %}/>
                 <label class="govuk-label govuk-checkboxes__label" for="oiFailPotentialCommercial">
                     Potential commercial movement
@@ -18,6 +19,7 @@
 
             <div class="govuk-checkboxes__item">
                 <input class="govuk-checkboxes__input" id="oiFailAuthTravellerNoConfirmation" name="oiFailAuthTravellerNoConfirmation" type="checkbox"
+                aria-label="Authorised traveller but no confirmation"
                     value="true" {% if payload['oiFailAuthTravellerNoConfirmation']=="true" %}checked{% endif %}/>
                 <label class="govuk-label govuk-checkboxes__label" for="oiFailAuthTravellerNoConfirmation">
                     Authorised traveller but no confirmation
@@ -26,6 +28,7 @@
 
             <div class="govuk-checkboxes__item">
                 <input class="govuk-checkboxes__input" id="oiFailOther" name="oiFailOther" type="checkbox"
+                aria-label="Other reason"
                     value="true" {% if payload['oiFailOther']=="true" %}checked{% endif %}/>
                 <label class="govuk-label govuk-checkboxes__label" for="oiFailOther">
                     Other reason

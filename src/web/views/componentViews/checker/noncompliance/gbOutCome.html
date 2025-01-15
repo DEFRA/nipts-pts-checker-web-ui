@@ -18,6 +18,7 @@
     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
       <div class="govuk-checkboxes__item">
         <input class="govuk-checkboxes__input" id="isGBCheck" name="gbRefersToDAERAOrSPS" type="checkbox" value="true"
+        aria-label="Passenger referred to DAERA/SPS at NI port"
         {% if payload['gbRefersToDAERAOrSPS']=="true" %}checked{% endif %}>
         <label class="govuk-label govuk-checkboxes__label" for="isGBCheck">
           Passenger referred to DAERA/SPS at NI port
@@ -25,6 +26,7 @@
       </div>
       <div class="govuk-checkboxes__item">
         <input class="govuk-checkboxes__input" id="gbAdviseNoTravel" name="gbAdviseNoTravel" type="checkbox" value="true"
+        aria-label="Passenger advised not to travel"
         {% if payload['gbAdviseNoTravel']=="true" %}checked{% endif %}>
         <label class="govuk-label govuk-checkboxes__label" for="gbAdviseNoTravel">
           Passenger advised not to travel
@@ -32,6 +34,7 @@
       </div>
       <div class="govuk-checkboxes__item">
         <input class="govuk-checkboxes__input" id="gbPassengerSaysNoTravel" name="gbPassengerSaysNoTravel" type="checkbox" value="true"
+        aria-label="Passenger says they will not travel"
         {% if payload['gbPassengerSaysNoTravel']=="true" %}checked{% endif %}>
         <label class="govuk-label govuk-checkboxes__label" for="gbPassengerSaysNoTravel">
           Passenger says they will not travel

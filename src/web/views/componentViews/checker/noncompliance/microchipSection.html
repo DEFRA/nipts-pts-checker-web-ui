@@ -45,7 +45,8 @@
         <div class="govuk-checkboxes" data-module="govuk-checkboxes">
             <div class="govuk-checkboxes__item">
                 <input class="govuk-checkboxes__input" id="missingReason" name="mcNotMatch"
-                    type="checkbox" value="true" data-aria-controls="conditional-mcNotMatchActual" {% if
+                    type="checkbox" value="true" data-aria-controls="conditional-mcNotMatchActual" 
+                    aria-label="Microchip number does not match the PTD" {% if
                         payload['mcNotMatch']=="true" %}checked{% endif %}>
                 <label class="govuk-label govuk-checkboxes__label" for="missingReason">
                     Microchip number does not match the PTD
@@ -73,7 +74,8 @@
             </div>
 
             <div class="govuk-checkboxes__item">
-                <input class="govuk-checkboxes__input" id="mcNotFound" name="mcNotFound" type="checkbox" value="true" {%
+                <input class="govuk-checkboxes__input" id="mcNotFound" name="mcNotFound" type="checkbox" value="true"
+                aria-label="Cannot find microchip" {%
                     if payload['mcNotFound']=="true" %}checked{% endif %}>
                 <label class="govuk-label govuk-checkboxes__label" for="mcNotFound">
                     Cannot find microchip
