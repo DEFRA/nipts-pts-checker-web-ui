@@ -145,24 +145,19 @@ const validateSailingHour = (sailingHour) => {
     const validateDateRange = (date, zeroDate) => {
       const now = new Date();
     
-      // Split the date and time parts (if time is included)
       const [datePart, timePart] = date.split(' ');
     
-      // Parse the date part (DD/MM/YYYY)
       const [day, month, year] = datePart.split('/').map(Number);
     
-      // Parse the time part (HH:mm) if present
       let hours = 0;
       let minutes = 0;
       if (timePart) {
         [hours, minutes] = timePart.split(':').map(Number);
       }
     
-      // Create the sailingDate object using parsed values
       const sailingDate = new Date(year, month - 1, day, hours, minutes);
     
       if (zeroDate) {
-        // Zero out the time (set hours, minutes, seconds, and milliseconds to zero)
         sailingDate.setHours(0, 0, 0, 0);
       }
     
@@ -172,7 +167,6 @@ const validateSailingHour = (sailingHour) => {
       const upperBound = new Date(now);
       upperBound.setDate(now.getDate() + 1); // 24 hours in the future
     
-      // Check if the sailingDate is within the bounds
       if (sailingDate < lowerBound || sailingDate > upperBound) {
         return {
           isValid: false,
