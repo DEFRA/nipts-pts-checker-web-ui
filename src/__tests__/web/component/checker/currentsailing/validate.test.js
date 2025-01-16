@@ -106,13 +106,13 @@ describe('Validation Functions', () => {
     it('should return invalid for an empty string', () => {
       const result = validateFlightNumber('');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe(CurrentSailingMainModelErrors.flightError); // Replace with your actual error message
+      expect(result.error).toBe(CurrentSailingMainModelErrors.flightNoEmptyError); // Replace with your actual error message
     });
 
     it('should return invalid for undefined', () => {
       const result = validateFlightNumber(undefined);
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe(CurrentSailingMainModelErrors.flightError); // Replace with your actual error message
+      expect(result.error).toBe(CurrentSailingMainModelErrors.flightNoEmptyError); // Replace with your actual error message
     });
   });
 

@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const ferryRouteTwo = document.getElementById('routeRadio-1');
   const ferryRouteThree = document.getElementById('routeRadio-2');
 
-  const flightError = document.getElementById('flight-error');
+  const flightNoEmptyError = document.getElementById('flight-error');
   const flightform = document.getElementById('flight-form');
   const flightText = document.getElementById('routeFlight');
 
@@ -68,8 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
         flightform.classList.remove("govuk-form-group--error");
       }
       
-      if (flightError) { 
-            flightError.remove();
+      if (flightNoEmptyError) { 
+        flightNoEmptyError.remove();
       }
 
       flightText.value = '';

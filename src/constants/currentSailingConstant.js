@@ -4,7 +4,7 @@ times.unshift(""); // Add an empty string at the beginning
 const errors = {
   routeOptionError: "Select if you are checking a ferry or a flight",
   routeError: "Select the ferry you are checking",
-  flightError: "Enter the flight number you are checking",
+  flightNoEmptyError: "Enter the flight number. For example, RK 103",
   departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
   departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
   timeError: "Enter the scheduled departure time, for example 15:30",

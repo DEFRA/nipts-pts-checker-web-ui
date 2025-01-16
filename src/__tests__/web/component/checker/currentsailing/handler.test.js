@@ -1,7 +1,7 @@
 import moment from "moment-timezone";
 import { CurrentSailingHandlers } from "../../../../../web/component/checker/currentsailing/handler.js";
 import currentSailingMainService from "../../../../../api/services/currentSailingMainService.js";
-import { validateRouteOptionRadio, validateRouteRadio, validateSailingHour, validateSailingMinutes, validateFlightNumber, validateDate } from "../../../../../web/component/checker/currentsailing/validate.js";
+import { validateRouteOptionRadio, validateRouteRadio, validateSailingHour, validateSailingMinutes, validateFlightNumber, validateDate, validateDateRange } from "../../../../../web/component/checker/currentsailing/validate.js";
 import { HttpStatusCode } from "axios";
 
 jest.mock("../../../../../api/services/currentSailingMainService.js");
@@ -143,6 +143,11 @@ describe('submitCurrentSailingSlot', () => {
       error: null
     });
 
+    validateDateRange.mockReturnValue({
+      isValid: true,
+      error: null
+    });
+
     // Mock response toolkit
     const mockRedirect = jest.fn();
     const mockResponseToolkit = {
@@ -172,7 +177,7 @@ describe('submitCurrentSailingSlot', () => {
     const errors = {
       routeOptionError: "Select if you are checking a ferry or a flight",
       routeError: "Select the ferry you are checking",
-      flightError: "Enter the flight number you are checking",
+      flightNoEmptyError: "Enter the flight number. For example, RK 103",
       departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
       departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
       timeError: "Enter the scheduled departure time, for example 15:30",
@@ -254,6 +259,11 @@ describe('submitCurrentSailingSlot', () => {
       error: null
     });
 
+    validateDateRange.mockReturnValue({
+      isValid: true,
+      error: null
+    });
+
 
     await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
 
@@ -278,7 +288,9 @@ describe('submitCurrentSailingSlot', () => {
         routeFlight: mockPayload.routeFlight,
         departureDateDay: mockPayload.departureDateDay,
         departureDateMonth: mockPayload.departureDateMonth,
-        departureDateYear: mockPayload.departureDateYear
+        departureDateYear: mockPayload.departureDateYear, 
+        errorDateRangeDate: null, 
+        errorDateRangeTime: null,
       }
     );
   });
@@ -287,7 +299,7 @@ describe('submitCurrentSailingSlot', () => {
     const errors = {
       routeOptionError: "Select if you are checking a ferry or a flight",
       routeError: "Select the ferry you are checking",
-      flightError: "Enter the flight number you are checking",
+      flightNoEmptyError: "Enter the flight number. For example, RK 103",
       departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
       departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
       timeError: "Enter the scheduled departure time, for example 15:30",
@@ -367,6 +379,11 @@ describe('submitCurrentSailingSlot', () => {
       error: null
     });
 
+    validateDateRange.mockReturnValue({
+      isValid: true,
+      error: null
+    });
+
     await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
 
     expect(mockResponseToolkit.view).toHaveBeenCalledWith(
@@ -376,6 +393,8 @@ describe('submitCurrentSailingSlot', () => {
         departureDateDay: mockPayload.departureDateDay,
         departureDateMonth: mockPayload.departureDateMonth,
         departureDateYear: mockPayload.departureDateYear,
+        errorDateRangeDate: null, 
+        errorDateRangeTime: null,
         errorDepartureDate: null,
         errorFlight: null,
         errorRouteOptionRadio: null,
@@ -399,7 +418,7 @@ describe('submitCurrentSailingSlot', () => {
     const errors = {
       routeOptionError: "Select if you are checking a ferry or a flight",
       routeError: "Select the ferry you are checking",
-      flightError: "Enter the flight number you are checking",
+      flightNoEmptyError: "Enter the flight number. For example, RK 103",
       departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
       departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
       timeError: "Enter the scheduled departure time, for example 15:30",
@@ -461,7 +480,7 @@ describe('submitCurrentSailingSlot', () => {
 
     validateFlightNumber.mockReturnValue({
       isValid: false,
-      error: errors.flightError
+      error: errors.flightNoEmptyError
     });
 
     validateSailingHour.mockReturnValue({
@@ -474,9 +493,12 @@ describe('submitCurrentSailingSlot', () => {
       error: null
     });
 
-
-
     validateDate.mockReturnValue({
+      isValid: true,
+      error: null
+    });
+
+    validateDateRange.mockReturnValue({
       isValid: true,
       error: null
     });
@@ -490,14 +512,16 @@ describe('submitCurrentSailingSlot', () => {
         departureDateDay: mockPayload.departureDateDay,
         departureDateMonth: mockPayload.departureDateMonth,
         departureDateYear: mockPayload.departureDateYear,
+        errorDateRangeDate: null, 
+        errorDateRangeTime: null,
         errorDepartureDate: null,
-        errorFlight: errors.flightError,
+        errorFlight: errors.flightNoEmptyError,
         errorRouteOptionRadio: null,
         errorRouteRadio: null,
         errorSailingHour: null,
         errorSailingMinutes: null,
         errorSummary: [
-          { fieldId: "routeFlight", message: errors.flightError }
+          { fieldId: "routeFlight", message: errors.flightNoEmptyError }
         ],
         formSubmitted: true,
         routeFlight: mockPayload.routeFlight,
@@ -513,7 +537,7 @@ describe('submitCurrentSailingSlot', () => {
     const errors = {
       routeOptionError: "Select if you are checking a ferry or a flight",
       routeError: "Select the ferry you are checking",
-      flightError: "Enter the flight number you are checking",
+      flightNoEmptyError: "Enter the flight number. For example, RK 103",
       departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
       departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
       timeError: "Enter the scheduled departure time, for example 15:30",
@@ -593,6 +617,11 @@ describe('submitCurrentSailingSlot', () => {
       error: errors.departureDateRequiredError
     });
 
+    validateDateRange.mockReturnValue({
+      isValid: true,
+      error: null
+    });
+
     await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
 
     expect(mockResponseToolkit.view).toHaveBeenCalledWith(
@@ -603,6 +632,8 @@ describe('submitCurrentSailingSlot', () => {
         departureDateMonth: mockPayload.departureDateMonth,
         departureDateYear: mockPayload.departureDateYear,
         errorDepartureDate: errors.departureDateRequiredError,
+        errorDateRangeDate: null, 
+        errorDateRangeTime: null,
         errorFlight: null,
         errorRouteOptionRadio: null,
         errorRouteRadio: errors.routeError,
@@ -626,7 +657,7 @@ describe('submitCurrentSailingSlot', () => {
     const errors = {
       routeOptionError: "Select if you are checking a ferry or a flight",
       routeError: "Select the ferry you are checking",
-      flightError: "Enter the flight number you are checking",
+      flightNoEmptyError: "Enter the flight number. For example, RK 103",
       departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
       departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
       timeError: "Enter the scheduled departure time, for example 15:30",
@@ -706,6 +737,11 @@ describe('submitCurrentSailingSlot', () => {
       error: errors.departureDateFormatError
     });
 
+    validateDateRange.mockReturnValue({
+      isValid: true,
+      error: null
+    });
+
     await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
 
     expect(mockResponseToolkit.view).toHaveBeenCalledWith(
@@ -716,6 +752,8 @@ describe('submitCurrentSailingSlot', () => {
         departureDateMonth: mockPayload.departureDateMonth,
         departureDateYear: mockPayload.departureDateYear,
         errorDepartureDate: errors.departureDateFormatError,
+        errorDateRangeDate: null, 
+        errorDateRangeTime: null,
         errorFlight: null,
         errorRouteOptionRadio: null,
         errorRouteRadio: errors.routeError,
@@ -739,7 +777,7 @@ describe('submitCurrentSailingSlot', () => {
     const errors = {
       routeOptionError: "Select if you are checking a ferry or a flight",
       routeError: "Select the ferry you are checking",
-      flightError: "Enter the flight number you are checking",
+      flightNoEmptyError: "Enter the flight number. For example, RK 103",
       departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
       departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
       timeError: "Enter the scheduled departure time, for example 15:30",
@@ -823,6 +861,11 @@ describe('submitCurrentSailingSlot', () => {
       error: errors.departureDateFormatError
     });
 
+    validateDateRange.mockReturnValue({
+      isValid: true,
+      error: null
+    });
+
     await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
 
     expect(mockResponseToolkit.view).toHaveBeenCalledWith(
@@ -832,6 +875,8 @@ describe('submitCurrentSailingSlot', () => {
         departureDateDay: mockPayload.departureDateDay,
         departureDateMonth: mockPayload.departureDateMonth,
         departureDateYear: mockPayload.departureDateYear,
+        errorDateRangeDate: null, 
+        errorDateRangeTime: null,
         errorDepartureDate: errors.departureDateFormatError,
         errorFlight: null,
         errorRouteOptionRadio: null,

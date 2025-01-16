@@ -13,8 +13,8 @@ const routeRadioSchema = Joi.string().required().label('Route').messages({
 });
 
 const flightSchema = Joi.string().required().label('Flight').messages({
-  'string.empty': CurrentSailingMainModelErrors.flightError,
-  'any.required': CurrentSailingMainModelErrors.flightError,
+  'string.empty': CurrentSailingMainModelErrors.flightNoEmptyError,
+  'any.required': CurrentSailingMainModelErrors.flightNoEmptyError,
 });
 
 const sailingHourSchema = Joi.string().pattern(/^\d{2}$/).required().label('Sailing Hour').messages({
