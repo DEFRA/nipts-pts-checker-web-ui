@@ -12,10 +12,15 @@ const routeRadioSchema = Joi.string().required().label('Route').messages({
   'any.required': CurrentSailingMainModelErrors.routeError,
 });
 
-const flightSchema = Joi.string().required().label('Flight').messages({
-  'string.empty': CurrentSailingMainModelErrors.flightNoEmptyError,
-  'any.required': CurrentSailingMainModelErrors.flightNoEmptyError,
-});
+const flightSchema = Joi.string()
+  .pattern(/^(?=.{1,8}$)[A-Za-z0-9]+( [A-Za-z0-9]+)*$/)
+  .required()
+  .label('Flight')
+  .messages({
+    'string.empty': CurrentSailingMainModelErrors.flightNoEmptyError,
+    'string.pattern.base': CurrentSailingMainModelErrors.flightNumberFormatError,
+    'any.required': CurrentSailingMainModelErrors.flightNoEmptyError,
+  });
 
 const sailingHourSchema = Joi.string().pattern(/^\d{2}$/).required().label('Sailing Hour').messages({
   'string.empty': CurrentSailingMainModelErrors.timeError,
@@ -117,6 +122,7 @@ const validateFlightNumber = (flightNumber) => {
     error: error ? error.details[0].message : null,
     };
   };
+
   const validateDate = (date) => {
     const { error } = dateSchema.validate(date);
     return {
