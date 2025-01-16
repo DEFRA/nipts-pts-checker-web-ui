@@ -106,19 +106,25 @@ const submitCurrentSailingSlot = async (request, h) => {
   }
 
 
+  let shouldSkipFurtherChecks = false;
+
   if (!validateDepartureDateRangeZeroHourResult.isValid) {
     let errorSummaryMessage;
     errorSummaryMessage = validateDepartureDateRangeZeroHourResult.error;
     errorSummary.push({ fieldId: "departureDateDay", message: errorSummaryMessage });
     isValid = false;
-  }
 
-  else if (!validateDepartureDateRangeActualHourResult.isValid) {
-      let errorSummaryMessage;
-      errorSummaryMessage = validateDepartureDateRangeActualHourResult.error;
-      errorSummary.push({ fieldId: "sailingHour", message: errorSummaryMessage });
-      isValid = false;
-    }
+    //Do not flag time portion, as the date is the issue
+    validateDepartureDateRangeActualHourResult.error = "";
+    shouldSkipFurtherChecks = true; 
+  }
+  
+  if (!shouldSkipFurtherChecks && !validateDepartureDateRangeActualHourResult.isValid) {
+    let errorSummaryMessage;
+    errorSummaryMessage = validateDepartureDateRangeActualHourResult.error;
+    errorSummary.push({ fieldId: "sailingHour", message: errorSummaryMessage });
+    isValid = false;
+  }
 
   if (!isValid) {
     return h.view(VIEW_PATH, {
