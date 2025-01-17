@@ -109,8 +109,7 @@ const submitCurrentSailingSlot = async (request, h) => {
   let shouldSkipFurtherChecks = false;
 
   if (!validateDepartureDateRangeZeroHourResult.isValid) {
-    let errorSummaryMessage;
-    errorSummaryMessage = validateDepartureDateRangeZeroHourResult.error;
+    const errorSummaryMessage = validateDepartureDateRangeZeroHourResult.error;
     errorSummary.push({ fieldId: "departureDateDay", message: errorSummaryMessage });
     isValid = false;
 
@@ -120,8 +119,7 @@ const submitCurrentSailingSlot = async (request, h) => {
   }
   
   if (!shouldSkipFurtherChecks && !validateDepartureDateRangeActualHourResult.isValid) {
-    let errorSummaryMessage;
-    errorSummaryMessage = validateDepartureDateRangeActualHourResult.error;
+    const errorSummaryMessage = validateDepartureDateRangeActualHourResult.error;
     errorSummary.push({ fieldId: "sailingHour", message: errorSummaryMessage });
     isValid = false;
   }

@@ -11,6 +11,8 @@ const birkenheadRoute = 'Birkenhead to Belfast (Stena)';
 const cairnryanRoute = 'Cairnryan to Larne (P&O)';
 const lochRyanRoute =  'Loch Ryan to Belfast (Stena)';
 
+const flightNoErrorText = "Enter the flight number. For example, RK 103";
+
 const sailingRoutesDefault = [
   { id: '1', value: birkenheadRoute, label: birkenheadRoute },
   { id: '2', value: cairnryanRoute, label: cairnryanRoute },
@@ -177,7 +179,7 @@ describe('submitCurrentSailingSlot', () => {
     const errors = {
       routeOptionError: "Select if you are checking a ferry or a flight",
       routeError: "Select the ferry you are checking",
-      flightNoEmptyError: "Enter the flight number. For example, RK 103",
+      flightNoEmptyError: flightNoErrorText,
       departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
       departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
       timeError: "Enter the scheduled departure time, for example 15:30",
@@ -299,7 +301,7 @@ describe('submitCurrentSailingSlot', () => {
     const errors = {
       routeOptionError: "Select if you are checking a ferry or a flight",
       routeError: "Select the ferry you are checking",
-      flightNoEmptyError: "Enter the flight number. For example, RK 103",
+      flightNoEmptyError: flightNoErrorText,
       departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
       departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
       timeError: "Enter the scheduled departure time, for example 15:30",
@@ -418,7 +420,7 @@ describe('submitCurrentSailingSlot', () => {
     const errors = {
       routeOptionError: "Select if you are checking a ferry or a flight",
       routeError: "Select the ferry you are checking",
-      flightNoEmptyError: "Enter the flight number. For example, RK 103",
+      flightNoEmptyError: flightNoErrorText,
       departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
       departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
       timeError: "Enter the scheduled departure time, for example 15:30",
@@ -537,7 +539,7 @@ describe('submitCurrentSailingSlot', () => {
     const errors = {
       routeOptionError: "Select if you are checking a ferry or a flight",
       routeError: "Select the ferry you are checking",
-      flightNoEmptyError: "Enter the flight number. For example, RK 103",
+      flightNoEmptyError: flightNoErrorText,
       departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
       departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
       timeError: "Enter the scheduled departure time, for example 15:30",
@@ -657,7 +659,7 @@ describe('submitCurrentSailingSlot', () => {
     const errors = {
       routeOptionError: "Select if you are checking a ferry or a flight",
       routeError: "Select the ferry you are checking",
-      flightNoEmptyError: "Enter the flight number. For example, RK 103",
+      flightNoEmptyError: flightNoErrorText,
       departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
       departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
       timeError: "Enter the scheduled departure time, for example 15:30",
@@ -777,7 +779,7 @@ describe('submitCurrentSailingSlot', () => {
     const errors = {
       routeOptionError: "Select if you are checking a ferry or a flight",
       routeError: "Select the ferry you are checking",
-      flightNoEmptyError: "Enter the flight number. For example, RK 103",
+      flightNoEmptyError: flightNoErrorText,
       departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
       departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
       timeError: "Enter the scheduled departure time, for example 15:30",

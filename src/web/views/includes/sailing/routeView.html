@@ -1,49 +1,61 @@
-<div class="govuk-form-group govuk-!-margin-top-6 {% if errorRouteOptionRadio %}govuk-form-group--error{%endif %}">
-    <fieldset class="govuk-fieldset">
+<div class="govuk-form-group govuk-!-margin-top-6 {% if errorRouteOptionRadio %}govuk-form-group--error{% endif %}">
+  <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-        <h2 class="govuk-fieldset__heading">{{ currentSailingMainModelData.routeOptionHeading }}</h2>
+          <h2 class="govuk-fieldset__heading">{{ currentSailingMainModelData.routeOptionHeading }}</h2>
       </legend>
       <div>
-        {% if errorRouteOptionRadio %}
-        <p class="govuk-error-message">
-          <span class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError
-            }}</span> {{currentSailingMainModelData.currentSailingMainModelErrors.routeOptionError}}
-        </p>
-        {% endif %}
+          {% if errorRouteOptionRadio %}
+          <p class="govuk-error-message">
+              <span class="govuk-visually-hidden">{{ currentSailingMainModelData.currentSailingMainModelErrors.labelError }}</span>
+              {{ currentSailingMainModelData.currentSailingMainModelErrors.routeOptionError }}
+          </p>
+          {% endif %}
       </div>
       <div class="govuk-radios" data-module="govuk-radios">
-        {% for option in currentSailingMainModelData.routeOptions %}
-        <div class="govuk-radios__item">
+          {% for option in currentSailingMainModelData.routeOptions %}
+          <div class="govuk-radios__item">
+              {% if option.id == 1 %}
+              <input 
+                  class="govuk-radios__input" 
+                  id="routeOption" 
+                  name="routeOption" 
+                  type="radio" 
+                  value="{{ option.id }}" 
+                  {% if routeOption == option.id %}checked{% endif %}
+                  data-aria-controls="conditional-routeOption"
+                  aria-label="{{ option.label }}">
+              <label class="govuk-label govuk-radios__label" for="routeOption">
+                  {{ option.label }}
+              </label>
+              {% else %}
+              <input 
+                  class="govuk-radios__input" 
+                  id="routeOption-{{ option.id }}" 
+                  name="routeOption" 
+                  type="radio" 
+                  value="{{ option.id }}" 
+                  {% if routeOption == option.id %}checked{% endif %}
+                  data-aria-controls="conditional-routeOption-{{ option.id }}"
+                  aria-label="{{ option.label }}">
+              <label class="govuk-label govuk-radios__label" for="routeOption-{{ option.id }}">
+                  {{ option.label }}
+              </label>
+              {% endif %}
+          </div>
           {% if option.id == 1 %}
-            <input class="govuk-radios__input" id="routeOption" name="routeOption" 
-            type="radio" value="{{ option.id }}" {% if routeOption == option.id %}checked{% endif %}
-            data-aria-controls="conditional-routeOption">
-            <label class="govuk-label govuk-radios__label" for="routeOption">
-              {{ option.label }}
-            </label>
+          <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-routeOption">
+              {% include "includes/sailing/" + option.template %}
+          </div>
           {% else %}
-            <input class="govuk-radios__input" id="routeOption-{{ option.id }}" name="routeOption" 
-            type="radio" value="{{ option.id }}" {% if routeOption == option.id %}checked{% endif %}
-            data-aria-controls="conditional-routeOption-{{ option.id }}">
-            <label class="govuk-label govuk-radios__label" for="routeOption-{{ option.id }}">
-              {{ option.label }}
-            </label>
+          <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-routeOption-{{ option.id }}">
+              {% include "includes/sailing/" + option.template %}
+          </div>
           {% endif %}
-        </div>
-        {% if option.id == 1 %}
-            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-routeOption">      
-                {% include "includes/sailing/" + option.template %}       
-            </div>
-        {% else %}
-            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-routeOption-{{ option.id }}">          
-              {% include "includes/sailing/" + option.template %}       
-            </div>
-        {% endif %}
-        {% endfor %}
+          {% endfor %}
       </div>
-    </fieldset>
-  </div>
-  <script>
+  </fieldset>
+</div>
+<script>
 document.addEventListener('DOMContentLoaded', function() {
   const ferryRadioButton = document.getElementById('routeOption');
   const flightRadioButton = document.getElementById('routeOption-2');
@@ -61,63 +73,54 @@ document.addEventListener('DOMContentLoaded', function() {
   const flightText = document.getElementById('routeFlight');
 
   ferryRadioButton.addEventListener('change', function() {
-    if (ferryRadioButton.checked) 
-    {
-      if(flightform.classList.contains('govuk-form-group--error'))
-      {
-        flightform.classList.remove("govuk-form-group--error");
-      }
-      
-      if (flightNoEmptyError) { 
-        flightNoEmptyError.remove();
-      }
+      if (ferryRadioButton.checked) {
+          if (flightform.classList.contains('govuk-form-group--error')) {
+              flightform.classList.remove("govuk-form-group--error");
+          }
 
-      flightText.value = '';
-    }
+          if (flightNoEmptyError) {
+              flightNoEmptyError.remove();
+          }
+
+          flightText.value = '';
+      }
   });
 
   flightRadioButton.addEventListener('change', function() {
-    if (flightRadioButton.checked)
-    {
-      if(ferryform.classList.contains('govuk-form-group--error'))
-      {
-        ferryform.classList.remove("govuk-form-group--error");
-      }
+      if (flightRadioButton.checked) {
+          if (ferryform.classList.contains('govuk-form-group--error')) {
+              ferryform.classList.remove("govuk-form-group--error");
+          }
 
-      if (ferryError) { 
-        ferryError.remove();
-      }
+          if (ferryError) {
+              ferryError.remove();
+          }
 
-      if(ferryRouteOne)
-      {
-        ferryRouteOne.checked = false;
-      }
+          if (ferryRouteOne) {
+              ferryRouteOne.checked = false;
+          }
 
-      if(ferryRouteTwo)
-      {
-        ferryRouteTwo.checked = false;
-      }
+          if (ferryRouteTwo) {
+              ferryRouteTwo.checked = false;
+          }
 
-      if(ferryRouteThree)
-      {
-        ferryRouteThree.checked = false;
+          if (ferryRouteThree) {
+              ferryRouteThree.checked = false;
+          }
       }
-     }
   });
 
-  if (selectRouteLink) 
-  {
-    selectRouteLink.addEventListener('click', function(e) {
-      e.preventDefault();
-      ferryRadioButton.checked = true;  // Programmatically check the radio button
-      conditionalContent.hidden = false;  // Show the content
-      conditionalContent.classList.remove('govuk-radios__conditional--hidden');
-      ferryRadioButton.setAttribute('aria-expanded', 'true');
-      if(!conditionalContentFlight.classList.contains('govuk-radios__conditional--hidden'))
-      {
-        conditionalContentFlight.classList.add('govuk-radios__conditional--hidden');
-      }    
-    });
+  if (selectRouteLink) {
+      selectRouteLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          ferryRadioButton.checked = true; // Programmatically check the radio button
+          conditionalContent.hidden = false; // Show the content
+          conditionalContent.classList.remove('govuk-radios__conditional--hidden');
+          ferryRadioButton.setAttribute('aria-expanded', 'true');
+          if (!conditionalContentFlight.classList.contains('govuk-radios__conditional--hidden')) {
+              conditionalContentFlight.classList.add('govuk-radios__conditional--hidden');
+          }
+      });
   }
 });
 </script>
