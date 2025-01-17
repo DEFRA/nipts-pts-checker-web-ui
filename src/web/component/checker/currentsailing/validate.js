@@ -12,11 +12,15 @@ const routeRadioSchema = Joi.string().required().label('Route').messages({
   'any.required': CurrentSailingMainModelErrors.routeError,
 });
 
-const flightSchema = Joi.string().required().label('Flight').messages({
-  'string.empty': CurrentSailingMainModelErrors.flightError,
-  'any.required': CurrentSailingMainModelErrors.flightError,
-});
-
+const flightSchema = Joi.string()
+  .pattern(/^(?=.{1,8}$)[A-Za-z0-9]+( [A-Za-z0-9]+)*$/)
+  .required()
+  .label('Flight')
+  .messages({
+    'string.empty': CurrentSailingMainModelErrors.flightNoEmptyError,
+    'string.pattern.base': CurrentSailingMainModelErrors.flightNumberFormatError,
+    'any.required': CurrentSailingMainModelErrors.flightNoEmptyError,
+  });
 
 const sailingHourSchema = Joi.string().pattern(/^\d{2}$/).required().label('Sailing Hour').messages({
   'string.empty': CurrentSailingMainModelErrors.timeError,
@@ -119,7 +123,7 @@ const validateFlightNumber = (flightNumber) => {
     };
   };
 
-const validateDate = (date) => {
+  const validateDate = (date) => {
     const { error } = dateSchema.validate(date);
     return {
     isValid: !error,
@@ -144,7 +148,41 @@ const validateSailingHour = (sailingHour) => {
     };
     };
 
-
+    const validateDateRange = (date, zeroDate) => {
+      const now = new Date();
+    
+      const [datePart, timePart] = date.split(' ');
+    
+      const [day, month, year] = datePart.split('/').map(Number);
+    
+      let hours = 0;
+      let minutes = 0;
+      if (timePart) {
+        [hours, minutes] = timePart.split(':').map(Number);
+      }
+    
+      const sailingDate = new Date(year, month - 1, day, hours, minutes);
+    
+      if (zeroDate) {
+        sailingDate.setHours(0, 0, 0, 0);
+      }
+    
+      // Set the bounds for validation
+      const lowerBound = new Date(now);
+      lowerBound.setDate(now.getDate() - 2); // 48 hours in the past
+      const upperBound = new Date(now);
+      upperBound.setDate(now.getDate() + 1); // 24 hours in the future
+    
+      if (sailingDate < lowerBound || sailingDate > upperBound) {
+        return {
+          isValid: false,
+          error: CurrentSailingMainModelErrors.timeOutOfBoundsError,
+        };
+      }
+    
+      return { isValid: true, error: null };
+    };
+    
 
 export  {
   validateRouteOptionRadio,
@@ -153,5 +191,6 @@ export  {
   validateSailingMinutes,
   validateFlightNumber,
   validateDate,
+  validateDateRange
 };
   

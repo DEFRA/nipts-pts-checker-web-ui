@@ -18,7 +18,6 @@ describe("currentSailingMainModel", () => {
         routeSubHeading: "Test Route Subheading",
         sailingTimeSubHeading: "Test Sailing Time Subheading",
         sailingHintText1: "Sailing Hint Text 1",
-        sailingHintText2: "Sailing Hint Text 2",
         sailingTimes: sailingTimes,
         currentSailingMainModelErrors: null, 
         routeOptions: routeOptions,
@@ -36,7 +35,6 @@ describe("currentSailingMainModel", () => {
       expect(result.routeSubHeading).toEqual("Test Route Subheading");
       expect(result.sailingTimeSubHeading).toEqual("Test Sailing Time Subheading");
       expect(result.sailingHintText1).toEqual("Sailing Hint Text 1");
-      expect(result.sailingHintText2).toEqual("Sailing Hint Text 2");
       expect(result.sailingTimes).toEqual(sailingTimes);
       expect(result.currentSailingMainModelErrors).toEqual(null);
       expect(result.routeOptions).toEqual(routeOptions);

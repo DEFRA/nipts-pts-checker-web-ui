@@ -8,6 +8,7 @@ import {
   validateSailingMinutes,
   validateFlightNumber,
   validateDate,
+  validateDateRange
 } from "./validate.js";
 import headerData from "../../../../web/helper/constants.js";
 const VIEW_PATH = "componentViews/checker/currentsailing/currentsailingView";
@@ -34,7 +35,7 @@ const getCurrentSailings = async (request, h) => {
 };
 
 const submitCurrentSailingSlot = async (request, h) => {
-  const { routeOption, routeRadio, routeFlight, departureDateDay, departureDateMonth, departureDateYear, sailingHour, sailingMinutes } = request.payload;
+  const { routeOption, routeRadio, routeFlight, departureDateDay, departureDateMonth, departureDateYear, sailingHour, sailingMinutes } = request.payload; 
   const validationRouteOptionRadioResult = validateRouteOptionRadio(routeOption);
   let validationRouteRadioResult;
   let validateFlightNumberResult;
@@ -46,6 +47,12 @@ const submitCurrentSailingSlot = async (request, h) => {
 
   const departureDate = `${departureDateDayPadded.trim()}/${departureDateMonthPadded.trim()}/${departureDateYear.trim()}`;
   const validateDepartureDateResult = validateDate(departureDate);
+
+  const validateDepartureDateRangeZeroHourResult = validateDateRange(departureDate, true);
+
+  const dateWithTime = `${departureDateDayPadded.trim()}/${departureDateMonthPadded.trim()}/${departureDateYear.trim()} ${sailingHour}:${sailingMinutes}`;
+  const validateDepartureDateRangeActualHourResult = validateDateRange(dateWithTime, false);
+
   const currentSailingMainModelData =  request.yar.get("CurrentSailingModel");
 
   const errorSummary = [];
@@ -81,51 +88,65 @@ const submitCurrentSailingSlot = async (request, h) => {
 
 
   if(!validateDepartureDateResult.isValid)
-  {
-    errorSummary.push({ fieldId: "departureDateDay", message: validateDepartureDateResult.error });
+    {
+      errorSummary.push({ fieldId: "departureDateDay", message: validateDepartureDateResult.error });
+      isValid = false;
+    }
+
+  if (!validateSailingHourResult.isValid || !validateSailingMinutesResult.isValid) {
+    let errorSummaryMessage;
+    if (!validateSailingHourResult.isValid) {
+      errorSummaryMessage = validateSailingHourResult.error;
+      errorSummary.push({ fieldId: "sailingHour", message: errorSummaryMessage });
+    } else {
+      errorSummaryMessage = validateSailingMinutesResult.error;
+      errorSummary.push({ fieldId: "sailingMinutes", message: errorSummaryMessage });
+    }
     isValid = false;
   }
 
 
-  if(!validateSailingHourResult.isValid ||
-      !validateSailingMinutesResult.isValid)
-    {
-      let errorSummaryMessage;
-      if(!validateSailingHourResult.isValid)
-      {
-        errorSummaryMessage = validateSailingHourResult.error;
-        errorSummary.push({ fieldId: "sailingHour", message: errorSummaryMessage });
-      }
-      else{
-        errorSummaryMessage = validateSailingMinutesResult.error;
-        errorSummary.push({ fieldId: "sailingMinutes", message: errorSummaryMessage });
-      }
-      isValid = false;
-    }
+  let shouldSkipFurtherChecks = false;
 
-    if(!isValid)
-    {
-      return h.view(VIEW_PATH, {
-        errorRouteOptionRadio: validationRouteOptionRadioResult.error,
-        errorRouteRadio: validationRouteRadioResult ? validationRouteRadioResult.error : null,
-        errorFlight: validateFlightNumberResult ? validateFlightNumberResult.error : null,
-        errorDepartureDate: validateDepartureDateResult.error,       
-        errorSailingHour: validateSailingHourResult.error,
-        errorSailingMinutes: validateSailingMinutesResult.error,
-        errorSummary,
-        formSubmitted: true,
-        currentSailingMainModelData,
-        routeRadio,
-        sailingHour,
-        sailingMinutes,
-        routeOption,
-        routeFlight,
-        departureDateDay,
-        departureDateMonth,
-        departureDateYear,
-      });
-    }
+  if (!validateDepartureDateRangeZeroHourResult.isValid) {
+    const errorSummaryMessage = validateDepartureDateRangeZeroHourResult.error;
+    errorSummary.push({ fieldId: "departureDateDay", message: errorSummaryMessage });
+    isValid = false;
 
+    //Do not flag time portion, as the date is the issue
+    validateDepartureDateRangeActualHourResult.error = "";
+    shouldSkipFurtherChecks = true; 
+  }
+  
+  if (!shouldSkipFurtherChecks && !validateDepartureDateRangeActualHourResult.isValid) {
+    const errorSummaryMessage = validateDepartureDateRangeActualHourResult.error;
+    errorSummary.push({ fieldId: "sailingHour", message: errorSummaryMessage });
+    isValid = false;
+  }
+
+  if (!isValid) {
+    return h.view(VIEW_PATH, {
+      errorRouteOptionRadio: validationRouteOptionRadioResult.error,
+      errorRouteRadio: validationRouteRadioResult ? validationRouteRadioResult.error : null,
+      errorFlight: validateFlightNumberResult ? validateFlightNumberResult.error : null,
+      errorDepartureDate: validateDepartureDateResult.error,
+      errorSailingHour: validateSailingHourResult.error,
+      errorSailingMinutes: validateSailingMinutesResult.error,
+      errorDateRangeDate: validateDepartureDateRangeZeroHourResult.error,
+      errorDateRangeTime: validateDepartureDateRangeActualHourResult.error,
+      errorSummary,
+      formSubmitted: true,
+      currentSailingMainModelData,
+      routeRadio,
+      sailingHour,
+      sailingMinutes,
+      routeOption,
+      routeFlight,
+      departureDateDay,
+      departureDateMonth,
+      departureDateYear,
+    });
+  }
 
   // Handle the form submission here
   const selectedRouteOption = currentSailingMainModelData.routeOptions.find(
@@ -133,9 +154,8 @@ const submitCurrentSailingSlot = async (request, h) => {
   );
 
   const sailingRoutes = request.yar.get("SailingRoutes");
-  let selectedRoute =null;
-  if(sailingRoutes !== null)
-  {
+  let selectedRoute = null;
+  if (sailingRoutes !== null) {
     selectedRoute = sailingRoutes.find(
       (x) => x.id === request.payload.routeRadio
     );
@@ -157,6 +177,7 @@ const submitCurrentSailingSlot = async (request, h) => {
   // If successful, redirect to the dashboard
   return h.redirect("/checker/dashboard");
 };
+
 
 const getCurrentSailingSlot = async (request, h) => {
   const currentSailingSlot = request.yar.get("currentSailingSlot");
