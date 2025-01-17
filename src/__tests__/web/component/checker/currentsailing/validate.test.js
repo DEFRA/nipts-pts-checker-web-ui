@@ -182,6 +182,16 @@ describe('Validation Functions', () => {
       expect(result.isValid).toBe(false);
       expect(result.error).toBe("The flight or ferry must have departed in the past 48 hours or departs within the next 24 hours");
     });
+
+    it('should return invalid for a non-empty string, 3 days in the past, with time', () => {
+      const now = new Date(); // Get today's date
+      now.setDate(now.getDate() - 3); // Subtract 3 days
+      const formattedDateWithTime = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`; // Format as dd/MM/yyyy hh:mm
+    
+      const result = validateDateRange(formattedDateWithTime, false);
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe("The flight or ferry must have departed in the past 48 hours or departs within the next 24 hours");
+    });
   });
 
 });
