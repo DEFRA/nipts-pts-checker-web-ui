@@ -1,5 +1,5 @@
 "use strict";
-import  { validateRouteOptionRadio, validateRouteRadio, validateSailingHour, validateSailingMinutes, validateFlightNumber, validateDate } from "../../../../../web/component/checker/currentsailing/validate.js";
+import  { validateRouteOptionRadio, validateRouteRadio, validateSailingHour, validateSailingMinutes, validateFlightNumber, validateDate, validateDateRange } from "../../../../../web/component/checker/currentsailing/validate.js";
 import { CurrentSailingMainModelErrors } from "../../../../../constants/currentSailingConstant.js";
 
 
@@ -151,6 +151,27 @@ describe('Validation Functions', () => {
       const result = validateDate(undefined);
       expect(result.isValid).toBe(false);
       expect(result.error).toBe('The date is required.'); // Replace with your actual error message
+    });
+  });
+
+  describe('validateDateRange', () => {
+    it('should return valid for a non-empty string, todays date', () => {
+      const now = new Date(); // Get today's date
+      const formattedDate = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`; // Format as dd/MM/yyyy
+    
+      const result = validateDateRange(formattedDate, false);
+      expect(result.isValid).toBe(true);
+      expect(result.error).toBe(null);
+    });
+
+    it('should return invalid for a non-empty string, 3 days in the past', () => {
+      const now = new Date(); // Get today's date
+      now.setDate(now.getDate() - 3); // Subtract 3 days
+      const formattedDate = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`; // Format as dd/MM/yyyy
+    
+      const result = validateDateRange(formattedDate, false);
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe("The flight or ferry must have departed in the past 48 hours or departs within the next 24 hours");
     });
   });
 
