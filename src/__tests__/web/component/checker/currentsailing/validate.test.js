@@ -123,6 +123,12 @@ describe('Validation Functions', () => {
       expect(result.error).toBe(null);
     });
 
+    it('should return valid for a non-empty string on a leap year', () => {
+      const result = validateDate('29/04/2024');
+      expect(result.isValid).toBe(true);
+      expect(result.error).toBe(null);
+    });
+
     it('should return required eror for a partial empty string', () => {
       const result = validateDate('33//2024');
       expect(result.isValid).toBe(false);
