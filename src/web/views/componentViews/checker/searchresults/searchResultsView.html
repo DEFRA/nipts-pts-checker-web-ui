@@ -384,10 +384,8 @@
                         <div class="govuk-radios" data-module="govuk-radios">
                             <div class="govuk-radios__item">
                                 <input class="govuk-radios__input" id="checklistPass" name="checklist" type="radio"
-                                    aria-describedby="checklistPass-hint"
-                                    aria-labelledby="checklistPass-label"
+                                    aria-label="Pass"
                                     value="Pass" {% if checklist == "Pass" %}checked{% endif %}>
-                                {# data-aria-controls="conditional-checklistFail" #}
                                 <label id="checklistPass-label" class="govuk-label govuk-radios__label" for="checklistPass">
                                     Pass
                                 </label>
@@ -402,10 +400,8 @@
                             </div> #}
                             <div class="govuk-radios__item">
                                 <input class="govuk-radios__input" id="checklistFail" name="checklist" type="radio"
-                                    aria-describedby="checklistFail-hint"
-                                    aria-labelledby="checklistFail-label"
+                                    aria-label="Fail or referred to SPS"
                                     value="Fail" {% if checklist == "Fail" %}checked{% endif %}>
-                                {# data-aria-controls="conditional-checklistFail" #}
                                 <label id="checklistFail-label" class="govuk-label govuk-radios__label" for="checklistFail">
                                     Fail or referred to SPS
                                 </label>
