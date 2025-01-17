@@ -381,35 +381,28 @@
                         {% endif %}
                     
                     
-                        <div class="govuk-radios" data-module="govuk-radios">
-                            <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="checklistPass" name="checklist" type="radio"
-                                    aria-label="Pass"
-                                    value="Pass" {% if checklist == "Pass" %}checked{% endif %}>
-                                <label id="checklistPass-label" class="govuk-label govuk-radios__label" for="checklistPass">
-                                    Pass
-                                </label>
-                                <div id="checklistPass-hint" class="govuk-hint govuk-radios__hint">
-                                    Passes all checks.
-                                </div>
-                            </div>
-                            {# <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
-                                id="conditional-checklistFail">
+                        {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
+                        {{ govukRadios({
+                            name: "checklistPassOrFail",
+                            items: [
+                                {
+                                    id: "checklistPass",
+                                    value: "Pass",
+                                    checked: checklist == "Pass",
+                                    text: "Pass",
+                                    hint: { text: 'Passes all checks.' }
+                                },
+                                {
 
-                            </div> #}
-                            <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="checklistFail" name="checklist" type="radio"
-                                    aria-label="Fail or referred to SPS"
-                                    value="Fail" {% if checklist == "Fail" %}checked{% endif %}>
-                                <label id="checklistFail-label" class="govuk-label govuk-radios__label" for="checklistFail">
-                                    Fail or referred to SPS
-                                </label>
-                                <div id="checklistFail-hint" class="govuk-hint govuk-radios__hint">
-                                    Fails at least one check.
-                                </div>
-                            </div>
-                        </div>
+                                    id: "checklistFail",
+                                    value: "Fail",
+                                    checked: checklist == "Fail",
+                                    text: "Fail or referred to SPS",
+                                    hint: {text: 'Fails at least one check.'}
+                                }
+                            ]}) }}
+
                     </div>
                 </div>
                 {% endif %}
