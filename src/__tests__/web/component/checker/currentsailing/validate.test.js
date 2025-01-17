@@ -164,6 +164,15 @@ describe('Validation Functions', () => {
       expect(result.error).toBe(null);
     });
 
+    it('should return valid for a non-empty string, todays date, when zeroed', () => {
+      const now = new Date(); // Get today's date
+      const formattedDate = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`; // Format as dd/MM/yyyy
+    
+      const result = validateDateRange(formattedDate, true);
+      expect(result.isValid).toBe(true);
+      expect(result.error).toBe(null);
+    });
+
     it('should return invalid for a non-empty string, 3 days in the past', () => {
       const now = new Date(); // Get today's date
       now.setDate(now.getDate() - 3); // Subtract 3 days
