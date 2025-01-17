@@ -383,29 +383,33 @@
                     
                         <div class="govuk-radios" data-module="govuk-radios">
                             <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="checklist" name="checklist" type="radio"
+                                <input class="govuk-radios__input" id="checklistPass" name="checklist" type="radio"
+                                    aria-describedby="checklistPass-hint"
+                                    aria-labelledby="checklistPass-label"
                                     value="Pass" {% if checklist == "Pass" %}checked{% endif %}>
-                                {# data-aria-controls="conditional-checklist-1" #}
-                                <label class="govuk-label govuk-radios__label" for="checklist">
+                                {# data-aria-controls="conditional-checklistFail" #}
+                                <label id="checklistPass-label" class="govuk-label govuk-radios__label" for="checklistPass">
                                     Pass
                                 </label>
-                                <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
+                                <div id="checklistPass-hint" class="govuk-hint govuk-radios__hint">
                                     Passes all checks.
                                 </div>
                             </div>
                             {# <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
-                                id="conditional-checklist-1">
+                                id="conditional-checklistFail">
 
 
                             </div> #}
                             <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="contact-2" name="checklist" type="radio"
+                                <input class="govuk-radios__input" id="checklistFail" name="checklist" type="radio"
+                                    aria-describedby="checklistFail-hint"
+                                    aria-labelledby="checklistFail-label"
                                     value="Fail" {% if checklist == "Fail" %}checked{% endif %}>
-                                {# data-aria-controls="conditional-contact-2" #}
-                                <label class="govuk-label govuk-radios__label" for="contact-2">
+                                {# data-aria-controls="conditional-checklistFail" #}
+                                <label id="checklistFail-label" class="govuk-label govuk-radios__label" for="checklistFail">
                                     Fail or referred to SPS
                                 </label>
-                                <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
+                                <div id="checklistFail-hint" class="govuk-hint govuk-radios__hint">
                                     Fails at least one check.
                                 </div>
                             </div>
