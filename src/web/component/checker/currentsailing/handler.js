@@ -86,11 +86,15 @@ const submitCurrentSailingSlot = async (request, h) => {
     }
   }
 
+  let shouldSkipFurtherChecks = false;
 
   if(!validateDepartureDateResult.isValid)
     {
       errorSummary.push({ fieldId: "departureDateDay", message: validateDepartureDateResult.error });
       isValid = false;
+      shouldSkipFurtherChecks = true; 
+      validateDepartureDateRangeActualHourResult.error = null;
+      validateDepartureDateRangeZeroHourResult.error = null;
     }
 
   if (!validateSailingHourResult.isValid || !validateSailingMinutesResult.isValid) {
@@ -106,15 +110,15 @@ const submitCurrentSailingSlot = async (request, h) => {
   }
 
 
-  let shouldSkipFurtherChecks = false;
 
-  if (!validateDepartureDateRangeZeroHourResult.isValid) {
+
+  if (!shouldSkipFurtherChecks && !validateDepartureDateRangeZeroHourResult.isValid) {
     const errorSummaryMessage = validateDepartureDateRangeZeroHourResult.error;
     errorSummary.push({ fieldId: "departureDateDay", message: errorSummaryMessage });
     isValid = false;
 
     //Do not flag time portion, as the date is the issue
-    validateDepartureDateRangeActualHourResult.error = "";
+    validateDepartureDateRangeActualHourResult.error = null;
     shouldSkipFurtherChecks = true; 
   }
   
