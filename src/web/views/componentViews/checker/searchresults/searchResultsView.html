@@ -372,45 +372,60 @@
                 {% if data['documentState'] !== 'rejected' and data['documentState'] !== 'revoked' and data['documentState'] !== 'awaiting' %}
                 <div>
                     
-                    <div id="radio-check-error" class="govuk-form-group {% if error %}govuk-form-group--error{%
-                        endif %}">
+                    <div id="radio-check-error" class="govuk-form-group {% if error %}govuk-form-group--error{% endif %}">
                         {% if error %}
                         <p id="passOrFailOption" class="govuk-error-message">
                             <span class="govuk-visually-hidden">Error:</span> Select an option
                         </p>
                         {% endif %}
                     
-                    
                         <div class="govuk-radios" data-module="govuk-radios">
                             <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="checklist" name="checklist" type="radio"
-                                    value="Pass" {% if checklist == "Pass" %}checked{% endif %}>
-                                {# data-aria-controls="conditional-checklist-1" #}
-                                <label class="govuk-label govuk-radios__label" for="checklist">
+                                <input 
+                                    class="govuk-radios__input" 
+                                    id="checklist" 
+                                    name="checklist" 
+                                    type="radio"
+                                    value="Pass" 
+                                    aria-labelledby="pass-label pass-hint"
+                                    {% if checklist == "Pass" %}checked{% endif %}>
+                                <label 
+                                    id="pass-label" 
+                                    class="govuk-label govuk-radios__label" 
+                                    for="checklist">
                                     Pass
                                 </label>
-                                <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
+                                <div 
+                                    id="pass-hint" 
+                                    class="govuk-hint govuk-radios__hint">
                                     Passes all checks.
                                 </div>
                             </div>
-                            {# <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
-                                id="conditional-checklist-1">
 
-
-                            </div> #}
                             <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="contact-2" name="checklist" type="radio"
-                                    value="Fail" {% if checklist == "Fail" %}checked{% endif %}>
-                                {# data-aria-controls="conditional-contact-2" #}
-                                <label class="govuk-label govuk-radios__label" for="contact-2">
+                                <input 
+                                    class="govuk-radios__input" 
+                                    id="contact-2" 
+                                    name="checklist" 
+                                    type="radio"
+                                    value="Fail" 
+                                    aria-labelledby="fail-label fail-hint"
+                                    {% if checklist == "Fail" %}checked{% endif %}>
+                                <label 
+                                    id="fail-label" 
+                                    class="govuk-label govuk-radios__label" 
+                                    for="contact-2">
                                     Fail or referred to SPS
                                 </label>
-                                <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
+                                <div 
+                                    id="fail-hint" 
+                                    class="govuk-hint govuk-radios__hint">
                                     Fails at least one check.
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
                 {% endif %}
             </fieldset>
