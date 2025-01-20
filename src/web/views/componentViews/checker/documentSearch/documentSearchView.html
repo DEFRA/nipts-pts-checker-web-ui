@@ -22,28 +22,30 @@
       <div class="govuk-grid-row govuk-!-margin-bottom-0 govuk-!-margin-top-0">
         <div class="govuk-grid-column-full govuk-!-margin-top-0">
           <div class="govuk-form-group">
-            <fieldset class="govuk-fieldset">
+            <fieldset class="govuk-fieldset" aria-describedby="document-search-hint">
               <legend>
                 <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
                   {{ documentSearchMainModelData.pageHeading }}
                 </h1>
               </legend>
+             
               <div class="govuk-radios" data-module="govuk-radios">
                 <ul style="list-style: none; padding-left: 0;">
                   <li>
                     <div class="govuk-radios__item">
                       <input class="govuk-radios__input" id="documentSearch-1" name="documentSearch" type="radio"
-                        value="ptd" data-aria-controls="conditional-documentSearch-1" aria-label="SearchByPtdNumber" {%
-                        if activeTab=="ptd" %}checked{% endif %}>
-                      <label class="govuk-label govuk-radios__label" for="documentSearch-1">
+                        value="ptd" data-aria-controls="conditional-documentSearch-1" {% if activeTab=="ptd" %}checked{%
+                        endif %}>
+                      <label class="govuk-label govuk-radios__label" for="documentSearch-1"
+                        aria-label="Search by PTD number">
                         {{documentSearchMainModelData.searchOptions[0].value}}
                       </label>
                     </div>
                     <div
                       class="govuk-radios__conditional {% if activeTab == 'ptd' %}{% else %}govuk-radios__conditional--hidden{% endif %}"
                       id="conditional-documentSearch-1">
-                      <div id="ptd-form-group" class="govuk-form-group {% if error and activeTab == " ptd"
-                        %}govuk-form-group--error{% endif %}">
+                      <div id="ptd-form-group"
+                        class="govuk-form-group {% if error and activeTab == 'ptd' %}govuk-form-group--error{% endif %}">
                         {% if error and activeTab == "ptd" %}
                         <p id="ptd-error" class="govuk-error-message">
                           <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span>
@@ -54,9 +56,10 @@
                           <div class="govuk-input__prefix" aria-hidden="true">
                             {{documentSearchMainModelData.ptdSearchText}}
                           </div>
-                          <input class="govuk-input {% if error and activeTab == " ptd" %}govuk-input--error{% endif %}
-                            govuk-input--width-10" id="ptdNumberSearch" aria-label="PtdNumber Input"
-                            name="ptdNumberSearch" type="text" spellcheck="false" value="{{ptdNumberSearch}}">
+                          <input
+                            class="govuk-input {% if error and activeTab == 'ptd' %}govuk-input--error{% endif %} govuk-input--width-10"
+                            id="ptdNumberSearch" name="ptdNumberSearch" type="text" spellcheck="false"
+                            value="{{ptdNumberSearch}}" aria-label="Enter PTD number">
                         </div>
                       </div>
                     </div>
@@ -66,25 +69,26 @@
                       <input class="govuk-radios__input" id="documentSearch-2" name="documentSearch" type="radio"
                         value="application" data-aria-controls="conditional-documentSearch-2" {% if
                         activeTab=="application" %}checked{% endif %}>
-                      <label class="govuk-label govuk-radios__label" for="documentSearch-2">
+                      <label class="govuk-label govuk-radios__label" for="documentSearch-2"
+                        aria-label="Search by application reference">
                         {{documentSearchMainModelData.searchOptions[1].value}}
                       </label>
                     </div>
                     <div
                       class="govuk-radios__conditional {% if activeTab == 'application' %}{% else %}govuk-radios__conditional--hidden{% endif %}"
                       id="conditional-documentSearch-2">
-                      <div id="application-form-group" class="govuk-form-group {% if error and activeTab == "
-                        application" %}govuk-form-group--error{% endif %}">
+                      <div id="application-form-group"
+                        class="govuk-form-group {% if error and activeTab == 'application' %}govuk-form-group--error{% endif %}">
                         {% if error and activeTab == "application" %}
                         <p id="application-error" class="govuk-error-message">
                           <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span>
                           {{error}}
                         </p>
                         {% endif %}
-                        <input class="govuk-input {% if error and activeTab == " application" %}govuk-input--error{%
-                          endif %} govuk-input--width-10" id="applicationNumberSearch" name="applicationNumberSearch"
-                          type="text" spellcheck="false" aria-label="ApplicationNumber Input"
-                          value="{{applicationNumberSearch}}">
+                        <input
+                          class="govuk-input {% if error and activeTab == 'application' %}govuk-input--error{% endif %} govuk-input--width-10"
+                          id="applicationNumberSearch" name="applicationNumberSearch" type="text" spellcheck="false"
+                          value="{{applicationNumberSearch}}" aria-label="Enter application reference number">
                       </div>
                     </div>
                   </li>
@@ -93,24 +97,26 @@
                       <input class="govuk-radios__input" id="documentSearch-3" name="documentSearch" type="radio"
                         value="microchip" data-aria-controls="conditional-documentSearch-3" {% if activeTab=="microchip"
                         %}checked{% endif %}>
-                      <label class="govuk-label govuk-radios__label" for="documentSearch-3">
+                      <label class="govuk-label govuk-radios__label" for="documentSearch-3"
+                        aria-label="Search by microchip number">
                         {{documentSearchMainModelData.searchOptions[2].value}}
                       </label>
                     </div>
                     <div
                       class="govuk-radios__conditional {% if activeTab == 'microchip' %}{% else %}govuk-radios__conditional--hidden{% endif %}"
                       id="conditional-documentSearch-3">
-                      <div id="microchip-form-group" class="govuk-form-group {% if error and activeTab == " microchip"
-                        %}govuk-form-group--error{% endif %}">
+                      <div id="microchip-form-group"
+                        class="govuk-form-group {% if error and activeTab == 'microchip' %}govuk-form-group--error{% endif %}">
                         {% if error and activeTab == "microchip" %}
                         <p id="microchip-error" class="govuk-error-message">
                           <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span>
                           {{error}}
                         </p>
                         {% endif %}
-                        <input class="govuk-input {% if error and activeTab == " microchip" %}govuk-input--error{% endif
-                          %} govuk-input--width-20" id="microchipNumber" name="microchipNumber" type="text"
-                          spellcheck="false" aria-label="MicrochipNumber Input" value="{{microchipNumber}}">
+                        <input
+                          class="govuk-input {% if error and activeTab == 'microchip' %}govuk-input--error{% endif %} govuk-input--width-20"
+                          id="microchipNumber" name="microchipNumber" type="text" spellcheck="false"
+                          value="{{microchipNumber}}" aria-label="Enter microchip number">
                       </div>
                     </div>
                   </li>
@@ -129,7 +135,8 @@
         </div>
         <div class="govuk-grid-column-one-half" style="text-align: right;">
           <p class="govuk-body govuk-!-margin-top-2">
-            <a class="govuk-link" style="text-align: right;" href="#" id="clearSearchButton">Clear search</a>
+            <a class="govuk-link" style="text-align: right;" href="#" id="clearSearchButton"
+              aria-label="Clear search">Clear search</a>
           </p>
         </div>
       </div>
