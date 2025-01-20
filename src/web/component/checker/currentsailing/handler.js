@@ -86,11 +86,15 @@ const submitCurrentSailingSlot = async (request, h) => {
     }
   }
 
+  let shouldSkipFurtherChecks = false;
 
   if(!validateDepartureDateResult.isValid)
     {
       errorSummary.push({ fieldId: "departureDateDay", message: validateDepartureDateResult.error });
       isValid = false;
+      shouldSkipFurtherChecks = true; 
+      validateDepartureDateRangeActualHourResult.error = "";
+      validateDepartureDateRangeZeroHourResult.error = "";
     }
 
   if (!validateSailingHourResult.isValid || !validateSailingMinutesResult.isValid) {
@@ -106,9 +110,9 @@ const submitCurrentSailingSlot = async (request, h) => {
   }
 
 
-  let shouldSkipFurtherChecks = false;
 
-  if (!validateDepartureDateRangeZeroHourResult.isValid) {
+
+  if (!shouldSkipFurtherChecks && !validateDepartureDateRangeZeroHourResult.isValid) {
     const errorSummaryMessage = validateDepartureDateRangeZeroHourResult.error;
     errorSummary.push({ fieldId: "departureDateDay", message: errorSummaryMessage });
     isValid = false;
