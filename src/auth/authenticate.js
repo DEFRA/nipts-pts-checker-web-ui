@@ -46,26 +46,19 @@ const authenticate = async (request) => {
     const organisation = userService.getUserOrganisation(request);
 
     let organisationId = null;
-    let isGBCheck = null;
+    let isGBCheck = true;
+    
     if(organisation.organisationId !== "")
     {
       organisationId = organisation.organisationId;
     }
 
     const userOrganisation = await apiService.getOrganisation(organisationId, request);
-    if(userOrganisation !== null)
-    {
-      switch (true) {
-        case userOrganisation.Location.toLowerCase().includes('gb'):
-            isGBCheck = true;
-            break;
-        case userOrganisation.Location.toLowerCase().includes('ni'):
+
+    if (userOrganisation !== null && userOrganisation.Location) {
+        if (userOrganisation.Location.toLowerCase().includes('ni')) {
             isGBCheck = false;
-            break;
-        default:
-            // Optionally handle other cases
-            break;
-      }
+        }
     }
     
 
