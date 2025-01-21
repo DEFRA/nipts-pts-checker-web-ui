@@ -379,20 +379,20 @@
                         </p>
                         {% endif %}
                     
-                        <div class="govuk-radios" data-module="govuk-radios">
-                            <div class="govuk-radios__item">
+                        <div class="govuk-radios" data-module="govuk-radios" role="radiogroup">                       
+                            <div class="govuk-radios__item" role="radio" aria-checked="{% if checklist == 'Pass' %}true{% else %}false{% endif %}" tabindex="{% if checklist == 'Pass' %}0{% else %}-1{% endif %}" aria-posinset="1" aria-setsize="2">
                                 <input 
                                     class="govuk-radios__input" 
-                                    id="checklist" 
+                                    id="checklist-pass" 
                                     name="checklist" 
                                     type="radio"
                                     value="Pass" 
-                                    aria-labelledby="pass-label"
-                                    {% if checklist == "Pass" %}checked{% endif %}>
+                                    aria-labelledby="pass-label" 
+                                    {% if checklist == "Pass" %}checked="checked"{% endif %}>
                                 <label 
                                     id="pass-label" 
                                     class="govuk-label govuk-radios__label" 
-                                    for="checklist">
+                                    for="checklist-pass">
                                     Pass
                                 </label>
                                 <div 
@@ -401,20 +401,20 @@
                                     Passes all checks.
                                 </div>
                             </div>
-
-                            <div class="govuk-radios__item">
+                        
+                            <div class="govuk-radios__item" role="radio" aria-checked="{% if checklist == 'Fail' %}true{% else %}false{% endif %}" tabindex="{% if checklist == 'Fail' %}0{% else %}-1{% endif %}" aria-posinset="2" aria-setsize="2">
                                 <input 
                                     class="govuk-radios__input" 
-                                    id="contact-2" 
+                                    id="checklist-fail" 
                                     name="checklist" 
                                     type="radio"
                                     value="Fail" 
-                                    aria-labelledby="fail-label"
-                                    {% if checklist == "Fail" %}checked{% endif %}>
+                                    aria-labelledby="fail-label" 
+                                    {% if checklist == "Fail" %}checked="checked"{% endif %}>
                                 <label 
                                     id="fail-label" 
                                     class="govuk-label govuk-radios__label" 
-                                    for="contact-2">
+                                    for="checklist-fail">
                                     Fail or referred to SPS
                                 </label>
                                 <div 
@@ -424,6 +424,7 @@
                                 </div>
                             </div>
                         </div>
+                            
                     </div>
 
                 </div>
@@ -477,7 +478,23 @@
     }
 
     if(window.history.replaceState) {
-    window.history.replaceState(null, null, window.location.href);
-  }
+        window.history.replaceState(null, null, window.location.href);
+    }
+
+      // Select all radio buttons within the radiogroup
+    const radioButtons = document.querySelectorAll('[role="radio"]');
+  
+    radioButtons.forEach(radio => {
+        // Add an event listener to each radio button
+        radio.addEventListener('change', function() {
+            // Update aria-checked for each radio button
+            radioButtons.forEach(rb => {
+                const input = rb.querySelector('input');
+                const ariaChecked = (input.checked) ? 'true' : 'false';
+                rb.setAttribute('aria-checked', ariaChecked);
+            });
+        });
+    });
+
 </script>
 {% endblock %}
