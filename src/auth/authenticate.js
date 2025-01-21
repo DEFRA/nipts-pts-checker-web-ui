@@ -55,11 +55,10 @@ const authenticate = async (request) => {
 
     const userOrganisation = await apiService.getOrganisation(organisationId, request);
 
-    if (userOrganisation !== null && userOrganisation.Location) {
-        if (userOrganisation.Location.toLowerCase().includes('ni')) {
-            isGBCheck = false;
-        }
+    if (userOrganisation?.Location && typeof userOrganisation.Location === 'string' && userOrganisation.Location.toLowerCase().includes('ni')) {
+        isGBCheck = false;
     }
+    
     
 
     const checker = {
