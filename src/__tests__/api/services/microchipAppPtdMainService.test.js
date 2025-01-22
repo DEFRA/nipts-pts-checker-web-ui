@@ -410,3 +410,82 @@ describe("getMicrochipData", () => {
     expect(data).toEqual(expectedError);
   });
 });
+
+describe("checkMicrochipNumberExistWithPtd", () => {
+  it("should return true when microchip number exists", async () => {
+    const microchipNumber = "123456789012345";
+    const request = {
+      headers: {
+        authorization: "Bearer mockToken",
+      },
+    };
+
+    const apiResponse = {
+      data: true,
+    };
+
+    httpService.postAsync.mockResolvedValue(apiResponse);
+
+    const result = await microchipApi.checkMicrochipNumberExistWithPtd(microchipNumber, request);
+
+    expect(result).toEqual({ exists: true });
+  });
+
+  it("should return false when microchip number does not exist", async () => {
+    const microchipNumber = "987654321098765";
+    const request = {
+      headers: {
+        authorization: "Bearer mockToken",
+      },
+    };
+
+    const apiResponse = {
+      data: false,
+    };
+
+    httpService.postAsync.mockResolvedValue(apiResponse);
+
+    const result = await microchipApi.checkMicrochipNumberExistWithPtd(microchipNumber, request);
+
+    expect(result).toEqual({ exists: false });
+  });
+
+  it("should return an error when API response contains an error", async () => {
+    const microchipNumber = "123456789012345";
+    const request = {
+      headers: {
+        authorization: "Bearer mockToken",
+      },
+    };
+
+    const apiErrorResponse = {
+      response: {
+        data: {
+          error: "Microchip not found",
+        },
+      },
+    };
+
+    httpService.postAsync.mockRejectedValue(apiErrorResponse);
+
+    const result = await microchipApi.checkMicrochipNumberExistWithPtd(microchipNumber, request);
+
+    expect(result).toEqual({ error: "Microchip not found" });
+  });
+
+  it("should return a generic error for unexpected exceptions", async () => {
+    const microchipNumber = "123456789012345";
+    const request = {
+      headers: {
+        authorization: "Bearer mockToken",
+      },
+    };
+
+    httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
+
+    const result = await microchipApi.checkMicrochipNumberExistWithPtd(microchipNumber, request);
+
+    expect(result).toEqual({ error: "Unexpected error occurred" });
+  });
+});
+
