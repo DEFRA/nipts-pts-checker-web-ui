@@ -112,7 +112,6 @@ const postNonComplianceHandler = async (request, h) => {
     if (request.yar.get("IsFailSelected")) {
         const responseData = await saveReportNonCompliance(payload, data);
         if (responseData?.error) {
-          //const errorMessage = errorMessages.serviceError.message;
           return h.view(VIEW_PATH, {
             //error: errorMessage,
             errorSummary: [

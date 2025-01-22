@@ -2,7 +2,6 @@
 import { CheckReportHandlers } from "../../../../../web/component/checker/checkreportdetails/handler.js";
 import spsReferralMainService from "../../../../../api/services/spsReferralMainService.js";
 import apiService from "../../../../../api/services/apiService.js";
-import moment from "moment";
 
 jest.mock("../../../../../api/services/spsReferralMainService.js");
 jest.mock("../../../../../api/services/apiService.js");
