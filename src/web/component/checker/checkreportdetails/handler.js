@@ -1,12 +1,14 @@
 import moment from "moment";
 import spsReferralMainService from "../../../../api/services/spsReferralMainService.js";
 import apiService from "../../../../api/services/apiService.js";
+import { HttpStatusConstants } from "../../../../constants/httpMethod.js";
 
 const VIEW_PATH = "componentViews/checker/checkReport/reportDetails";
+const dateNotavailableText = "Not available";
 
 async function getCheckDetails(request, h) {
   try {
-    let checkSummaryId = request.yar.get("checkSummaryId");
+    const checkSummaryId = request.yar.get("checkSummaryId");
 
     const checkDetails = await spsReferralMainService.GetCompleteCheckDetails(
       checkSummaryId,
@@ -16,7 +18,7 @@ async function getCheckDetails(request, h) {
     if (!checkDetails) {
       return h
         .response("No data found for the provided CheckSummaryId")
-        .code(404);
+        .code(HttpStatusConstants.NOT_FOUND);
     }
 
     const formatDateTime = (dateTime) => {
@@ -24,11 +26,11 @@ async function getCheckDetails(request, h) {
         ? moment(dateTime, ["YYYY-MM-DD HH:mm:ss", "YYYY-MM-DD"]).format(
             "DD/MM/YYYY HH:mm"
           )
-        : "Not available";
+        : dateNotavailableText;
     };
 
     const formatScheduledDate = (date) => {
-      return date ? moment(date).format("DD/MM/YYYY") : "Not available";
+      return date ? moment(date).format("DD/MM/YYYY") : dateNotavailableText;
     };
 
     const shouldDisplayMicrochip = checkDetails.reasonForReferral?.some(
@@ -37,7 +39,11 @@ async function getCheckDetails(request, h) {
 
     
     const hasValidComments = (comments) => {
-      if (!comments || !Array.isArray(comments)) return false;
+      if (!comments || !Array.isArray(comments)) 
+      {
+        return false;
+      }
+
       return comments.some(
         (comment) =>
           comment && typeof comment === "string" && comment.trim() !== ""
@@ -67,7 +73,7 @@ async function getCheckDetails(request, h) {
         ? moment(checkDetails.scheduledDepartureTime, "HH:mm:ss").format(
             "HH:mm"
           )
-        : "Not available",
+        : dateNotavailableText,
     };
 
     return h.view(VIEW_PATH, {
@@ -77,7 +83,7 @@ async function getCheckDetails(request, h) {
     console.error("Error in getCheckDetails:", error);
     return h
       .response({ error: "Internal Server Error", details: error.message })
-      .code(500);
+      .code(HttpStatusConstants.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -86,7 +92,7 @@ async function conductSpsCheck(request, h) {
     const identifier = request.yar.get("identifier");
 
     if (!identifier) {
-      return h.response({ error: "Identifier is required" }).code(400);
+      return h.response({ error: "Identifier is required" }).code(HttpStatusConstants.BAD_REQUEST);
     }
 
     let responseData;
@@ -98,7 +104,7 @@ async function conductSpsCheck(request, h) {
       if (!responseData) {
         return h
           .response("No data found for the provided PTD number")
-          .code(404);
+          .code(HttpStatusConstants.NOT_FOUND);
       }
       request.yar.set("ptdNumber", identifier);
     } else {
@@ -109,7 +115,7 @@ async function conductSpsCheck(request, h) {
       if (!responseData) {
         return h
           .response("No data found for the provided application number")
-          .code(404);
+          .code(HttpStatusConstants.NOT_FOUND);
       }
       request.yar.set("applicationNumber", identifier);
     }
@@ -121,7 +127,7 @@ async function conductSpsCheck(request, h) {
     console.error("Error in conductSpsCheck:", error);
     return h
       .response({ error: "Internal Server Error", details: error.message })
-      .code(500);
+      .code(HttpStatusConstants.INTERNAL_SERVER_ERROR);
   }
 }
 
