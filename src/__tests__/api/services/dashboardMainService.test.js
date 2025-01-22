@@ -33,7 +33,7 @@ describe("service.getCheckOutcomes", () => {
           passCount: 10,
           failCount: 2,
           failReason: "Delay",
-          viewDetailsLink: "http://detailslink.com",
+          viewDetailsLink: "",
         },
         {
           routeId: "2",
@@ -46,7 +46,7 @@ describe("service.getCheckOutcomes", () => {
           passCount: 20,
           failCount: 3,
           failReason: "Weather",
-          viewDetailsLink: "http://detailslink.com",
+          viewDetailsLink: "",
         },
       ],
     };
