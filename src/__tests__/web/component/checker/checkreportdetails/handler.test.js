@@ -15,6 +15,10 @@ const errorCode400 = 400;
 
 const validGuid = "valid-guid";
 const checkOutcome = "Passenger referred to DAERA/SPS at NI port";
+const checkerName = "Checker Name";
+const reportDetailsView = "componentViews/checker/checkReport/reportDetails";
+const referralReason = "Potential commercial movement";
+const dateNotAvailable = "Not available";
 
 describe("CheckReportHandlers", () => {
   afterEach(() => {
@@ -59,7 +63,7 @@ describe("CheckReportHandlers", () => {
         reasonForReferral: ["Microchip number does not match the PTD"],
         microchipNumber: "1234567890",
         additionalComments: ["Comment 1"],
-        gbCheckerName: "Checker Name",
+        gbCheckerName: checkerName,
         route: "Route A",
         scheduledDepartureDate: "2024-12-15",
         scheduledDepartureTime: "14:00:00",
@@ -81,7 +85,7 @@ describe("CheckReportHandlers", () => {
         reasonForReferral: ["Microchip number does not match the PTD"],
         microchipNumber: "1234567890",
         additionalComments: ["Comment 1"],
-        gbCheckerName: "Checker Name",
+        gbCheckerName: checkerName,
         dateTimeChecked: "13/12/2024 14:22",
         route: "Route A",
         scheduledDepartureDate: "15/12/2024",
@@ -89,7 +93,7 @@ describe("CheckReportHandlers", () => {
       };
 
       expect(h.view).toHaveBeenCalledWith(
-        "componentViews/checker/checkReport/reportDetails",
+        reportDetailsView,
         {
           checkDetails: expectedFormattedDetails,
         }
@@ -108,10 +112,10 @@ describe("CheckReportHandlers", () => {
         ptdNumber: "PTD12345",
         applicationReference: null,
         checkOutcome: [checkOutcome],
-        reasonForReferral: ["Potential commercial movement"],
+        reasonForReferral: [referralReason],
         microchipNumber: "1234567890",
         additionalComments: ["Comment 1"],
-        gbCheckerName: "Checker Name",
+        gbCheckerName: checkerName,
         route: "Route A",
         scheduledDepartureDate: "2024-12-15",
         scheduledDepartureTime: "14:00:00",
@@ -130,10 +134,10 @@ describe("CheckReportHandlers", () => {
       const expectedFormattedDetails = {
         reference: "PTD12345",
         checkOutcome: [checkOutcome],
-        reasonForReferral: ["Potential commercial movement"],
+        reasonForReferral: [referralReason],
         microchipNumber: null,
         additionalComments: ["Comment 1"],
-        gbCheckerName: "Checker Name",
+        gbCheckerName: checkerName,
         dateTimeChecked: "13/12/2024 14:22",
         route: "Route A",
         scheduledDepartureDate: "15/12/2024",
@@ -141,7 +145,7 @@ describe("CheckReportHandlers", () => {
       };
 
       expect(h.view).toHaveBeenCalledWith(
-        "componentViews/checker/checkReport/reportDetails",
+        reportDetailsView,
         {
           checkDetails: expectedFormattedDetails,
         }
@@ -158,8 +162,8 @@ describe("CheckReportHandlers", () => {
       const mockCheckDetails = {
         ptdNumber: "PTD12345",
         checkOutcome: [checkOutcome],
-        reasonForReferral: ["Potential commercial movement"],
-        gbCheckerName: "Checker Name",
+        reasonForReferral: [referralReason],
+        gbCheckerName: checkerName,
         route: "Route A",
       };
 
@@ -176,18 +180,18 @@ describe("CheckReportHandlers", () => {
       const expectedFormattedDetails = {
         reference: "PTD12345",
         checkOutcome: [checkOutcome],
-        reasonForReferral: ["Potential commercial movement"],
+        reasonForReferral: [referralReason],
         microchipNumber: null,
         additionalComments: ["None"],
-        gbCheckerName: "Checker Name",
-        dateTimeChecked: "Not available",
+        gbCheckerName: checkerName,
+        dateTimeChecked: dateNotAvailable,
         route: "Route A",
-        scheduledDepartureDate: "Not available",
-        scheduledDepartureTime: "Not available",
+        scheduledDepartureDate: dateNotAvailable,
+        scheduledDepartureTime: dateNotAvailable,
       };
 
       expect(h.view).toHaveBeenCalledWith(
-        "componentViews/checker/checkReport/reportDetails",
+        reportDetailsView,
         {
           checkDetails: expectedFormattedDetails,
         }

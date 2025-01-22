@@ -51,11 +51,15 @@ describe("ReferredHandlers", () => {
             if (key === "departureDate") return "01/01/2023";
             if (key === "departureTime") return "12:00";
             if (key === "currentSailingSlot") return { slot: "morning" };
-            if (key === "spsChecks") return { spsChecks : [
-              { SPSOutcome: checkNeeded, classColour: "blue", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
-              { SPSOutcome: allowed, classColour: "green", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted  },
-              { SPSOutcome: notAllowed, classColour: "red", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted  },
-            ]};
+            if (key === "spsChecks") {
+              return {
+                spsChecks: [
+                  { SPSOutcome: checkNeeded, classColour: "blue", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+                  { SPSOutcome: allowed, classColour: "green", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+                  { SPSOutcome: notAllowed, classColour: "red", PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+                ],
+              };
+            }            
             return null;
           }),
         },

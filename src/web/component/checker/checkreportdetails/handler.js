@@ -6,7 +6,7 @@ const VIEW_PATH = "componentViews/checker/checkReport/reportDetails";
 
 async function getCheckDetails(request, h) {
   try {
-    let checkSummaryId = request.yar.get("checkSummaryId");
+    const checkSummaryId = request.yar.get("checkSummaryId");
 
     const checkDetails = await spsReferralMainService.GetCompleteCheckDetails(
       checkSummaryId,
@@ -37,7 +37,11 @@ async function getCheckDetails(request, h) {
 
     
     const hasValidComments = (comments) => {
-      if (!comments || !Array.isArray(comments)) return false;
+      if (!comments || !Array.isArray(comments)) 
+      {
+        return false;
+      }
+      
       return comments.some(
         (comment) =>
           comment && typeof comment === "string" && comment.trim() !== ""
