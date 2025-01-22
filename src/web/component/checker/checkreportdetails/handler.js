@@ -4,6 +4,7 @@ import apiService from "../../../../api/services/apiService.js";
 import { HttpStatusConstants } from "../../../../constants/httpMethod.js";
 
 const VIEW_PATH = "componentViews/checker/checkReport/reportDetails";
+const dateNotavailableText = "Not available";
 
 async function getCheckDetails(request, h) {
   try {
@@ -25,11 +26,11 @@ async function getCheckDetails(request, h) {
         ? moment(dateTime, ["YYYY-MM-DD HH:mm:ss", "YYYY-MM-DD"]).format(
             "DD/MM/YYYY HH:mm"
           )
-        : "Not available";
+        : dateNotavailableText;
     };
 
     const formatScheduledDate = (date) => {
-      return date ? moment(date).format("DD/MM/YYYY") : "Not available";
+      return date ? moment(date).format("DD/MM/YYYY") : dateNotavailableText;
     };
 
     const shouldDisplayMicrochip = checkDetails.reasonForReferral?.some(
@@ -72,7 +73,7 @@ async function getCheckDetails(request, h) {
         ? moment(checkDetails.scheduledDepartureTime, "HH:mm:ss").format(
             "HH:mm"
           )
-        : "Not available",
+        : dateNotavailableText,
     };
 
     return h.view(VIEW_PATH, {
