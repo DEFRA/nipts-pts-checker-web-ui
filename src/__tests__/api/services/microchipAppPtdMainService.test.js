@@ -14,6 +14,7 @@ const issuingAuthorityAddressLineTwo = "Eden Bridge House";
 const issuingAuthorityAddressLineThree = "Lowther Street";
 const agencyName = "Animal and Plant Health Agency";
 const signatoryName = "John Smith (APHA) (Signed digitally)";
+const bearerToken = "Bearer mockToken"
 
 describe("getMicrochipData", () => {
   let request;
@@ -22,7 +23,7 @@ describe("getMicrochipData", () => {
     request = {
       // Mock request object
       headers: {
-        authorization: "Bearer mockToken",
+        authorization: bearerToken,
       },
     };
     jest.clearAllMocks();
@@ -416,7 +417,7 @@ describe("checkMicrochipNumberExistWithPtd", () => {
     const microchipNumber = "123456789012345";
     const request = {
       headers: {
-        authorization: "Bearer mockToken",
+        authorization: bearerToken,
       },
     };
 
@@ -435,7 +436,7 @@ describe("checkMicrochipNumberExistWithPtd", () => {
     const microchipNumber = "987654321098765";
     const request = {
       headers: {
-        authorization: "Bearer mockToken",
+        authorization: bearerToken,
       },
     };
 
@@ -454,7 +455,7 @@ describe("checkMicrochipNumberExistWithPtd", () => {
     const microchipNumber = "123456789012345";
     const request = {
       headers: {
-        authorization: "Bearer mockToken",
+        authorization: bearerToken,
       },
     };
 
@@ -477,7 +478,7 @@ describe("checkMicrochipNumberExistWithPtd", () => {
     const microchipNumber = "123456789012345";
     const request = {
       headers: {
-        authorization: "Bearer mockToken",
+        authorization: bearerToken,
       },
     };
 
