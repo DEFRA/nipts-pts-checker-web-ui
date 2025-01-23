@@ -26,6 +26,7 @@ const currentSailingMainModelData = {
     routes: undefined,
     sailingTimeSubHeading: "Scheduled departure time",
     sailingHintText1: "Use the 24-hour clock - for example, 15:30.",
+    sailingHintText2: "For midday, use 12:00. For midnight, use 23:59.",
     sailingTimes: times,
     currentSailingMainModelErrors: errors,
     routeOptions: routeOptions,
