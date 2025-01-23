@@ -19,6 +19,7 @@ const issuingAuthorityAddressLineTwo = "Eden Bridge House";
 const issuingAuthorityAddressLineThree = "Lowther Street";
 const agencyName = "Animal and Plant Health Agency";
 const signatoryName = "John Smith (APHA) (Signed digitally)";
+const additionalDetails = "Non-compliance details";
 
 const baseUrl =
   process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
@@ -1203,7 +1204,7 @@ describe("apiService", () => {
 
   describe("reportNonCompliance", () => {
     it("should handle non-compliance reporting and return checkSummaryId", async () => {
-      const mockCheckOutcome = { compliance: false, details: "Non-compliance details" };
+      const mockCheckOutcome = { compliance: false, details: additionalDetails };
       const mockResponse = {
         status: 200,
         data: { checkSummaryId: "mockCheckSummaryId" },
@@ -1222,7 +1223,7 @@ describe("apiService", () => {
     });
     
     it("should handle 404 response and return structured error", async () => {
-      const mockCheckOutcome = { compliance: false, details: "Non-compliance details" };
+      const mockCheckOutcome = { compliance: false, details: additionalDetails };
       const mockResponse = {
         status: HttpStatusCode.NotFound,
         error: applicationNotFoundMessage,
@@ -1236,7 +1237,7 @@ describe("apiService", () => {
     });
     
     it("should handle unexpected response structure and return structured error", async () => {
-      const mockCheckOutcome = { compliance: false, details: "Non-compliance details" };
+      const mockCheckOutcome = { compliance: false, details: additionalDetails };
       const mockResponse = {
         status: 200,
         data: null,
@@ -1250,7 +1251,7 @@ describe("apiService", () => {
     });
     
     it("should handle unexpected errors and return structured error", async () => {
-      const mockCheckOutcome = { compliance: false, details: "Non-compliance details" };
+      const mockCheckOutcome = { compliance: false, details: additionalDetails };
       const mockError = new Error("Unexpected failure");
     
       httpService.postAsync.mockRejectedValue(mockError);
