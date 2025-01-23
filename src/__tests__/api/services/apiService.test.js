@@ -1200,6 +1200,68 @@ describe("apiService", () => {
     });
 
   });
+
+  describe("reportNonCompliance", () => {
+    it("should handle non-compliance reporting and return checkSummaryId", async () => {
+      const mockCheckOutcome = { compliance: false, details: "Non-compliance details" };
+      const mockResponse = {
+        status: 200,
+        data: { checkSummaryId: "mockCheckSummaryId" },
+      };
+    
+      httpService.postAsync.mockResolvedValue(mockResponse);
+    
+      const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
+    
+      expect(httpService.postAsync).toHaveBeenCalledWith(
+        `${baseUrl}/Checker/ReportNonCompliance`,
+        mockCheckOutcome,
+        request
+      );
+      expect(result).toEqual("mockCheckSummaryId");
+    });
+    
+    it("should handle 404 response and return structured error", async () => {
+      const mockCheckOutcome = { compliance: false, details: "Non-compliance details" };
+      const mockResponse = {
+        status: HttpStatusCode.NotFound,
+        error: applicationNotFoundMessage,
+      };
+    
+      httpService.postAsync.mockResolvedValue(mockResponse);
+    
+      const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
+    
+      expect(result).toEqual({ error: "not_found" });
+    });
+    
+    it("should handle unexpected response structure and return structured error", async () => {
+      const mockCheckOutcome = { compliance: false, details: "Non-compliance details" };
+      const mockResponse = {
+        status: 200,
+        data: null,
+      };
+    
+      httpService.postAsync.mockResolvedValue(mockResponse);
+    
+      const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
+    
+      expect(result).toEqual({ error: unexpectedResponseStructure });
+    });
+    
+    it("should handle unexpected errors and return structured error", async () => {
+      const mockCheckOutcome = { compliance: false, details: "Non-compliance details" };
+      const mockError = new Error("Unexpected failure");
+    
+      httpService.postAsync.mockRejectedValue(mockError);
+    
+      const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
+    
+      expect(result).toEqual({ error: "Unexpected failure" });
+    });
+    
+  });
+
 });
 
 
