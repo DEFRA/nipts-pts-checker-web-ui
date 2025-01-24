@@ -16,6 +16,8 @@ const agencyName = "Animal and Plant Health Agency";
 const signatoryName = "John Smith (APHA) (Signed digitally)";
 const bearerToken = "Bearer mockToken"
 
+const unexpectedErrorMessage = "Unexpected error occurred";
+
 describe("getMicrochipData", () => {
   let request;
 
@@ -404,7 +406,7 @@ describe("getMicrochipData", () => {
 
     httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
 
-    const expectedError = { error: "Unexpected error occurred" };
+    const expectedError = { error: unexpectedErrorMessage };
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
 
@@ -416,7 +418,7 @@ describe("getMicrochipData", () => {
   
     httpService.postAsync.mockResolvedValue({ data: null });
   
-    const expectedError = { error: "Unexpected error occurred" };
+    const expectedError = { error: unexpectedErrorMessage };
   
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
   
@@ -529,7 +531,7 @@ describe("checkMicrochipNumberExistWithPtd", () => {
 
     const result = await microchipApi.checkMicrochipNumberExistWithPtd(microchipNumber, request);
 
-    expect(result).toEqual({ error: "Unexpected error occurred" });
+    expect(result).toEqual({ error: unexpectedErrorMessage });
   });
 });
 
