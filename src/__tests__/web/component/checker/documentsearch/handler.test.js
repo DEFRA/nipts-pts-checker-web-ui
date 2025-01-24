@@ -645,8 +645,6 @@ describe("DocumentSearchHandlers", () => {
         redirect: jest.fn().mockReturnValue({}),
       };
     
-      const mockData = "mockData";
-    
       microchipApi.getMicrochipData.mockResolvedValue(mockData);
     
       await DocumentSearchHandlers.submitSearch(request, h);
