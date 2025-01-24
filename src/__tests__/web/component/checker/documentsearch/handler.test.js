@@ -24,7 +24,7 @@ const pageTitleDefault =
   "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland";
 
 const documentNotFoundView = "componentViews/checker/documentsearch/documentNotFoundView";
-const errorOccureredText = errorOccureredText;
+const errorOccureredText = "An error occurred while processing your request";
 
 describe("DocumentSearchHandlers", () => {
   describe("getDocumentSearch", () => {
@@ -528,7 +528,6 @@ describe("DocumentSearchHandlers", () => {
       };
     
       const errorProcessingText = errorOccureredText;
-      const mockData = "mockData";  
       const VIEW_PATH = 'componentViews/checker/documentsearch/documentSearchView';
     
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue(mockData);
@@ -562,7 +561,6 @@ describe("DocumentSearchHandlers", () => {
       };
     
       const errorProcessingText = errorOccureredText;
-      const mockData = "mockData";  // Replace with actual mock data
       const VIEW_PATH = 'componentViews/checker/documentsearch/documentSearchView';  // Replace with actual value
     
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue(mockData);
