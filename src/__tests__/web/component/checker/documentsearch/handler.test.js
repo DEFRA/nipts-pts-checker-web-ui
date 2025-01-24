@@ -24,6 +24,7 @@ const pageTitleDefault =
   "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland";
 
 const documentNotFoundView = "componentViews/checker/documentsearch/documentNotFoundView";
+const errorOccureredText = errorOccureredText;
 
 describe("DocumentSearchHandlers", () => {
   describe("getDocumentSearch", () => {
@@ -453,7 +454,7 @@ describe("DocumentSearchHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(
         "componentViews/checker/documentsearch/documentSearchView",
         {
-          error: "An error occurred while processing your request",
+          error: errorOccureredText,
           errorSummary: [
             { fieldId: "general", message: "An unexpected error occurred" },
           ],
@@ -526,7 +527,7 @@ describe("DocumentSearchHandlers", () => {
         view: jest.fn().mockReturnValue({}),
       };
     
-      const errorProcessingText = "An error occurred while processing your request";
+      const errorProcessingText = errorOccureredText;
       const mockData = "mockData";  
       const VIEW_PATH = 'componentViews/checker/documentsearch/documentSearchView';
     
@@ -560,7 +561,7 @@ describe("DocumentSearchHandlers", () => {
         view: jest.fn().mockReturnValue({}),
       };
     
-      const errorProcessingText = "An error occurred while processing your request";
+      const errorProcessingText = errorOccureredText;
       const mockData = "mockData";  // Replace with actual mock data
       const VIEW_PATH = 'componentViews/checker/documentsearch/documentSearchView';  // Replace with actual value
     
