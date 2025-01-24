@@ -477,19 +477,16 @@ describe("DocumentSearchHandlers", () => {
         view: jest.fn().mockReturnValue({}),
       };
     
-      const NOT_FOUND_VIEW_PATH = 'componentViews/checker/documentsearch/documentNotFoundView';
-      const mockPageTitle = pageTitleDefault;
-    
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue('mockData');
       microchipApi.getMicrochipData.mockResolvedValue({ error: "not_found" });
     
       await DocumentSearchHandlers.submitSearch(request, h);
     
       expect(h.view).toHaveBeenCalledWith(
-        NOT_FOUND_VIEW_PATH,
+        documentNotFoundView,
         {
           searchValue: "123456",
-          pageTitle: mockPageTitle,
+          pageTitle: pageTitleDefault,
         }
       );
     });
@@ -502,20 +499,17 @@ describe("DocumentSearchHandlers", () => {
       const h = {
         view: jest.fn().mockReturnValue({}),
       };
-    
-      const NOT_FOUND_VIEW_PATH = 'componentViews/checker/documentsearch/documentNotFoundView';
-      const mockPageTitle = pageTitleDefault;
-    
+
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue('mockData');
       microchipApi.getMicrochipData.mockResolvedValue({ error: "not_found" });
     
       await DocumentSearchHandlers.submitSearch(request, h);
     
       expect(h.view).toHaveBeenCalledWith(
-        NOT_FOUND_VIEW_PATH,
+        documentNotFoundView,
         {
           searchValue: "123456",
-          pageTitle: mockPageTitle,
+          pageTitle: pageTitleDefault,
         }
       );
     });
