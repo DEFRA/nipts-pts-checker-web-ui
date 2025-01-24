@@ -18,6 +18,7 @@ jest.mock("../../../../../web/component/checker/documentsearch/validate.js");
 const microchipNumberErrorMessage = "Enter a microchip number";
 const microchipLengthErrorMessage = "Enter a 15-digit number";
 const applicationNumberErrorMessage =  "Enter 6 characters after 'GB826'";
+const searchResultsPage = "/checker/search-results";
 
 const pageTitleDefault =
   "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland";
@@ -271,7 +272,7 @@ describe("DocumentSearchHandlers", () => {
       expect(request.yar.set).toHaveBeenNthCalledWith(2, "data", {
         data: { status: "authorised", ptdNumber: "GB826123456" },
       });
-      expect(h.redirect).toHaveBeenCalledWith("/checker/search-results");
+      expect(h.redirect).toHaveBeenCalledWith(searchResultsPage);
     });
 
     it("should handle PTD search with invalid number", async () => {
@@ -394,7 +395,7 @@ describe("DocumentSearchHandlers", () => {
         },
       });
 
-      expect(h.redirect).toHaveBeenCalledWith("/checker/search-results");
+      expect(h.redirect).toHaveBeenCalledWith(searchResultsPage);
     });
 
     it("should handle application search with application data not found", async () => {
@@ -475,7 +476,7 @@ describe("DocumentSearchHandlers", () => {
       };
     
       const NOT_FOUND_VIEW_PATH = 'componentViews/checker/documentsearch/documentNotFoundView';
-      const mockPageTitle = "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland";
+      const mockPageTitle = pageTitleDefault;
     
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue('mockData');
       microchipApi.getMicrochipData.mockResolvedValue({ error: "not_found" });
@@ -501,7 +502,7 @@ describe("DocumentSearchHandlers", () => {
       };
     
       const NOT_FOUND_VIEW_PATH = 'componentViews/checker/documentsearch/documentNotFoundView';
-      const mockPageTitle = "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland";
+      const mockPageTitle = pageTitleDefault;
     
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue('mockData');
       microchipApi.getMicrochipData.mockResolvedValue({ error: "not_found" });
@@ -663,7 +664,6 @@ describe("DocumentSearchHandlers", () => {
       };
     
       const mockData = "mockData";
-      const SEARCH_RESULT_VIEW_PATH = "/checker/search-results";
     
       microchipApi.getMicrochipData.mockResolvedValue(mockData);
     
@@ -671,7 +671,7 @@ describe("DocumentSearchHandlers", () => {
     
       expect(request.yar.set).toHaveBeenCalledWith("microchipNumber", "123456");
       expect(request.yar.set).toHaveBeenCalledWith("data", mockData);
-      expect(h.redirect).toHaveBeenCalledWith(SEARCH_RESULT_VIEW_PATH);
+      expect(h.redirect).toHaveBeenCalledWith(searchResultsPage);
     });
 
     it("should perform default redirect to SEARCH_RESULT_VIEW_PATH if no conditions are met", async () => {
@@ -682,11 +682,9 @@ describe("DocumentSearchHandlers", () => {
         redirect: jest.fn().mockReturnValue({}),
       };
     
-      const SEARCH_RESULT_VIEW_PATH = "/checker/search-results";
-    
       await DocumentSearchHandlers.submitSearch(request, h);
     
-      expect(h.redirect).toHaveBeenCalledWith(SEARCH_RESULT_VIEW_PATH);
+      expect(h.redirect).toHaveBeenCalledWith(searchResultsPage);
     });
     
   });
