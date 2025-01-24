@@ -349,5 +349,31 @@ describe("CheckReportHandlers", () => {
       );
       expect(h.code).toHaveBeenCalledWith(errorCode404);
     });
+
+    it("should return 500 when an error occurs in conductSpsCheck", async () => {
+      const mockRequest = {
+        yar: {
+          get: jest.fn().mockReturnValue("APP123456"),
+          set: jest.fn(),
+        },
+      };
+    
+      const errorMessage = "Something went wrong";
+      apiService.getApplicationByApplicationNumber.mockRejectedValue(new Error(errorMessage));
+    
+      const h = {
+        response: jest.fn().mockReturnThis(),
+        code: jest.fn(),
+      };
+    
+      await CheckReportHandlers.conductSpsCheck(mockRequest, h);
+    
+      expect(h.response).toHaveBeenCalledWith({
+        error: "Internal Server Error",
+        details: errorMessage,
+      });
+      expect(h.code).toHaveBeenCalledWith(errorCode500);
+    });
+    
   });
 });

@@ -541,6 +541,19 @@ describe("apiService", () => {
       );
       expect(result).toEqual({ error: unexpectedErrorMessage });
     });
+
+    
+    it("should return unexpected response structure gracefully", async () => {
+      httpService.postAsync.mockResolvedValue({ data: null });
+      const expectedError = { error: "Unexpected response structure" };
+
+      const result = await apiService.getApplicationByPTDNumber(
+        "123456",
+        request
+      );
+
+      expect(result).toEqual(expectedError);
+    });
   });
 
   describe("getApplicationByApplicationNumber", () => {
@@ -1044,6 +1057,19 @@ describe("apiService", () => {
       );
       expect(result).toEqual({ error: unexpectedErrorMessage });
     });
+
+    it("should return unexpected response structure gracefully", async () => {
+      httpService.postAsync.mockResolvedValue({ data: null });
+      const expectedError = { error: "Unexpected response structure" };
+
+      const result = await apiService.getApplicationByApplicationNumber(
+        "app123",
+        request
+      );
+
+      expect(result).toEqual(expectedError);
+    });
+
   });
 
   describe("recordCheckOutCome", () => {
@@ -1073,6 +1099,17 @@ describe("apiService", () => {
 
       expect(result).toEqual({ error: unexpectedResponseStructure });
     });
+
+    it("should return unexpected response structure gracefully", async () => {
+      const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
+      httpService.postAsync.mockResolvedValue({ data: null });
+      const expectedError = { error: "Unexpected response structure" };
+
+      const result = await apiService.recordCheckOutCome(checkOutcome);
+
+      expect(result).toEqual(expectedError);
+    });
+    
   });
 
   describe("saveCheckerUser", () => {
@@ -1102,6 +1139,17 @@ describe("apiService", () => {
 
       expect(result).toEqual({ error: unexpectedResponseStructure });
     });
+
+    it("should return unexpected response structure gracefully", async () => {
+      const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
+      httpService.postAsync.mockResolvedValue({ data: null });
+      const expectedError = { error: "Unexpected response structure" };
+
+      const result = await apiService.saveCheckerUser(checkOutcome);
+
+      expect(result).toEqual(expectedError);
+    });
+
   });
 
   describe("getOrganisation", () => {
@@ -1199,7 +1247,6 @@ describe("apiService", () => {
         request
       );
     });
-
   });
 
   describe("reportNonCompliance", () => {
@@ -1259,6 +1306,16 @@ describe("apiService", () => {
       const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
     
       expect(result).toEqual({ error: "Unexpected failure" });
+    });
+
+    it("should return unexpected response structure gracefully", async () => {
+      const mockCheckOutcome = { compliance: false, details: additionalDetails };
+      httpService.postAsync.mockResolvedValue({ data: null });
+      const expectedError = { error: "Unexpected response structure" };
+
+      const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
+
+      expect(result).toEqual(expectedError);
     });
     
   });

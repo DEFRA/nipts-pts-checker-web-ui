@@ -555,4 +555,125 @@ test("should validate required fields when noncompliance reason selected on UI",
     expect(result.errors).toEqual(expectedErrorrs);
   });
 
+  test("should return error message when mcNotMatchActual is empty", () => {
+    const payload = {
+      mcNotMatch: "true",
+      mcNotMatchActual: "",
+      relevantComments: "",
+      spsOutcomeDetails: "",
+      isGBCheck: false,
+      vcNotMatchPTD: "true"
+    };
+  
+    const expectedErrors = [
+      {
+        "message": errorMessages.microchipNumber.empty,
+        "path": ["mcNotMatchActual"]
+      },
+      {
+        "message": errorMessages.passengerType.empty,
+        "path": ["passengerType"],
+      },
+      {
+        "message": errorMessages.spsOutcome.required,
+        "path": ["spsOutcome"]
+      },
+    ];
+  
+    const result = validateNonCompliance(payload);
+    expect(result.isValid).toBe(false);
+    expect(result.errors).toEqual(expectedErrors);
+  });
+  
+  test("should return error message when mcNotMatchActual contains special characters", () => {
+    const payload = {
+      mcNotMatch: "true",
+      mcNotMatchActual: "1234 5678 9012 345",
+      relevantComments: "",
+      spsOutcomeDetails: "",
+      isGBCheck: false,
+      vcNotMatchPTD: "true",
+    };
+  
+    const expectedErrors = [
+      {
+        "message": errorMessages.microchipNumber.specialCharacters,
+        "path": ["mcNotMatchActual"]
+      },
+      {
+        "message": errorMessages.passengerType.empty,
+        "path": ["passengerType"],
+      },
+      {
+        "message": errorMessages.spsOutcome.required,
+        "path": ["spsOutcome"]
+      },
+    ];
+  
+    const result = validateNonCompliance(payload);
+    expect(result.isValid).toBe(false);
+    expect(result.errors).toEqual(expectedErrors);
+  });
+  
+  test("should return error message when mcNotMatchActual contains letters", () => {
+    const payload = {
+      mcNotMatch: "true",
+      mcNotMatchActual: "12345ABC789012345",
+      relevantComments: "",
+      spsOutcomeDetails: "",
+      isGBCheck: false,
+      vcNotMatchPTD: "true",
+    };
+  
+    const expectedErrors = [
+      {
+        "message": errorMessages.microchipNumber.specialCharacters,
+        "path": ["mcNotMatchActual"]
+      },
+      {
+        "message": errorMessages.passengerType.empty,
+        "path": ["passengerType"],
+      },
+      {
+        "message": errorMessages.spsOutcome.required,
+        "path": ["spsOutcome"]
+      },
+    ];
+  
+    const result = validateNonCompliance(payload);
+    expect(result.isValid).toBe(false);
+    expect(result.errors).toEqual(expectedErrors);
+  });
+  
+  test("should return error message when mcNotMatchActual length is incorrect", () => {
+    const payload = {
+      mcNotMatch: "true",
+      mcNotMatchActual: "12345",
+      relevantComments: "",
+      spsOutcomeDetails: "",
+      isGBCheck: false,
+      vcNotMatchPTD: "true",
+    };
+  
+    const expectedErrors = [
+      {
+        "message": errorMessages.microchipNumber.length,
+        "path": ["mcNotMatchActual"]
+      },
+      {
+        "message": errorMessages.passengerType.empty,
+        "path": ["passengerType"],
+      },
+      {
+        "message": errorMessages.spsOutcome.required,
+        "path": ["spsOutcome"]
+      },
+    ];
+  
+    const result = validateNonCompliance(payload);
+    expect(result.isValid).toBe(false);
+    expect(result.errors).toEqual(expectedErrors);
+  });
+  
+
 });
