@@ -107,7 +107,7 @@ describe("ReferredHandlers", () => {
     });
 
     it("should handle pagination correctly", async () => {
-      
+
       const mockSpsChecks = Array.from({ length: numArrayElements }, () => ({
         SPSOutcome: allowed,
         PTDNumber: ptdNum,
@@ -168,9 +168,15 @@ describe("ReferredHandlers", () => {
       const mockRequest = {
         yar: {
           get: jest.fn().mockImplementation((key) => {
-            if (key === "routeName") return "RouteC";
-            if (key === "departureDate") return departureDate
-            if (key === "departureTime") return "12:00";
+            if (key === "routeName") {
+                return "RouteC";
+            }
+            if (key === "departureDate") {
+              return departureDate;
+            }
+            if (key === "departureTime") {
+              return "12:00";
+            }
             return null;
           }),
         },
