@@ -70,20 +70,17 @@ const nonComplianceSchema = Joi.object({
       gbPassengerSaysNoTravel,
     } = context;
     if (isGBCheck) {
-      if (
-        !gbRefersToDAERAOrSPS &&
-        !gbAdviseNoTravel &&
-        !gbPassengerSaysNoTravel
-      ) {
+      const isInvalidOutcome = !gbRefersToDAERAOrSPS && !gbAdviseNoTravel && !gbPassengerSaysNoTravel;
+      if (isInvalidOutcome) {
         return helpers.message(errorMessages.gbOutcome.required);
       }
-    } 
-    else if (gbRefersToDAERAOrSPS || gbAdviseNoTravel || gbPassengerSaysNoTravel) {
-      return helpers.message(errorMessages.gbOutcome.incorrectSelection);
+    } else {
+      const isIncorrectSelection = gbRefersToDAERAOrSPS || gbAdviseNoTravel || gbPassengerSaysNoTravel;
+      if (isIncorrectSelection) {
+        return helpers.message(errorMessages.gbOutcome.incorrectSelection);
+      }
     }
-    else {
-      return value;
-    }
+    return value;
   }),
 })
   .or(
