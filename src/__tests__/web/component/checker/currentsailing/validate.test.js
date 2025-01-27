@@ -2,6 +2,7 @@
 import  { validateRouteOptionRadio, validateRouteRadio, validateSailingHour, validateSailingMinutes, validateFlightNumber, validateDate, validateDateRange } from "../../../../../web/component/checker/currentsailing/validate.js";
 import { CurrentSailingMainModelErrors } from "../../../../../constants/currentSailingConstant.js";
 
+const outOfBoundsRange = 3;
 
 describe('Validation Functions', () => {
   describe('validateRouteOptionRadio', () => {
@@ -175,7 +176,7 @@ describe('Validation Functions', () => {
 
     it('should return invalid for a non-empty string, 3 days in the past', () => {
       const now = new Date(); // Get today's date
-      now.setDate(now.getDate() - 3); // Subtract 3 days
+      now.setDate(now.getDate() - outOfBoundsRange); // Subtract 3 days
       const formattedDate = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`; // Format as dd/MM/yyyy
     
       const result = validateDateRange(formattedDate, false);
@@ -185,7 +186,7 @@ describe('Validation Functions', () => {
 
     it('should return invalid for a non-empty string, 3 days in the past, with time', () => {
       const now = new Date(); // Get today's date
-      now.setDate(now.getDate() - 3); // Subtract 3 days
+      now.setDate(now.getDate() - outOfBoundsRange); // Subtract 3 days
       const formattedDateWithTime = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`; // Format as dd/MM/yyyy hh:mm
     
       const result = validateDateRange(formattedDateWithTime, false);

@@ -18,6 +18,7 @@ const checkerName = "Checker Name";
 const reportDetailsView = "componentViews/checker/checkReport/reportDetails";
 const referralReason = "Potential commercial movement";
 const dateNotAvailable = "Not available";
+const searchResultsPage = "/checker/search-results";
 
 describe("CheckReportHandlers", () => {
   afterEach(() => {
@@ -271,7 +272,7 @@ describe("CheckReportHandlers", () => {
         "GB826812345678"
       );
       expect(mockRequest.yar.set).toHaveBeenCalledWith("data", mockData);
-      expect(h.redirect).toHaveBeenCalledWith("/checker/search-results");
+      expect(h.redirect).toHaveBeenCalledWith(searchResultsPage);
     });
 
     it("should handle application number and redirect when data is found", async () => {
@@ -301,7 +302,7 @@ describe("CheckReportHandlers", () => {
         "APP123456"
       );
       expect(mockRequest.yar.set).toHaveBeenCalledWith("data", mockData);
-      expect(h.redirect).toHaveBeenCalledWith("/checker/search-results");
+      expect(h.redirect).toHaveBeenCalledWith(searchResultsPage);
     });
 
     it("should return 404 when no data found for PTD number", async () => {
@@ -349,5 +350,31 @@ describe("CheckReportHandlers", () => {
       );
       expect(h.code).toHaveBeenCalledWith(errorCode404);
     });
+
+    it("should return 500 when an error occurs in conductSpsCheck", async () => {
+      const mockRequest = {
+        yar: {
+          get: jest.fn().mockReturnValue("APP123456"),
+          set: jest.fn(),
+        },
+      };
+    
+      const errorMessage = "Something went wrong";
+      apiService.getApplicationByApplicationNumber.mockRejectedValue(new Error(errorMessage));
+    
+      const h = {
+        response: jest.fn().mockReturnThis(),
+        code: jest.fn(),
+      };
+    
+      await CheckReportHandlers.conductSpsCheck(mockRequest, h);
+    
+      expect(h.response).toHaveBeenCalledWith({
+        error: "Internal Server Error",
+        details: errorMessage,
+      });
+      expect(h.code).toHaveBeenCalledWith(errorCode500);
+    });
+    
   });
 });

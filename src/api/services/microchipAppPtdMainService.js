@@ -120,12 +120,12 @@ const getMicrochipData = async (microchipNumber, request) => {
 
     // Check for specific error message and return a structured error
     if (error.response?.data?.error) {
-      if (
-        error.response.data.error === "Application not found" ||
-        error.response.data.error === "Pet not found"
-      ) {
+      if (error.response.data.error === "Application not found" || error.response.data.error === "Pet not found") 
+      {
         return { error: "not_found" };
-      } else {
+      } 
+      else 
+      {
         return { error: error.response.data.error };
       }
     }

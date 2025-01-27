@@ -16,6 +16,8 @@ const agencyName = "Animal and Plant Health Agency";
 const signatoryName = "John Smith (APHA) (Signed digitally)";
 const bearerToken = "Bearer mockToken"
 
+const unexpectedErrorMessage = "Unexpected error occurred";
+
 describe("getMicrochipData", () => {
   let request;
 
@@ -404,12 +406,55 @@ describe("getMicrochipData", () => {
 
     httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
 
-    const expectedError = { error: "Unexpected error occurred" };
+    const expectedError = { error: unexpectedErrorMessage };
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
 
     expect(data).toEqual(expectedError);
   });
+
+  it("should handle unexpected response structure gracefully", async () => {
+    const microchipNumber = "123456789012345";
+  
+    httpService.postAsync.mockResolvedValue({ data: null });
+  
+    const expectedError = { error: unexpectedErrorMessage };
+  
+    const data = await microchipApi.getMicrochipData(microchipNumber, request);
+  
+    expect(data).toEqual(expectedError);
+  });
+
+  it("should return 'not_found' for specific error messages", async () => {
+    const microchipNumber = "123456789012345";
+  
+    const errorResponse = {
+      response: { data: { error: "Application not found" } },
+    };
+    httpService.postAsync.mockRejectedValue(errorResponse);
+  
+    const expectedError = { error: "not_found" };
+  
+    const data = await microchipApi.getMicrochipData(microchipNumber, request);
+  
+    expect(data).toEqual(expectedError);
+  });
+
+  it("should return the error message from the response if it is not 'Application not found' or 'Pet not found'", async () => {
+    const microchipNumber = "123456789012345";
+  
+    const errorResponse = {
+      response: { data: { error: "Unexpected server error" } },
+    };
+    httpService.postAsync.mockRejectedValue(errorResponse);
+  
+    const expectedError = { error: "Unexpected server error" };
+  
+    const data = await microchipApi.getMicrochipData(microchipNumber, request);
+  
+    expect(data).toEqual(expectedError);
+  });
+  
 });
 
 describe("checkMicrochipNumberExistWithPtd", () => {
@@ -486,7 +531,7 @@ describe("checkMicrochipNumberExistWithPtd", () => {
 
     const result = await microchipApi.checkMicrochipNumberExistWithPtd(microchipNumber, request);
 
-    expect(result).toEqual({ error: "Unexpected error occurred" });
+    expect(result).toEqual({ error: unexpectedErrorMessage });
   });
 });
 
