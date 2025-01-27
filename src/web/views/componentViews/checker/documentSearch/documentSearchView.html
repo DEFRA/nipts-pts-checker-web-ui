@@ -64,10 +64,12 @@
                 </div>
 
                 <!-- Application search option -->
-                <div class="govuk-radios__item" role="radio" tabindex="0">
+                <div class="govuk-radios__item" role="radio" tabindex="0"
+                  aria-checked="{% if activeTab=='application' %}true{% else %}false{% endif %}">
                   <input class="govuk-radios__input" id="documentSearch-2" name="documentSearch" type="radio"
                     value="application" data-aria-controls="conditional-documentSearch-2" {% if activeTab=="application"
-                    %}checked{% endif %}>
+                    %}checked{% endif %}
+                    aria-checked="{% if activeTab=='application' %}true{% else %}false{% endif %}">
                   <label class="govuk-label govuk-radios__label" for="documentSearch-2" tabindex="-1">
                     Search by application number
                   </label>
@@ -91,10 +93,12 @@
                 </div>
 
                 <!-- Microchip search option -->
-                <div class="govuk-radios__item" role="radio" tabindex="0">
+                <div class="govuk-radios__item" role="radio" tabindex="0"
+                  aria-checked="{% if activeTab=='microchip' %}true{% else %}false{% endif %}">
                   <input class="govuk-radios__input" id="documentSearch-3" name="documentSearch" type="radio"
                     value="microchip" data-aria-controls="conditional-documentSearch-3" {% if activeTab=="microchip"
-                    %}checked{% endif %}>
+                    %}checked{% endif %}
+                    aria-checked="{% if activeTab=='microchip' %}true{% else %}false{% endif %}">
                   <label class="govuk-label govuk-radios__label" for="documentSearch-3" tabindex="-1">
                     Search by microchip number
                   </label>
