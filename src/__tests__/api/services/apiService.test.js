@@ -473,7 +473,7 @@ describe("apiService", () => {
         { ptdNumber: "123459" },
         request
       );
-      expect(result).toEqual({ error: notFoundText });
+      expect(result).toEqual({ error: applicationNotFoundMessage });
     });
 
     it("should return error when application is not found", async () => {
@@ -967,7 +967,7 @@ describe("apiService", () => {
     });
 
 
-    it("should return error when application number is not found", async () => {
+    it("should return error when application number is not found - getApplicationByApplicationNumber", async () => {
       httpService.postAsync.mockResolvedValue({
         status: 404,
         error: applicationNotFoundMessage,
@@ -1037,18 +1037,6 @@ describe("apiService", () => {
       expect(result).toEqual({ error: applicationNotFoundMessage });
     });
 
-    it("should return error when application number is not found", async () => {
-      httpService.postAsync.mockResolvedValue({
-        status: 404,
-        error: applicationNotFoundMessage,
-      });
-
-      const result = await apiService.getApplicationByApplicationNumber(
-        "app123",
-        request
-      );
-      expect(result).toEqual({ error: notFoundText });
-    });
 
     it("should return unexpected error when an exception occurs", async () => {
       httpService.postAsync.mockRejectedValue(new Error(unexpectedErrorMessage));
@@ -1070,6 +1058,20 @@ describe("apiService", () => {
       );
 
       expect(result).toEqual(expectedError);
+    });
+
+    it("should handle errors without a message and return unexpectedErrorText - getApplicationByApplicationNumber", async () => {
+      const mockError = new Error();
+      delete mockError.message; 
+
+      httpService.postAsync.mockRejectedValue(mockError);
+    
+      const result = await apiService.getApplicationByApplicationNumber(
+        "app123",
+        request
+      );
+      
+      expect(result).toEqual({ error: unexpectedErrorText });
     });
 
   });
@@ -1110,6 +1112,32 @@ describe("apiService", () => {
       const result = await apiService.recordCheckOutCome(checkOutcome);
 
       expect(result).toEqual(expectedError);
+    });
+
+    it("should return error when application number is not found - recordCheckOutCome", async () => {
+      const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
+      
+      httpService.postAsync.mockResolvedValue({
+        status: 404,
+        error: applicationNotFoundMessage,
+      });
+
+      const result = await apiService.recordCheckOutCome(checkOutcome);
+
+      expect(result).toEqual({ error: notFoundText });
+    });
+
+    it("should handle errors without a message and return unexpectedErrorText - recordCheckOutCome", async () => {
+      const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
+    
+      const mockError = new Error();
+      delete mockError.message; 
+
+      httpService.postAsync.mockRejectedValue(mockError);
+    
+      const result = await apiService.recordCheckOutCome(checkOutcome);
+
+      expect(result).toEqual({ error: unexpectedErrorText });
     });
     
   });
@@ -1162,7 +1190,19 @@ describe("apiService", () => {
     
       expect(result).toEqual({ error: notFoundText });
     });
+
+    it("should handle errors without a message and return unexpectedErrorText", async () => {
+      const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
     
+      const mockError = new Error();
+      delete mockError.message; 
+
+      httpService.postAsync.mockRejectedValue(mockError);
+    
+      const result = await apiService.saveCheckerUser(checkOutcome);
+
+      expect(result).toEqual({ error: unexpectedErrorText });
+    });
 
   });
 
@@ -1342,6 +1382,19 @@ describe("apiService", () => {
       const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
 
       expect(result).toEqual(expectedError);
+    });
+
+    it("should handle errors without a message and return unexpectedErrorText - reportNonCompliance", async () => {
+      const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
+    
+      const mockError = new Error();
+      delete mockError.message; 
+
+      httpService.postAsync.mockRejectedValue(mockError);
+    
+      const result = await apiService.reportNonCompliance(checkOutcome, request);
+
+      expect(result).toEqual({ error: unexpectedErrorText });
     });
     
   });
