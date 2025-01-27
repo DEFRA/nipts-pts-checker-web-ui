@@ -107,7 +107,13 @@ describe("ReferredHandlers", () => {
     });
 
     it("should handle pagination correctly", async () => {
-      const mockSpsChecks = new Array(numArrayElements).fill({ SPSOutcome: allowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted });
+      
+      const mockSpsChecks = Array.from({ length: numArrayElements }, () => ({
+        SPSOutcome: allowed,
+        PTDNumber: ptdNum,
+        PTDNumberFormatted: ptdFormatted
+      }));
+
       spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
 
       const mockRequest = {
