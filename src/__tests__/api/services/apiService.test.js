@@ -1111,6 +1111,19 @@ describe("apiService", () => {
 
       expect(result).toEqual(expectedError);
     });
+
+    it("should return error when application number is not found", async () => {
+      const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
+      
+      httpService.postAsync.mockResolvedValue({
+        status: 404,
+        error: applicationNotFoundMessage,
+      });
+
+      const result = await apiService.recordCheckOutCome(checkOutcome);
+
+      expect(result).toEqual({ error: notFoundText });
+    });
     
   });
 
