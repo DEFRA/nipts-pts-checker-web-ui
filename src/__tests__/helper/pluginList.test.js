@@ -1,4 +1,4 @@
-jest.mock("../../helper/plugins", () => ({
+jest.mock("../../helper/pluginList", () => ({
   default: [
     { plugin: { pkg: { name: "@hapi/inert" }, register: () => {} } },
     { plugin: { pkg: { name: "@hapi/vision" }, register: () => {} } },
@@ -7,7 +7,7 @@ jest.mock("../../helper/plugins", () => ({
   __esModule: true, 
 }));
 
-import pluginList from "../../helper/plugins";
+import pluginList from "../../helper/pluginList";
 
 describe("pluginList", () => {
   test("should be an array", () => {

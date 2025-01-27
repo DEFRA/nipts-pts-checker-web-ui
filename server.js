@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import config from "./src/config/index.js";
 import catboxMemory from "@hapi/catbox-memory";
 import ConfigServer from "./src/configServer.js";
-import pluginList from "./src/helper/plugins.js";
+import pluginList from "./src/helper/pluginList.js";
 import blip from "blipp";
 
 // Load environment variables from .env file

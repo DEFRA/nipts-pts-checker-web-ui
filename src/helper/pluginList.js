@@ -1,4 +1,4 @@
-import Inert, { plugin } from "@hapi/inert";
+import Inert from "@hapi/inert";
 import Vision from "@hapi/vision";
 import Cookie from "@hapi/cookie";
 import Yar from "@hapi/yar";
