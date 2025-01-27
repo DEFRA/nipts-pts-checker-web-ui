@@ -1175,7 +1175,19 @@ describe("apiService", () => {
     
       expect(result).toEqual({ error: notFoundText });
     });
+
+    it("should handle errors without a message and return unexpectedErrorText", async () => {
+      const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
     
+      const mockError = new Error();
+      delete mockError.message; 
+
+      httpService.postAsync.mockRejectedValue(mockError);
+    
+      const result = await apiService.saveCheckerUser(checkOutcome);
+
+      expect(result).toEqual({ error: unexpectedErrorText });
+    });
 
   });
 
