@@ -31,15 +31,23 @@
               <div class="govuk-radios" data-module="govuk-radios" role="radiogroup"
                 aria-labelledby="search-options-heading">
                 <!-- PTD search option -->
-                <div class="govuk-radios__item" role="radio" tabindex="0"
-                  aria-checked="{% if activeTab=='ptd' %}true{% else %}false{% endif %}">
-                  <input class="govuk-radios__input" id="documentSearch-1" name="documentSearch" type="radio" value="ptd"
-                    data-aria-controls="conditional-documentSearch-1" {% if activeTab=="ptd" %}checked{% endif %}
-                    aria-checked="{% if activeTab=='ptd' %}true{% else %}false{% endif %}">
-                  <label class="govuk-label govuk-radios__label" for="documentSearch-1" tabindex="-1">
+                <div class="govuk-radios__item">
+                  <input 
+                    class="govuk-radios__input" 
+                    id="documentSearch-1" 
+                    name="documentSearch" 
+                    type="radio" 
+                    value="ptd" 
+                    data-aria-controls="conditional-documentSearch-1" 
+                    {% if activeTab == "ptd" %}checked{% endif %} 
+                    aria-checked="{% if activeTab == 'ptd' %}true{% else %}false{% endif %}">
+                  <label 
+                    class="govuk-label govuk-radios__label" 
+                    for="documentSearch-1">
                     Search by PTD number
                   </label>
                 </div>
+                
                 <div
                   class="govuk-radios__conditional {% if activeTab == 'ptd' %}{% else %}govuk-radios__conditional--hidden{% endif %}"
                   id="conditional-documentSearch-1">
@@ -64,16 +72,22 @@
                 </div>
 
                 <!-- Application search option -->
-                <div class="govuk-radios__item" role="radio" tabindex="0"
-                  aria-checked="{% if activeTab=='application' %}true{% else %}false{% endif %}">
-                  <input class="govuk-radios__input" id="documentSearch-2" name="documentSearch" type="radio"
-                    value="application" data-aria-controls="conditional-documentSearch-2" {% if activeTab=="application"
-                    %}checked{% endif %}
-                    aria-checked="{% if activeTab=='application' %}true{% else %}false{% endif %}">
-                  <label class="govuk-label govuk-radios__label" for="documentSearch-2" tabindex="-1">
+                <div class="govuk-radios__item">
+                  <input 
+                    class="govuk-radios__input" 
+                    id="documentSearch-2" 
+                    name="documentSearch" 
+                    type="radio" 
+                    value="application" 
+                    data-aria-controls="conditional-documentSearch-2" 
+                    {% if activeTab == "application" %}checked{% endif %}>
+                  <label 
+                    class="govuk-label govuk-radios__label" 
+                    for="documentSearch-2">
                     Search by application number
                   </label>
                 </div>
+                
                 <div
                   class="govuk-radios__conditional {% if activeTab == 'application' %}{% else %}govuk-radios__conditional--hidden{% endif %}"
                   id="conditional-documentSearch-2">
@@ -93,16 +107,22 @@
                 </div>
 
                 <!-- Microchip search option -->
-                <div class="govuk-radios__item" role="radio" tabindex="0"
-                  aria-checked="{% if activeTab=='microchip' %}true{% else %}false{% endif %}">
-                  <input class="govuk-radios__input" id="documentSearch-3" name="documentSearch" type="radio"
-                    value="microchip" data-aria-controls="conditional-documentSearch-3" {% if activeTab=="microchip"
-                    %}checked{% endif %}
-                    aria-checked="{% if activeTab=='microchip' %}true{% else %}false{% endif %}">
-                  <label class="govuk-label govuk-radios__label" for="documentSearch-3" tabindex="-1">
+                <div class="govuk-radios__item">
+                  <input 
+                    class="govuk-radios__input" 
+                    id="documentSearch-3" 
+                    name="documentSearch" 
+                    type="radio" 
+                    value="microchip" 
+                    data-aria-controls="conditional-documentSearch-3" 
+                    {% if activeTab == "microchip" %}checked{% endif %}>
+                  <label 
+                    class="govuk-label govuk-radios__label" 
+                    for="documentSearch-3">
                     Search by microchip number
                   </label>
                 </div>
+                
                 <div
                   class="govuk-radios__conditional {% if activeTab == 'microchip' %}{% else %}govuk-radios__conditional--hidden{% endif %}"
                   id="conditional-documentSearch-3">
