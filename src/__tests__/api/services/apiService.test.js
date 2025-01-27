@@ -967,7 +967,7 @@ describe("apiService", () => {
     });
 
 
-    it("should return error when application number is not found", async () => {
+    it("should return error when application number is not found - getApplicationByApplicationNumber", async () => {
       httpService.postAsync.mockResolvedValue({
         status: 404,
         error: applicationNotFoundMessage,
@@ -1037,18 +1037,6 @@ describe("apiService", () => {
       expect(result).toEqual({ error: applicationNotFoundMessage });
     });
 
-    it("should return error when application number is not found", async () => {
-      httpService.postAsync.mockResolvedValue({
-        status: 404,
-        error: applicationNotFoundMessage,
-      });
-
-      const result = await apiService.getApplicationByApplicationNumber(
-        "app123",
-        request
-      );
-      expect(result).toEqual({ error: notFoundText });
-    });
 
     it("should return unexpected error when an exception occurs", async () => {
       httpService.postAsync.mockRejectedValue(new Error(unexpectedErrorMessage));
@@ -1112,7 +1100,7 @@ describe("apiService", () => {
       expect(result).toEqual(expectedError);
     });
 
-    it("should return error when application number is not found", async () => {
+    it("should return error when application number is not found - recordCheckOutCome", async () => {
       const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
       
       httpService.postAsync.mockResolvedValue({
