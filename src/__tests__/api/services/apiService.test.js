@@ -1060,6 +1060,20 @@ describe("apiService", () => {
       expect(result).toEqual(expectedError);
     });
 
+    it("should handle errors without a message and return unexpectedErrorText - getApplicationByApplicationNumber", async () => {
+      const mockError = new Error();
+      delete mockError.message; 
+
+      httpService.postAsync.mockRejectedValue(mockError);
+    
+      const result = await apiService.getApplicationByApplicationNumber(
+        "app123",
+        request
+      );
+      
+      expect(result).toEqual({ error: unexpectedErrorText });
+    });
+
   });
 
   describe("recordCheckOutCome", () => {
