@@ -1112,6 +1112,19 @@ describe("apiService", () => {
 
       expect(result).toEqual({ error: notFoundText });
     });
+
+    it("should handle errors without a message and return unexpectedErrorText - recordCheckOutCome", async () => {
+      const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
+    
+      const mockError = new Error();
+      delete mockError.message; 
+
+      httpService.postAsync.mockRejectedValue(mockError);
+    
+      const result = await apiService.recordCheckOutCome(checkOutcome);
+
+      expect(result).toEqual({ error: unexpectedErrorText });
+    });
     
   });
 
@@ -1355,6 +1368,19 @@ describe("apiService", () => {
       const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
 
       expect(result).toEqual(expectedError);
+    });
+
+    it("should handle errors without a message and return unexpectedErrorText - reportNonCompliance", async () => {
+      const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
+    
+      const mockError = new Error();
+      delete mockError.message; 
+
+      httpService.postAsync.mockRejectedValue(mockError);
+    
+      const result = await apiService.reportNonCompliance(checkOutcome, request);
+
+      expect(result).toEqual({ error: unexpectedErrorText });
     });
     
   });
