@@ -5,6 +5,8 @@ import headerData from "../../../../web/helper/constants.js";
 import moment from "moment";
 
 const VIEW_PATH = "componentViews/checker/referred/referredView";
+const dashboardTimeBoundary = 48;
+
 const getReferredChecks = async (request, h) => {
   headerData.section = "referred";
 
@@ -67,7 +69,7 @@ async function getSpsChecks(routeName, departureDateTime, request) {
     (await spsReferralMainService.GetSpsReferrals(
       routeName,
       departureDateTime,
-      Number(process.env.DASHBOARD_START_HOUR) * -1 || 48,
+      Number(process.env.DASHBOARD_START_HOUR) * -1 || dashboardTimeBoundary,
       request
     )) || []
   );
