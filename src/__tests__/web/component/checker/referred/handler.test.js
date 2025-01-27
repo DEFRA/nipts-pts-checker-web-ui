@@ -13,6 +13,7 @@ const allowed = "Allowed";
 const ptdNum = "GB826223445";
 const ptdFormatted = "GB826 223 445";
 const numArrayElements = 25;
+const departureDate = "01/01/2023";
 
 describe("ReferredHandlers", () => {
   afterEach(() => {
@@ -47,10 +48,19 @@ describe("ReferredHandlers", () => {
       const mockRequest = {
         yar: {
           get: jest.fn().mockImplementation((key) => {
-            if (key === "routeName") return "RouteA";
-            if (key === "departureDate") return "01/01/2023";
-            if (key === "departureTime") return "12:00";
-            if (key === "currentSailingSlot") return { slot: "morning" };
+            if (key === "routeName") {
+              return "RouteA";
+            }
+            if (key === "departureDate") 
+            {
+              return departureDate
+            }
+            if (key === "departureTime") {
+              return "12:00";
+            }
+            if (key === "currentSailingSlot") {
+              return { slot: "morning" };
+            }
             if (key === "spsChecks") {
               return {
                 spsChecks: [
@@ -79,7 +89,7 @@ describe("ReferredHandlers", () => {
         currentSailingSlot: { slot: "morning" },
         check: {
           routeName: "RouteA",
-          departureDate: "01/01/2023",
+          departureDate: departureDate,
           departureTime: "12:00",
         },
         spsChecks: [
@@ -100,9 +110,15 @@ describe("ReferredHandlers", () => {
       const mockRequest = {
         yar: {
           get: jest.fn().mockImplementation((key) => {
-            if (key === "routeName") return "RouteB";
-            if (key === "departureDate") return "01/01/2023";
-            if (key === "departureTime") return "12:00";
+            if (key === "routeName") {
+              return "RouteB";
+            }
+            if (key === "departureDate") {
+              return departureDate;
+            } 
+            if (key === "departureTime") {
+              return "12:00";
+            }
             return null;
           }),
         },
@@ -122,7 +138,7 @@ describe("ReferredHandlers", () => {
         currentSailingSlot: {},
         check: {
           routeName: "RouteB",
-          departureDate: "01/01/2023",
+          departureDate: departureDate,
           departureTime: "12:00",
         },
         spsChecks: mockSpsChecks.slice(10, 20), // Ensuring correct pagination slice
@@ -144,7 +160,7 @@ describe("ReferredHandlers", () => {
         yar: {
           get: jest.fn().mockImplementation((key) => {
             if (key === "routeName") return "RouteC";
-            if (key === "departureDate") return "01/01/2023";
+            if (key === "departureDate") return departureDate
             if (key === "departureTime") return "12:00";
             return null;
           }),
@@ -163,7 +179,7 @@ describe("ReferredHandlers", () => {
         currentSailingSlot: {},
         check: {
           routeName: "RouteC",
-          departureDate: "01/01/2023",
+          departureDate: departureDate,
           departureTime: "12:00",
         },
         spsChecks: [
