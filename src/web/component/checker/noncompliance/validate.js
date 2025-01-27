@@ -27,7 +27,7 @@ const nonComplianceSchema = Joi.object({
           }
           return helpers.message(errorMessages.microchipNumber.letters);
         }
-        if (/[^0-9]/.test(val)) {
+        if (/\D/.test(val)) {
           return helpers.message(
             errorMessages.microchipNumber.specialCharacters
           );
