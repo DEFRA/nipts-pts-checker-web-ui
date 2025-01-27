@@ -1,7 +1,6 @@
 import { ScanHandlers } from "../../../../../web/component/checker/scan/handler.js";
 import apiService from "../../../../../api/services/apiService.js";
 import headerData from "../../../../../web/helper/constants.js";
-import DashboardMainModel from "../../../../../constants/dashBoardConstant.js";
 
 jest.mock("../../../../../api/services/apiService.js");
 jest.mock("../../../../../web/helper/constants.js");
