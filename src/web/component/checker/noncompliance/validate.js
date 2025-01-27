@@ -77,14 +77,13 @@ const nonComplianceSchema = Joi.object({
       ) {
         return helpers.message(errorMessages.gbOutcome.required);
       }
-    } else if (
-      gbRefersToDAERAOrSPS ||
-      gbAdviseNoTravel ||
-      gbPassengerSaysNoTravel
-    ) {
+    } 
+    else if (gbRefersToDAERAOrSPS || gbAdviseNoTravel || gbPassengerSaysNoTravel) {
       return helpers.message(errorMessages.gbOutcome.incorrectSelection);
     }
-    return value;
+    else {
+      return value;
+    }
   }),
 })
   .or(
