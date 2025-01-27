@@ -473,7 +473,7 @@ describe("apiService", () => {
         { ptdNumber: "123459" },
         request
       );
-      expect(result).toEqual({ error: notFoundText });
+      expect(result).toEqual({ error: applicationNotFoundMessage });
     });
 
     it("should return error when application is not found", async () => {
