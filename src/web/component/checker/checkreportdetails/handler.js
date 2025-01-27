@@ -8,6 +8,7 @@ const dateNotavailableText = "Not available";
 
 async function getCheckDetails(request, h) {
   try {
+    const ref = request.yar.get("identifier");   
     const checkSummaryId = request.yar.get("checkSummaryId");
 
     const checkDetails = await spsReferralMainService.GetCompleteCheckDetails(
@@ -51,10 +52,7 @@ async function getCheckDetails(request, h) {
     };
 
     const formattedCheckDetails = {
-      reference:
-        checkDetails.ptdNumber ||
-        checkDetails.applicationReference ||
-        "No reference",
+      reference: ref,
       checkOutcome: checkDetails.checkOutcome || [],
       reasonForReferral: checkDetails.reasonForReferral || [],
       microchipNumber: shouldDisplayMicrochip

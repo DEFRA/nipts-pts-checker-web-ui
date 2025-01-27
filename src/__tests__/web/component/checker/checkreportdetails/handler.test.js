@@ -19,6 +19,7 @@ const reportDetailsView = "componentViews/checker/checkReport/reportDetails";
 const referralReason = "Potential commercial movement";
 const dateNotAvailable = "Not available";
 const searchResultsPage = "/checker/search-results";
+const identifier = "GB826123456"; // Mock identifier for reference
 
 describe("CheckReportHandlers", () => {
   afterEach(() => {
@@ -29,7 +30,10 @@ describe("CheckReportHandlers", () => {
     it("should return 404 when no data is found for the provided CheckSummaryId", async () => {
       const mockRequest = {
         yar: {
-          get: jest.fn().mockReturnValue("invalid-guid"),
+          get: jest
+            .fn()
+            .mockReturnValueOnce(identifier) // Mock identifier
+            .mockReturnValueOnce("invalid-guid"), // Mock checkSummaryId
         },
       };
 
@@ -51,7 +55,10 @@ describe("CheckReportHandlers", () => {
     it("should display microchip number when reason for referral includes microchip mismatch", async () => {
       const mockRequest = {
         yar: {
-          get: jest.fn().mockReturnValue(validGuid),
+          get: jest
+            .fn()
+            .mockReturnValueOnce(identifier) // Mock identifier
+            .mockReturnValueOnce(validGuid), // Mock checkSummaryId
         },
       };
 
@@ -80,7 +87,7 @@ describe("CheckReportHandlers", () => {
       await CheckReportHandlers.getCheckDetails(mockRequest, h);
 
       const expectedFormattedDetails = {
-        reference: "PTD12345",
+        reference: identifier, // Use the mocked identifier
         checkOutcome: [checkOutcome],
         reasonForReferral: ["Microchip number does not match the PTD"],
         microchipNumber: "1234567890",
@@ -92,18 +99,18 @@ describe("CheckReportHandlers", () => {
         scheduledDepartureTime: "14:00",
       };
 
-      expect(h.view).toHaveBeenCalledWith(
-        reportDetailsView,
-        {
-          checkDetails: expectedFormattedDetails,
-        }
-      );
+      expect(h.view).toHaveBeenCalledWith(reportDetailsView, {
+        checkDetails: expectedFormattedDetails,
+      });
     });
 
     it("should not display microchip number when reason for referral does not include microchip mismatch", async () => {
       const mockRequest = {
         yar: {
-          get: jest.fn().mockReturnValue(validGuid),
+          get: jest
+            .fn()
+            .mockReturnValueOnce(identifier) // Mock identifier
+            .mockReturnValueOnce(validGuid), // Mock checkSummaryId
         },
       };
 
@@ -132,7 +139,7 @@ describe("CheckReportHandlers", () => {
       await CheckReportHandlers.getCheckDetails(mockRequest, h);
 
       const expectedFormattedDetails = {
-        reference: "PTD12345",
+        reference: identifier, // Use the mocked identifier
         checkOutcome: [checkOutcome],
         reasonForReferral: [referralReason],
         microchipNumber: null,
@@ -144,18 +151,18 @@ describe("CheckReportHandlers", () => {
         scheduledDepartureTime: "14:00",
       };
 
-      expect(h.view).toHaveBeenCalledWith(
-        reportDetailsView,
-        {
-          checkDetails: expectedFormattedDetails,
-        }
-      );
+      expect(h.view).toHaveBeenCalledWith(reportDetailsView, {
+        checkDetails: expectedFormattedDetails,
+      });
     });
 
     it("should handle missing dates and times gracefully", async () => {
       const mockRequest = {
         yar: {
-          get: jest.fn().mockReturnValue(validGuid),
+          get: jest
+            .fn()
+            .mockReturnValueOnce(identifier) // Mock identifier
+            .mockReturnValueOnce(validGuid), // Mock checkSummaryId
         },
       };
 
@@ -178,7 +185,7 @@ describe("CheckReportHandlers", () => {
       await CheckReportHandlers.getCheckDetails(mockRequest, h);
 
       const expectedFormattedDetails = {
-        reference: "PTD12345",
+        reference: identifier, // Use the mocked identifier
         checkOutcome: [checkOutcome],
         reasonForReferral: [referralReason],
         microchipNumber: null,
@@ -190,18 +197,18 @@ describe("CheckReportHandlers", () => {
         scheduledDepartureTime: dateNotAvailable,
       };
 
-      expect(h.view).toHaveBeenCalledWith(
-        reportDetailsView,
-        {
-          checkDetails: expectedFormattedDetails,
-        }
-      );
+      expect(h.view).toHaveBeenCalledWith(reportDetailsView, {
+        checkDetails: expectedFormattedDetails,
+      });
     });
 
     it("should return 500 when there is an error in GetCompleteCheckDetails", async () => {
       const mockRequest = {
         yar: {
-          get: jest.fn().mockReturnValue(validGuid),
+          get: jest
+            .fn()
+            .mockReturnValueOnce(identifier) // Mock identifier
+            .mockReturnValueOnce(validGuid), // Mock checkSummaryId
         },
       };
 
