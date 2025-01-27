@@ -14,6 +14,9 @@ const ptdNum = "GB826223445";
 const ptdFormatted = "GB826 223 445";
 const numArrayElements = 25;
 const departureDate = "01/01/2023";
+const paginationMin = 10;
+const paginationMax = 20;
+const totalPages = 3;
 
 describe("ReferredHandlers", () => {
   afterEach(() => {
@@ -141,9 +144,9 @@ describe("ReferredHandlers", () => {
           departureDate: departureDate,
           departureTime: "12:00",
         },
-        spsChecks: mockSpsChecks.slice(10, 20), // Ensuring correct pagination slice
+        spsChecks: mockSpsChecks.slice(paginationMin, paginationMax), // Ensuring correct pagination slice
         page: 2,
-        totalPages: 3,
+        totalPages: totalPages,
         pages: [1, 2, 3],
       });
     });
