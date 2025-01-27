@@ -1,10 +1,10 @@
 "use strict";
 
-import ScanRoutes from "./routes.js";
+import Routes from "./routes.js";
 
 function register(server) {
   server.dependency(["@hapi/vision"]);
-  server.route(ScanRoutes);
+  server.route(Routes);
   server.log("info", "Plugin registered: scan");
 }
 
