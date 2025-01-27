@@ -494,11 +494,7 @@ describe("postNonComplianceHandler", () => {
     const mockAppSettings = { setting1: "value1" };
     appSettingsService.getAppSettings.mockResolvedValue(mockAppSettings);
     console.error = jest.fn();
-  
-    const h = {
-      view: jest.fn(),
-    };
-  
+
     const applicationStatus = "awaiting";
     const statusMapping = {
       approved: "Approved",
