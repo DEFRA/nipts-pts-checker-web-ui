@@ -1,18 +1,16 @@
 import { fileURLToPath } from "url";
-import { dirname } from "path";
-import Path from "path";
-import Vision from "@hapi/vision";
+import Path, { dirname } from "path";
 import Nunjucks from "nunjucks";
 import Joi from "joi";
 import headerData from "./web/helper/constants.js";
 import { promises as fs } from "fs";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const fileName = fileURLToPath(import.meta.url);
+const directoryName = dirname(fileName);
 
 const setup = (server) => {
   // View configuration
-  const viewsPath = Path.resolve(__dirname, "./web/views");
+  const viewsPath = Path.resolve(directoryName, "./web/views");
   const includesPath = Path.resolve(viewsPath, "includes");
 
   console.log("Views path:", viewsPath);
@@ -47,14 +45,14 @@ const setup = (server) => {
         },
       },
     },
-    relativeTo: __dirname,
+    relativeTo: directoryName,
     path: viewsPath,
     partialsPath: includesPath,
     context: { headerData },
   });
 
   
-  const webAssetsPath = Path.join(__dirname, "./web/assets");
+  const webAssetsPath = Path.join(directoryName, "./web/assets");
 
   server.route({
     method: "GET",
@@ -72,7 +70,7 @@ const setup = (server) => {
   });
 
   
-  const webPath = Path.join(__dirname, "./web");
+  const webPath = Path.join(directoryName, "./web");
   
   server.route({
     method: "GET",
@@ -101,7 +99,7 @@ const setup = (server) => {
 
   async function serveStaticErrorPage() {
     const filePath = Path.join(
-      __dirname,
+      directoryName,
       "/web/views/errors/",
       "500Error.html"
     );
