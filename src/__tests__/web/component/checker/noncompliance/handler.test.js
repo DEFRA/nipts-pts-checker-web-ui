@@ -362,7 +362,7 @@ describe("postNonComplianceHandler", () => {
     request.yar.get.mockImplementation((key) => {
       const mockData = {
         data: { applicationId: "testApplicationId", documentState: "approved" },
-        IsFailSelected: { value: true },  // Return as an object
+        IsFailSelected: { value: true },
         currentSailingSlot: {
           departureDate: departureDate,
           sailingHour: "10",
@@ -472,6 +472,68 @@ describe("postNonComplianceHandler", () => {
     expect(request.yar.clear).toHaveBeenCalledWith("IsFailSelected");
 
     expect(h.redirect).toHaveBeenCalledWith("/checker/dashboard");
+  });
+
+  it("should handle unexpected errors and render the error view with appropriate details", async () => {
+    const payload = {
+      mcNotMatch: "true",
+      mcNotMatchActual: "123456789123456",
+      relevantComments: "Some relevant comments",
+      isGBCheck: true,
+    };
+  
+    request.payload = payload;
+  
+    request.yar.get.mockImplementation((key) => {
+      const mockData = {
+        data: { documentState: "awaiting", applicationId: "testApplicationId" },
+      };
+      return mockData[key] || null;
+    });
+  
+    const mockAppSettings = { setting1: "value1" };
+    appSettingsService.getAppSettings.mockResolvedValue(mockAppSettings);
+    console.error = jest.fn();
+
+    const applicationStatus = "awaiting";
+    const statusMapping = {
+      approved: "Approved",
+      awaiting: "Awaiting Verification",
+      revoked: "Revoked",
+      rejected: "Unsuccessful",
+    };
+    const statusColourMapping = {
+      approved: "green",
+      awaiting: "yellow",
+      revoked: "orange",
+      rejected: "red",
+    };
+    const documentStatus = statusMapping[applicationStatus] || applicationStatus;
+    const documentStatusColourMapping = statusColourMapping[applicationStatus] || applicationStatus;
+  
+    await NonComplianceHandlers.postNonComplianceHandler(request, h).catch((error) => {
+      expect(console.error).toHaveBeenCalledWith("Unexpected Error:", error);
+  
+      expect(h.view).toHaveBeenCalledWith(
+        VIEW_PATH,
+        expect.objectContaining({
+          documentStatus,
+          documentStatusColourMapping,
+          data: { documentState: "awaiting", applicationId: "testApplicationId" },
+          model: mockAppSettings,
+          errorSummary: [
+            {
+              fieldId: "unexpected",
+              message: genericErrorMessage,
+              dispalyAs: "text",
+            },
+          ],
+          formSubmitted: true,
+          errors: {},
+          payload,
+        })
+      );
+    });
   });
 });
 
