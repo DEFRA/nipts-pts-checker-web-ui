@@ -27,7 +27,7 @@ const nonComplianceSchema = Joi.object({
           }
           return helpers.message(errorMessages.microchipNumber.letters);
         }
-        if (/[^0-9]/.test(val)) {
+        if (/\D/.test(val)) {
           return helpers.message(
             errorMessages.microchipNumber.specialCharacters
           );
@@ -70,19 +70,15 @@ const nonComplianceSchema = Joi.object({
       gbPassengerSaysNoTravel,
     } = context;
     if (isGBCheck) {
-      if (
-        !gbRefersToDAERAOrSPS &&
-        !gbAdviseNoTravel &&
-        !gbPassengerSaysNoTravel
-      ) {
+      const isInvalidOutcome = !gbRefersToDAERAOrSPS && !gbAdviseNoTravel && !gbPassengerSaysNoTravel;
+      if (isInvalidOutcome) {
         return helpers.message(errorMessages.gbOutcome.required);
       }
-    } else if (
-      gbRefersToDAERAOrSPS ||
-      gbAdviseNoTravel ||
-      gbPassengerSaysNoTravel
-    ) {
-      return helpers.message(errorMessages.gbOutcome.incorrectSelection);
+    } else {
+      const isIncorrectSelection = gbRefersToDAERAOrSPS || gbAdviseNoTravel || gbPassengerSaysNoTravel;
+      if (isIncorrectSelection) {
+        return helpers.message(errorMessages.gbOutcome.incorrectSelection);
+      }
     }
     return value;
   }),

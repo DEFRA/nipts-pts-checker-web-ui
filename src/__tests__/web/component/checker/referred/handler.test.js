@@ -13,6 +13,10 @@ const allowed = "Allowed";
 const ptdNum = "GB826223445";
 const ptdFormatted = "GB826 223 445";
 const numArrayElements = 25;
+const departureDate = "01/01/2023";
+const paginationMin = 10;
+const paginationMax = 20;
+const totalPages = 3;
 
 describe("ReferredHandlers", () => {
   afterEach(() => {
@@ -47,10 +51,19 @@ describe("ReferredHandlers", () => {
       const mockRequest = {
         yar: {
           get: jest.fn().mockImplementation((key) => {
-            if (key === "routeName") return "RouteA";
-            if (key === "departureDate") return "01/01/2023";
-            if (key === "departureTime") return "12:00";
-            if (key === "currentSailingSlot") return { slot: "morning" };
+            if (key === "routeName") {
+              return "RouteA";
+            }
+            if (key === "departureDate") 
+            {
+              return departureDate
+            }
+            if (key === "departureTime") {
+              return "12:00";
+            }
+            if (key === "currentSailingSlot") {
+              return { slot: "morning" };
+            }
             if (key === "spsChecks") {
               return {
                 spsChecks: [
@@ -79,7 +92,7 @@ describe("ReferredHandlers", () => {
         currentSailingSlot: { slot: "morning" },
         check: {
           routeName: "RouteA",
-          departureDate: "01/01/2023",
+          departureDate: departureDate,
           departureTime: "12:00",
         },
         spsChecks: [
@@ -94,15 +107,27 @@ describe("ReferredHandlers", () => {
     });
 
     it("should handle pagination correctly", async () => {
-      const mockSpsChecks = new Array(numArrayElements).fill({ SPSOutcome: allowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted });
+
+      const mockSpsChecks = Array.from({ length: numArrayElements }, () => ({
+        SPSOutcome: allowed,
+        PTDNumber: ptdNum,
+        PTDNumberFormatted: ptdFormatted
+      }));
+
       spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
 
       const mockRequest = {
         yar: {
           get: jest.fn().mockImplementation((key) => {
-            if (key === "routeName") return "RouteB";
-            if (key === "departureDate") return "01/01/2023";
-            if (key === "departureTime") return "12:00";
+            if (key === "routeName") {
+              return "RouteB";
+            }
+            if (key === "departureDate") {
+              return departureDate;
+            } 
+            if (key === "departureTime") {
+              return "12:00";
+            }
             return null;
           }),
         },
@@ -122,12 +147,12 @@ describe("ReferredHandlers", () => {
         currentSailingSlot: {},
         check: {
           routeName: "RouteB",
-          departureDate: "01/01/2023",
+          departureDate: departureDate,
           departureTime: "12:00",
         },
-        spsChecks: mockSpsChecks.slice(10, 20), // Ensuring correct pagination slice
+        spsChecks: mockSpsChecks.slice(paginationMin, paginationMax), // Ensuring correct pagination slice
         page: 2,
-        totalPages: 3,
+        totalPages: totalPages,
         pages: [1, 2, 3],
       });
     });
@@ -143,9 +168,15 @@ describe("ReferredHandlers", () => {
       const mockRequest = {
         yar: {
           get: jest.fn().mockImplementation((key) => {
-            if (key === "routeName") return "RouteC";
-            if (key === "departureDate") return "01/01/2023";
-            if (key === "departureTime") return "12:00";
+            if (key === "routeName") {
+                return "RouteC";
+            }
+            if (key === "departureDate") {
+              return departureDate;
+            }
+            if (key === "departureTime") {
+              return "12:00";
+            }
             return null;
           }),
         },
@@ -163,7 +194,7 @@ describe("ReferredHandlers", () => {
         currentSailingSlot: {},
         check: {
           routeName: "RouteC",
-          departureDate: "01/01/2023",
+          departureDate: departureDate,
           departureTime: "12:00",
         },
         spsChecks: [

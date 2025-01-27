@@ -1,9 +1,9 @@
-import ScanRoutes from "../../../../../web/component/checker/scan/routes.js";
+import Routes from "../../../../../web/component/checker/scan/routes.js";
 import HttpMethod from "../../../../../constants/httpMethod.js";
 
 describe("Scan Routes", () => {
   it("should have a GET route for /checker/scan", () => {
-    const foundRoute = ScanRoutes.find(
+    const foundRoute = Routes.find(
       (route) =>
         route.path === "/checker/scan" && route.method === HttpMethod.GET
     );
@@ -13,7 +13,7 @@ describe("Scan Routes", () => {
   });
 
   it("should have a POST route for /checker/scan", () => {
-    const foundRoute = ScanRoutes.find(
+    const foundRoute = Routes.find(
       (route) =>
         route.path === "/checker/scan" && route.method === HttpMethod.POST
     );
@@ -23,7 +23,7 @@ describe("Scan Routes", () => {
   });
 
   it("should have a GET route for /checker/scan/not-found", () => {
-    const foundRoute = ScanRoutes.find(
+    const foundRoute = Routes.find(
       (route) =>
         route.path === "/checker/scan/not-found" &&
         route.method === HttpMethod.GET

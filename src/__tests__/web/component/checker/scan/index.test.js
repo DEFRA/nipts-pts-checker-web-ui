@@ -16,7 +16,7 @@ describe("Scan Plugin", () => {
     expect(server.dependency).toHaveBeenCalledWith(["@hapi/vision"]);
   });
 
-  it("should call server.route with ScanRoutes", () => {
+  it("should call server.route with Routes", () => {
     plugin.register(server);
     expect(server.route).toHaveBeenCalled();
   });

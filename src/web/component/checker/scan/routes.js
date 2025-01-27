@@ -3,7 +3,7 @@
 import { ScanHandlers } from "./handler.js";
 import HttpMethod from "../../../../constants/httpMethod.js";
 
-const ScanRoutes = [
+const Routes = [
   {
     method: HttpMethod.GET,
     path: "/checker/scan",
@@ -27,4 +27,4 @@ const ScanRoutes = [
   },
 ];
 
-export default ScanRoutes;
+export default Routes;
