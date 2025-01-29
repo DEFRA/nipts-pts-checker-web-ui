@@ -1,6 +1,37 @@
 {% extends "./layouts/checkerLayout.html" %}
 
-{% block headContent %}{% endblock %}
+{% block headContent %}
+<!-- Include custom styles directly in the page -->
+<style>
+    .govuk-button--link {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        color: #1d70b8;
+        text-decoration: underline;
+        font: inherit;
+        cursor: pointer;
+    }
+
+    .govuk-button--link:hover,
+    .govuk-button--link:focus {
+        text-decoration: none;
+    }
+
+    /* Style for visited links */
+    .govuk-button--link.visited {
+        color: #4c2c92;
+        /* GOV.UK visited link color */
+    }
+
+    .govuk-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    }
+    
+</style>
+{% endblock %}
 
 {% block beforeContent %}
 {{ super() }}
@@ -16,39 +47,49 @@
 
         <span class="govuk-caption-xl">GB checks</span>
         <h1 class="govuk-heading-xl">Referred to SPS</h1>
+        <div class="govuk-table-wrapper">
+            <table class="govuk-table govuk-table--small-text-until-tablet">
 
-        <table class="govuk-table govuk-table--small-text-until-tablet">
+                <caption class="govuk-table__caption govuk-table__caption--m">
+                    {{ check.routeName }} - {{ check.departureDate }} {{ check.departureTime }}
+                </caption>
 
-            <caption class="govuk-table__caption govuk-table__caption--m">
-                {{ check.routeName }} - {{ check.departureDate }} {{ check.departureTime }}
-            </caption>
-
-            <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                    <th scope="col" class="govuk-table__header">PTD/Reference number</th>
-                    <th scope="col" class="govuk-table__header">Pet</th>
-                    <th scope="col" class="govuk-table__header">Microchip</th>
-                    <th scope="col" class="govuk-table__header">Travel by</th>
-                    <th scope="col" class="govuk-table__header">SPS outcome</th>
-                </tr>
-            </thead>
-            <tbody class="govuk-table__body">
-                {% for spsCheck in spsChecks %}
-                <tr class="govuk-table__row">
-                    <th scope="row" class="govuk-table__header"><a
-                            href="#">{{spsCheck.PTDNumber}}</a></th>
-                    <td class="govuk-table__cell">{{spsCheck.PetDescription}}</td>
-                    <td class="govuk-table__cell">{{spsCheck.Microchip}}</td>
-                    <td class="govuk-table__cell">{{spsCheck.TravelBy}}</td>
-                    <td class="govuk-table__cell">
-                        <strong class="govuk-tag govuk-tag--{{spsCheck.classColour}}">
-                            {{spsCheck.SPSOutcome}}
-                        </strong>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">PTD/Reference number</th>
+                        <th scope="col" class="govuk-table__header">Pet</th>
+                        <th scope="col" class="govuk-table__header">Microchip</th>
+                        <th scope="col" class="govuk-table__header">Travel by</th>
+                        <th scope="col" class="govuk-table__header">SPS outcome</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    {% for spsCheck in spsChecks %}                   
+                        <tr class="govuk-table__row">
+                            <th scope="row" class="govuk-table__header">
+                                <form method="POST" action="/checker/checkreport" class="referred-form">
+                                    <button type="submit" class="govuk-button--link referred-button"
+                                        data-identifier="referred-{{ loop.index }}">
+                                        {{spsCheck.PTDNumberFormatted}}<span class="govuk-visually-hidden"> reported</span>
+                                    </button>
+                                    <input type="hidden" name="CheckSummaryId" value="{{ spsCheck.CheckSummaryId }}">                                    
+                                    <input type="hidden" name="PTDNumber" value="{{ spsCheck.PTDNumber }}">
+                                    <input type="hidden" name="ApplicationNumber" value="{{ spsCheck.ApplicationNumber }}">
+                                </form>
+                            </th>
+                            <td class="govuk-table__cell">{{spsCheck.PetDescription}}</td>
+                            <td class="govuk-table__cell">{{spsCheck.Microchip}}</td>
+                            <td class="govuk-table__cell">{{spsCheck.TravelBy}}</td>
+                            <td class="govuk-table__cell">
+                                <strong class="govuk-tag govuk-tag--{{spsCheck.classColour}}">
+                                    {{spsCheck.SPSOutcome}}
+                                </strong>
+                            </td>
+                        </tr>                    
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
         <!-- Pagination Component -->
         {% if totalPages > 1 %}
@@ -56,7 +97,7 @@
             <ul class="govuk-pagination__list">
                 {% if page > 1 %}
                 <li class="govuk-pagination__prev">
-                    <a class="govuk-link govuk-pagination__link" href="?page={{ page - 1 }}" rel="prev">
+                    <a class="govuk-link govuk-pagination__link" href="?previousPage={{ page - 1 }}" rel="prev">
                         <svg class="govuk-pagination__icon govuk-pagination__icon--prev"
                             xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true"
                             focusable="false" viewBox="0 0 15 13">
@@ -80,7 +121,7 @@
                 {% endfor %}
 
                 {% if page < totalPages %} <li class="govuk-pagination__next">
-                    <a class="govuk-link govuk-pagination__link" href="?page={{ page + 1 }}" rel="next">
+                    <a class="govuk-link govuk-pagination__link" href="?nextPage={{ page + 1 }}" rel="next">
                         <span class="govuk-pagination__link-title">
                             Next<span class="govuk-visually-hidden"> page</span>
                         </span>
@@ -101,6 +142,33 @@
     </div>
 </div>
 
+<script>
+    if(window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+  }
+</script>
+
 {% endblock %}
 
-{% block bodyContent %}{% endblock %}
+{% block bodyContent %}
+<script>
+    // JavaScript to handle the visited state of 'View' links
+    document.addEventListener('DOMContentLoaded', function () {
+        const referredButtons = document.querySelectorAll('.referred-button');
+
+        referredButtons.forEach(function (button) {
+            const identifier = button.getAttribute('data-identifier');
+
+            // Check if this link was clicked before
+            if (localStorage.getItem(identifier)) {
+                button.classList.add('visited');
+            }
+
+            button.addEventListener('click', function () {
+                // Mark this link as visited
+                localStorage.setItem(identifier, 'true');
+            });
+        });
+    });
+</script>
+{% endblock %}

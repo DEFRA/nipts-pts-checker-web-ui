@@ -1,7 +1,6 @@
 import { DashboardMainModel } from "../models/dashboardMainModel.js";
 import dotenv from "dotenv";
 import httpService from "./httpService.js";
-import moment from "moment";
 
 dotenv.config();
 
@@ -11,12 +10,6 @@ const baseUrl =
 if (!baseUrl) {
   throw new Error("BASE_API_URL is not set in environment variables.");
 }
-
-// Format date helper function
-const formatDate = (dateRaw) => {
-  const date = dateRaw ? new Date(dateRaw) : null;
-  return date ? moment(date).format("DD/MM/YYYY") : undefined;
-};
 
 const getCheckOutcomes = async (startHour, endHour, request) => {
   try {
@@ -40,6 +33,7 @@ const getCheckOutcomes = async (startHour, endHour, request) => {
     // Map each item to DashboardMainModel
     const dashboardItems = items.map((item) => {
       return new DashboardMainModel({
+        routeId: item.routeId,
         routeName: item.routeName,
         operatorName: item.operatorName,
         departurePort: item.departurePort,

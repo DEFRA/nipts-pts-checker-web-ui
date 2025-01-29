@@ -2,6 +2,7 @@ import apiService from "../../../api/services/apiService.js";
 import httpService from "../../../api/services/httpService.js";
 import { HttpStatusCode } from "axios";
 import moment from "moment";
+import { organisationMainModel } from "../../../api/models/organisationMainModel.js";
 import { MicrochipAppPtdMainModel } from "../../../api/models/microchipAppPtdMainModel.js";
 
 jest.mock("../../../api/services/httpService.js");
@@ -18,6 +19,7 @@ const issuingAuthorityAddressLineTwo = "Eden Bridge House";
 const issuingAuthorityAddressLineThree = "Lowther Street";
 const agencyName = "Animal and Plant Health Agency";
 const signatoryName = "John Smith (APHA) (Signed digitally)";
+const additionalDetails = "Non-compliance details";
 
 const baseUrl =
   process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
@@ -27,6 +29,12 @@ const baseUrl =
 
   const applicationNotFoundMessage = "Application not found";
   const unexpectedErrorMessage = "Unexpected error";
+
+  const getOrganisationRoute = "/Checker/getOrganisation";
+  const organisationId = "9245A7BB-F2A4-4BD7-AD9F-08DC32FA7B20";
+  const unexpectedResponseStructureText = "Unexpected response structure";
+  const unexpectedErrorText = "Unexpected error occurred";
+  const notFoundText = "not_found";
 
 describe("apiService", () => {
   let request;
@@ -465,7 +473,7 @@ describe("apiService", () => {
         { ptdNumber: "123459" },
         request
       );
-      expect(result).toEqual({ error: "not_found" });
+      expect(result).toEqual({ error: applicationNotFoundMessage });
     });
 
     it("should return error when application is not found", async () => {
@@ -534,6 +542,19 @@ describe("apiService", () => {
         request
       );
       expect(result).toEqual({ error: unexpectedErrorMessage });
+    });
+
+    
+    it("should return unexpected response structure gracefully - getApplicationByPTDNumber", async () => {
+      httpService.postAsync.mockResolvedValue({ data: null });
+      const expectedError = { error: unexpectedResponseStructureText };
+
+      const result = await apiService.getApplicationByPTDNumber(
+        "123456",
+        request
+      );
+
+      expect(result).toEqual(expectedError);
     });
   });
 
@@ -946,7 +967,7 @@ describe("apiService", () => {
     });
 
 
-    it("should return error when application number is not found", async () => {
+    it("should return error when application number is not found - getApplicationByApplicationNumber", async () => {
       httpService.postAsync.mockResolvedValue({
         status: 404,
         error: applicationNotFoundMessage,
@@ -956,7 +977,7 @@ describe("apiService", () => {
         "app123",
         request
       );
-      expect(result).toEqual({ error: "not_found" });
+      expect(result).toEqual({ error: notFoundText });
     });
 
     it("should return error when pet is not found", async () => {
@@ -1016,18 +1037,6 @@ describe("apiService", () => {
       expect(result).toEqual({ error: applicationNotFoundMessage });
     });
 
-    it("should return error when application number is not found", async () => {
-      httpService.postAsync.mockResolvedValue({
-        status: 404,
-        error: applicationNotFoundMessage,
-      });
-
-      const result = await apiService.getApplicationByApplicationNumber(
-        "app123",
-        request
-      );
-      expect(result).toEqual({ error: "not_found" });
-    });
 
     it("should return unexpected error when an exception occurs", async () => {
       httpService.postAsync.mockRejectedValue(new Error(unexpectedErrorMessage));
@@ -1038,6 +1047,33 @@ describe("apiService", () => {
       );
       expect(result).toEqual({ error: unexpectedErrorMessage });
     });
+
+    it("should return unexpected response structure gracefully - getApplicationByApplicationNumber", async () => {
+      httpService.postAsync.mockResolvedValue({ data: null });
+      const expectedError = { error: unexpectedResponseStructureText };
+
+      const result = await apiService.getApplicationByApplicationNumber(
+        "app123",
+        request
+      );
+
+      expect(result).toEqual(expectedError);
+    });
+
+    it("should handle errors without a message and return unexpectedErrorText - getApplicationByApplicationNumber", async () => {
+      const mockError = new Error();
+      delete mockError.message; 
+
+      httpService.postAsync.mockRejectedValue(mockError);
+    
+      const result = await apiService.getApplicationByApplicationNumber(
+        "app123",
+        request
+      );
+      
+      expect(result).toEqual({ error: unexpectedErrorText });
+    });
+
   });
 
   describe("recordCheckOutCome", () => {
@@ -1065,8 +1101,45 @@ describe("apiService", () => {
 
       const result = await apiService.recordCheckOutCome(checkOutcome);
 
-      expect(result).toEqual({ error: "Unexpected response structure" });
+      expect(result).toEqual({ error: unexpectedResponseStructureText });
     });
+
+    it("should return unexpected response structure gracefully - recordCheckOutCome", async () => {
+      const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
+      httpService.postAsync.mockResolvedValue({ data: null });
+      const expectedError = { error: unexpectedResponseStructureText };
+
+      const result = await apiService.recordCheckOutCome(checkOutcome);
+
+      expect(result).toEqual(expectedError);
+    });
+
+    it("should return error when application number is not found - recordCheckOutCome", async () => {
+      const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
+      
+      httpService.postAsync.mockResolvedValue({
+        status: 404,
+        error: applicationNotFoundMessage,
+      });
+
+      const result = await apiService.recordCheckOutCome(checkOutcome);
+
+      expect(result).toEqual({ error: notFoundText });
+    });
+
+    it("should handle errors without a message and return unexpectedErrorText - recordCheckOutCome", async () => {
+      const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
+    
+      const mockError = new Error();
+      delete mockError.message; 
+
+      httpService.postAsync.mockRejectedValue(mockError);
+    
+      const result = await apiService.recordCheckOutCome(checkOutcome);
+
+      expect(result).toEqual({ error: unexpectedErrorText });
+    });
+    
   });
 
   describe("saveCheckerUser", () => {
@@ -1094,7 +1167,238 @@ describe("apiService", () => {
 
       const result = await apiService.saveCheckerUser(checkOutcome);
 
-      expect(result).toEqual({ error: "Unexpected response structure" });
+      expect(result).toEqual({ error: unexpectedResponseStructureText });
+    });
+
+    it("should return unexpected response structure gracefully - saveCheckerUser", async () => {
+      const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
+      httpService.postAsync.mockResolvedValue({ data: null });
+      const expectedError = { error: unexpectedResponseStructureText };
+
+      const result = await apiService.saveCheckerUser(checkOutcome);
+
+      expect(result).toEqual(expectedError);
+    });
+
+    it("should handle applicationNotFoundErrorText and return 'not_found'", async () => {
+      const mockCheckOutcome = { applicationId: "app1", checkOutcome: "pass" };
+      const mockError = new Error(notFoundText);
+    
+      httpService.postAsync.mockRejectedValue(mockError);
+    
+      const result = await apiService.recordCheckOutCome(mockCheckOutcome, request);
+    
+      expect(result).toEqual({ error: notFoundText });
+    });
+
+    it("should handle errors without a message and return unexpectedErrorText", async () => {
+      const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
+    
+      const mockError = new Error();
+      delete mockError.message; 
+
+      httpService.postAsync.mockRejectedValue(mockError);
+    
+      const result = await apiService.saveCheckerUser(checkOutcome);
+
+      expect(result).toEqual({ error: unexpectedErrorText });
+    });
+
+  });
+
+  describe("getOrganisation", () => {
+
+    it("should fetch data and map it to OrganisationMainModel", async () => {
+      const requestData =   { organisationId: organisationId };
+      const apiResponse = {
+        data: 
+          {
+            id: organisationId,
+            name: "Golden Retriever, friendly and playful",
+            location: "NI",
+            externalId: null,
+            activeFrom: "11/11/2024",
+            activeTo: null,
+            isActive: true,
+          }
+      };
+
+      httpService.postAsync.mockResolvedValue({
+        status: 200,
+        data: apiResponse.data,
+      });
+  
+      const expectedData = organisationMainModel({
+        Id: organisationId,
+        Name: "Golden Retriever, friendly and playful",
+        Location: "NI",
+        ExternalId: null,
+        ActiveFrom: "11/11/2024",
+        ActiveTo: null,
+        IsActive: true,
+      });
+  
+      const data = await apiService.getOrganisation(
+        organisationId,
+        request
+      );
+  
+      expect(data).toEqual(expectedData);
+      expect(httpService.postAsync).toHaveBeenCalledWith(
+        expect.stringContaining(getOrganisationRoute),
+         requestData,
+        request // Pass the request object as the third parameter
+      );
+
+    });
+  
+    it("should return an error if the API returns an error", async () => {
+      const requestData =   { organisationId: organisationId };
+      const apiError = { error: "Not Found" };
+      httpService.postAsync.mockResolvedValue(apiError);
+  
+      const result = await apiService.getOrganisation(
+        organisationId,
+        request
+      );
+  
+      expect(result).toEqual({ error: apiError.error });
+      expect(httpService.postAsync).toHaveBeenCalledWith(
+        expect.stringContaining(getOrganisationRoute),
+        requestData,
+        request
+      );
+    });
+
+    it("should throw an error if response data structure is invalid", async () => {
+      
+      const requestData =   { organisationId: organisationId };
+      const apiResponse = { data: "Invalid Data Structure" };
+      httpService.postAsync.mockResolvedValue(apiResponse);
+  
+      await expect(
+        apiService.getOrganisation(organisationId, request)
+      ).rejects.toThrow(unexpectedResponseStructureText);
+  
+      expect(httpService.postAsync).toHaveBeenCalledWith(
+        expect.stringContaining(getOrganisationRoute),
+        requestData,
+        request
+      );
+    });
+
+    it("should handle unexpected errors gracefully", async () => {
+      const requestData =   { organisationId: organisationId };
+      httpService.postAsync.mockRejectedValue(new Error(unexpectedErrorMessage));
+  
+      await expect(
+        apiService.getOrganisation(organisationId, request)
+      ).rejects.toThrow(unexpectedErrorMessage);
+  
+      expect(httpService.postAsync).toHaveBeenCalledWith(
+        expect.stringContaining(getOrganisationRoute),
+        requestData,
+        request
+      );
     });
   });
+
+  describe("reportNonCompliance", () => {
+    it("should handle non-compliance reporting and return checkSummaryId", async () => {
+      const mockCheckOutcome = { compliance: false, details: additionalDetails };
+      const mockResponse = {
+        status: 200,
+        data: { checkSummaryId: "mockCheckSummaryId" },
+      };
+    
+      httpService.postAsync.mockResolvedValue(mockResponse);
+    
+      const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
+    
+      expect(httpService.postAsync).toHaveBeenCalledWith(
+        `${baseUrl}/Checker/ReportNonCompliance`,
+        mockCheckOutcome,
+        request
+      );
+      expect(result).toEqual("mockCheckSummaryId");
+    });
+    
+    it("should handle 404 response and return structured error", async () => {
+      const mockCheckOutcome = { compliance: false, details: additionalDetails };
+      const mockResponse = {
+        status: HttpStatusCode.NotFound,
+        error: applicationNotFoundMessage,
+      };
+    
+      httpService.postAsync.mockResolvedValue(mockResponse);
+    
+      const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
+    
+      expect(result).toEqual({ error: notFoundText });
+    });
+
+    it("should handle unexpected errors and return a structured error with 'unexpectedErrorText'", async () => {
+      const mockCheckOutcome = { compliance: false, details: "Some details" };
+      const mockError = new Error("Unexpected error occurred");
+    
+      httpService.postAsync.mockRejectedValue(mockError);
+    
+      const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
+    
+      expect(result).toEqual({ error: unexpectedErrorText });
+    });
+    
+    
+    it("should handle unexpected response structure and return structured error", async () => {
+      const mockCheckOutcome = { compliance: false, details: additionalDetails };
+      const mockResponse = {
+        status: 200,
+        data: null,
+      };
+    
+      httpService.postAsync.mockResolvedValue(mockResponse);
+    
+      const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
+    
+      expect(result).toEqual({ error: unexpectedResponseStructureText });
+    });
+    
+    it("should handle unexpected errors and return structured error", async () => {
+      const mockCheckOutcome = { compliance: false, details: additionalDetails };
+      const mockError = new Error("Unexpected failure");
+    
+      httpService.postAsync.mockRejectedValue(mockError);
+    
+      const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
+    
+      expect(result).toEqual({ error: "Unexpected failure" });
+    });
+
+    it("should return unexpected response structure gracefully - reportNonCompliance", async () => {
+      const mockCheckOutcome = { compliance: false, details: additionalDetails };
+      httpService.postAsync.mockResolvedValue({ data: null });
+      const expectedError = { error: unexpectedResponseStructureText };
+
+      const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
+
+      expect(result).toEqual(expectedError);
+    });
+
+    it("should handle errors without a message and return unexpectedErrorText - reportNonCompliance", async () => {
+      const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
+    
+      const mockError = new Error();
+      delete mockError.message; 
+
+      httpService.postAsync.mockRejectedValue(mockError);
+    
+      const result = await apiService.reportNonCompliance(checkOutcome, request);
+
+      expect(result).toEqual({ error: unexpectedErrorText });
+    });
+    
+  });
+
 });
+
+

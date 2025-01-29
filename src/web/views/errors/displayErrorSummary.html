@@ -29,7 +29,6 @@
 
             if (targetElement) {
                 if (targetElement.type === 'radio' || targetElement.type === 'checkbox') {
-                    targetElement.checked = true;
 
                     // Ensure the conditional content is shown
                     const ariaControls = targetElement.getAttribute('data-aria-controls');

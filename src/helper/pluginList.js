@@ -1,4 +1,4 @@
-import Inert, { plugin } from "@hapi/inert";
+import Inert from "@hapi/inert";
 import Vision from "@hapi/vision";
 import Cookie from "@hapi/cookie";
 import Yar from "@hapi/yar";
@@ -9,6 +9,7 @@ import DocumentSearch from "../web/component/checker/documentsearch/index.js";
 import SearchResults from "../web/component/checker/searchresults/index.js";
 import NonCompliance from "../web/component/checker/noncompliance/index.js";
 import Referred from "../web/component/checker/referred/index.js";
+import CheckReportDetails from "../web/component/checker/checkreportdetails/index.js";
 import MagicPassword from "../web/component/checker/magicPassword/index.js";
 import SignIn from "../web/component/checker/SignIn/index.js";
 import SignOut from "../web/component/checker/SignOut/index.js";
@@ -18,6 +19,7 @@ import AuthPlugin from "../plugins/auth-plugin.js";
 import HeaderPlugin from "../plugins/header.js";
 import MagicPasswordPlugin from "../plugins/magic-password.js";
 import CurrentSailingSlotPlugin from "../plugins/currentsailingslot.js";
+import Scan from "../web/component/checker/scan/index.js";
 import config from "../config/index.js";
 
 const pluginList = [
@@ -79,6 +81,9 @@ const pluginList = [
     plugin: Referred,
   },
   {
+    plugin: CheckReportDetails,
+  },
+  {
     plugin: AuthPlugin,
   },
   {
@@ -104,6 +109,9 @@ const pluginList = [
   },
   {
     plugin: CurrentSailingSlotPlugin,
+  },
+  {
+    plugin: Scan,
   },
 ];
 

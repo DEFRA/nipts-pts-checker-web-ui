@@ -7,13 +7,32 @@ import {
   validatePassOrFail,
 } from "./validate.js";
 
+
 const VIEW_PATH = "componentViews/checker/searchresults/searchResultsView";
 
 const getSearchResultsHandler = async (request, h) => {
   const microchipNumber = request.yar.get("microchipNumber");
   const data = request.yar.get("data");
+
+  const PTD_LENGTH = 11; 
+  const PTD_PREFIX_LENGTH = 5;
+  const PTD_MID_LENGTH = 8;
+
+  data.ptdFormatted = data?.ptdNumber 
+  ? `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(0, PTD_PREFIX_LENGTH)} ` +
+    `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(PTD_PREFIX_LENGTH, PTD_MID_LENGTH)} ` +
+    `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(PTD_MID_LENGTH)}`
+  : "";
+
   const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
-  return h.view(VIEW_PATH, { microchipNumber, data, pageTitle });
+  let checklist = {};
+  const nonComplianceToSearchResults = request.yar.get("nonComplianceToSearchResults");
+  if(nonComplianceToSearchResults)
+  {
+    checklist = CheckOutcomeConstants.Fail;
+    request.yar.clear("nonComplianceToSearchResults");
+  } 
+  return h.view(VIEW_PATH, { microchipNumber, data, pageTitle, checklist });
 };
 
 const saveAndContinueHandler = async (request, h) => {
@@ -21,7 +40,7 @@ const saveAndContinueHandler = async (request, h) => {
     let { checklist } = request.payload;
 
     const data = request.yar.get("data");
-    if (data.documentState === "rejected" || data.documentState === "revoked") {
+    if (data.documentState === "rejected" || data.documentState === "revoked" || data.documentState === "awaiting") {
       checklist = CheckOutcomeConstants.Fail;
     }
 
@@ -47,10 +66,8 @@ const saveAndContinueHandler = async (request, h) => {
         const currentSailingSlot = request.yar.get("currentSailingSlot") || {};
         const currentDate = currentSailingSlot.departureDate.split("/").reverse().join("-");
         const dateTimeString = `${currentDate}T${currentSailingSlot.sailingHour}:${currentSailingSlot.sailingMinutes}:00Z`;
-
         
-        //TODO need to get GB/SPS check basing on Org ID and set 
-        //isGBCheck
+        const isGBCheck = request.yar.get("isGBCheck");
         const checkerId = request.yar.get("checkerId");
         const checkOutcome = {
           applicationId: data.applicationId,
@@ -60,7 +77,7 @@ const saveAndContinueHandler = async (request, h) => {
           sailingTime: dateTimeString,
           sailingOption: currentSailingSlot.selectedRouteOption.id,
           flightNumber: currentSailingSlot.routeFlight || null,
-          isGBCheck: true,
+          isGBCheck: isGBCheck,
         };
 
         const responseData = await apiService.recordCheckOutCome(
@@ -92,9 +109,17 @@ const saveAndContinueHandler = async (request, h) => {
           });
         }
       
-      request.yar.set("IsFailSelected", false);
+      request.yar.clear("IsFailSelected");
+
+      // Clear individual keys
+      request.yar.clear("routeId");
+      request.yar.clear("routeName");
+      request.yar.clear("departureDate");
+      request.yar.clear("departureTime");
+      request.yar.clear("checkSummaryId");
+
       request.yar.set("successConfirmation", true);
-      return h.redirect("/checker/document-search");
+      return h.redirect("/checker/dashboard");
     }
 
     request.yar.set("IsFailSelected", true);

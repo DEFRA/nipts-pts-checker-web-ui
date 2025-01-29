@@ -1,17 +1,32 @@
 
-<h2 class="govuk-heading-l govuk-!-static-margin-top-9">GB outcome</h2>
-
-<div class="govuk-form-group">
+<div id="gbOutcomeFormGroup" name="gbOutcomeFormGroup" class="govuk-form-group {% if errors['isGBCheck'] %}govuk-form-group--error{% endif %}">
+  <fieldset class="govuk-fieldset" aria-describedby="gbOutcomeLegend">
+    <legend id="gbOutcomeLegend" class="govuk-fieldset__legend govuk-fieldset__legend--l">
+      <h2 class="govuk-fieldset__heading govuk-!-static-margin-top-0">GB outcome</h2>
+      <div id="gb-item-hint" class="govuk-hint">
+        For GB staff to fill in.
+      </div>
+    </legend>
+    
+    <div>
+      {% if errors['isGBCheck'] %}
+        <span id="gbOutcomeError" class="govuk-error-message"> 
+          {{ errors['isGBCheck'] }} 
+        </span>
+      {% endif %}
+    </div>
     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
       <div class="govuk-checkboxes__item">
-        <input class="govuk-checkboxes__input" id="gbRefersToDAERAOrSPS" name="gbRefersToDAERAOrSPS" type="checkbox" value="true"
+        <input class="govuk-checkboxes__input" id="isGBCheck" name="gbRefersToDAERAOrSPS" type="checkbox" value="true"
+        aria-label="Passenger referred to DAERA/SPS at NI port"
         {% if payload['gbRefersToDAERAOrSPS']=="true" %}checked{% endif %}>
-        <label class="govuk-label govuk-checkboxes__label" for="gbRefersToDAERAOrSPS">
+        <label class="govuk-label govuk-checkboxes__label" for="isGBCheck">
           Passenger referred to DAERA/SPS at NI port
         </label>
       </div>
       <div class="govuk-checkboxes__item">
         <input class="govuk-checkboxes__input" id="gbAdviseNoTravel" name="gbAdviseNoTravel" type="checkbox" value="true"
+        aria-label="Passenger advised not to travel"
         {% if payload['gbAdviseNoTravel']=="true" %}checked{% endif %}>
         <label class="govuk-label govuk-checkboxes__label" for="gbAdviseNoTravel">
           Passenger advised not to travel
@@ -19,10 +34,12 @@
       </div>
       <div class="govuk-checkboxes__item">
         <input class="govuk-checkboxes__input" id="gbPassengerSaysNoTravel" name="gbPassengerSaysNoTravel" type="checkbox" value="true"
+        aria-label="Passenger says they will not travel"
         {% if payload['gbPassengerSaysNoTravel']=="true" %}checked{% endif %}>
         <label class="govuk-label govuk-checkboxes__label" for="gbPassengerSaysNoTravel">
           Passenger says they will not travel
         </label>
       </div>
     </div>
-  </div>
+  </fieldset>
+</div>

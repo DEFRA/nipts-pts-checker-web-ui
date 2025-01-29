@@ -18,4 +18,16 @@ describe("Routes", () => {
 
     expect(foundRoute.options.handler).toBe(ReferredHandlers.getReferredChecks);
   });
+
+  it("should have a POST route for /checker/checkreport", () => {
+    const foundRoute = Routes.find(
+      (route) =>
+        route.path === "/checker/checkreport" && route.method === "POST"
+    );
+
+    expect(foundRoute).toBeDefined();
+    expect(foundRoute.options.handler).toBe(
+      ReferredHandlers.postCheckReport
+    );
+  });
 });

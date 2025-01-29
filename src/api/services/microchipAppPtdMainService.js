@@ -88,7 +88,7 @@ const getMicrochipData = async (microchipNumber, request) => {
       petId: item.pet ? item.pet.petId : undefined,
       petName: item.pet ? item.pet.petName : undefined,
       petSpecies: item.pet ? item.pet.species : undefined,
-      petBreed: item.pet && item.pet.breedName === "Mixed breed or unknown"
+      petBreed: item.pet && item.pet.breedName === "Mixed breed or unknown" && item.pet.breedAdditionalInfo
       ? item.pet.breedAdditionalInfo 
       : item.pet?.breedName,
       documentState,
@@ -120,12 +120,12 @@ const getMicrochipData = async (microchipNumber, request) => {
 
     // Check for specific error message and return a structured error
     if (error.response?.data?.error) {
-      if (
-        error.response.data.error === "Application not found" ||
-        error.response.data.error === "Pet not found"
-      ) {
+      if (error.response.data.error === "Application not found" || error.response.data.error === "Pet not found") 
+      {
         return { error: "not_found" };
-      } else {
+      } 
+      else 
+      {
         return { error: error.response.data.error };
       }
     }

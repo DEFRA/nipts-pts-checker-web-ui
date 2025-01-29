@@ -18,6 +18,13 @@ const Routes = [
       handler: NonComplianceHandlers.postNonComplianceHandler,
     },
   },
+  {
+    method: HttpMethod.POST,
+    path: "/checker/non-compliance-back",
+    options: {
+      handler: NonComplianceHandlers.postNonComplianceBackHandler,
+    },
+  },
 ];
 
 export default Routes;

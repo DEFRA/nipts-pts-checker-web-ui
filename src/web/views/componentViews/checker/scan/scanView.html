@@ -1,0 +1,43 @@
+{% extends "./layouts/checkerLayout.html" %}
+
+{% block headContent %}
+<script src="/web/assets/javascripts/html5-qrcode.min.js"></script>
+<link href="/web/assets/css/scan.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block pageTitle %}Scan QR Code - {{currentSailingSlot.pageTitle}} – GOV.UK{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row govuk-!-margin-bottom-2 govuk-!-margin-top-4">
+    <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
+        <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
+            Scan a QR code
+        </h1>
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <div id="camera-access-prompt" class="camera-access-prompt">
+            <p class="govuk-body">You need to allow camera access to scan.</p>
+            <button id="allow-camera-access" class="govuk-button" data-module="govuk-button">
+                Allow camera access
+            </button>
+        </div>
+        <div id="camera-access-denied" class="camera-access-denied" style="display: none;">
+            <p class="govuk-body">Camera access is blocked. Please allow camera access to scan QR codes.</p>
+        </div>
+        <div class="flash-button">
+            <button id="toggle-flash" class="govuk-button govuk-button--flash" data-module="govuk-button">
+                Turn flash on
+            </button>
+        </div>
+        <div id="qr-reader" style="display: none;"></div>
+        <div id="qr-reader-results"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block bodyEnd %}
+<script src="/web/assets/javascripts/scan.js"></script>
+{% endblock %}

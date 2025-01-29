@@ -9,6 +9,7 @@ jest.mock("../../../../../api/services/dashboardMainService.js", () => ({
   __esModule: true,
   default: {
     getCheckOutcomes: jest.fn(),
+    postReferred: jest.fn()
   },
 }));
 
@@ -145,6 +146,39 @@ describe("Handler", () => {
       await expect(
         DashboardHandlers.getDashboard(mockRequest, h)
       ).rejects.toThrow("Test error");
+    });
+  });
+
+  describe("postReferred", () => {
+    
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it("should set route details in session and redirect to /checker/referred", async () => {
+      const mockRequest = {
+        payload: {
+          routeId: "12345",
+          routeName: "Test Route",
+          departureDate: "2025-01-01",
+          departureTime: "10:00",
+        },
+        yar: {
+          set: jest.fn(),
+        },
+      };
+  
+      const mockResponseToolkit = {
+        redirect: jest.fn(),
+      };
+  
+      await DashboardHandlers.postReferred(mockRequest, mockResponseToolkit);
+  
+      expect(mockRequest.yar.set).toHaveBeenCalledWith("routeId", "12345");
+      expect(mockRequest.yar.set).toHaveBeenCalledWith("routeName", "Test Route");
+      expect(mockRequest.yar.set).toHaveBeenCalledWith("departureDate", "2025-01-01");
+      expect(mockRequest.yar.set).toHaveBeenCalledWith("departureTime", "10:00");
+      expect(mockResponseToolkit.redirect).toHaveBeenCalledWith("/checker/referred");
     });
   });
 });

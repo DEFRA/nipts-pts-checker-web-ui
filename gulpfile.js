@@ -3,12 +3,37 @@ import eslint from "gulp-eslint";
 import jest from "gulp-jest";
 import sassModule from "gulp-sass";
 import dartCompiler from "sass";
+import babel from "gulp-babel";
+import uglify from "gulp-uglify";
 const { src, dest, series } = gulp;
 
 const sass = sassModule(dartCompiler);
 
+function copyLibraries() {
+  return src("node_modules/html5-qrcode/html5-qrcode.min.js").pipe(
+    dest("dist/web/assets/javascripts")
+  );
+}
+
+function bundleJs() {
+  return src("src/web/assets/javascripts/scan.js")
+    .pipe(
+      babel({
+        presets: ["@babel/preset-env"],
+      })
+    )
+    .pipe(
+      uglify({
+        compress: {
+          drop_console: false, 
+        },
+      })
+    )
+    .pipe(dest("dist/web/assets/javascripts"));
+}
+
 function compileCss() {
-  return src("src/web/assets/**/*.css").pipe(dest("dist/src/web/assets"));
+  return src("src/web/assets/**/*.css").pipe(dest("dist/web/assets"));
 }
 
 function compileJs() {
@@ -16,7 +41,7 @@ function compileJs() {
 }
 
 function compileHtml() {
-  return src("src/web/views/**/*.html").pipe(dest("dist/src/web/views"));
+  return src("src/web/views/**/*.html").pipe(dest("dist/web/views"));
 }
 
 function moveConfig() {
@@ -30,7 +55,6 @@ function lint() {
     .pipe(eslint.failAfterError());
 }
 
-//write test function under src/__tests__ folder to run all the test
 function test() {
   return src("src/__tests__/**/*.test.js").pipe(
     jest.default({
@@ -43,8 +67,10 @@ function test() {
   );
 }
 
-//export the above function as series can this be default
+
 export default series(
+  copyLibraries,
+  bundleJs,
   compileCss,
   compileJs,
   compileHtml,

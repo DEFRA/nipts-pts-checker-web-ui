@@ -15,7 +15,7 @@
             <div class="govuk-details__text">
                 <div id="document-pet-card" class="govuk-summary-card">
                     <div class="govuk-summary-card__title-wrapper">
-                        <h2 class="govuk-summary-card__title">Pet details from PTD or application</h2>
+                        <h2 class="govuk-summary-card__title">Pet details from PTD or Application</h2>
                     </div>
                     <div class="govuk-summary-card__content">
                         <dl class="govuk-summary-list">                            
@@ -80,6 +80,7 @@
         <div class="govuk-checkboxes" data-module="govuk-checkboxes">
             <div class="govuk-checkboxes__item">
                 <input class="govuk-checkboxes__input" id="vcNotMatchPTD" name="vcNotMatchPTD" type="checkbox"
+                aria-label="Pet does not match the PTD"
                     value="true" {% if payload['vcNotMatchPTD']=="true" %}checked{% endif %}>
                 <label class="govuk-label govuk-checkboxes__label" for="vcNotMatchPTD">
                     Pet does not match the PTD

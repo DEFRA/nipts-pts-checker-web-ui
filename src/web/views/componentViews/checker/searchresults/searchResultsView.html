@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% set ptdNumber = data.ptdNumber %}
+{% set ptdFormatted = data.ptdFormatted %}
 {% set issuedDate = data.issuedDate %}
 {% set microchipNumber = data.microchipNumber %}
 {% set microchipDate = data.microchipDate %}
@@ -76,7 +77,7 @@
                                 PTD number
                             </dt>
                             <dd class="govuk-summary-list__value">
-                                {{ ptdNumber }}
+                                {{ ptdFormatted }}
                             </dd>
                         </div>
                         <div class="govuk-summary-list__row">
@@ -368,48 +369,64 @@
                         no risks identified
                     </li>
                 </ul>
-                {% if data['documentState'] !== 'rejected' and data['documentState'] !== 'revoked' %}
+                {% if data['documentState'] !== 'rejected' and data['documentState'] !== 'revoked' and data['documentState'] !== 'awaiting' %}
                 <div>
                     
-                    <div id="radio-check-error" class="govuk-form-group {% if error %}govuk-form-group--error{%
-                        endif %}">
+                    <div id="radio-check-error" class="govuk-form-group {% if error %}govuk-form-group--error{% endif %}">
                         {% if error %}
                         <p id="passOrFailOption" class="govuk-error-message">
                             <span class="govuk-visually-hidden">Error:</span> Select an option
                         </p>
                         {% endif %}
                     
-                    
-                        <div class="govuk-radios" data-module="govuk-radios">
-                            <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="checklist" name="checklist" type="radio"
-                                    value="Pass" {% if checklist == "Pass" %}checked{% endif %}>
-                                {# data-aria-controls="conditional-checklist-1" #}
-                                <label class="govuk-label govuk-radios__label" for="checklist">
+                        <div class="govuk-radios" data-module="govuk-radios" role="radiogroup">                       
+                            <div class="govuk-radios__item" role="radio" aria-checked="{% if checklist == 'Pass' %}true{% else %}false{% endif %}" tabindex="{% if checklist == 'Pass' %}0{% else %}-1{% endif %}" aria-posinset="1" aria-setsize="2">
+                                <input 
+                                    class="govuk-radios__input" 
+                                    id="checklist-pass" 
+                                    name="checklist" 
+                                    type="radio"
+                                    value="Pass" 
+                                    aria-labelledby="pass-label" 
+                                    {% if checklist == "Pass" %}checked="checked"{% endif %}>
+                                <label 
+                                    id="pass-label" 
+                                    class="govuk-label govuk-radios__label" 
+                                    for="checklist-pass">
                                     Pass
                                 </label>
-                                <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
+                                <div 
+                                    id="pass-hint" 
+                                    class="govuk-hint govuk-radios__hint">
                                     Passes all checks.
                                 </div>
                             </div>
-                            {# <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
-                                id="conditional-checklist-1">
-
-
-                            </div> #}
-                            <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="contact-2" name="checklist" type="radio"
-                                    value="Fail" {% if checklist == "Fail" %}checked{% endif %}>
-                                {# data-aria-controls="conditional-contact-2" #}
-                                <label class="govuk-label govuk-radios__label" for="contact-2">
+                        
+                            <div class="govuk-radios__item" role="radio" aria-checked="{% if checklist == 'Fail' %}true{% else %}false{% endif %}" tabindex="{% if checklist == 'Fail' %}0{% else %}-1{% endif %}" aria-posinset="2" aria-setsize="2">
+                                <input 
+                                    class="govuk-radios__input" 
+                                    id="checklist-fail" 
+                                    name="checklist" 
+                                    type="radio"
+                                    value="Fail" 
+                                    aria-labelledby="fail-label" 
+                                    {% if checklist == "Fail" %}checked="checked"{% endif %}>
+                                <label 
+                                    id="fail-label" 
+                                    class="govuk-label govuk-radios__label" 
+                                    for="checklist-fail">
                                     Fail or referred to SPS
                                 </label>
-                                <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
+                                <div 
+                                    id="fail-hint" 
+                                    class="govuk-hint govuk-radios__hint">
                                     Fails at least one check.
                                 </div>
                             </div>
                         </div>
+                            
                     </div>
+
                 </div>
                 {% endif %}
             </fieldset>
@@ -418,7 +435,11 @@
         <div class="govuk-grid-row govuk-!-static-margin-top-4">
             <div class="govuk-grid-column-one-half">
                 <button type="submit" class="govuk-button" data-module="govuk-button" id="saveAndContinue">
-                    Save and continue
+                    {% if data['documentState'] !== 'approved' %}
+                        Continue
+                    {% else %}
+                        Save and continue
+                    {% endif %}
                 </button>
             </div>
         </div>
@@ -455,5 +476,25 @@
         });
         document.getElementById('errorSummary').innerHTML = '';
     }
+
+    if(window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+
+      // Select all radio buttons within the radiogroup
+    const radioButtons = document.querySelectorAll('[role="radio"]');
+  
+    radioButtons.forEach(radio => {
+        // Add an event listener to each radio button
+        radio.addEventListener('change', function() {
+            // Update aria-checked for each radio button
+            radioButtons.forEach(rb => {
+                const input = rb.querySelector('input');
+                const ariaChecked = (input.checked) ? 'true' : 'false';
+                rb.setAttribute('aria-checked', ariaChecked);
+            });
+        });
+    });
+
 </script>
 {% endblock %}

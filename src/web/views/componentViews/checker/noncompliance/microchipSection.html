@@ -14,7 +14,7 @@
             <div class="govuk-details__text">
                 <div id="document-microchip-card" class="govuk-summary-card">
                     <div class="govuk-summary-card__title-wrapper">
-                        <h2 class="govuk-summary-card__title">Microchip information from PTD or application</h2>
+                        <h2 class="govuk-summary-card__title">Microchip information from PTD or Application</h2>
                     </div>
                     <div class="govuk-summary-card__content">
                         <dl class="govuk-summary-list">
@@ -44,10 +44,11 @@
 
         <div class="govuk-checkboxes" data-module="govuk-checkboxes">
             <div class="govuk-checkboxes__item">
-                <input class="govuk-checkboxes__input" id="mcNotMatch" name="mcNotMatch"
-                    type="checkbox" value="true" data-aria-controls="conditional-mcNotMatchActual" {% if
+                <input class="govuk-checkboxes__input" id="missingReason" name="mcNotMatch"
+                    type="checkbox" value="true" data-aria-controls="conditional-mcNotMatchActual" 
+                    aria-label="Microchip number does not match the PTD" {% if
                         payload['mcNotMatch']=="true" %}checked{% endif %}>
-                <label class="govuk-label govuk-checkboxes__label" for="mcNotMatch">
+                <label class="govuk-label govuk-checkboxes__label" for="missingReason">
                     Microchip number does not match the PTD
                 </label>
             </div>
@@ -73,7 +74,8 @@
             </div>
 
             <div class="govuk-checkboxes__item">
-                <input class="govuk-checkboxes__input" id="mcNotFound" name="mcNotFound" type="checkbox" value="true" {%
+                <input class="govuk-checkboxes__input" id="mcNotFound" name="mcNotFound" type="checkbox" value="true"
+                aria-label="Cannot find microchip" {%
                     if payload['mcNotFound']=="true" %}checked{% endif %}>
                 <label class="govuk-label govuk-checkboxes__label" for="mcNotFound">
                     Cannot find microchip

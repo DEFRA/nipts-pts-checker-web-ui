@@ -10,6 +10,7 @@ describe("SpsReferralMainModel", () => {
         TravelBy: "Car",
         SPSOutcome: "Approved",
         classColour: "Green",
+        CheckSummaryId: "9245A7BB-F2A4-4BD7-AD9F-08DC32FA7B20"
       });
 
       expect(result.PTDNumber).toEqual("XYZ123");
@@ -20,6 +21,7 @@ describe("SpsReferralMainModel", () => {
       expect(result.TravelBy).toEqual("Car");
       expect(result.SPSOutcome).toEqual("Approved");
       expect(result.classColour).toEqual("Green");
+      expect(result.CheckSummaryId).toEqual("9245A7BB-F2A4-4BD7-AD9F-08DC32FA7B20");
     });
   });
 });

@@ -11,6 +11,13 @@ const Routes = [
       handler: ReferredHandlers.getReferredChecks,
     },
   },
+  {
+    method: HttpMethod.POST,
+    path: "/checker/checkreport",
+    options: {
+      handler: ReferredHandlers.postCheckReport,
+    },
+  },
 ];
 
 export default Routes;

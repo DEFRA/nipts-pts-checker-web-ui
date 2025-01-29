@@ -14,6 +14,9 @@ const issuingAuthorityAddressLineTwo = "Eden Bridge House";
 const issuingAuthorityAddressLineThree = "Lowther Street";
 const agencyName = "Animal and Plant Health Agency";
 const signatoryName = "John Smith (APHA) (Signed digitally)";
+const bearerToken = "Bearer mockToken"
+
+const unexpectedErrorMessage = "Unexpected error occurred";
 
 describe("getMicrochipData", () => {
   let request;
@@ -22,7 +25,7 @@ describe("getMicrochipData", () => {
     request = {
       // Mock request object
       headers: {
-        authorization: "Bearer mockToken",
+        authorization: bearerToken,
       },
     };
     jest.clearAllMocks();
@@ -403,10 +406,132 @@ describe("getMicrochipData", () => {
 
     httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
 
-    const expectedError = { error: "Unexpected error occurred" };
+    const expectedError = { error: unexpectedErrorMessage };
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
 
     expect(data).toEqual(expectedError);
   });
+
+  it("should handle unexpected response structure gracefully", async () => {
+    const microchipNumber = "123456789012345";
+  
+    httpService.postAsync.mockResolvedValue({ data: null });
+  
+    const expectedError = { error: unexpectedErrorMessage };
+  
+    const data = await microchipApi.getMicrochipData(microchipNumber, request);
+  
+    expect(data).toEqual(expectedError);
+  });
+
+  it("should return 'not_found' for specific error messages", async () => {
+    const microchipNumber = "123456789012345";
+  
+    const errorResponse = {
+      response: { data: { error: "Application not found" } },
+    };
+    httpService.postAsync.mockRejectedValue(errorResponse);
+  
+    const expectedError = { error: "not_found" };
+  
+    const data = await microchipApi.getMicrochipData(microchipNumber, request);
+  
+    expect(data).toEqual(expectedError);
+  });
+
+  it("should return the error message from the response if it is not 'Application not found' or 'Pet not found'", async () => {
+    const microchipNumber = "123456789012345";
+  
+    const errorResponse = {
+      response: { data: { error: "Unexpected server error" } },
+    };
+    httpService.postAsync.mockRejectedValue(errorResponse);
+  
+    const expectedError = { error: "Unexpected server error" };
+  
+    const data = await microchipApi.getMicrochipData(microchipNumber, request);
+  
+    expect(data).toEqual(expectedError);
+  });
+  
 });
+
+describe("checkMicrochipNumberExistWithPtd", () => {
+  it("should return true when microchip number exists", async () => {
+    const microchipNumber = "123456789012345";
+    const request = {
+      headers: {
+        authorization: bearerToken,
+      },
+    };
+
+    const apiResponse = {
+      data: true,
+    };
+
+    httpService.postAsync.mockResolvedValue(apiResponse);
+
+    const result = await microchipApi.checkMicrochipNumberExistWithPtd(microchipNumber, request);
+
+    expect(result).toEqual({ exists: true });
+  });
+
+  it("should return false when microchip number does not exist", async () => {
+    const microchipNumber = "987654321098765";
+    const request = {
+      headers: {
+        authorization: bearerToken,
+      },
+    };
+
+    const apiResponse = {
+      data: false,
+    };
+
+    httpService.postAsync.mockResolvedValue(apiResponse);
+
+    const result = await microchipApi.checkMicrochipNumberExistWithPtd(microchipNumber, request);
+
+    expect(result).toEqual({ exists: false });
+  });
+
+  it("should return an error when API response contains an error", async () => {
+    const microchipNumber = "123456789012345";
+    const request = {
+      headers: {
+        authorization: bearerToken,
+      },
+    };
+
+    const apiErrorResponse = {
+      response: {
+        data: {
+          error: "Microchip not found",
+        },
+      },
+    };
+
+    httpService.postAsync.mockRejectedValue(apiErrorResponse);
+
+    const result = await microchipApi.checkMicrochipNumberExistWithPtd(microchipNumber, request);
+
+    expect(result).toEqual({ error: "Microchip not found" });
+  });
+
+  it("should return a generic error for unexpected exceptions", async () => {
+    const microchipNumber = "123456789012345";
+    const request = {
+      headers: {
+        authorization: bearerToken,
+      },
+    };
+
+    httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
+
+    const result = await microchipApi.checkMicrochipNumberExistWithPtd(microchipNumber, request);
+
+    expect(result).toEqual({ error: unexpectedErrorMessage });
+  });
+});
+

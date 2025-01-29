@@ -1759,6 +1759,7 @@ p + .govuk-heading-s,
   margin-top: 15px;
   margin-bottom: 15px;
   padding-left: 0.875em;
+  margin-left: 0px;
 }
 @media (min-width: 40.0625em) {
   .govuk-back-link {

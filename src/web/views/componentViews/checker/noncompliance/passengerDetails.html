@@ -4,23 +4,24 @@
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
       <h3 class="govuk-fieldset__heading">Type of passenger</h3>
     </legend>
-
-    <!-- Display error message inline if the passenger type is not selected -->
-    {% if errors['passengerType'] %}
-      <p id="passengerError" class="govuk-error-message">
-        {{ errors['passengerType'] }}
-      </p>
-    {% endif %}
-
-    <div class="govuk-radios" data-module="govuk-radios" id="passengerType">
+    <div>
+      <!-- Display error message inline if the passenger type is not selected -->
+      {% if errors['passengerType'] %}
+        <span id="passengerError" class="govuk-error-message">
+          {{ errors['passengerType'] }}
+        </span>
+      {% endif %}
+    </div>
+    <div class="govuk-radios" data-module="govuk-radios">
       <div class="govuk-radios__item">
         <input class="govuk-radios__input" 
-               id="footPassenger" 
+               id="passengerType" 
                name="passengerType" 
                type="radio" 
-               value="1" 
+               value="1"
+               aria-label="Ferry foot passenger" 
                {% if payload['passengerType'] == '1' %}checked{% endif %}>
-        <label class="govuk-label govuk-radios__label" for="footPassenger">Foot passenger</label>
+        <label class="govuk-label govuk-radios__label" for="passengerType">Ferry foot passenger</label>
       </div>
 
       <div class="govuk-radios__item">
@@ -28,9 +29,21 @@
                id="vehiclePassenger" 
                name="passengerType" 
                type="radio" 
-               value="2" 
+               value="2"
+               aria-label="Vehicle on ferry" 
                {% if payload['passengerType'] == '2' %}checked{% endif %}>
-        <label class="govuk-label govuk-radios__label" for="vehiclePassenger">Vehicle</label>
+        <label class="govuk-label govuk-radios__label" for="vehiclePassenger">Vehicle on ferry</label>
+      </div>
+
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" 
+               id="airlinePassenger" 
+               name="passengerType" 
+               type="radio" 
+               value="3"
+               aria-label="Airline" 
+               {% if payload['passengerType'] == '3' %}checked{% endif %}>
+        <label class="govuk-label govuk-radios__label" for="airlinePassenger">Airline</label>
       </div>
     </div>
   </fieldset>

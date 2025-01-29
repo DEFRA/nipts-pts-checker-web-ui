@@ -1,5 +1,6 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 import { HttpStatusCode } from "axios";
+import { organisationMainModel } from "../models/organisationMainModel.js";
 import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js";
 import httpService from "./httpService.js";
 import { issuingAuthorityModelData } from "../../constants/issuingAuthority.js";
@@ -52,109 +53,114 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
     }
 
     const item = response.data;
+    validateItem(item);
 
-    if (!item || typeof item !== "object") {
-      throw new Error(unexpectedResponseErrorText);
-    }
-
-    // Ensure the item structure is as expected
-    if (!item.pet) {
-      return { error: petNotFoundErrorText };
-    }
-
-    if (!item.application) {
-      return { error: applicationNotFoundErrorText };
-    }
-
-    if (!item.travelDocument) {
-      return { error: "TravelDocument not found" };
-    }
-
-    // Convert application status to lowercase and trim for consistent comparison
-    const applicationStatus = item.application.status.toLowerCase().trim();
-    const documentState = statusMapping[applicationStatus] || applicationStatus;
-
-    const ptdNumber =
-      documentState === "approved" || documentState === "revoked"
-        ? item?.travelDocument?.travelDocumentReferenceNumber
-        : item?.application?.referenceNumber;
-
-    let issuedDateRaw;
-
-    switch (documentState) {
-      case "approved":
-        issuedDateRaw = item.application?.dateAuthorised;
-        break;
-      case "revoked":
-        issuedDateRaw = item.application?.dateRevoked;
-        break;
-      case "rejected":
-        issuedDateRaw = item.application?.dateRejected;
-        break;
-      default:
-        issuedDateRaw = item.application?.dateOfApplication;
-        break;
-    }
+    const { documentState, ptdNumber, issuedDateRaw, microchippedDateRaw, dateOfBirthRaw } = getDocumentAndDateData(item);
 
     const formattedIssuedDate = formatDate(issuedDateRaw);
-
-    const microchippedDateRaw = item.pet
-      ? item.pet.microchippedDate
-      : undefined;
     const formattedMicrochippedDate = formatDate(microchippedDateRaw);
-
-    const dateOfBirthRaw = item.pet ? item.pet.dateOfBirth : undefined;
     const formattedDateOfBirth = formatDate(dateOfBirthRaw);
 
     const transformedItem = new MicrochipAppPtdMainModel({
-      petId: item.pet ? item.pet.petId : undefined,
-      petName: item.pet ? item.pet.petName : undefined,
-      petSpecies: item.pet ? item.pet.species : undefined,
-      petBreed: item.pet && item.pet.breedName === "Mixed breed or unknown"
-      ? item.pet.additionalBreedInfo
-      : item.pet?.breedName,
+      petId: item.pet?.petId,
+      petName: item.pet?.petName,
+      petSpecies: item.pet?.species,
+      petBreed: getPetBreed(item),
       documentState,
       ptdNumber,
       issuedDate: formattedIssuedDate || undefined,
-      microchipNumber: item.pet ? item.pet.microchipNumber : undefined,
+      microchipNumber: item.pet?.microchipNumber,
       microchipDate: formattedMicrochippedDate || undefined,
-      petSex: item.pet ? item.pet.sex : undefined,
+      petSex: item.pet?.sex,
       petDoB: formattedDateOfBirth || undefined,
-      petColour: item.pet ? item.pet.colourName : undefined,
-      petFeaturesDetail: item.pet ? item.pet.significantFeatures : undefined,
-      applicationId: item.application
-        ? item.application.applicationId
-        : undefined,
-      travelDocumentId: item.travelDocument
-        ? item.travelDocument.travelDocumentId
-        : null,
-      dateOfIssue: item.travelDocument ? item.travelDocument.dateOfIssue : null,
-      petOwnerName: item.petOwner ? item.petOwner.name : null,
-      petOwnerEmail: item.petOwner ? item.petOwner.email : null,
-      petOwnerTelephone: item.petOwner ? item.petOwner.telephone : null,
-      petOwnerAddress: item.petOwner.address ? item.petOwner.address : null,
+      petColour: item.pet?.colourName,
+      petFeaturesDetail: item.pet?.significantFeatures,
+      applicationId: item.application?.applicationId,
+      travelDocumentId: item.travelDocument?.travelDocumentId,
+      dateOfIssue: item.travelDocument?.dateOfIssue,
+      petOwnerName: item.petOwner?.name,
+      petOwnerEmail: item.petOwner?.email,
+      petOwnerTelephone: item.petOwner?.telephone,
+      petOwnerAddress: item.petOwner?.address || null,
       issuingAuthority: issuingAuthorityModelData,
     });
 
     return transformedItem;
   } catch (error) {
     console.error(errorText, error.message);
-
-    // Check for specific error message and return a structured error
-    if (error?.message) {
-      if (
-        error.message === applicationNotFoundErrorText ||
-        error.message === petNotFoundErrorText
-      ) {
-        return { error: "not_found" };
-      } else {
-        return { error: error.message };
-      }
-    }
-
-    return { error: unexpectedErrorText };
+    return handleError(error);
   }
 };
+
+function validateItem(item) {
+  if (!item || typeof item !== "object") {
+    throw new Error(unexpectedResponseErrorText);
+  }
+
+  if (!item.pet) {
+    throw new Error(petNotFoundErrorText);
+  }
+
+  if (!item.application) {
+    throw new Error(applicationNotFoundErrorText);
+  }
+
+  if (!item.travelDocument) {
+    throw new Error("TravelDocument not found");
+  }
+}
+
+function getDocumentAndDateData(item) {
+  const applicationStatus = item.application.status.toLowerCase().trim();
+  const documentState = statusMapping[applicationStatus] || applicationStatus;
+
+  const ptdNumber =
+    documentState === "approved" || documentState === "revoked"
+      ? item?.travelDocument?.travelDocumentReferenceNumber
+      : item?.application?.referenceNumber;
+
+  let issuedDateRaw;
+
+  switch (documentState) {
+    case "approved":
+      issuedDateRaw = item.application?.dateAuthorised;
+      break;
+    case "revoked":
+      issuedDateRaw = item.application?.dateRevoked;
+      break;
+    case "rejected":
+      issuedDateRaw = item.application?.dateRejected;
+      break;
+    default:
+      issuedDateRaw = item.application?.dateOfApplication;
+      break;
+  }
+
+  const microchippedDateRaw = item.pet?.microchippedDate;
+  const dateOfBirthRaw = item.pet?.dateOfBirth;
+
+  return { documentState, ptdNumber, issuedDateRaw, microchippedDateRaw, dateOfBirthRaw };
+}
+
+function getPetBreed(item) {
+  return item.pet?.breedName === "Mixed breed or unknown" && item.pet?.additionalBreedInfo
+    ? item.pet.additionalBreedInfo
+    : item.pet?.breedName;
+}
+
+function handleError(error) {
+  if (error?.message) {
+    const errorMapping = {
+      [applicationNotFoundErrorText]: applicationNotFoundErrorText,
+      [petNotFoundErrorText]: petNotFoundErrorText,
+    };
+  
+    return { error: errorMapping[error.message] || error.message };
+  }
+  
+  return { error: unexpectedErrorText };
+}
+
 
 const getApplicationByApplicationNumber = async (
   applicationNumber,
@@ -229,7 +235,7 @@ const getApplicationByApplicationNumber = async (
       petId: item.pet ? item.pet.petId : undefined,
       petName: item.pet ? item.pet.petName : undefined,
       petSpecies: item.pet ? item.pet.species : undefined,
-      petBreed: item.pet && item.pet.breedName === "Mixed breed or unknown"
+      petBreed: item.pet && item.pet.breedName === "Mixed breed or unknown" && item.pet.breedAdditionalInfo
       ? item.pet.breedAdditionalInfo  
       : item.pet?.breedName,
       documentState,
@@ -360,11 +366,47 @@ const saveCheckerUser = async (checker, request) => {
   }
 };
 
+const getOrganisation = async (organisationId, request) => {
+  try {
+    const data =   { organisationId: organisationId };
+    const url = buildApiUrl("Checker/getOrganisation");
+    const response = await httpService.postAsync(url, data, request);
+
+    // Check for errors in the response
+    if (response?.error) {
+      return { error: response.error };
+    }
+
+    const organisationResposne = response.data;
+    if (!organisationResposne || typeof organisationResposne !== "object") {
+      throw new Error(unexpectedResponseErrorText);
+    }
+
+    // Map each item to OrganisationMainModel
+    const organisation = organisationMainModel({
+        Id: organisationResposne.id,
+        Name: organisationResposne.name,
+        Location: organisationResposne.location,
+        ExternalId: organisationResposne.externalId, 
+        ActiveFrom: organisationResposne.activeFrom,
+        ActiveTo: organisationResposne.activeTo,
+        IsActive: organisationResposne.isActive,
+      });
+
+    return organisation;
+  } catch (error) {
+    console.error(errorText, error.message);
+
+    throw error;
+  }
+};
+
 
 export default {
   getApplicationByPTDNumber,
   getApplicationByApplicationNumber,
   recordCheckOutCome,
   reportNonCompliance,
-  saveCheckerUser
+  saveCheckerUser,
+  getOrganisation
 };

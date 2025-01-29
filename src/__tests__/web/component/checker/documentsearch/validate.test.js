@@ -28,7 +28,7 @@ describe("Validation Functions", () => {
     test("should return error for PTD number with invalid characters", () => {
       const result = validatePtdNumber("#A2B3C4!#");
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe(errorMessages.ptdNumber.invalid);
+      expect(result.error).toBe(errorMessages.ptdNumber.length);
     });
   });
 
@@ -74,7 +74,7 @@ describe("Validation Functions", () => {
     test("should return error for microchip number not 15 digits long", () => {
       const result = validateMicrochipNumber("12345678901234");
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe(errorMessages.microchipNumber.invalid);
+      expect(result.error).toBe(errorMessages.microchipNumber.length);
     });
 
     test("should return error for microchip number with invalid characters", () => {

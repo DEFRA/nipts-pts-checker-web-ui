@@ -6,9 +6,9 @@
       {% if errorFlight %}
       <p id="flight-error" class="govuk-error-message">
         <span class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError
-          }}</span> {{currentSailingMainModelData.currentSailingMainModelErrors.flightError}}
+          }}</span> {{errorFlight}}
       </p>
       {% endif %}
     </div>
-    <input class="govuk-input {% if errorFlight %} govuk-input--error {%endif %} govuk-!-width-one-third" id="routeFlight" name="routeFlight" type="text" autocomplete="tel" value={{routeFlight}}>
+    <input class="govuk-input {% if errorFlight %} govuk-input--error {%endif %} govuk-!-width-one-third" id="routeFlight" name="routeFlight" type="text" autocomplete="tel" value="{{ routeFlight }}">
 </div>
