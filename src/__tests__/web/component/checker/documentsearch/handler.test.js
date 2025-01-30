@@ -17,14 +17,16 @@ jest.mock("../../../../../web/component/checker/documentsearch/validate.js");
 
 const microchipNumberErrorMessage = "Enter a microchip number";
 const microchipLengthErrorMessage = "Enter a 15-digit number";
-const applicationNumberErrorMessage =  "Enter 6 characters after 'GB826'";
+const applicationNumberErrorMessage = "Enter 6 characters after 'GB826'";
 const searchResultsPage = "/checker/search-results";
-const documentSearchView = "componentViews/checker/documentsearch/documentSearchView";
+const documentSearchView =
+  "componentViews/checker/documentsearch/documentSearchView";
 
 const pageTitleDefault =
   "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland";
 
-const documentNotFoundView = "componentViews/checker/documentsearch/documentNotFoundView";
+const documentNotFoundView =
+  "componentViews/checker/documentsearch/documentNotFoundView";
 const errorOccureredText = "An error occurred while processing your request";
 
 describe("DocumentSearchHandlers", () => {
@@ -58,18 +60,15 @@ describe("DocumentSearchHandlers", () => {
       ).toHaveBeenCalled();
       expect(_request.yar.get).toHaveBeenCalledWith("successConfirmation");
       expect(_request.yar.clear).toHaveBeenCalledWith("successConfirmation");
-      expect(h.view).toHaveBeenCalledWith(
-        documentSearchView,
-        {
-          documentSearchMainModelData: mockData,
-          successConfirmation: true,
-          activeTab: "ptd",
-          formSubmitted: false,
-          ptdNumberSearch: "",
-          applicationNumberSearch: "",
-          microchipNumber: "",
-        }
-      );
+      expect(h.view).toHaveBeenCalledWith(documentSearchView, {
+        documentSearchMainModelData: mockData,
+        successConfirmation: true,
+        activeTab: "ptd",
+        formSubmitted: false,
+        ptdNumberSearch: "",
+        applicationNumberSearch: "",
+        microchipNumber: "",
+      });
     });
 
     it("should return the document search view with successConfirmation as false if it is null", async () => {
@@ -86,18 +85,15 @@ describe("DocumentSearchHandlers", () => {
       ).toHaveBeenCalled();
       expect(_request.yar.get).toHaveBeenCalledWith("successConfirmation");
       expect(_request.yar.clear).toHaveBeenCalledWith("successConfirmation");
-      expect(h.view).toHaveBeenCalledWith(
-        documentSearchView,
-        {
-          documentSearchMainModelData: mockData,
-          successConfirmation: false,
-          activeTab: "ptd",
-          formSubmitted: false,
-          ptdNumberSearch: "",
-          applicationNumberSearch: "",
-          microchipNumber: "",
-        }
-      );
+      expect(h.view).toHaveBeenCalledWith(documentSearchView, {
+        documentSearchMainModelData: mockData,
+        successConfirmation: false,
+        activeTab: "ptd",
+        formSubmitted: false,
+        ptdNumberSearch: "",
+        applicationNumberSearch: "",
+        microchipNumber: "",
+      });
     });
 
     it("should return the error view if fetching data fails", async () => {
@@ -110,10 +106,9 @@ describe("DocumentSearchHandlers", () => {
       expect(
         documentSearchMainService.getDocumentSearchMain
       ).toHaveBeenCalled();
-      expect(h.view).toHaveBeenCalledWith(
-        documentSearchView,
-        { error: "Failed to fetch document search data" }
-      );
+      expect(h.view).toHaveBeenCalledWith(documentSearchView, {
+        error: "Failed to fetch document search data",
+      });
     });
   });
 
@@ -155,21 +150,18 @@ describe("DocumentSearchHandlers", () => {
 
       await DocumentSearchHandlers.submitSearch(request, h);
 
-      expect(h.view).toHaveBeenCalledWith(
-        documentSearchView,
-        {
-          error: microchipNumberErrorMessage,
-          errorSummary: [
-            { fieldId: "microchipNumber", message: microchipNumberErrorMessage },
-          ],
-          activeTab: "microchip",
-          formSubmitted: true,
-          ptdNumberSearch: "",
-          applicationNumberSearch: "",
-          microchipNumber: "",
-          documentSearchMainModelData: mockData,
-        }
-      );
+      expect(h.view).toHaveBeenCalledWith(documentSearchView, {
+        error: microchipNumberErrorMessage,
+        errorSummary: [
+          { fieldId: "microchipNumber", message: microchipNumberErrorMessage },
+        ],
+        activeTab: "microchip",
+        formSubmitted: true,
+        ptdNumberSearch: "",
+        applicationNumberSearch: "",
+        microchipNumber: "",
+        documentSearchMainModelData: mockData,
+      });
     });
 
     it("should handle microchip search with invalid microchip number", async () => {
@@ -191,21 +183,18 @@ describe("DocumentSearchHandlers", () => {
 
       await DocumentSearchHandlers.submitSearch(request, h);
 
-      expect(h.view).toHaveBeenCalledWith(
-        documentSearchView,
-        {
-          error: microchipLengthErrorMessage,
-          errorSummary: [
-            { fieldId: "microchipNumber", message: microchipLengthErrorMessage },
-          ],
-          activeTab: "microchip",
-          formSubmitted: true,
-          ptdNumberSearch: "",
-          applicationNumberSearch: "",
-          microchipNumber: "123",
-          documentSearchMainModelData: mockData,
-        }
-      );
+      expect(h.view).toHaveBeenCalledWith(documentSearchView, {
+        error: microchipLengthErrorMessage,
+        errorSummary: [
+          { fieldId: "microchipNumber", message: microchipLengthErrorMessage },
+        ],
+        activeTab: "microchip",
+        formSubmitted: true,
+        ptdNumberSearch: "",
+        applicationNumberSearch: "",
+        microchipNumber: "123",
+        documentSearchMainModelData: mockData,
+      });
     });
 
     it("should handle microchip search with microchip data not found", async () => {
@@ -228,13 +217,10 @@ describe("DocumentSearchHandlers", () => {
       );
 
       await DocumentSearchHandlers.submitSearch(request, h);
-      expect(h.view).toHaveBeenCalledWith(
-        documentNotFoundView,
-        {
-          pageTitle: pageTitleDefault,
-          searchValue: request.payload.microchipNumber,
-        }
-      );
+      expect(h.view).toHaveBeenCalledWith(documentNotFoundView, {
+        pageTitle: pageTitleDefault,
+        searchValue: request.payload.microchipNumber,
+      });
     });
 
     it("should handle PTD search with valid number", async () => {
@@ -299,24 +285,21 @@ describe("DocumentSearchHandlers", () => {
 
       await DocumentSearchHandlers.submitSearch(request, h);
 
-      expect(h.view).toHaveBeenCalledWith(
-        documentSearchView,
-        {
-          error: applicationNumberErrorMessage,
-          errorSummary: [
-            {
-              fieldId: "ptdNumberSearch",
-              message: applicationNumberErrorMessage,
-            },
-          ],
-          activeTab: "ptd",
-          formSubmitted: true,
-          ptdNumberSearch: "123",
-          applicationNumberSearch: "",
-          microchipNumber: "",
-          documentSearchMainModelData: mockData,
-        }
-      );
+      expect(h.view).toHaveBeenCalledWith(documentSearchView, {
+        error: applicationNumberErrorMessage,
+        errorSummary: [
+          {
+            fieldId: "ptdNumberSearch",
+            message: applicationNumberErrorMessage,
+          },
+        ],
+        activeTab: "ptd",
+        formSubmitted: true,
+        ptdNumberSearch: "123",
+        applicationNumberSearch: "",
+        microchipNumber: "",
+        documentSearchMainModelData: mockData,
+      });
     });
 
     it("should handle PTD search with PTD data not found", async () => {
@@ -333,7 +316,7 @@ describe("DocumentSearchHandlers", () => {
 
       validatePtdNumber.mockReturnValue({ isValid: true, error: null });
       apiService.getApplicationByPTDNumber.mockResolvedValue({
-        error: "not_found",
+        error: "Application not found",
       });
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
         mockData
@@ -341,13 +324,10 @@ describe("DocumentSearchHandlers", () => {
 
       await DocumentSearchHandlers.submitSearch(request, h);
 
-      expect(h.view).toHaveBeenCalledWith(
-        documentNotFoundView,
-        {
-          pageTitle: pageTitleDefault,
-          searchValue: "GB826" + request.payload.ptdNumberSearch,
-        }
-      );
+      expect(h.view).toHaveBeenCalledWith(documentNotFoundView, {
+        pageTitle: pageTitleDefault,
+        searchValue: "GB826" + request.payload.ptdNumberSearch,
+      });
     });
 
     it("should handle application search with valid number", async () => {
@@ -422,13 +402,10 @@ describe("DocumentSearchHandlers", () => {
 
       await DocumentSearchHandlers.submitSearch(request, h);
 
-      expect(h.view).toHaveBeenCalledWith(
-        documentNotFoundView,
-        {
-          pageTitle: pageTitleDefault,
-          searchValue: request.payload.applicationNumberSearch,
-        }
-      );
+      expect(h.view).toHaveBeenCalledWith(documentNotFoundView, {
+        pageTitle: pageTitleDefault,
+        searchValue: request.payload.applicationNumberSearch,
+      });
     });
 
     it("should handle unexpected error during search", async () => {
@@ -452,21 +429,18 @@ describe("DocumentSearchHandlers", () => {
 
       await DocumentSearchHandlers.submitSearch(request, h);
 
-      expect(h.view).toHaveBeenCalledWith(
-        documentSearchView,
-        {
-          error: errorOccureredText,
-          errorSummary: [
-            { fieldId: "general", message: "An unexpected error occurred" },
-          ],
-          formSubmitted: true,
-          activeTab: "ptd",
-          ptdNumberSearch: "123456",
-          applicationNumberSearch: "",
-          microchipNumber: "",
-          documentSearchMainModelData: mockData,
-        }
-      );
+      expect(h.view).toHaveBeenCalledWith(documentSearchView, {
+        error: errorOccureredText,
+        errorSummary: [
+          { fieldId: "general", message: "An unexpected error occurred" },
+        ],
+        formSubmitted: true,
+        activeTab: "ptd",
+        ptdNumberSearch: "123456",
+        applicationNumberSearch: "",
+        microchipNumber: "",
+        documentSearchMainModelData: mockData,
+      });
     });
 
     it("should handle microchip search with 'not_found' error", async () => {
@@ -476,22 +450,20 @@ describe("DocumentSearchHandlers", () => {
       const h = {
         view: jest.fn().mockReturnValue({}),
       };
-    
-      documentSearchMainService.getDocumentSearchMain.mockResolvedValue('mockData');
-      microchipApi.getMicrochipData.mockResolvedValue({ error: "not_found" });
-    
-      await DocumentSearchHandlers.submitSearch(request, h);
-    
-      expect(h.view).toHaveBeenCalledWith(
-        documentNotFoundView,
-        {
-          searchValue: "123456",
-          pageTitle: pageTitleDefault,
-        }
+
+      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
+        "mockData"
       );
+      microchipApi.getMicrochipData.mockResolvedValue({ error: "not_found" });
+
+      await DocumentSearchHandlers.submitSearch(request, h);
+
+      expect(h.view).toHaveBeenCalledWith(documentNotFoundView, {
+        searchValue: "123456",
+        pageTitle: pageTitleDefault,
+      });
     });
-    
-    
+
     it("should handle microchip search with an error other than 'not_found'", async () => {
       const request = {
         payload: { documentSearch: "microchip", microchipNumber: "123456" },
@@ -500,18 +472,17 @@ describe("DocumentSearchHandlers", () => {
         view: jest.fn().mockReturnValue({}),
       };
 
-      documentSearchMainService.getDocumentSearchMain.mockResolvedValue('mockData');
-      microchipApi.getMicrochipData.mockResolvedValue({ error: "not_found" });
-    
-      await DocumentSearchHandlers.submitSearch(request, h);
-    
-      expect(h.view).toHaveBeenCalledWith(
-        documentNotFoundView,
-        {
-          searchValue: "123456",
-          pageTitle: pageTitleDefault,
-        }
+      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
+        "mockData"
       );
+      microchipApi.getMicrochipData.mockResolvedValue({ error: "not_found" });
+
+      await DocumentSearchHandlers.submitSearch(request, h);
+
+      expect(h.view).toHaveBeenCalledWith(documentNotFoundView, {
+        searchValue: "123456",
+        pageTitle: pageTitleDefault,
+      });
     });
 
     it("should handle microchip search with error and return VIEW_PATH", async () => {
@@ -522,56 +493,59 @@ describe("DocumentSearchHandlers", () => {
         view: jest.fn().mockReturnValue({}),
       };
 
-      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(mockData);
-      microchipApi.getMicrochipData.mockResolvedValue({ error: "some_error" });
-    
-      await DocumentSearchHandlers.submitSearch(request, h);
-    
-      expect(h.view).toHaveBeenCalledWith(
-        documentSearchView,
-        {
-          error: errorOccureredText,
-          errorSummary: [
-            { fieldId: "microchipNumber", message: errorOccureredText },
-          ],
-          activeTab: "microchip",
-          formSubmitted: true,
-          ptdNumberSearch: "",
-          applicationNumberSearch: "",
-          microchipNumber: "123456",
-          documentSearchMainModelData: mockData,
-        }
+      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
+        mockData
       );
+      microchipApi.getMicrochipData.mockResolvedValue({ error: "some_error" });
+
+      await DocumentSearchHandlers.submitSearch(request, h);
+
+      expect(h.view).toHaveBeenCalledWith(documentSearchView, {
+        error: errorOccureredText,
+        errorSummary: [
+          { fieldId: "microchipNumber", message: errorOccureredText },
+        ],
+        activeTab: "microchip",
+        formSubmitted: true,
+        ptdNumberSearch: "",
+        applicationNumberSearch: "",
+        microchipNumber: "123456",
+        documentSearchMainModelData: mockData,
+      });
     });
 
     it("should handle application search with error and return VIEW_PATH", async () => {
       const request = {
-        payload: { documentSearch: "application", applicationNumberSearch: "987654" },
+        payload: {
+          documentSearch: "application",
+          applicationNumberSearch: "987654",
+        },
       };
       const h = {
         view: jest.fn().mockReturnValue({}),
-      };  
-    
-      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(mockData);
-      apiService.getApplicationByApplicationNumber.mockResolvedValue({ error: "some_error" });
-    
-      await DocumentSearchHandlers.submitSearch(request, h);
-    
-      expect(h.view).toHaveBeenCalledWith(
-        documentSearchView,
-        {
-          error: errorOccureredText,
-          errorSummary: [
-            { fieldId: "applicationNumberSearch", message: errorOccureredText },
-          ],
-          activeTab: "application",
-          formSubmitted: true,
-          ptdNumberSearch: "",
-          applicationNumberSearch: "987654",
-          microchipNumber: "",
-          documentSearchMainModelData: mockData,
-        }
+      };
+
+      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
+        mockData
       );
+      apiService.getApplicationByApplicationNumber.mockResolvedValue({
+        error: "some_error",
+      });
+
+      await DocumentSearchHandlers.submitSearch(request, h);
+
+      expect(h.view).toHaveBeenCalledWith(documentSearchView, {
+        error: errorOccureredText,
+        errorSummary: [
+          { fieldId: "applicationNumberSearch", message: errorOccureredText },
+        ],
+        activeTab: "application",
+        formSubmitted: true,
+        ptdNumberSearch: "",
+        applicationNumberSearch: "987654",
+        microchipNumber: "",
+        documentSearchMainModelData: mockData,
+      });
     });
 
     it("should handle PTD search with error and return VIEW_PATH", async () => {
@@ -581,60 +555,69 @@ describe("DocumentSearchHandlers", () => {
       const h = {
         view: jest.fn().mockReturnValue({}),
       };
-    
-      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(mockData);
-      apiService.getApplicationByPTDNumber.mockResolvedValue({ error: "some_error" });
-    
-      await DocumentSearchHandlers.submitSearch(request, h);
-    
-      expect(h.view).toHaveBeenCalledWith(
-        documentSearchView,
-        {
-          error: errorOccureredText,
-          errorSummary: [
-            { fieldId: "ptdNumberSearch", message: errorOccureredText },
-          ],
-          activeTab: "ptd",
-          formSubmitted: true,
-          ptdNumberSearch: "GB826123456",
-          applicationNumberSearch: "",
-          microchipNumber: "",
-          documentSearchMainModelData: mockData,
-        }
+
+      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
+        mockData
       );
+      apiService.getApplicationByPTDNumber.mockResolvedValue({
+        error: "some_error",
+      });
+
+      await DocumentSearchHandlers.submitSearch(request, h);
+
+      expect(h.view).toHaveBeenCalledWith(documentSearchView, {
+        error: errorOccureredText,
+        errorSummary: [
+          { fieldId: "ptdNumberSearch", message: errorOccureredText },
+        ],
+        activeTab: "ptd",
+        formSubmitted: true,
+        ptdNumberSearch: "GB826123456",
+        applicationNumberSearch: "",
+        microchipNumber: "",
+        documentSearchMainModelData: mockData,
+      });
     });
 
     it("should handle invalid application number and return VIEW_PATH", async () => {
       const request = {
-        payload: { documentSearch: "application", applicationNumberSearch: "invalidNumber" },
+        payload: {
+          documentSearch: "application",
+          applicationNumberSearch: "invalidNumber",
+        },
       };
       const h = {
         view: jest.fn().mockReturnValue({}),
       };
-    
-      const validationResult = { isValid: false, error: "Invalid application number" };
-    
-      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(mockData);
-      validateApplicationNumber.mockReturnValue(validationResult);
-    
-      await DocumentSearchHandlers.submitSearch(request, h);
-    
-      expect(h.view).toHaveBeenCalledWith(
-        documentSearchView,
-        {
-          error: validationResult.error,
-          errorSummary: [
-            { fieldId: "applicationNumberSearch", message: validationResult.error },
-          ],
-          activeTab: "application",
-          formSubmitted: true,
-          ptdNumberSearch: "",
-          applicationNumberSearch: "invalidNumber",
-          microchipNumber: "",
-          documentSearchMainModelData: mockData,
-        }
+
+      const validationResult = {
+        isValid: false,
+        error: "Invalid application number",
+      };
+
+      documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
+        mockData
       );
-    }); 
+      validateApplicationNumber.mockReturnValue(validationResult);
+
+      await DocumentSearchHandlers.submitSearch(request, h);
+
+      expect(h.view).toHaveBeenCalledWith(documentSearchView, {
+        error: validationResult.error,
+        errorSummary: [
+          {
+            fieldId: "applicationNumberSearch",
+            message: validationResult.error,
+          },
+        ],
+        activeTab: "application",
+        formSubmitted: true,
+        ptdNumberSearch: "",
+        applicationNumberSearch: "invalidNumber",
+        microchipNumber: "",
+        documentSearchMainModelData: mockData,
+      });
+    });
 
     it("should set microchipNumber and data in yar and redirect to SEARCH_RESULT_VIEW_PATH", async () => {
       const request = {
@@ -644,11 +627,11 @@ describe("DocumentSearchHandlers", () => {
       const h = {
         redirect: jest.fn().mockReturnValue({}),
       };
-    
+
       microchipApi.getMicrochipData.mockResolvedValue(mockData);
-    
+
       await DocumentSearchHandlers.submitSearch(request, h);
-    
+
       expect(request.yar.set).toHaveBeenCalledWith("microchipNumber", "123456");
       expect(request.yar.set).toHaveBeenCalledWith("data", mockData);
       expect(h.redirect).toHaveBeenCalledWith(searchResultsPage);
@@ -656,16 +639,20 @@ describe("DocumentSearchHandlers", () => {
 
     it("should perform default redirect to SEARCH_RESULT_VIEW_PATH if no conditions are met", async () => {
       const request = {
-        payload: { documentSearch: "none", microchipNumber: "", ptdNumberSearch: "", applicationNumberSearch: "" },
+        payload: {
+          documentSearch: "none",
+          microchipNumber: "",
+          ptdNumberSearch: "",
+          applicationNumberSearch: "",
+        },
       };
       const h = {
         redirect: jest.fn().mockReturnValue({}),
       };
-    
+
       await DocumentSearchHandlers.submitSearch(request, h);
-    
+
       expect(h.redirect).toHaveBeenCalledWith(searchResultsPage);
     });
-    
   });
 });
