@@ -90,29 +90,31 @@ const submitSearch = async (request, h) => {
       );
 
       if (responseData.error) {
-        if (responseData.error === "not_found") {
-          return h.view(NOT_FOUND_VIEW_PATH, {
-            searchValue: ptdNumber,
-            pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
-          });
-        } else {
-          error = errorProcessingText;
-          errorSummary.push({
-            fieldId: "ptdNumberSearch",
-            message: errorProcessingText,
-          });
-          return h.view(VIEW_PATH, {
-            error,
-            errorSummary,
-            activeTab: "ptd",
-            formSubmitted: true,
-            ptdNumberSearch: searchText,
-            applicationNumberSearch: "",
-            microchipNumber: "",
-            documentSearchMainModelData:
-              await documentSearchMainService.getDocumentSearchMain(searchText),
-          });
-        }
+         if (responseData.error === "Application not found") {
+           return h.view(NOT_FOUND_VIEW_PATH, {
+             searchValue: ptdNumber,
+             pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
+           });
+         } else {
+           error = errorProcessingText;
+           errorSummary.push({
+             fieldId: "ptdNumberSearch",
+             message: errorProcessingText,
+           });
+           return h.view(VIEW_PATH, {
+             error,
+             errorSummary,
+             activeTab: "ptd",
+             formSubmitted: true,
+             ptdNumberSearch: searchText,
+             applicationNumberSearch: "",
+             microchipNumber: "",
+             documentSearchMainModelData:
+               await documentSearchMainService.getDocumentSearchMain(
+                 searchText
+               ),
+           });
+         }
       }
 
       request.yar.set("ptdNumber", ptdNumber);
