@@ -29,6 +29,11 @@ const DATE_FORMATS = {
   TIMEZONE: "Europe/London",
 };
 
+const HTML = {
+  VIEW_HTML: "ferryView.html"
+};
+ 
+
 const VIEW_PATH = "componentViews/checker/currentsailing/currentsailingView";
 const ERROR_MESSAGES = {
   routeOptionError: "Select if you are checking a ferry or a flight",
@@ -282,7 +287,7 @@ describe("submitCurrentSailingSlot", () => {
     const sailingRoutes = sailingRoutesDefault;
 
     const routeOptions = [
-      { id: "1", value: "Ferry", label: "Ferry", template: "ferryView.html" },
+      { id: "1", value: "Ferry", label: "Ferry", template: HTML.VIEW_HTML },
       {
         id: "2",
         value: "Flight",
@@ -376,7 +381,7 @@ describe("submitCurrentSailingSlot", () => {
 
   it("should handle and return error for flight or ferry radio option not selected", async () => {
     const routeOptions = [
-      { id: "1", value: "Ferry", label: "Ferry", template: "ferryView.html" },
+      { id: "1", value: "Ferry", label: "Ferry", template: HTML.VIEW_HTML },
       {
         id: "2",
         value: "Flight",
@@ -483,7 +488,7 @@ describe("submitCurrentSailingSlot", () => {
 
   it("should handle and return error for ferry route not selected", async () => {
     const routeOptions = [
-      { id: "1", value: "Ferry", label: "Ferry", template: "ferryView.html" },
+      { id: "1", value: "Ferry", label: "Ferry", template: HTML.VIEW_HTML },
       {
         id: "2",
         value: "Flight",
@@ -594,7 +599,7 @@ describe("submitCurrentSailingSlot", () => {
 
   it("should handle and return error for flight when not entered", async () => {
     const routeOptions = [
-      { id: "1", value: "Ferry", label: "Ferry", template: "ferryView.html" },
+      { id: "1", value: "Ferry", label: "Ferry", template: HTML.VIEW_HTML },
       {
         id: "2",
         value: "Flight",
@@ -705,7 +710,7 @@ describe("submitCurrentSailingSlot", () => {
 
   it("should handle and return errors for ferry route not selected and departure date being empty", async () => {
     const routeOptions = [
-      { id: "1", value: "Ferry", label: "Ferry", template: "ferryView.html" },
+      { id: "1", value: "Ferry", label: "Ferry", template: HTML.VIEW_HTML },
       {
         id: "2",
         value: "Flight",
@@ -820,7 +825,7 @@ describe("submitCurrentSailingSlot", () => {
 
   it("should handle and return errors for ferry route not selected and invalid departure date", async () => {
     const routeOptions = [
-      { id: "1", value: "Ferry", label: "Ferry", template: "ferryView.html" },
+      { id: "1", value: "Ferry", label: "Ferry", template: HTML.VIEW_HTML },
       {
         id: "2",
         value: "Flight",
@@ -935,7 +940,7 @@ describe("submitCurrentSailingSlot", () => {
 
   it("should handle and return errors for ferry route not selected and invalid departure date and time error", async () => {
     const routeOptions = [
-      { id: "1", value: "Ferry", label: "Ferry", template: "ferryView.html" },
+      { id: "1", value: "Ferry", label: "Ferry", template: HTML.VIEW_HTML },
       {
         id: "2",
         value: "Flight",
@@ -1051,7 +1056,7 @@ describe("submitCurrentSailingSlot", () => {
 
   it("should handle and return error for date range being invalid", async () => {
     const routeOptions = [
-      { id: "1", value: "Ferry", label: "Ferry", template: "ferryView.html" },
+      { id: "1", value: "Ferry", label: "Ferry", template: HTML.VIEW_HTML },
       {
         id: "2",
         value: "Flight",
