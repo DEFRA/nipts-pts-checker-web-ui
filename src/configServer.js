@@ -8,13 +8,37 @@ import { promises as fs } from "fs";
 const fileName = fileURLToPath(import.meta.url);
 const directoryName = dirname(fileName);
 
-const setup = (server) => {
-  // View configuration
-  const viewsPath = Path.resolve(directoryName, "./web/views");
-  const includesPath = Path.resolve(viewsPath, "includes");
+const HTTP_STATUS = {
+  FORBIDDEN: 403,
+  SERVER_ERROR: 500,
+};
 
-  console.log("Views path:", viewsPath);
-  console.log("Includes path:", includesPath);
+const PATHS = {
+  VIEWS: Path.resolve(directoryName, "./web/views"),
+  WEB_ASSETS: Path.join(directoryName, "./web/assets"),
+  WEB: Path.join(directoryName, "./web"),
+};
+
+const ERROR_VIEWS = {
+  FORBIDDEN: "errors/403Error",
+  SERVER_ERROR: "errors/500Error",
+};
+
+const ERROR_ROUTES = {
+  SERVER_ERROR: "/500error",
+};
+
+async function serveStaticErrorPage() {
+  const filePath = Path.join(PATHS.VIEWS, "errors", "500Error.html");
+  try {
+    return await fs.readFile(filePath, "utf-8");
+  } catch (fileError) {
+    return "<h1>Internal Server Error</h1><p>There was an error rendering the page.</p>";
+  }
+}
+
+const configureViews = (server) => {
+  const includesPath = Path.resolve(PATHS.VIEWS, "includes");
 
   server.views({
     engines: {
@@ -25,7 +49,6 @@ const setup = (server) => {
             try {
               return template.render(context);
             } catch (error) {
-              console.error("Error rendering template:", error);
               return serveStaticErrorPage();
             }
           };
@@ -36,7 +59,7 @@ const setup = (server) => {
               "node_modules/hmrc-frontend/dist",
               "node_modules/govuk-frontend/dist",
               options.path,
-              viewsPath,
+              PATHS.VIEWS,
               includesPath,
             ],
             { watch: false }
@@ -46,14 +69,13 @@ const setup = (server) => {
       },
     },
     relativeTo: directoryName,
-    path: viewsPath,
+    path: PATHS.VIEWS,
     partialsPath: includesPath,
     context: { headerData },
   });
+};
 
-  
-  const webAssetsPath = Path.join(directoryName, "./web/assets");
-
+const configureStaticRoutes = (server) => {
   server.route({
     method: "GET",
     path: "/web/assets/{param*}",
@@ -61,7 +83,7 @@ const setup = (server) => {
       auth: false,
       handler: {
         directory: {
-          path: webAssetsPath,
+          path: PATHS.WEB_ASSETS,
           redirectToSlash: true,
           index: true,
         },
@@ -69,9 +91,6 @@ const setup = (server) => {
     },
   });
 
-  
-  const webPath = Path.join(directoryName, "./web");
-  
   server.route({
     method: "GET",
     path: "/{param*}",
@@ -79,55 +98,50 @@ const setup = (server) => {
       auth: false,
       handler: {
         directory: {
-          path: webPath,
+          path: PATHS.WEB,
         },
       },
     },
   });
+};
 
-  // Configure validator
-  server.validator(Joi);
-
-  // Route to get a 500 error
+const configureErrorRoutes = (server) => {
   server.route({
     method: "GET",
-    path: "/500error",
-    handler: (_request, _h) => {
-      return _h.view("errors/500error").takeover();
+    path: ERROR_ROUTES.SERVER_ERROR,
+    handler: (_request, h) => {
+      return h.view(ERROR_VIEWS.SERVER_ERROR).takeover();
     },
   });
+};
 
-  async function serveStaticErrorPage() {
-    const filePath = Path.join(
-      directoryName,
-      "/web/views/errors/",
-      "500Error.html"
-    );
-    try {
-      const content = await fs.readFile(filePath, "utf-8");
-      return content;
-    } catch (fileError) {
-      console.error("Error reading static error page:", fileError);
-      return "<h1>Internal Server Error</h1><p>There was an error rendering the page.</p>";
-    }
-  }
+const setup = (server) => {
+  configureViews(server);
+  configureStaticRoutes(server);
+  configureErrorRoutes(server);
 
- 
-  server.ext("onPreResponse", (_request, h) => {
-    const response = _request.response;
+  server.validator(Joi);
+
+  server.ext("onPreResponse", (request, h) => {
+    const response = request.response;
 
     if (response.isBoom) {
-      if (response.output.statusCode === 500) {
-        return h.view("errors/500Error").code(500).takeover();
+      if (response.output.statusCode === HTTP_STATUS.SERVER_ERROR) {
+        return h
+          .view(ERROR_VIEWS.SERVER_ERROR)
+          .code(HTTP_STATUS.SERVER_ERROR)
+          .takeover();
       }
-      if (response.output.statusCode === 403) {
-        return h.view("errors/403Error").code(403).takeover();
+      if (response.output.statusCode === HTTP_STATUS.FORBIDDEN) {
+        return h
+          .view(ERROR_VIEWS.FORBIDDEN)
+          .code(HTTP_STATUS.FORBIDDEN)
+          .takeover();
       }
     }
 
     return h.continue;
   });
-
 };
 
 export default {
