@@ -60,10 +60,13 @@ const sailingRoutesDefault = [
 
 const createMockYar = (options = {}) => ({
   get: jest.fn().mockImplementation((key) => {
-    if (key === "organisationId") return options.organisationId;
-    if (key === "SailingRoutes")
+    if (key === "organisationId") {
+      return options.organisationId;
+    }
+    if (key === "SailingRoutes") {
       return options.sailingRoutes || sailingRoutesDefault;
-    if (key === "CurrentSailingModel")
+    }
+    if (key === "CurrentSailingModel") {
       return (
         options.currentSailingModel || {
           routeOptions: options.routeOptions || [
@@ -73,6 +76,7 @@ const createMockYar = (options = {}) => ({
           sailingRoutes: sailingRoutesDefault,
         }
       );
+    }
     return options.defaultValue;
   }),
   set: jest.fn(),
@@ -80,7 +84,7 @@ const createMockYar = (options = {}) => ({
 
 const createMockRequest = (options = {}) => ({
   payload: options.payload,
-  yar: createMockYar(options.yar),
+  yar: createMockYar(options.yar || {}),
 });
 
 const createMockH = (options = {}) => ({
@@ -124,10 +128,9 @@ const setupValidationMocks = (config = {}) => {
   validateDateRange.mockReturnValue(config.dateRange || defaultValidResult);
 };
 
-describe("getCurrentSailings", () => {
+describe("getCurrentSailings Authorization", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    setupValidationMocks();
   });
 
   test("should return 403 when organisationId is missing", async () => {
@@ -149,32 +152,42 @@ describe("getCurrentSailings", () => {
     expect(h.view).toHaveBeenCalledWith("errors/403Error");
     expect(h.view().code).toHaveBeenCalledWith(HTTP_STATUS.FORBIDDEN);
   });
+});
 
-  test("should handle successful data retrieval", async () => {
-    const mockMainServiceData = {
-      pageHeading: "What route are you checking?",
-      serviceName: "Pet Travel Scheme",
-      routeSubHeading: "Route",
-      routes: sailingRoutesDefault,
-      sailingRoutes: sailingRoutesDefault,
-    };
+describe("getCurrentSailings Data Handling", () => {
+  const mockMainServiceData = {
+    pageHeading: "What route are you checking?",
+    serviceName: "Pet Travel Scheme",
+    routeSubHeading: "Route",
+    routes: sailingRoutesDefault,
+    sailingRoutes: sailingRoutesDefault,
+  };
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test("should set data in session and return view with current date", async () => {
     currentSailingMainService.getCurrentSailingMain.mockResolvedValue(
       mockMainServiceData
     );
-
     const request = createMockRequest({ yar: { organisationId: "valid-id" } });
     const h = createMockH();
 
     await CurrentSailingHandlers.getCurrentSailings(request, h);
 
+    const londonTime = moment.tz(DATE_FORMATS.TIMEZONE);
     expect(request.yar.set).toHaveBeenCalledWith(
       "CurrentSailingModel",
       mockMainServiceData
     );
-    expect(request.yar.set).toHaveBeenCalledWith(
-      "SailingRoutes",
-      mockMainServiceData.sailingRoutes
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        departureDateDay: londonTime.format(DATE_FORMATS.DAY),
+        departureDateMonth: londonTime.format(DATE_FORMATS.MONTH),
+        departureDateYear: londonTime.format(DATE_FORMATS.YEAR),
+      })
     );
   });
 
@@ -190,7 +203,7 @@ describe("getCurrentSailings", () => {
   });
 });
 
-describe("submitCurrentSailingSlot", () => {
+describe("submitCurrentSailingSlot Validation", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     setupValidationMocks();
@@ -236,17 +249,14 @@ describe("submitCurrentSailingSlot", () => {
     );
   });
 
-  test("should validate flight number", async () => {
+  test("should validate sailing minutes", async () => {
     const request = createMockRequest({
-      payload: createMockPayload({ routeOption: "2", routeFlight: "" }),
+      payload: createMockPayload({ sailingMinutes: "61" }),
     });
     const h = createMockH();
 
     setupValidationMocks({
-      flightNumber: {
-        isValid: false,
-        error: ERROR_MESSAGES.flightNoEmptyError,
-      },
+      sailingMinutes: { isValid: false, error: ERROR_MESSAGES.timeError },
     });
 
     await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
@@ -254,19 +264,19 @@ describe("submitCurrentSailingSlot", () => {
     expect(h.view).toHaveBeenCalledWith(
       VIEW_PATH,
       expect.objectContaining({
-        errorFlight: ERROR_MESSAGES.flightNoEmptyError,
+        errorSailingMinutes: ERROR_MESSAGES.timeError,
       })
     );
   });
 
-  test("should validate sailing time", async () => {
+  test("should validate departure date format", async () => {
     const request = createMockRequest({
-      payload: createMockPayload({ sailingHour: "25" }),
+      payload: createMockPayload({ departureDateDay: "32" }),
     });
     const h = createMockH();
 
     setupValidationMocks({
-      sailingHour: { isValid: false, error: ERROR_MESSAGES.timeError },
+      date: { isValid: false, error: ERROR_MESSAGES.departureDateFormatError },
     });
 
     await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
@@ -274,12 +284,53 @@ describe("submitCurrentSailingSlot", () => {
     expect(h.view).toHaveBeenCalledWith(
       VIEW_PATH,
       expect.objectContaining({
-        errorSailingHour: ERROR_MESSAGES.timeError,
+        errorDepartureDate: ERROR_MESSAGES.departureDateFormatError,
       })
     );
   });
 
-  test("should handle successful submission", async () => {
+ test("should validate date range with zero hour", async () => {
+   const request = createMockRequest({
+     payload: createMockPayload({
+       departureDateDay: "1",
+       departureDateMonth: "1",
+       departureDateYear: "2024",
+       sailingHour: "12",
+       sailingMinutes: "30",
+     }),
+   });
+   const h = createMockH();
+
+   setupValidationMocks({
+     dateRange: { isValid: false, error: "Date out of range" },
+   });
+
+   await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
+
+   expect(h.view).toHaveBeenCalledWith(
+     VIEW_PATH,
+     expect.objectContaining({
+       errorSummary: expect.arrayContaining([
+         {
+           fieldId: "departureDateDay",
+           message: "Date out of range",
+         },
+       ]),
+       errorDateRangeDate: null,
+       formSubmitted: true,
+     })
+   );
+ });
+
+});
+
+describe("submitCurrentSailingSlot Success", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    setupValidationMocks();
+  });
+
+  test("should submit valid sailing slot for ferry", async () => {
     const routeOptions = [
       {
         id: "1",
@@ -314,6 +365,44 @@ describe("submitCurrentSailingSlot", () => {
     );
     expect(h.redirect).toHaveBeenCalledWith("/checker/dashboard");
   });
+
+  test("should submit valid sailing slot for flight", async () => {
+    const routeOptions = [
+      {
+        id: "1",
+        value: "Ferry",
+        label: "Ferry",
+        template: HTML.FERRY_VIEW_HTML,
+      },
+      {
+        id: "2",
+        value: "Flight",
+        label: "Flight",
+        template: HTML.FLIGHT_VIEW_HTML,
+      },
+    ];
+
+    const request = createMockRequest({
+      payload: createMockPayload({ routeOption: "2", routeFlight: "RK103" }),
+      yar: {
+        currentSailingModel: {
+          routeOptions,
+          sailingRoutes: sailingRoutesDefault,
+        },
+      },
+    });
+    const h = createMockH();
+
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
+
+    expect(request.yar.set).toHaveBeenCalledWith(
+      "currentSailingSlot",
+      expect.objectContaining({
+        routeFlight: "RK103",
+      })
+    );
+    expect(h.redirect).toHaveBeenCalledWith("/checker/dashboard");
+  });
 });
 
 describe("getCurrentSailingSlot", () => {
@@ -338,7 +427,7 @@ describe("getCurrentSailingSlot", () => {
     });
   });
 
-  test("should handle missing sailing slot", async () => {
+  test("should handle null sailing slot", async () => {
     const request = createMockRequest({ yar: { defaultValue: null } });
     const h = createMockH();
 
