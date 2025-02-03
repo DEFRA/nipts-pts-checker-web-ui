@@ -20,54 +20,68 @@ const sailingRoutesDefault = [
 ];
 
 describe('Handler', () => {
-  describe("index", () => {
-    it('should return view with currentSailingMainModelData', async () => {
-      const mockData = {
-        pageHeading: "What route are you checking?",
-        serviceName: "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
-        routeSubHeading: "Route",
-        routes: sailingRoutesDefault,
-        sailingTimeSubHeading: "Scheduled sailing time",
-        sailingHintText1: "Use the 24-hour clock - for example, 15:30.",
-        sailingHintText2: "For midday, use 12:00. For midnight, use 23:59.",
-        sailingTimes: ["", "00", "01"]
-      };
+ describe("index", () => {
+   it("should return view with currentSailingMainModelData", async () => {
+     const mockData = {
+       pageHeading: "What route are you checking?",
+       serviceName:
+         "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
+       routeSubHeading: "Route",
+       routes: sailingRoutesDefault,
+       sailingTimeSubHeading: "Scheduled sailing time",
+       sailingHintText1: "Use the 24-hour clock - for example, 15:30.",
+       sailingHintText2: "For midday, use 12:00. For midnight, use 23:59.",
+       sailingTimes: ["", "00", "01"],
+     };
 
-      currentSailingMainService.getCurrentSailingMain.mockResolvedValue(mockData);
+     currentSailingMainService.getCurrentSailingMain.mockResolvedValue(
+       mockData
+     );
 
-      const request = {
-        yar: {
-          set: jest.fn(),
-        },
-      };
-      const h = {
-        view: jest.fn((viewPath, data) => {
-          return { viewPath, data };
-        })
-      };
+     const request = {
+       yar: {
+         set: jest.fn(),
+         get: jest.fn(() => "mockedOrganisationId"), // Ensure get is mocked properly
+       },
+     };
 
+     const h = {
+       view: jest.fn((viewPath, data) => {
+         return { viewPath, data };
+       }),
+     };
 
-      const londonTime = moment.tz("Europe/London");
-      const departureDateDay = londonTime.format('DD');
-      const departureDateMonth = londonTime.format('MM');
-      const departureDateYear = londonTime.format('YYYY');
+     const londonTime = moment.tz("Europe/London");
+     const departureDateDay = londonTime.format("DD");
+     const departureDateMonth = londonTime.format("MM");
+     const departureDateYear = londonTime.format("YYYY");
 
-      const response = await CurrentSailingHandlers.getCurrentSailings(request, h);
+     const response = await CurrentSailingHandlers.getCurrentSailings(
+       request,
+       h
+     );
 
-      expect(response.viewPath).toBe("componentViews/checker/currentsailing/currentsailingView");
-      expect(response.data).toEqual({
-        currentSailingMainModelData: mockData, 
-        departureDateDay,
-        departureDateMonth,
-        departureDateYear
-      });
-      expect(h.view).toHaveBeenCalledWith("componentViews/checker/currentsailing/currentsailingView", {
-        currentSailingMainModelData: mockData, departureDateDay,
-        departureDateMonth,
-        departureDateYear
-      });
-    });
-  });
+     expect(response.viewPath).toBe(
+       "componentViews/checker/currentsailing/currentsailingView"
+     );
+     expect(response.data).toEqual({
+       currentSailingMainModelData: mockData,
+       departureDateDay,
+       departureDateMonth,
+       departureDateYear,
+     });
+     expect(h.view).toHaveBeenCalledWith(
+       "componentViews/checker/currentsailing/currentsailingView",
+       {
+         currentSailingMainModelData: mockData,
+         departureDateDay,
+         departureDateMonth,
+         departureDateYear,
+       }
+     );
+   });
+ });
+
 });
 
 describe('submitCurrentSailingSlot', () => {

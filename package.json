@@ -2,7 +2,7 @@
   "name": "defra.pts.admin.web.new",
   "version": "1.0.0",
   "description": "",
-   "main": "index.js",
+  "main": "index.js",
   "scripts": {
     "test": "jest",
     "build": "gulp",
@@ -21,6 +21,7 @@
     "@babel/core": "^7.24.5",
     "@babel/preset-env": "^7.24.5",
     "@hapi/bell": "^13.0.2",
+    "@hapi/boom": "^10.0.1",
     "@hapi/catbox-memory": "^6.0.2",
     "@hapi/catbox-redis": "^6.0.2",
     "@hapi/cookie": "^11.0.2",

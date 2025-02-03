@@ -15,24 +15,33 @@ const VIEW_PATH = "componentViews/checker/currentsailing/currentsailingView";
 
 const getCurrentSailings = async (request, h) => {
   headerData.section = "sailing";
+
+  const organisationId = request.yar.get("organisationId");
+
+  if (!organisationId || organisationId.trim() === "") {
+    console.error("Organisation ID is missing - Showing 403 error page");
+    return h.view("errors/403Error").code(403).takeover();
+  }
+
   const currentSailingMainModelData =
     (await currentSailingMainService.getCurrentSailingMain(request)) || {};
+
   request.yar.set("CurrentSailingModel", currentSailingMainModelData);
   request.yar.set("SailingRoutes", currentSailingMainModelData.sailingRoutes);
 
- 
   const londonTime = moment.tz("Europe/London");
-  const departureDateDay = londonTime.format('DD');
-  const departureDateMonth = londonTime.format('MM');
-  const departureDateYear = londonTime.format('YYYY');
+  const departureDateDay = londonTime.format("DD");
+  const departureDateMonth = londonTime.format("MM");
+  const departureDateYear = londonTime.format("YYYY");
 
-  return h.view(VIEW_PATH, { 
+  return h.view(VIEW_PATH, {
     currentSailingMainModelData,
     departureDateDay,
     departureDateMonth,
-    departureDateYear
+    departureDateYear,
   });
 };
+
 
 const submitCurrentSailingSlot = async (request, h) => {
   const { routeOption, routeRadio, routeFlight, departureDateDay, departureDateMonth, departureDateYear, sailingHour, sailingMinutes } = request.payload; 
