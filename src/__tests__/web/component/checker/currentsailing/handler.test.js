@@ -207,7 +207,7 @@ describe("getCurrentSailings Data Handling", () => {
   });
 });
 
-describe("submitCurrentSailingSlot Validation", () => {
+describe("submitCurrentSailingSlot Validation OnePart", () => {
   const setupTestRequest = (payload) => ({
     payload,
     yar: {
@@ -274,7 +274,22 @@ describe("submitCurrentSailingSlot Validation", () => {
       })
     );
   });
+});
 
+describe("submitCurrentSailingSlot Validation TwoPart", () => {
+  const setupTestRequest = (payload) => ({
+    payload,
+    yar: {
+      get: jest.fn().mockReturnValue({
+        routeOptions: [
+          { id: "1", value: "Ferry", template: HTML.FERRY_VIEW_HTML },
+          { id: "2", value: "Flight", template: HTML.FLIGHT_VIEW_HTML },
+        ],
+        sailingRoutes: sailingRoutesDefault,
+      }),
+      set: jest.fn(),
+    },
+  });
   it("should validate flight number", async () => {
     const payload = createMockPayload({
       routeOption: "2",
@@ -300,6 +315,7 @@ describe("submitCurrentSailingSlot Validation", () => {
     );
   });
 });
+
 
 describe('submitCurrentSailingSlot Success', () => {
   it("should submit valid sailing slot", async () => {
