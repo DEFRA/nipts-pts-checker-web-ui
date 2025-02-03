@@ -1,7 +1,5 @@
-import Joi from "joi";
-import HttpMethod from "../../../../constants/httpMethod.js";
+
 import auth from "../../../../auth/index.js";
-import session from "../../../../session/index.js";
 import logout from "../../../../lib/logout.js";
 
 const Routes = [
@@ -13,7 +11,7 @@ const Routes = [
       handler: async (request, h) => {
         console.log("SignIn callback");
         try {
-          const authResult = await auth.authenticate(request, h);
+          await auth.authenticate(request, h);
 
           const organisationId = request.yar.get("organisationId");
           if (!organisationId || organisationId.trim() === "") {
@@ -37,6 +35,5 @@ const Routes = [
     },
   },
 ];
-
 
 export default Routes;

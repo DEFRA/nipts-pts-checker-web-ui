@@ -36,7 +36,7 @@ const authenticate = async (request, h) => {
     cookieAuthentication.set(request, accessToken);
 
     const organisation = userService.getUserOrganisation(request);
-    let organisationId = organisation?.organisationId || null;
+    const organisationId = organisation?.organisationId || null;
 
     if (!organisationId || organisationId.trim() === "") {
       console.error("Invalid organisation ID - Showing 403 error page");
@@ -52,7 +52,7 @@ const authenticate = async (request, h) => {
       organisationId,
       request
     );
-    let isGBCheck = !userOrganisation?.Location?.toLowerCase().includes("ni");
+    const isGBCheck = !userOrganisation?.Location?.toLowerCase().includes("ni");
 
     const checker = {
       id: accessToken.sub,
