@@ -22,6 +22,12 @@ const ROUTES = {
   LOCH_RYAN: 'Loch Ryan to Belfast (Stena)'
 };
 
+const DATE_FORMATS = {
+  DAY: "DD",
+  MONTH: "MM",
+  YEAR: "YYYY",
+  TIMEZONE: "Europe/London",
+};
 
 const VIEW_PATH = "componentViews/checker/currentsailing/currentsailingView";
 const ERROR_MESSAGES = {
@@ -126,10 +132,11 @@ describe("Handler", () => {
         }),
       };
 
-      const londonTime = moment.tz("Europe/London");
-      const departureDateDay = londonTime.format("DD");
-      const departureDateMonth = londonTime.format("MM");
-      const departureDateYear = londonTime.format("YYYY");
+     const londonTime = moment.tz(DATE_FORMATS.TIMEZONE);
+     const departureDateDay = londonTime.format(DATE_FORMATS.DAY);
+     const departureDateMonth = londonTime.format(DATE_FORMATS.MONTH);
+     const departureDateYear = londonTime.format(DATE_FORMATS.YEAR);
+
 
       const response = await CurrentSailingHandlers.getCurrentSailings(
         request,
@@ -170,10 +177,11 @@ describe("Handler", () => {
         }),
       };
 
-      const londonTime = moment.tz("Europe/London");
-      const departureDateDay = londonTime.format("DD");
-      const departureDateMonth = londonTime.format("MM");
-      const departureDateYear = londonTime.format("YYYY");
+     const londonTime = moment.tz(DATE_FORMATS.TIMEZONE);
+     const departureDateDay = londonTime.format(DATE_FORMATS.DAY);
+     const departureDateMonth = londonTime.format(DATE_FORMATS.MONTH);
+     const departureDateYear = londonTime.format(DATE_FORMATS.YEAR);
+
 
       const response = await CurrentSailingHandlers.getCurrentSailings(
         request,
@@ -223,10 +231,11 @@ describe('Handler', () => {
         }),
       };
 
-      const londonTime = moment.tz("Europe/London");
-      const departureDateDay = londonTime.format("DD");
-      const departureDateMonth = londonTime.format("MM");
-      const departureDateYear = londonTime.format("YYYY");
+     const londonTime = moment.tz(DATE_FORMATS.TIMEZONE);
+     const departureDateDay = londonTime.format(DATE_FORMATS.DAY);
+     const departureDateMonth = londonTime.format(DATE_FORMATS.MONTH);
+     const departureDateYear = londonTime.format(DATE_FORMATS.YEAR);
+
 
       const response = await CurrentSailingHandlers.getCurrentSailings(request, h);
 
