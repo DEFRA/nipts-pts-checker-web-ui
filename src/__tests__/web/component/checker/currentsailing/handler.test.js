@@ -203,7 +203,7 @@ describe("getCurrentSailings Data Handling", () => {
   });
 });
 
-describe("submitCurrentSailingSlot Validation", () => {
+describe("submitCurrentSailingSlot Route Validation", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     setupValidationMocks();
@@ -248,6 +248,13 @@ describe("submitCurrentSailingSlot Validation", () => {
       })
     );
   });
+});
+
+describe("submitCurrentSailingSlot Time Validation", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    setupValidationMocks();
+  });
 
   test("should validate sailing minutes", async () => {
     const request = createMockRequest({
@@ -267,6 +274,13 @@ describe("submitCurrentSailingSlot Validation", () => {
         errorSailingMinutes: ERROR_MESSAGES.timeError,
       })
     );
+  });
+});
+
+describe("submitCurrentSailingSlot Date Validation", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    setupValidationMocks();
   });
 
   test("should validate departure date format", async () => {
@@ -289,39 +303,38 @@ describe("submitCurrentSailingSlot Validation", () => {
     );
   });
 
- test("should validate date range with zero hour", async () => {
-   const request = createMockRequest({
-     payload: createMockPayload({
-       departureDateDay: "1",
-       departureDateMonth: "1",
-       departureDateYear: "2024",
-       sailingHour: "12",
-       sailingMinutes: "30",
-     }),
-   });
-   const h = createMockH();
+  test("should validate date range with zero hour", async () => {
+    const request = createMockRequest({
+      payload: createMockPayload({
+        departureDateDay: "1",
+        departureDateMonth: "1",
+        departureDateYear: "2024",
+        sailingHour: "12",
+        sailingMinutes: "30",
+      }),
+    });
+    const h = createMockH();
 
-   setupValidationMocks({
-     dateRange: { isValid: false, error: "Date out of range" },
-   });
+    setupValidationMocks({
+      dateRange: { isValid: false, error: "Date out of range" },
+    });
 
-   await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
 
-   expect(h.view).toHaveBeenCalledWith(
-     VIEW_PATH,
-     expect.objectContaining({
-       errorSummary: expect.arrayContaining([
-         {
-           fieldId: "departureDateDay",
-           message: "Date out of range",
-         },
-       ]),
-       errorDateRangeDate: null,
-       formSubmitted: true,
-     })
-   );
- });
-
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        errorSummary: expect.arrayContaining([
+          {
+            fieldId: "departureDateDay",
+            message: "Date out of range",
+          },
+        ]),
+        errorDateRangeDate: null,
+        formSubmitted: true,
+      })
+    );
+  });
 });
 
 describe("submitCurrentSailingSlot Success", () => {
