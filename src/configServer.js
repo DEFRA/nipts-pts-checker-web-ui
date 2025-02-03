@@ -112,19 +112,22 @@ const setup = (server) => {
     }
   }
 
-  // Global error handling via 'onPreResponse' extension
-  server.ext("onPreResponse", (_request, _h) => {
+ 
+  server.ext("onPreResponse", (_request, h) => {
     const response = _request.response;
 
-    // Check if the response is an error (500 level)
-    if (response.isBoom && response.output.statusCode === 500) {
-      // Render the 500Error.html template
-      return _h.redirect("/500error").takeover();
+    if (response.isBoom) {
+      if (response.output.statusCode === 500) {
+        return h.view("errors/500Error").code(500).takeover();
+      }
+      if (response.output.statusCode === 403) {
+        return h.view("errors/403Error").code(403).takeover();
+      }
     }
 
-    // If it's not a 500 error, continue as normal
-    return _h.continue;
+    return h.continue;
   });
+
 };
 
 export default {

@@ -7,59 +7,52 @@ import expiresIn from "./auth-code-grant/expires-in.js";
 import session from "../session/index.js";
 import sessionKeys from "../session/keys.js";
 import cookieAuthentication from "./cookie-auth/cookie-auth.js";
-import { InvalidStateError } from "../exceptions/index.js";
 import apiService from "../api/services/apiService.js";
 import userService from "../api/services/userService.js";
 
-const authenticate = async (request) => {
-  if (!state.verify(request)) {
-    throw new InvalidStateError("Invalid state");
-  }
-
-  const redeemResponse = await redeemAuthorizationCodeForAccessToken(request);
-
-  await jwtVerify(redeemResponse.access_token);
-  
-  const accessToken = decodeJwt(redeemResponse.access_token);
-
-  const idToken = decodeJwt(redeemResponse.id_token);
-
-  nonce.verify(request, idToken);
-
-  session.setToken(
-    request,
-    sessionKeys.tokens.accessToken,
-    redeemResponse.access_token
-  );
-
-  session.setToken(
-    request,
-    sessionKeys.tokens.tokenExpiry,
-    expiresIn.toISOString(redeemResponse.expires_in)
-  );
-
-  cookieAuthentication.set(request, accessToken);
-  
-  // Add or update checker user
+const authenticate = async (request, h) => {
   try {
-    
+    if (!state.verify(request)) {
+      return h.view("errors/500Error").code(500).takeover();
+    }
+
+    const redeemResponse = await redeemAuthorizationCodeForAccessToken(request);
+    await jwtVerify(redeemResponse.access_token);
+
+    const accessToken = decodeJwt(redeemResponse.access_token);
+    const idToken = decodeJwt(redeemResponse.id_token);
+    nonce.verify(request, idToken);
+
+    session.setToken(
+      request,
+      sessionKeys.tokens.accessToken,
+      redeemResponse.access_token
+    );
+    session.setToken(
+      request,
+      sessionKeys.tokens.tokenExpiry,
+      expiresIn.toISOString(redeemResponse.expires_in)
+    );
+    cookieAuthentication.set(request, accessToken);
+
     const organisation = userService.getUserOrganisation(request);
+    let organisationId = organisation?.organisationId || null;
 
-    let organisationId = null;
-    let isGBCheck = true;
-    
-    if(organisation.organisationId !== "")
-    {
-      organisationId = organisation.organisationId;
+    if (!organisationId || organisationId.trim() === "") {
+      console.error("Invalid organisation ID - Showing 403 error page");
+      session.clear(request);
+      request.cookieAuth.clear();
+      return h.view("errors/403Error").code(403).takeover();
     }
 
-    const userOrganisation = await apiService.getOrganisation(organisationId, request);
+   
+    request.yar.set("organisationId", organisationId);
 
-    if (userOrganisation?.Location && typeof userOrganisation.Location === 'string' && userOrganisation.Location.toLowerCase().includes('ni')) {
-        isGBCheck = false;
-    }
-    
-    
+    const userOrganisation = await apiService.getOrganisation(
+      organisationId,
+      request
+    );
+    let isGBCheck = !userOrganisation?.Location?.toLowerCase().includes("ni");
 
     const checker = {
       id: accessToken.sub,
@@ -74,14 +67,12 @@ const authenticate = async (request) => {
     request.yar.set("checkerId", accessToken.sub);
     session.setToken(request, sessionKeys.tokens.sso, "");
 
+    return accessToken;
   } catch (error) {
-    console.error("Error saving checker user:", error);
-
-    // Rethrow the error
-    throw error;
+    console.error("Authentication error:", error);
+    session.clear(request);
+    return h.view("errors/500Error").code(500).takeover();
   }
-
-  return accessToken;
 };
 
 export default authenticate;

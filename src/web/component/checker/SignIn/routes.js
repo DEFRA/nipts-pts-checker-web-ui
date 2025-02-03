@@ -1,4 +1,3 @@
-"use strict";
 import Joi from "joi";
 import HttpMethod from "../../../../constants/httpMethod.js";
 import auth from "../../../../auth/index.js";
@@ -7,67 +6,37 @@ import logout from "../../../../lib/logout.js";
 
 const Routes = [
   {
-    method: HttpMethod.GET,
+    method: "GET",
     path: "/signin-oidc",
     options: {
       auth: false,
-      validate: {
-        query: Joi.object({
-          code: Joi.string().required(),
-          state: Joi.string().required(),
-        }).options({
-          stripUnknown: true,
-        }),
-        failAction(request, h, err) {
-          console.log(
-            `Validation error caught during DEFRA ID redirect - ${err.message}.`
-          );
-
-          const vm = {
-            backLink: auth.requestAuthorizationCodeUrl(
-              session,
-              request,
-              "PTSCompliancePortal"
-            ),
-          };
-          return h
-            .view("componentViews/checker/SignIn/view", vm)
-            .code(HttpMethod.BAD_REQUEST)
-            .takeover();
-        },
-      },
       handler: async (request, h) => {
         console.log("SignIn callback");
         try {
-          await auth.authenticate(request, session);
-          console.log("authenticated, now redirecting to dashboard");
+          const authResult = await auth.authenticate(request, h);
+
+          const organisationId = request.yar.get("organisationId");
+          if (!organisationId || organisationId.trim() === "") {
+            logout(request);
+            console.error("Organisation ID missing - Showing 403 error");
+            return h.view("errors/403Error").code(403).takeover();
+          }
+
+          console.log("Authenticated, now redirecting to Current Sailings");
           return h.redirect("/checker/current-sailings");
         } catch (err) {
-          if (err.name) {
-            return h.redirect("/checker/current-sailings");
+          console.error(`Authentication error: ${err.message}`);
+          logout(request);
+
+          if (err.statusCode === 403) {
+            return h.view("errors/403Error").code(403).takeover();
           }
-          console.error(
-            `Received error with name ${err.name} and message ${err.message}.`
-          );
+          return h.view("errors/500Error").code(500).takeover();
         }
-
-        logout(request);
-
-        const vm = {
-          backLink: auth.requestAuthorizationCodeUrl(
-            session,
-            request,
-            "PTSCompliancePortal"
-          ),
-        };
-
-        return h
-          .view("componentViews/checker/SignIn/view", vm)
-          .code(HttpMethod.BAD_REQUEST)
-          .takeover();
       },
     },
   },
 ];
+
 
 export default Routes;
