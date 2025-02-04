@@ -8,10 +8,17 @@ import {
   validateSailingMinutes,
   validateFlightNumber,
   validateDate,
-  validateDateRange
+  validateDateRange,
 } from "./validate.js";
 import headerData from "../../../../web/helper/constants.js";
+
+const HTTP_STATUS = {
+  FORBIDDEN: 403,
+};
+
 const VIEW_PATH = "componentViews/checker/currentsailing/currentsailingView";
+const ERROR_VIEW = "errors/403Error";
+const DASHBOARD_PATH = "/checker/dashboard";
 
 const getCurrentSailings = async (request, h) => {
   headerData.section = "sailing";
@@ -19,8 +26,7 @@ const getCurrentSailings = async (request, h) => {
   const organisationId = request.yar.get("organisationId");
 
   if (!organisationId || organisationId.trim() === "") {
-    console.error("Organisation ID is missing - Showing 403 error page");
-    return h.view("errors/403Error").code(403).takeover();
+    return h.view(ERROR_VIEW).code(HTTP_STATUS.FORBIDDEN).takeover();
   }
 
   const currentSailingMainModelData =
@@ -42,97 +48,136 @@ const getCurrentSailings = async (request, h) => {
   });
 };
 
-
+// Rest of your original submitCurrentSailingSlot function remains unchanged
 const submitCurrentSailingSlot = async (request, h) => {
-  const { routeOption, routeRadio, routeFlight, departureDateDay, departureDateMonth, departureDateYear, sailingHour, sailingMinutes } = request.payload; 
-  const validationRouteOptionRadioResult = validateRouteOptionRadio(routeOption);
+  const {
+    routeOption,
+    routeRadio,
+    routeFlight,
+    departureDateDay,
+    departureDateMonth,
+    departureDateYear,
+    sailingHour,
+    sailingMinutes,
+  } = request.payload;
+  const validationRouteOptionRadioResult =
+    validateRouteOptionRadio(routeOption);
   let validationRouteRadioResult;
   let validateFlightNumberResult;
   const validateSailingHourResult = validateSailingHour(sailingHour);
   const validateSailingMinutesResult = validateSailingMinutes(sailingMinutes);
-  
-  const departureDateDayPadded = departureDateDay.length === 1 ? '0' + departureDateDay : departureDateDay;
-  const departureDateMonthPadded = departureDateMonth.length === 1 ? '0' + departureDateMonth : departureDateMonth;
+
+  const departureDateDayPadded =
+    departureDateDay.length === 1 ? "0" + departureDateDay : departureDateDay;
+  const departureDateMonthPadded =
+    departureDateMonth.length === 1
+      ? "0" + departureDateMonth
+      : departureDateMonth;
 
   const departureDate = `${departureDateDayPadded.trim()}/${departureDateMonthPadded.trim()}/${departureDateYear.trim()}`;
   const validateDepartureDateResult = validateDate(departureDate);
 
-  const validateDepartureDateRangeZeroHourResult = validateDateRange(departureDate, true);
+  const validateDepartureDateRangeZeroHourResult = validateDateRange(
+    departureDate,
+    true
+  );
 
   const dateWithTime = `${departureDateDayPadded.trim()}/${departureDateMonthPadded.trim()}/${departureDateYear.trim()} ${sailingHour}:${sailingMinutes}`;
-  const validateDepartureDateRangeActualHourResult = validateDateRange(dateWithTime, false);
+  const validateDepartureDateRangeActualHourResult = validateDateRange(
+    dateWithTime,
+    false
+  );
 
-  const currentSailingMainModelData =  request.yar.get("CurrentSailingModel");
+  const currentSailingMainModelData = request.yar.get("CurrentSailingModel");
 
   const errorSummary = [];
   let isValid = true;
-  if(!validationRouteOptionRadioResult.isValid)
-  {
-    errorSummary.push({ fieldId: "routeOption", message: validationRouteOptionRadioResult.error });
+  if (!validationRouteOptionRadioResult.isValid) {
+    errorSummary.push({
+      fieldId: "routeOption",
+      message: validationRouteOptionRadioResult.error,
+    });
     isValid = false;
   }
-  
-  if (validationRouteOptionRadioResult.isValid)
-  {
-    if(routeOption === currentSailingMainModelData.routeOptions[0].id)
-    {
+
+  if (validationRouteOptionRadioResult.isValid) {
+    if (routeOption === currentSailingMainModelData.routeOptions[0].id) {
       validationRouteRadioResult = validateRouteRadio(routeRadio);
-      if(!validationRouteRadioResult.isValid)
-      {
-        errorSummary.push({ fieldId: "routeRadio", message: validationRouteRadioResult.error });
+      if (!validationRouteRadioResult.isValid) {
+        errorSummary.push({
+          fieldId: "routeRadio",
+          message: validationRouteRadioResult.error,
+        });
         isValid = false;
       }
     }
-    
-    if(routeOption === currentSailingMainModelData.routeOptions[1].id)
-    {
+
+    if (routeOption === currentSailingMainModelData.routeOptions[1].id) {
       validateFlightNumberResult = validateFlightNumber(routeFlight);
-      if(!validateFlightNumberResult.isValid)
-        {
-          errorSummary.push({ fieldId: "routeFlight", message: validateFlightNumberResult.error });
-          isValid = false;
-        }
+      if (!validateFlightNumberResult.isValid) {
+        errorSummary.push({
+          fieldId: "routeFlight",
+          message: validateFlightNumberResult.error,
+        });
+        isValid = false;
+      }
     }
   }
 
   let shouldSkipFurtherChecks = false;
 
-  if(!validateDepartureDateResult.isValid)
-    {
-      errorSummary.push({ fieldId: "departureDateDay", message: validateDepartureDateResult.error });
-      isValid = false;
-      shouldSkipFurtherChecks = true; 
-      validateDepartureDateRangeActualHourResult.error = null;
-      validateDepartureDateRangeZeroHourResult.error = null;
-    }
+  if (!validateDepartureDateResult.isValid) {
+    errorSummary.push({
+      fieldId: "departureDateDay",
+      message: validateDepartureDateResult.error,
+    });
+    isValid = false;
+    shouldSkipFurtherChecks = true;
+    validateDepartureDateRangeActualHourResult.error = null;
+    validateDepartureDateRangeZeroHourResult.error = null;
+  }
 
-  if (!validateSailingHourResult.isValid || !validateSailingMinutesResult.isValid) {
+  if (
+    !validateSailingHourResult.isValid ||
+    !validateSailingMinutesResult.isValid
+  ) {
     let errorSummaryMessage;
     if (!validateSailingHourResult.isValid) {
       errorSummaryMessage = validateSailingHourResult.error;
-      errorSummary.push({ fieldId: "sailingHour", message: errorSummaryMessage });
+      errorSummary.push({
+        fieldId: "sailingHour",
+        message: errorSummaryMessage,
+      });
     } else {
       errorSummaryMessage = validateSailingMinutesResult.error;
-      errorSummary.push({ fieldId: "sailingMinutes", message: errorSummaryMessage });
+      errorSummary.push({
+        fieldId: "sailingMinutes",
+        message: errorSummaryMessage,
+      });
     }
     isValid = false;
   }
 
-
-
-
-  if (!shouldSkipFurtherChecks && !validateDepartureDateRangeZeroHourResult.isValid) {
+  if (
+    !shouldSkipFurtherChecks &&
+    !validateDepartureDateRangeZeroHourResult.isValid
+  ) {
     const errorSummaryMessage = validateDepartureDateRangeZeroHourResult.error;
-    errorSummary.push({ fieldId: "departureDateDay", message: errorSummaryMessage });
+    errorSummary.push({
+      fieldId: "departureDateDay",
+      message: errorSummaryMessage,
+    });
     isValid = false;
-
-    //Do not flag time portion, as the date is the issue
     validateDepartureDateRangeActualHourResult.error = null;
-    shouldSkipFurtherChecks = true; 
+    shouldSkipFurtherChecks = true;
   }
-  
-  if (!shouldSkipFurtherChecks && !validateDepartureDateRangeActualHourResult.isValid) {
-    const errorSummaryMessage = validateDepartureDateRangeActualHourResult.error;
+
+  if (
+    !shouldSkipFurtherChecks &&
+    !validateDepartureDateRangeActualHourResult.isValid
+  ) {
+    const errorSummaryMessage =
+      validateDepartureDateRangeActualHourResult.error;
     errorSummary.push({ fieldId: "sailingHour", message: errorSummaryMessage });
     isValid = false;
   }
@@ -140,8 +185,12 @@ const submitCurrentSailingSlot = async (request, h) => {
   if (!isValid) {
     return h.view(VIEW_PATH, {
       errorRouteOptionRadio: validationRouteOptionRadioResult.error,
-      errorRouteRadio: validationRouteRadioResult ? validationRouteRadioResult.error : null,
-      errorFlight: validateFlightNumberResult ? validateFlightNumberResult.error : null,
+      errorRouteRadio: validationRouteRadioResult
+        ? validationRouteRadioResult.error
+        : null,
+      errorFlight: validateFlightNumberResult
+        ? validateFlightNumberResult.error
+        : null,
       errorDepartureDate: validateDepartureDateResult.error,
       errorSailingHour: validateSailingHourResult.error,
       errorSailingMinutes: validateSailingMinutesResult.error,
@@ -161,7 +210,6 @@ const submitCurrentSailingSlot = async (request, h) => {
     });
   }
 
-  // Handle the form submission here
   const selectedRouteOption = currentSailingMainModelData.routeOptions.find(
     (x) => x.id === request.payload.routeOption
   );
@@ -184,13 +232,8 @@ const submitCurrentSailingSlot = async (request, h) => {
   };
 
   request.yar.set("currentSailingSlot", currentSailingSlot);
-
-  // Perform necessary validations and actions here
-
-  // If successful, redirect to the dashboard
-  return h.redirect("/checker/dashboard");
+  return h.redirect(DASHBOARD_PATH);
 };
-
 
 const getCurrentSailingSlot = async (request, h) => {
   const currentSailingSlot = request.yar.get("currentSailingSlot");

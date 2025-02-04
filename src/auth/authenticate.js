@@ -10,10 +10,23 @@ import cookieAuthentication from "./cookie-auth/cookie-auth.js";
 import apiService from "../api/services/apiService.js";
 import userService from "../api/services/userService.js";
 
+const HTTP_STATUS = {
+  FORBIDDEN: 403,
+  SERVER_ERROR: 500,
+};
+
+const ERROR_VIEWS = {
+  FORBIDDEN: "errors/403Error",
+  SERVER_ERROR: "errors/500Error",
+};
+
 const authenticate = async (request, h) => {
   try {
     if (!state.verify(request)) {
-      return h.view("errors/500Error").code(500).takeover();
+      return h
+        .view(ERROR_VIEWS.SERVER_ERROR)
+        .code(HTTP_STATUS.SERVER_ERROR)
+        .takeover();
     }
 
     const redeemResponse = await redeemAuthorizationCodeForAccessToken(request);
@@ -36,23 +49,24 @@ const authenticate = async (request, h) => {
     cookieAuthentication.set(request, accessToken);
 
     const organisation = userService.getUserOrganisation(request);
-    let organisationId = organisation?.organisationId || null;
+    const organisationId = organisation?.organisationId || null;
 
     if (!organisationId || organisationId.trim() === "") {
-      console.error("Invalid organisation ID - Showing 403 error page");
       session.clear(request);
       request.cookieAuth.clear();
-      return h.view("errors/403Error").code(403).takeover();
+      return h
+        .view(ERROR_VIEWS.FORBIDDEN)
+        .code(HTTP_STATUS.FORBIDDEN)
+        .takeover();
     }
 
-   
     request.yar.set("organisationId", organisationId);
 
     const userOrganisation = await apiService.getOrganisation(
       organisationId,
       request
     );
-    let isGBCheck = !userOrganisation?.Location?.toLowerCase().includes("ni");
+    const isGBCheck = !userOrganisation?.Location?.toLowerCase().includes("ni");
 
     const checker = {
       id: accessToken.sub,
@@ -69,9 +83,11 @@ const authenticate = async (request, h) => {
 
     return accessToken;
   } catch (error) {
-    console.error("Authentication error:", error);
     session.clear(request);
-    return h.view("errors/500Error").code(500).takeover();
+    return h
+      .view(ERROR_VIEWS.SERVER_ERROR)
+      .code(HTTP_STATUS.SERVER_ERROR)
+      .takeover();
   }
 };
 

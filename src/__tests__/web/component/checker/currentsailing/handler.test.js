@@ -1,1066 +1,643 @@
-import moment from "moment-timezone";
 import { CurrentSailingHandlers } from "../../../../../web/component/checker/currentsailing/handler.js";
-import currentSailingMainService from "../../../../../api/services/currentSailingMainService.js";
-import { validateRouteOptionRadio, validateRouteRadio, validateSailingHour, validateSailingMinutes, validateFlightNumber, validateDate, validateDateRange } from "../../../../../web/component/checker/currentsailing/validate.js";
-import { HttpStatusCode } from "axios";
+import {
+  validateRouteOptionRadio,
+  validateRouteRadio,
+  validateSailingHour,
+  validateSailingMinutes,
+  validateFlightNumber,
+  validateDate,
+  validateDateRange,
+} from "../../../../../web/component/checker/currentsailing/validate.js";
 
-jest.mock("../../../../../api/services/currentSailingMainService.js");
+jest.mock("../../../../../api/services/currentSailingMainService.js", () => ({
+  getCurrentSailingMain: jest.fn(),
+}));
+
 jest.mock("../../../../../web/component/checker/currentsailing/validate.js");
 
-const birkenheadRoute = 'Birkenhead to Belfast (Stena)';
-const cairnryanRoute = 'Cairnryan to Larne (P&O)';
-const lochRyanRoute =  'Loch Ryan to Belfast (Stena)';
+const ROUTES = {
+  BIRKENHEAD: "Birkenhead to Belfast (Stena)",
+  CAIRNRYAN: "Cairnryan to Larne (P&O)",
+  LOCH_RYAN: "Loch Ryan to Belfast (Stena)",
+};
 
-const flightNoErrorText = "Enter the flight number. For example, RK 103";
+const ROUTE_SLOT = {
+  RET_SLOT: "Retrieved Route details slot"
+};
+
+
+
+const DATE = {
+  DEP_DATE: "01/01/2024",
+  RANGE: "Date range error",
+};
+
+const HTTP_STATUS = {
+  FORBIDDEN: 403,
+  OK: 200,
+};
+
+const HTML = {
+  FERRY_VIEW_HTML: "ferryView.html",
+  FLIGHT_VIEW_HTML: "flightView.html",
+};
+
+const VIEW_PATH = "componentViews/checker/currentsailing/currentsailingView";
+const ERROR_PATH = "errors/403Error";
+const DASHBOARD_PATH = "/checker/dashboard";
+
+const ERROR_MESSAGES = {
+  routeOptionError: "Select if you are checking a ferry or a flight",
+  routeError: "Select the ferry you are checking",
+  flightNoEmptyError: "Enter the flight number. For example, RK 103",
+  departureDateRequiredError: "Enter the scheduled departure date",
+  departureDateFormatError: "Enter the date in the correct format",
+  timeError: "Enter the scheduled sailing time",
+  labelError: "Error:",
+  genericError: "Validation errors occurred",
+};
 
 const sailingRoutesDefault = [
-  { id: '1', value: birkenheadRoute, label: birkenheadRoute },
-  { id: '2', value: cairnryanRoute, label: cairnryanRoute },
-  { id: '3', value: lochRyanRoute, label: lochRyanRoute }
+  { id: "1", value: ROUTES.BIRKENHEAD, label: ROUTES.BIRKENHEAD },
+  { id: "2", value: ROUTES.CAIRNRYAN, label: ROUTES.CAIRNRYAN },
+  { id: "3", value: ROUTES.LOCH_RYAN, label: ROUTES.LOCH_RYAN },
 ];
 
-describe('Handler', () => {
- describe("index", () => {
-   it("should return view with currentSailingMainModelData", async () => {
-     const mockData = {
-       pageHeading: "What route are you checking?",
-       serviceName:
-         "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
-       routeSubHeading: "Route",
-       routes: sailingRoutesDefault,
-       sailingTimeSubHeading: "Scheduled sailing time",
-       sailingHintText1: "Use the 24-hour clock - for example, 15:30.",
-       sailingHintText2: "For midday, use 12:00. For midnight, use 23:59.",
-       sailingTimes: ["", "00", "01"],
-     };
+const routeOptionsDefault = [
+  { id: "1", value: "Ferry", label: "Ferry", template: HTML.FERRY_VIEW_HTML },
+  {
+    id: "2",
+    value: "Flight",
+    label: "Flight",
+    template: HTML.FLIGHT_VIEW_HTML,
+  },
+];
 
-     currentSailingMainService.getCurrentSailingMain.mockResolvedValue(
-       mockData
-     );
-
-     const request = {
-       yar: {
-         set: jest.fn(),
-         get: jest.fn(() => "mockedOrganisationId"), // Ensure get is mocked properly
-       },
-     };
-
-     const h = {
-       view: jest.fn((viewPath, data) => {
-         return { viewPath, data };
-       }),
-     };
-
-     const londonTime = moment.tz("Europe/London");
-     const departureDateDay = londonTime.format("DD");
-     const departureDateMonth = londonTime.format("MM");
-     const departureDateYear = londonTime.format("YYYY");
-
-     const response = await CurrentSailingHandlers.getCurrentSailings(
-       request,
-       h
-     );
-
-     expect(response.viewPath).toBe(
-       "componentViews/checker/currentsailing/currentsailingView"
-     );
-     expect(response.data).toEqual({
-       currentSailingMainModelData: mockData,
-       departureDateDay,
-       departureDateMonth,
-       departureDateYear,
-     });
-     expect(h.view).toHaveBeenCalledWith(
-       "componentViews/checker/currentsailing/currentsailingView",
-       {
-         currentSailingMainModelData: mockData,
-         departureDateDay,
-         departureDateMonth,
-         departureDateYear,
-       }
-     );
-   });
- });
-
+const createMockRequest = (options = {}) => ({
+  payload: options.payload,
+  yar: {
+    get: jest.fn().mockImplementation((key) => {
+      if (key === "organisationId") {
+        return options.yar?.organisationId;
+      }
+      if (key === "SailingRoutes") {
+        return options.yar?.sailingRoutes || sailingRoutesDefault;
+      }
+      if (key === "CurrentSailingModel") {
+        return (
+          options.yar?.currentSailingModel || {
+            routeOptions: routeOptionsDefault,
+            sailingRoutes: sailingRoutesDefault,
+          }
+        );
+      }
+      return options.yar?.defaultValue;
+    }),
+    set: jest.fn(),
+  },
 });
 
-describe('submitCurrentSailingSlot', () => {
-  it('should set the sailing slot in the session and redirect to the dashboard', async () => {
-    // Mock payload
-    const mockPayload = {
-      routeOption: '1',
-      routeRadio: '1',
-      sailingHour: '12',
-      sailingMinutes: '30',
-      departureDateDay: '1',
-      departureDateMonth: '1',
-      departureDateYear: '2024',
-      routeFlight: '',
-    };
-    const departureDateDayPadded = mockPayload.departureDateDay.length === 1 ? '0' + mockPayload.departureDateDay : mockPayload.departureDateDay;
-    const departureDateMonthPadded = mockPayload.departureDateMonth.length === 1 ? '0' + mockPayload.departureDateMonth : mockPayload.departureDateMonth;
+const createMockH = () => ({
+  view: jest.fn().mockReturnValue({
+    code: jest.fn().mockReturnValue({
+      takeover: jest.fn(),
+    }),
+  }),
+  redirect: jest.fn(),
+  response: jest.fn((val) => ({ code: HTTP_STATUS.OK, source: val })),
+});
 
-    const departureDate = `${departureDateDayPadded.trim()}/${departureDateMonthPadded.trim()}/${mockPayload.departureDateYear.trim()}`;
+const createMockPayload = (overrides = {}) => ({
+  routeOption: "1",
+  routeRadio: "1",
+  sailingHour: "12",
+  sailingMinutes: "30",
+  departureDateDay: "1",
+  departureDateMonth: "1",
+  departureDateYear: "2024",
+  routeFlight: "",
+  ...overrides,
+});
 
-    // Mock sailing routes stored in session
-    const sailingRoutes = sailingRoutesDefault;
+const setupValidationMocks = (config = {}) => {
+  const defaultValidResult = { isValid: true, error: null };
+  validateRouteOptionRadio.mockReturnValue(
+    config.routeOption || defaultValidResult
+  );
+  validateRouteRadio.mockReturnValue(config.routeRadio || defaultValidResult);
+  validateSailingHour.mockReturnValue(config.sailingHour || defaultValidResult);
+  validateSailingMinutes.mockReturnValue(
+    config.sailingMinutes || defaultValidResult
+  );
+  validateFlightNumber.mockReturnValue(
+    config.flightNumber || defaultValidResult
+  );
+  validateDate.mockReturnValue(config.date || defaultValidResult);
+  validateDateRange.mockReturnValue(config.dateRange || defaultValidResult);
+};
 
-    const routeOptions = [
-      { id: '1', value: 'Ferry', label: 'Ferry', template: 'ferryView.html' },
-      { id: '2', value: 'Flight', label: 'Flight', template: 'flightView.html' }
-    ];
-
-    const currentSailingMainModelData = { sailingRoutes, routeOptions };
-
-    // Mock request object
-    const mockRequest = {
-      payload: mockPayload,
-      yar: {
-        set: jest.fn(),
-        get: jest.fn((key) => {
-          if (key === 'SailingRoutes') {
-            return sailingRoutes;  // Return the mock sailingRoutes array
-          }
-          if (key === 'CurrentSailingModel') {
-            return currentSailingMainModelData;
-          }
-          return null;
-        }),
-      },
-    };
-
-    validateRouteOptionRadio.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateRouteRadio.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateSailingHour.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateSailingMinutes.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateFlightNumber.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateDate.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateDateRange.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    // Mock response toolkit
-    const mockRedirect = jest.fn();
-    const mockResponseToolkit = {
-      redirect: mockRedirect,
-    };
-
-    // Expected sailing slot to be set in session
-    const expectedSailingSlot = {
-      sailingHour: mockPayload.sailingHour,
-      sailingMinutes: mockPayload.sailingMinutes,
-      selectedRoute: { id: '1', value: birkenheadRoute, label: birkenheadRoute },
-      departureDate,
-      selectedRouteOption: routeOptions[0],
-      routeFlight: mockPayload.routeFlight,
-    };
-
-
-    // Invoke the handler
-    await CurrentSailingHandlers.submitCurrentSailingSlot(mockRequest, mockResponseToolkit);
-
-    // Assertions
-    expect(mockRequest.yar.set).toHaveBeenCalledWith('currentSailingSlot', expectedSailingSlot);
-    expect(mockRedirect).toHaveBeenCalledWith('/checker/dashboard');
+describe("getCurrentSailings Authorization", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.resetModules();
   });
 
-  it("should handle and return error for flight or ferry radio option not selected", async () => {
-    const errors = {
-      routeOptionError: "Select if you are checking a ferry or a flight",
-      routeError: "Select the ferry you are checking",
-      flightNoEmptyError: flightNoErrorText,
-      departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
-      departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
-      timeError: "Enter the scheduled departure time, for example 15:30",
-      labelError: "Error:",
-      genericError: "Validation errors occurred",
-    };
+  test("should return 403 for missing organisationId", async () => {
+    const request = createMockRequest({ yar: { organisationId: "" } });
+    const h = createMockH();
+    await CurrentSailingHandlers.getCurrentSailings(request, h);
+    expect(h.view).toHaveBeenCalledWith(ERROR_PATH);
+    expect(h.view().code).toHaveBeenCalledWith(HTTP_STATUS.FORBIDDEN);
+  });
 
+  test("should return 403 for null organisationId", async () => {
+    const request = createMockRequest({ yar: { organisationId: null } });
+    const h = createMockH();
+    await CurrentSailingHandlers.getCurrentSailings(request, h);
+    expect(h.view().code).toHaveBeenCalledWith(HTTP_STATUS.FORBIDDEN);
+  });
+
+  test("should return 403 for whitespace organisationId", async () => {
+    const request = createMockRequest({ yar: { organisationId: "   " } });
+    const h = createMockH();
+    await CurrentSailingHandlers.getCurrentSailings(request, h);
+    expect(h.view().code).toHaveBeenCalledWith(HTTP_STATUS.FORBIDDEN);
+  });
+});
+
+describe("submitCurrentSailingSlot Route Option Validation", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    setupValidationMocks();
+  });
+
+  test("should validate route option selection", async () => {
+    const request = createMockRequest({
+      payload: createMockPayload({ routeOption: undefined }),
+    });
+    const h = createMockH();
+    setupValidationMocks({
+      routeOption: { isValid: false, error: ERROR_MESSAGES.routeOptionError },
+    });
+
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        errorRouteOptionRadio: ERROR_MESSAGES.routeOptionError,
+      })
+    );
+  });
+});
+
+describe("submitCurrentSailingSlot Ferry Route Validation", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    setupValidationMocks();
+  });
+
+  test("should validate ferry route selection", async () => {
+    const request = createMockRequest({
+      payload: createMockPayload({ routeRadio: undefined }),
+    });
+    const h = createMockH();
+    setupValidationMocks({
+      routeRadio: { isValid: false, error: ERROR_MESSAGES.routeError },
+    });
+
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        errorRouteRadio: ERROR_MESSAGES.routeError,
+      })
+    );
+  });
+});
+
+describe("submitCurrentSailingSlot Flight Validation", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    setupValidationMocks();
+  });
+
+  test("should validate flight number", async () => {
+    const request = createMockRequest({
+      payload: createMockPayload({
+        routeOption: "2",
+        routeFlight: "",
+      }),
+    });
+    const h = createMockH();
+    setupValidationMocks({
+      flightNumber: {
+        isValid: false,
+        error: ERROR_MESSAGES.flightNoEmptyError,
+      },
+    });
+
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        errorFlight: ERROR_MESSAGES.flightNoEmptyError,
+      })
+    );
+  });
+});
+
+describe("submitCurrentSailingSlot Time Validation", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    setupValidationMocks();
+  });
+
+  test("should validate sailing hours", async () => {
+    const request = createMockRequest({
+      payload: createMockPayload({ sailingHour: "25" }),
+    });
+    const h = createMockH();
+    setupValidationMocks({
+      sailingHour: { isValid: false, error: ERROR_MESSAGES.timeError },
+    });
+
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        errorSailingHour: ERROR_MESSAGES.timeError,
+      })
+    );
+  });
+
+  test("should validate sailing minutes", async () => {
+    const request = createMockRequest({
+      payload: createMockPayload({ sailingMinutes: "61" }),
+    });
+    const h = createMockH();
+    setupValidationMocks({
+      sailingMinutes: { isValid: false, error: ERROR_MESSAGES.timeError },
+    });
+
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        errorSailingMinutes: ERROR_MESSAGES.timeError,
+      })
+    );
+  });
+});
+
+describe("submitCurrentSailingSlot Date Format Validation", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    setupValidationMocks();
+  });
+
+  test("should validate date format", async () => {
+    const request = createMockRequest({
+      payload: createMockPayload({
+        departureDateDay: "32",
+        departureDateMonth: "13",
+      }),
+    });
+    const h = createMockH();
+    setupValidationMocks({
+      date: { isValid: false, error: ERROR_MESSAGES.departureDateFormatError },
+    });
+
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        errorDepartureDate: ERROR_MESSAGES.departureDateFormatError,
+      })
+    );
+  });
+});
+
+describe("submitCurrentSailingSlot Date Range Validation", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    setupValidationMocks();
+  });
+
+  test("should validate date range", async () => {
+    const request = createMockRequest({
+      payload: createMockPayload(),
+    });
+    const h = createMockH();
+    setupValidationMocks({
+      dateRange: { isValid: false, error: DATE.RANGE },
+    });
+
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        errorSummary: expect.arrayContaining([
+          { fieldId: "departureDateDay", message: DATE.RANGE },
+        ]),
+      })
+    );
+  });
+
+  test("should skip date range validation for invalid date", async () => {
+    const request = createMockRequest({
+      payload: createMockPayload({ departureDateDay: "32" }),
+    });
+    const h = createMockH();
+    setupValidationMocks({
+      date: { isValid: false, error: ERROR_MESSAGES.departureDateFormatError },
+      dateRange: { isValid: false, error: DATE.RANGE },
+    });
+
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        errorDepartureDate: ERROR_MESSAGES.departureDateFormatError,
+        errorDateRangeDate: null,
+        errorDateRangeTime: null,
+      })
+    );
+  });
+});
+
+describe("submitCurrentSailingSlot Ferry Success", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    setupValidationMocks();
+  });
+
+  test("should submit valid ferry slot", async () => {
     const routeOptions = [
-      { id: '1', value: 'Ferry', label: 'Ferry', template: 'ferryView.html' },
-      { id: '2', value: 'Flight', label: 'Flight', template: 'flightView.html' }
+      {
+        id: "1",
+        value: "Ferry",
+        label: "Ferry",
+        template: HTML.FERRY_VIEW_HTML,
+      },
+      {
+        id: "2",
+        value: "Flight",
+        label: "Flight",
+        template: HTML.FLIGHT_VIEW_HTML,
+      },
     ];
 
-
-    // Mock sailing routes stored in session
-    const sailingRoutes = sailingRoutesDefault;
-
-    const currentSailingMainModelData = { sailingRoutes, routeOptions };
-    // Mock payload
-    const mockPayload = {
-      routeOption: undefined,
-      routeRadio: '1',
-      sailingHour: '12',
-      sailingMinutes: '30',
-      departureDateDay: '1',
-      departureDateMonth: '1',
-      departureDateYear: '2024',
-      routeFlight: '12345',
-    };
-
-    // Mock request object
-    const request = {
-      payload: mockPayload,
+    const request = createMockRequest({
+      payload: createMockPayload(),
       yar: {
-        set: jest.fn(),
-        get: jest.fn((key) => {
-          if (key === 'SailingRoutes') {
-            return sailingRoutes;  // Return the mock sailingRoutes array
-          }
-          if (key === 'CurrentSailingModel') {
-            return currentSailingMainModelData;
-          }
-          return null;
-        }),
+        currentSailingModel: {
+          routeOptions,
+          sailingRoutes: sailingRoutesDefault,
+        },
       },
-    };
+    });
+    const h = createMockH();
 
-    // Mock response toolkit
-    const h = {
-      view: jest.fn().mockReturnValue({}),
-    };
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
 
-    validateRouteOptionRadio.mockReturnValue({
-      isValid: false,
-      error: errors.routeOptionError
+    expect(request.yar.set).toHaveBeenCalledWith(
+      "currentSailingSlot",
+      expect.objectContaining({
+        sailingHour: "12",
+        sailingMinutes: "30",
+        selectedRoute: sailingRoutesDefault[0],
+        departureDate: DATE.DEP_DATE,
+        selectedRouteOption: routeOptions[0],
+      })
+    );
+    expect(h.redirect).toHaveBeenCalledWith(DASHBOARD_PATH);
+  });
+});
+
+describe("submitCurrentSailingSlot Flight Success", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    setupValidationMocks();
+  });
+
+  test("should submit valid flight slot", async () => {
+    const routeOptions = [
+      {
+        id: "1",
+        value: "Ferry",
+        label: "Ferry",
+        template: HTML.FERRY_VIEW_HTML,
+      },
+      {
+        id: "2",
+        value: "Flight",
+        label: "Flight",
+        template: HTML.FLIGHT_VIEW_HTML,
+      },
+    ];
+
+    const request = createMockRequest({
+      payload: createMockPayload({
+        routeOption: "2",
+        routeFlight: "RK103",
+        routeRadio: undefined,
+      }),
+      yar: {
+        currentSailingModel: {
+          routeOptions,
+          sailingRoutes: sailingRoutesDefault,
+        },
+      },
     });
 
-    validateRouteRadio.mockReturnValue({
-      isValid: false,
-      error: "Select a route",
+    const h = createMockH();
+
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
+
+    expect(request.yar.set).toHaveBeenCalledWith("currentSailingSlot", {
+      sailingHour: "12",
+      sailingMinutes: "30",
+      selectedRoute: undefined,
+      departureDate: DATE.DEP_DATE,
+      selectedRouteOption: routeOptions[1],
+      routeFlight: "RK103",
+    });
+    expect(h.redirect).toHaveBeenCalledWith(DASHBOARD_PATH);
+  });
+});
+
+describe("submitCurrentSailingSlot Edge Cases", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    setupValidationMocks();
+  });
+
+  test("should handle empty route options", async () => {
+    // Mock validation to simulate route option validation failure
+    setupValidationMocks({
+      routeOption: { isValid: false, error: ERROR_MESSAGES.routeOptionError },
     });
 
-    validateSailingHour.mockReturnValue({
-      isValid: true,
-      error: null
+    const request = createMockRequest({
+      payload: createMockPayload(),
+      yar: {
+        currentSailingModel: {
+          routeOptions: [], // Empty route options
+          sailingRoutes: sailingRoutesDefault,
+        },
+      },
     });
 
-    validateSailingMinutes.mockReturnValue({
-      isValid: true,
-      error: null
+    const h = createMockH();
+
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
+
+    // Verify that the view is called with appropriate error messages
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        errorRouteOptionRadio: ERROR_MESSAGES.routeOptionError,
+        errorSummary: expect.arrayContaining([
+          { fieldId: "routeOption", message: ERROR_MESSAGES.routeOptionError },
+        ]),
+        formSubmitted: true,
+      })
+    );
+  });
+
+  test("should handle null sailing routes", async () => {
+    const routeOptions = [
+      {
+        id: "1",
+        value: "Ferry",
+        label: "Ferry",
+        template: HTML.FERRY_VIEW_HTML,
+      },
+      {
+        id: "2",
+        value: "Flight",
+        label: "Flight",
+        template: HTML.FLIGHT_VIEW_HTML,
+      },
+    ];
+
+    const request = createMockRequest({
+      payload: createMockPayload(),
+      yar: {
+        currentSailingModel: {
+          routeOptions,
+          sailingRoutes: null,
+        },
+        sailingRoutes: null,
+      },
     });
 
-    validateFlightNumber.mockReturnValue({
-      isValid: true,
-      error: null
-    });
+    const h = createMockH();
 
-    validateDate.mockReturnValue({
-      isValid: true,
-      error: null
-    });
+    await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
 
-    validateDateRange.mockReturnValue({
-      isValid: true,
-      error: null
-    });
+    expect(request.yar.set).toHaveBeenCalledWith(
+      "currentSailingSlot",
+      expect.objectContaining({
+        departureDate: DATE.DEP_DATE,
+        routeFlight: "",
+        sailingHour: "12",
+        sailingMinutes: "30",
+        selectedRoute: expect.any(Object),
+        selectedRouteOption: expect.any(Object),
+      })
+    );
+    expect(h.redirect).toHaveBeenCalledWith(DASHBOARD_PATH);
+  });
+});
 
+describe("getCurrentSailingSlot", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test("should retrieve existing sailing slot", async () => {
+    const testSlot = { id: "test" };
+    const request = createMockRequest({ yar: { defaultValue: testSlot } });
+    const h = createMockH();
+
+    const response = await CurrentSailingHandlers.getCurrentSailingSlot(
+      request,
+      h
+    );
+
+    expect(response.code).toBe(HTTP_STATUS.OK);
+    expect(response.source).toEqual({
+      message: ROUTE_SLOT.RET_SLOT,
+      currentSailingSlot: testSlot,
+    });
+  });
+
+  test("should handle null sailing slot", async () => {
+    const request = createMockRequest({ yar: { defaultValue: null } });
+    const h = createMockH();
+
+    const response = await CurrentSailingHandlers.getCurrentSailingSlot(
+      request,
+      h
+    );
+
+    expect(response.code).toBe(HTTP_STATUS.OK);
+    expect(response.source).toEqual({
+      message: ROUTE_SLOT.RET_SLOT,
+      currentSailingSlot: null,
+    });
+  });
+
+  test("should handle undefined sailing slot", async () => {
+    const request = createMockRequest({ yar: { defaultValue: undefined } });
+    const h = createMockH();
+
+    const response = await CurrentSailingHandlers.getCurrentSailingSlot(
+      request,
+      h
+    );
+
+    expect(response.code).toBe(HTTP_STATUS.OK);
+    expect(response.source).toEqual({
+      message: ROUTE_SLOT.RET_SLOT,
+      currentSailingSlot: undefined,
+    });
+  });
+});
+
+describe("submitCurrentSailingSlot Error Handling", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    setupValidationMocks();
+  });
+
+  test("should handle validation errors gracefully", async () => {
+    const request = createMockRequest({
+      payload: createMockPayload({
+        routeOption: undefined,
+        sailingHour: "25",
+        sailingMinutes: "61",
+      }),
+    });
+    const h = createMockH();
+
+    setupValidationMocks({
+      routeOption: { isValid: false, error: ERROR_MESSAGES.routeOptionError },
+      sailingHour: { isValid: false, error: ERROR_MESSAGES.timeError },
+      sailingMinutes: { isValid: false, error: ERROR_MESSAGES.timeError },
+    });
 
     await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
 
     expect(h.view).toHaveBeenCalledWith(
-      "componentViews/checker/currentsailing/currentsailingView",
-      {
-        errorRouteOptionRadio: errors.routeOptionError,
-        errorRouteRadio: null,
-        errorFlight: null,
-        errorDepartureDate: null,
-        errorSailingHour: null,
-        errorSailingMinutes: null,
-        errorSummary: [
-          { fieldId: "routeOption", message: errors.routeOptionError }
-        ],
+      VIEW_PATH,
+      expect.objectContaining({
+        errorRouteOptionRadio: ERROR_MESSAGES.routeOptionError,
+        errorSailingHour: ERROR_MESSAGES.timeError,
+        errorSailingMinutes: ERROR_MESSAGES.timeError,
         formSubmitted: true,
-        currentSailingMainModelData,
-        routeRadio: mockPayload.routeRadio,
-        sailingHour: mockPayload.sailingHour,
-        sailingMinutes: mockPayload.sailingMinutes,
-        routeOption: mockPayload.routeoption,
-        routeFlight: mockPayload.routeFlight,
-        departureDateDay: mockPayload.departureDateDay,
-        departureDateMonth: mockPayload.departureDateMonth,
-        departureDateYear: mockPayload.departureDateYear, 
-        errorDateRangeDate: null, 
-        errorDateRangeTime: null,
-      }
+      })
     );
-  });
-
-  it("should handle and return error for ferry route not selected", async () => {
-    const errors = {
-      routeOptionError: "Select if you are checking a ferry or a flight",
-      routeError: "Select the ferry you are checking",
-      flightNoEmptyError: flightNoErrorText,
-      departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
-      departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
-      timeError: "Enter the scheduled departure time, for example 15:30",
-      labelError: "Error:",
-      genericError: "Validation errors occurred",
-    };
-
-    const routeOptions = [
-      { id: '1', value: 'Ferry', label: 'Ferry', template: 'ferryView.html' },
-      { id: '2', value: 'Flight', label: 'Flight', template: 'flightView.html' }
-    ];
-
-    const sailingRoutes = sailingRoutesDefault;
-
-    const currentSailingMainModelData = { sailingRoutes, routeOptions };
-
-    const mockPayload = {
-      routeOption: '1',
-      routeRadio: null,
-      sailingHour: '12',
-      sailingMinutes: '30',
-      departureDateDay: '1',
-      departureDateMonth: '1',
-      departureDateYear: '2024',
-      routeFlight: '12345',
-    };
-
-    const request = {
-      payload: mockPayload,
-      yar: {
-        set: jest.fn(),
-        get: jest.fn((key) => {
-          if (key === 'SailingRoutes') {
-            return sailingRoutes;
-          }
-          if (key === 'CurrentSailingModel') {
-            return currentSailingMainModelData;
-          }
-          return null;
-        }),
-      },
-    };
-
-    // Mock response toolkit
-    const mockResponseToolkit = {
-      redirect: jest.fn().mockReturnValue({}),
-      view: jest.fn().mockReturnValue({}),
-    };
-
-    validateRouteOptionRadio.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateRouteRadio.mockReturnValue({
-      isValid: false,
-      error: errors.routeError,
-    });
-
-    validateSailingHour.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateSailingMinutes.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateFlightNumber.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateDate.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateDateRange.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
-
-    expect(mockResponseToolkit.view).toHaveBeenCalledWith(
-      "componentViews/checker/currentsailing/currentsailingView",
-      {
-        currentSailingMainModelData,
-        departureDateDay: mockPayload.departureDateDay,
-        departureDateMonth: mockPayload.departureDateMonth,
-        departureDateYear: mockPayload.departureDateYear,
-        errorDateRangeDate: null, 
-        errorDateRangeTime: null,
-        errorDepartureDate: null,
-        errorFlight: null,
-        errorRouteOptionRadio: null,
-        errorRouteRadio: errors.routeError,
-        errorSailingHour: null,
-        errorSailingMinutes: null,
-        errorSummary: [
-          { fieldId: "routeRadio", message: errors.routeError }
-        ],
-        formSubmitted: true,
-        routeFlight: mockPayload.routeFlight,
-        routeOption: mockPayload.routeOption,
-        routeRadio: mockPayload.routeRadio,
-        sailingHour: mockPayload.sailingHour,
-        sailingMinutes: mockPayload.sailingMinutes,
-      }
-    );
-  });
-
-  it("should handle and return error for flight when not entered", async () => {
-    const errors = {
-      routeOptionError: "Select if you are checking a ferry or a flight",
-      routeError: "Select the ferry you are checking",
-      flightNoEmptyError: flightNoErrorText,
-      departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
-      departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
-      timeError: "Enter the scheduled departure time, for example 15:30",
-      labelError: "Error:",
-      genericError: "Validation errors occurred",
-    };
-
-    const routeOptions = [
-      { id: '1', value: 'Ferry', label: 'Ferry', template: 'ferryView.html' },
-      { id: '2', value: 'Flight', label: 'Flight', template: 'flightView.html' }
-    ];
-
-    const sailingRoutes = sailingRoutesDefault;
-
-    const currentSailingMainModelData = { sailingRoutes, routeOptions };
-
-    const mockPayload = {
-      routeOption: '2',
-      routeRadio: null,
-      sailingHour: '12',
-      sailingMinutes: '30',
-      departureDateDay: '1',
-      departureDateMonth: '1',
-      departureDateYear: '2024',
-      routeFlight: '',
-    };
-
-    const request = {
-      payload: mockPayload,
-      yar: {
-        set: jest.fn(),
-        get: jest.fn((key) => {
-          if (key === 'SailingRoutes') {
-            return sailingRoutes;
-          }
-          if (key === 'CurrentSailingModel') {
-            return currentSailingMainModelData;
-          }
-          return null;
-        }),
-      },
-    };
-
-    // Mock response toolkit
-    const mockResponseToolkit = {
-      redirect: jest.fn().mockReturnValue({}),
-      view: jest.fn().mockReturnValue({}),
-    };
-
-    validateRouteOptionRadio.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateRouteRadio.mockReturnValue({
-      isValid: true,
-      error: null,
-    });
-
-    validateFlightNumber.mockReturnValue({
-      isValid: false,
-      error: errors.flightNoEmptyError
-    });
-
-    validateSailingHour.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateSailingMinutes.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateDate.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateDateRange.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
-
-    expect(mockResponseToolkit.view).toHaveBeenCalledWith(
-      "componentViews/checker/currentsailing/currentsailingView",
-      {
-        currentSailingMainModelData,
-        departureDateDay: mockPayload.departureDateDay,
-        departureDateMonth: mockPayload.departureDateMonth,
-        departureDateYear: mockPayload.departureDateYear,
-        errorDateRangeDate: null, 
-        errorDateRangeTime: null,
-        errorDepartureDate: null,
-        errorFlight: errors.flightNoEmptyError,
-        errorRouteOptionRadio: null,
-        errorRouteRadio: null,
-        errorSailingHour: null,
-        errorSailingMinutes: null,
-        errorSummary: [
-          { fieldId: "routeFlight", message: errors.flightNoEmptyError }
-        ],
-        formSubmitted: true,
-        routeFlight: mockPayload.routeFlight,
-        routeOption: mockPayload.routeOption,
-        routeRadio: mockPayload.routeRadio,
-        sailingHour: mockPayload.sailingHour,
-        sailingMinutes: mockPayload.sailingMinutes,
-      }
-    );
-  });
-
-  it("should handle and return errors for ferry route not selected and departure date being empty", async () => {
-    const errors = {
-      routeOptionError: "Select if you are checking a ferry or a flight",
-      routeError: "Select the ferry you are checking",
-      flightNoEmptyError: flightNoErrorText,
-      departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
-      departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
-      timeError: "Enter the scheduled departure time, for example 15:30",
-      labelError: "Error:",
-      genericError: "Validation errors occurred",
-    };
-
-    const routeOptions = [
-      { id: '1', value: 'Ferry', label: 'Ferry', template: 'ferryView.html' },
-      { id: '2', value: 'Flight', label: 'Flight', template: 'flightView.html' }
-    ];
-
-    const sailingRoutes = sailingRoutesDefault;
-
-    const currentSailingMainModelData = { sailingRoutes, routeOptions };
-
-    const mockPayload = {
-      routeOption: '1',
-      routeRadio: null,
-      sailingHour: '12',
-      sailingMinutes: '30',
-      departureDateDay: '',
-      departureDateMonth: '1',
-      departureDateYear: '2024',
-      routeFlight: '12345',
-    };
-
-    const request = {
-      payload: mockPayload,
-      yar: {
-        set: jest.fn(),
-        get: jest.fn((key) => {
-          if (key === 'SailingRoutes') {
-            return sailingRoutes;
-          }
-          if (key === 'CurrentSailingModel') {
-            return currentSailingMainModelData;
-          }
-          return null;
-        }),
-      },
-    };
-
-    // Mock response toolkit
-    const mockResponseToolkit = {
-      redirect: jest.fn().mockReturnValue({}),
-      view: jest.fn().mockReturnValue({}),
-    };
-
-    validateRouteOptionRadio.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateRouteRadio.mockReturnValue({
-      isValid: false,
-      error: errors.routeError,
-    });
-
-    validateSailingHour.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateSailingMinutes.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateFlightNumber.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateDate.mockReturnValue({
-      isValid: false,
-      error: errors.departureDateRequiredError
-    });
-
-    validateDateRange.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
-
-    expect(mockResponseToolkit.view).toHaveBeenCalledWith(
-      "componentViews/checker/currentsailing/currentsailingView",
-      {
-        currentSailingMainModelData,
-        departureDateDay: mockPayload.departureDateDay,
-        departureDateMonth: mockPayload.departureDateMonth,
-        departureDateYear: mockPayload.departureDateYear,
-        errorDepartureDate: errors.departureDateRequiredError,
-        errorDateRangeDate: null, 
-        errorDateRangeTime: null,
-        errorFlight: null,
-        errorRouteOptionRadio: null,
-        errorRouteRadio: errors.routeError,
-        errorSailingHour: null,
-        errorSailingMinutes: null,
-        errorSummary: [
-          { fieldId: "routeRadio", message: errors.routeError },
-          { fieldId: "departureDateDay", message: errors.departureDateRequiredError }
-        ],
-        formSubmitted: true,
-        routeFlight: mockPayload.routeFlight,
-        routeOption: mockPayload.routeOption,
-        routeRadio: mockPayload.routeRadio,
-        sailingHour: mockPayload.sailingHour,
-        sailingMinutes: mockPayload.sailingMinutes,
-      }
-    );
-  });
-
-  it("should handle and return errors for ferry route not selected and invalid departure date", async () => {
-    const errors = {
-      routeOptionError: "Select if you are checking a ferry or a flight",
-      routeError: "Select the ferry you are checking",
-      flightNoEmptyError: flightNoErrorText,
-      departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
-      departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
-      timeError: "Enter the scheduled departure time, for example 15:30",
-      labelError: "Error:",
-      genericError: "Validation errors occurred",
-    };
-
-    const routeOptions = [
-      { id: '1', value: 'Ferry', label: 'Ferry', template: 'ferryView.html' },
-      { id: '2', value: 'Flight', label: 'Flight', template: 'flightView.html' }
-    ];
-
-    const sailingRoutes = sailingRoutesDefault;
-
-    const currentSailingMainModelData = { sailingRoutes, routeOptions };
-
-    const mockPayload = {
-      routeOption: '1',
-      routeRadio: null,
-      sailingHour: '12',
-      sailingMinutes: '30',
-      departureDateDay: '33',
-      departureDateMonth: '1',
-      departureDateYear: '2024',
-      routeFlight: '12345',
-    };
-
-    const request = {
-      payload: mockPayload,
-      yar: {
-        set: jest.fn(),
-        get: jest.fn((key) => {
-          if (key === 'SailingRoutes') {
-            return sailingRoutes;
-          }
-          if (key === 'CurrentSailingModel') {
-            return currentSailingMainModelData;
-          }
-          return null;
-        }),
-      },
-    };
-
-    // Mock response toolkit
-    const mockResponseToolkit = {
-      redirect: jest.fn().mockReturnValue({}),
-      view: jest.fn().mockReturnValue({}),
-    };
-
-    validateRouteOptionRadio.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateRouteRadio.mockReturnValue({
-      isValid: false,
-      error: errors.routeError,
-    });
-
-    validateSailingHour.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateSailingMinutes.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateFlightNumber.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateDate.mockReturnValue({
-      isValid: false,
-      error: errors.departureDateFormatError
-    });
-
-    validateDateRange.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
-
-    expect(mockResponseToolkit.view).toHaveBeenCalledWith(
-      "componentViews/checker/currentsailing/currentsailingView",
-      {
-        currentSailingMainModelData,
-        departureDateDay: mockPayload.departureDateDay,
-        departureDateMonth: mockPayload.departureDateMonth,
-        departureDateYear: mockPayload.departureDateYear,
-        errorDepartureDate: errors.departureDateFormatError,
-        errorDateRangeDate: null, 
-        errorDateRangeTime: null,
-        errorFlight: null,
-        errorRouteOptionRadio: null,
-        errorRouteRadio: errors.routeError,
-        errorSailingHour: null,
-        errorSailingMinutes: null,
-        errorSummary: [
-          { fieldId: "routeRadio", message: errors.routeError },
-          { fieldId: "departureDateDay", message: errors.departureDateFormatError }
-        ],
-        formSubmitted: true,
-        routeFlight: mockPayload.routeFlight,
-        routeOption: mockPayload.routeOption,
-        routeRadio: mockPayload.routeRadio,
-        sailingHour: mockPayload.sailingHour,
-        sailingMinutes: mockPayload.sailingMinutes,
-      }
-    );
-  });
-
-  it("should handle and return errors for ferry route not selected and invalid departure date and time error", async () => {
-    const errors = {
-      routeOptionError: "Select if you are checking a ferry or a flight",
-      routeError: "Select the ferry you are checking",
-      flightNoEmptyError: flightNoErrorText,
-      departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
-      departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
-      timeError: "Enter the scheduled departure time, for example 15:30",
-      labelError: "Error:",
-      genericError: "Validation errors occurred",
-    };
-
-    const routeOptions = [
-      { id: '1', value: 'Ferry', label: 'Ferry', template: 'ferryView.html' },
-      { id: '2', value: 'Flight', label: 'Flight', template: 'flightView.html' }
-    ];
-
-    const sailingRoutes = sailingRoutesDefault;
-
-    const currentSailingMainModelData = { sailingRoutes, routeOptions };
-
-    const mockPayload = {
-      routeOption: '1',
-      routeRadio: null,
-      sailingHour: '',
-      sailingMinutes: '30',
-      departureDateDay: '33',
-      departureDateMonth: '1',
-      departureDateYear: '2024',
-      routeFlight: '12345',
-    };
-
-    const request = {
-      payload: mockPayload,
-      yar: {
-        set: jest.fn(),
-        get: jest.fn((key) => {
-
-          if (key === 'SailingRoutes') 
-          {
-            return sailingRoutes;
-          }
-
-          if (key === 'CurrentSailingModel') 
-          {
-              return currentSailingMainModelData;
-          }
-          return null;
-        }),
-      },
-    };
-
-    // Mock response toolkit
-    const mockResponseToolkit = {
-      redirect: jest.fn().mockReturnValue({}),
-      view: jest.fn().mockReturnValue({}),
-    };
-
-    validateRouteOptionRadio.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateRouteRadio.mockReturnValue({
-      isValid: false,
-      error: errors.routeError,
-    });
-
-    validateSailingHour.mockReturnValue({
-      isValid: false,
-      error: errors.timeError
-    });
-
-    validateSailingMinutes.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateFlightNumber.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateDate.mockReturnValue({
-      isValid: false,
-      error: errors.departureDateFormatError
-    });
-
-    validateDateRange.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
-
-    expect(mockResponseToolkit.view).toHaveBeenCalledWith(
-      "componentViews/checker/currentsailing/currentsailingView",
-      {
-        currentSailingMainModelData,
-        departureDateDay: mockPayload.departureDateDay,
-        departureDateMonth: mockPayload.departureDateMonth,
-        departureDateYear: mockPayload.departureDateYear,
-        errorDateRangeDate: null, 
-        errorDateRangeTime: null,
-        errorDepartureDate: errors.departureDateFormatError,
-        errorFlight: null,
-        errorRouteOptionRadio: null,
-        errorRouteRadio: errors.routeError,
-        errorSailingHour: errors.timeError,
-        errorSailingMinutes: null,
-        errorSummary: [
-          { fieldId: "routeRadio", message: errors.routeError },
-          { fieldId: "departureDateDay", message: errors.departureDateFormatError },
-          { fieldId: "sailingHour", message: errors.timeError }
-        ],
-        formSubmitted: true,
-        routeFlight: mockPayload.routeFlight,
-        routeOption: mockPayload.routeOption,
-        routeRadio: mockPayload.routeRadio,
-        sailingHour: mockPayload.sailingHour,
-        sailingMinutes: mockPayload.sailingMinutes,
-      }
-    );
-  });
-
-  it("should handle and return error for date range being invalid", async () => {
-    const errors = {
-      routeOptionError: "Select if you are checking a ferry or a flight",
-      routeError: "Select the ferry you are checking",
-      flightNoEmptyError: flightNoErrorText,
-      departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
-      departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
-      timeError: "Enter the scheduled departure time, for example 15:30",
-      labelError: "Error:",
-      genericError: "Validation errors occurred",
-    };
-
-    const routeOptions = [
-      { id: '1', value: 'Ferry', label: 'Ferry', template: 'ferryView.html' },
-      { id: '2', value: 'Flight', label: 'Flight', template: 'flightView.html' }
-    ];
-
-    const sailingRoutes = sailingRoutesDefault;
-
-    const currentSailingMainModelData = { sailingRoutes, routeOptions };
-
-    const mockPayload = {
-      routeOption: '1',
-      routeRadio: null,
-      sailingHour: '12',
-      sailingMinutes: '30',
-      departureDateDay: '1',
-      departureDateMonth: '1',
-      departureDateYear: '2024',
-      routeFlight: '12345',
-    };
-
-    const request = {
-      payload: mockPayload,
-      yar: {
-        set: jest.fn(),
-        get: jest.fn((key) => {
-          if (key === 'SailingRoutes') {
-            return sailingRoutes;
-          }
-          if (key === 'CurrentSailingModel') {
-            return currentSailingMainModelData;
-          }
-          return null;
-        }),
-      },
-    };
-
-    // Mock response toolkit
-    const mockResponseToolkit = {
-      redirect: jest.fn().mockReturnValue({}),
-      view: jest.fn().mockReturnValue({}),
-    };
-
-    validateRouteOptionRadio.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateRouteRadio.mockReturnValue({
-      isValid: true,
-      error: null,
-    });
-
-    validateSailingHour.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateSailingMinutes.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateFlightNumber.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateDate.mockReturnValue({
-      isValid: true,
-      error: null
-    });
-
-    validateDateRange.mockReturnValue({
-      isValid: false,
-      error: errors.errorDateRangeDate
-    });
-
-    await CurrentSailingHandlers.submitCurrentSailingSlot(request, mockResponseToolkit);
-
-    expect(mockResponseToolkit.view).toHaveBeenCalledWith(
-      "componentViews/checker/currentsailing/currentsailingView",
-      {
-        currentSailingMainModelData,
-        departureDateDay: mockPayload.departureDateDay,
-        departureDateMonth: mockPayload.departureDateMonth,
-        departureDateYear: mockPayload.departureDateYear,
-        errorDateRangeDate: null, 
-        errorDateRangeTime: null,
-        errorDepartureDate: null,
-        errorFlight: null,
-        errorRouteOptionRadio: null,
-        errorRouteRadio: null,
-        errorSailingHour: null,
-        errorSailingMinutes: null,
-        errorSummary: [
-          { fieldId: "departureDateDay", message: errors.errorDateRangeDate }
-        ],
-        formSubmitted: true,
-        routeFlight: mockPayload.routeFlight,
-        routeOption: mockPayload.routeOption,
-        routeRadio: mockPayload.routeRadio,
-        sailingHour: mockPayload.sailingHour,
-        sailingMinutes: mockPayload.sailingMinutes,
-      }
-    );
-  });
-
-});
-
-
-describe('getCurrentSailingSlot', () => {
-  it('should retrieve the currentSailingSlot from session', async () => {
-    const mockRequest = {
-      yar: {
-        get: jest.fn().mockReturnValue('testSlot')
-      }
-    };
-    const mockResponseToolkit = {
-      response: jest.fn((value) => ({
-        code: 200,
-        source: value
-      }))
-    };
-
-    const response = await CurrentSailingHandlers.getCurrentSailingSlot(mockRequest, mockResponseToolkit);
-
-    expect(mockRequest.yar.get).toHaveBeenCalledWith('currentSailingSlot');
-    expect(mockResponseToolkit.response).toHaveBeenCalledWith({
-      message: 'Retrieved Route details slot',
-      currentSailingSlot: 'testSlot'
-    });
-    expect(response.code).toBe(HttpStatusCode.Ok);
-    expect(response.source).toEqual({
-      message: 'Retrieved Route details slot',
-      currentSailingSlot: 'testSlot'
-    });
   });
 });

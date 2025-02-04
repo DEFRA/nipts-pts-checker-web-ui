@@ -1,8 +1,19 @@
-import Joi from "joi";
-import HttpMethod from "../../../../constants/httpMethod.js";
 import auth from "../../../../auth/index.js";
-import session from "../../../../session/index.js";
 import logout from "../../../../lib/logout.js";
+
+const HTTP_STATUS = {
+  FORBIDDEN: 403,
+  SERVER_ERROR: 500,
+};
+
+const ERROR_VIEWS = {
+  FORBIDDEN: "errors/403Error",
+  SERVER_ERROR: "errors/500Error",
+};
+
+const REDIRECT_PATHS = {
+  CURRENT_SAILINGS: "/checker/current-sailings",
+};
 
 const Routes = [
   {
@@ -11,32 +22,36 @@ const Routes = [
     options: {
       auth: false,
       handler: async (request, h) => {
-        console.log("SignIn callback");
         try {
-          const authResult = await auth.authenticate(request, h);
+          await auth.authenticate(request, h);
 
           const organisationId = request.yar.get("organisationId");
-          if (!organisationId || organisationId.trim() === "") {
+          if (!organisationId?.trim()) {
             logout(request);
-            console.error("Organisation ID missing - Showing 403 error");
-            return h.view("errors/403Error").code(403).takeover();
+            return h
+              .view(ERROR_VIEWS.FORBIDDEN)
+              .code(HTTP_STATUS.FORBIDDEN)
+              .takeover();
           }
 
-          console.log("Authenticated, now redirecting to Current Sailings");
-          return h.redirect("/checker/current-sailings");
+          return h.redirect(REDIRECT_PATHS.CURRENT_SAILINGS);
         } catch (err) {
-          console.error(`Authentication error: ${err.message}`);
           logout(request);
 
-          if (err.statusCode === 403) {
-            return h.view("errors/403Error").code(403).takeover();
+          if (err.statusCode === HTTP_STATUS.FORBIDDEN) {
+            return h
+              .view(ERROR_VIEWS.FORBIDDEN)
+              .code(HTTP_STATUS.FORBIDDEN)
+              .takeover();
           }
-          return h.view("errors/500Error").code(500).takeover();
+          return h
+            .view(ERROR_VIEWS.SERVER_ERROR)
+            .code(HTTP_STATUS.SERVER_ERROR)
+            .takeover();
         }
       },
     },
   },
 ];
-
 
 export default Routes;
