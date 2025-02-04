@@ -23,6 +23,7 @@ const ROUTES = {
 
 const DATE = {
   DEP_DATE: "01/01/2024",
+  RANGE: "Date range error",
 };
 
 const HTTP_STATUS = {
@@ -70,9 +71,12 @@ const createMockRequest = (options = {}) => ({
   payload: options.payload,
   yar: {
     get: jest.fn().mockImplementation((key) => {
-      if (key === "organisationId") return options.yar?.organisationId;
-      if (key === "SailingRoutes")
+      if (key === "organisationId") {
+        return options.yar?.organisationId;
+      }
+      if (key === "SailingRoutes") {
         return options.yar?.sailingRoutes || sailingRoutesDefault;
+      }
       if (key === "CurrentSailingModel") {
         return (
           options.yar?.currentSailingModel || {
@@ -319,7 +323,7 @@ describe("submitCurrentSailingSlot Date Range Validation", () => {
     });
     const h = createMockH();
     setupValidationMocks({
-      dateRange: { isValid: false, error: "Date range error" },
+      dateRange: { isValid: false, error: DATE.RANGE },
     });
 
     await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
@@ -327,7 +331,7 @@ describe("submitCurrentSailingSlot Date Range Validation", () => {
       VIEW_PATH,
       expect.objectContaining({
         errorSummary: expect.arrayContaining([
-          { fieldId: "departureDateDay", message: "Date range error" },
+          { fieldId: "departureDateDay", message: DATE.RANGE },
         ]),
       })
     );
@@ -340,7 +344,7 @@ describe("submitCurrentSailingSlot Date Range Validation", () => {
     const h = createMockH();
     setupValidationMocks({
       date: { isValid: false, error: ERROR_MESSAGES.departureDateFormatError },
-      dateRange: { isValid: false, error: "Date range error" },
+      dateRange: { isValid: false, error: DATE.RANGE },
     });
 
     await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
