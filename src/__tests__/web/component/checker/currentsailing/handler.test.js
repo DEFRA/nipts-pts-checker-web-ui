@@ -21,6 +21,12 @@ const ROUTES = {
   LOCH_RYAN: "Loch Ryan to Belfast (Stena)",
 };
 
+const ROUTE_SLOT = {
+  RET_SLOT: "Retrieved Route details slot"
+};
+
+
+
 const DATE = {
   DEP_DATE: "01/01/2024",
   RANGE: "Date range error",
@@ -562,7 +568,7 @@ describe("getCurrentSailingSlot", () => {
 
     expect(response.code).toBe(HTTP_STATUS.OK);
     expect(response.source).toEqual({
-      message: "Retrieved Route details slot",
+      message: ROUTE_SLOT.RET_SLOT,
       currentSailingSlot: testSlot,
     });
   });
@@ -578,7 +584,7 @@ describe("getCurrentSailingSlot", () => {
 
     expect(response.code).toBe(HTTP_STATUS.OK);
     expect(response.source).toEqual({
-      message: "Retrieved Route details slot",
+      message: ROUTE_SLOT.RET_SLOT,
       currentSailingSlot: null,
     });
   });
@@ -594,7 +600,7 @@ describe("getCurrentSailingSlot", () => {
 
     expect(response.code).toBe(HTTP_STATUS.OK);
     expect(response.source).toEqual({
-      message: "Retrieved Route details slot",
+      message: ROUTE_SLOT.RET_SLOT,
       currentSailingSlot: undefined,
     });
   });
