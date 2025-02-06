@@ -7,66 +7,66 @@ import expiresIn from "./auth-code-grant/expires-in.js";
 import session from "../session/index.js";
 import sessionKeys from "../session/keys.js";
 import cookieAuthentication from "./cookie-auth/cookie-auth.js";
+import { InvalidStateError } from "../exceptions/index.js";
 import apiService from "../api/services/apiService.js";
 import userService from "../api/services/userService.js";
 
-const HTTP_STATUS = {
-  FORBIDDEN: 403,
-  SERVER_ERROR: 500,
-};
+const authenticate = async (request) => {
+  if (!state.verify(request)) {
+    throw new InvalidStateError("Invalid state");
+  }
 
-const ERROR_VIEWS = {
-  FORBIDDEN: "errors/403Error",
-  SERVER_ERROR: "errors/500Error",
-};
+  const redeemResponse = await redeemAuthorizationCodeForAccessToken(request);
 
-const authenticate = async (request, h) => {
+  await jwtVerify(redeemResponse.access_token);
+
+  const accessToken = decodeJwt(redeemResponse.access_token);
+
+  const idToken = decodeJwt(redeemResponse.id_token);
+
+  nonce.verify(request, idToken);
+
+  session.setToken(
+    request,
+    sessionKeys.tokens.accessToken,
+    redeemResponse.access_token
+  );
+
+  session.setToken(
+    request,
+    sessionKeys.tokens.tokenExpiry,
+    expiresIn.toISOString(redeemResponse.expires_in)
+  );
+
+  cookieAuthentication.set(request, accessToken);
+
+  // Add or update checker user
   try {
-    if (!state.verify(request)) {
-      return h
-        .view(ERROR_VIEWS.SERVER_ERROR)
-        .code(HTTP_STATUS.SERVER_ERROR)
-        .takeover();
-    }
-
-    const redeemResponse = await redeemAuthorizationCodeForAccessToken(request);
-    await jwtVerify(redeemResponse.access_token);
-
-    const accessToken = decodeJwt(redeemResponse.access_token);
-    const idToken = decodeJwt(redeemResponse.id_token);
-    nonce.verify(request, idToken);
-
-    session.setToken(
-      request,
-      sessionKeys.tokens.accessToken,
-      redeemResponse.access_token
-    );
-    session.setToken(
-      request,
-      sessionKeys.tokens.tokenExpiry,
-      expiresIn.toISOString(redeemResponse.expires_in)
-    );
-    cookieAuthentication.set(request, accessToken);
-
     const organisation = userService.getUserOrganisation(request);
-    const organisationId = organisation?.organisationId || null;
 
-    if (!organisationId || organisationId.trim() === "") {
-      session.clear(request);
-      request.cookieAuth.clear();
-      return h
-        .view(ERROR_VIEWS.FORBIDDEN)
-        .code(HTTP_STATUS.FORBIDDEN)
-        .takeover();
+    let organisationId = null;
+    let isGBCheck = true;
+
+    if (organisation.organisationId !== "") {
+      organisationId = organisation.organisationId;
+      request.yar.set("organisationId", organisationId);
     }
-
-    request.yar.set("organisationId", organisationId);
+    else{
+      request.yar.clear("organisationId");
+    }
 
     const userOrganisation = await apiService.getOrganisation(
       organisationId,
       request
     );
-    const isGBCheck = !userOrganisation?.Location?.toLowerCase().includes("ni");
+
+    if (
+      userOrganisation?.Location &&
+      typeof userOrganisation.Location === "string" &&
+      userOrganisation.Location.toLowerCase().includes("ni")
+    ) {
+      isGBCheck = false;
+    }
 
     const checker = {
       id: accessToken.sub,
@@ -80,15 +80,14 @@ const authenticate = async (request, h) => {
     request.yar.set("isGBCheck", isGBCheck);
     request.yar.set("checkerId", accessToken.sub);
     session.setToken(request, sessionKeys.tokens.sso, "");
-
-    return accessToken;
   } catch (error) {
-    session.clear(request);
-    return h
-      .view(ERROR_VIEWS.SERVER_ERROR)
-      .code(HTTP_STATUS.SERVER_ERROR)
-      .takeover();
+    console.error("Error saving checker user:", error);
+
+    // Rethrow the error
+    throw error;
   }
+
+  return accessToken;
 };
 
 export default authenticate;

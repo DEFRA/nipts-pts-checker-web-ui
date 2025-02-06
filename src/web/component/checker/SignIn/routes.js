@@ -1,54 +1,70 @@
+"use strict";
+import Joi from "joi";
+import HttpMethod from "../../../../constants/httpMethod.js";
 import auth from "../../../../auth/index.js";
+import session from "../../../../session/index.js";
 import logout from "../../../../lib/logout.js";
-
-const HTTP_STATUS = {
-  FORBIDDEN: 403,
-  SERVER_ERROR: 500,
-};
-
-const ERROR_VIEWS = {
-  FORBIDDEN: "errors/403Error",
-  SERVER_ERROR: "errors/500Error",
-};
-
-const REDIRECT_PATHS = {
-  CURRENT_SAILINGS: "/checker/current-sailings",
-};
 
 const Routes = [
   {
-    method: "GET",
+    method: HttpMethod.GET,
     path: "/signin-oidc",
     options: {
       auth: false,
-      handler: async (request, h) => {
-        try {
-          await auth.authenticate(request, h);
+      validate: {
+        query: Joi.object({
+          code: Joi.string().required(),
+          state: Joi.string().required(),
+        }).options({
+          stripUnknown: true,
+        }),
+        failAction(request, h, err) {
+          console.log(
+            `Validation error caught during DEFRA ID redirect - ${err.message}.`
+          );
 
-          const organisationId = request.yar.get("organisationId");
-          if (!organisationId?.trim()) {
-            logout(request);
-            return h
-              .view(ERROR_VIEWS.FORBIDDEN)
-              .code(HTTP_STATUS.FORBIDDEN)
-              .takeover();
-          }
-
-          return h.redirect(REDIRECT_PATHS.CURRENT_SAILINGS);
-        } catch (err) {
-          logout(request);
-
-          if (err.statusCode === HTTP_STATUS.FORBIDDEN) {
-            return h
-              .view(ERROR_VIEWS.FORBIDDEN)
-              .code(HTTP_STATUS.FORBIDDEN)
-              .takeover();
-          }
+          const vm = {
+            backLink: auth.requestAuthorizationCodeUrl(
+              session,
+              request,
+              "PTSCompliancePortal"
+            ),
+          };
           return h
-            .view(ERROR_VIEWS.SERVER_ERROR)
-            .code(HTTP_STATUS.SERVER_ERROR)
+            .view("componentViews/checker/SignIn/view", vm)
+            .code(HttpMethod.BAD_REQUEST)
             .takeover();
+        },
+      },
+      handler: async (request, h) => {
+        console.log("SignIn callback");
+        try {
+          await auth.authenticate(request, session);
+          console.log("authenticated, now redirecting to dashboard");
+          return h.redirect("/checker/current-sailings");
+        } catch (err) {
+          if (err.name) {
+            return h.redirect("/checker/current-sailings");
+          }
+          console.error(
+            `Received error with name ${err.name} and message ${err.message}.`
+          );
         }
+
+        logout(request);
+
+        const vm = {
+          backLink: auth.requestAuthorizationCodeUrl(
+            session,
+            request,
+            "PTSCompliancePortal"
+          ),
+        };
+
+        return h
+          .view("componentViews/checker/SignIn/view", vm)
+          .code(HttpMethod.BAD_REQUEST)
+          .takeover();
       },
     },
   },
