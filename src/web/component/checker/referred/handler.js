@@ -33,8 +33,9 @@ const getReferredChecks = async (request, h) => {
   assignClassColors(spsChecks);
   formatPTDNumbers(spsChecks);
 
+  const page = parseInt(request.query.page || request.query.nextPage || request.query.previousPage) || 1; // Get page number from query parameter, default to 1
   // Implement pagination
-  const { paginatedSpsChecks, currentPage, totalPages, pages } = paginateSpsChecks(request.query.page, spsChecks);
+  const { paginatedSpsChecks, currentPage, totalPages, pages } = paginateSpsChecks(page, spsChecks);
 
   // Prepare data for the view
   const check = { routeName, departureDate, departureTime };
