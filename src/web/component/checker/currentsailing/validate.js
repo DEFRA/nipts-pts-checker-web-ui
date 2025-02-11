@@ -2,122 +2,153 @@
 import Joi from "joi";
 import { CurrentSailingMainModelErrors } from "../../../../constants/currentSailingConstant.js";
 
+const MONTHS_WITH_31_DAYS = [1, 3, 5, 7, 8, 10, 12];
+const MONTHS_WITH_30_DAYS = [4, 6, 9, 11];
+const DATE_FORMAT_REGEX = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+const TWO_DIGIT_REGEX = /^\d{2}$/;
+const FLIGHT_NUMBER_REGEX = /^(?=.{1,8}$)[A-Za-z0-9]+( [A-Za-z0-9]+)*$/;
+const PAST_HOURS_LIMIT = 48;
+const FUTURE_HOURS_LIMIT = 24;
+const ZERO_HOUR_START = 0;
+const ZERO_HOUR_END = 23;
+const ZERO_MINUTES_START = 0;
+const ZERO_MINUTES_END = 59;
+const ZERO_SECONDS_START = 0;
+const ZERO_SECONDS_END = 59;
+const ZERO_MS_START = 0;
+const ZERO_MS_END = 999;
+const MIN_MONTH = 1;
+const MAX_MONTH = 12;
+const MIN_DAY = 1;
+const FEBRUARY = 2;
+const LEAP_YEAR_DIVISOR_4 = 4;
+const LEAP_YEAR_DIVISOR_100 = 100;
+const LEAP_YEAR_DIVISOR_400 = 400;
+const FEBRUARY_LEAP_DAYS = 29;
+const FEBRUARY_NORMAL_DAYS = 28;
+const DAYS_31 = 31;
+const DAYS_30 = 30;
+const DATE_PARTS_SEPARATOR = "/";
+const MONTH_INDEX_OFFSET = 1;
+
+const SCHEMA_LABELS = {
+  ROUTE_OPTION: "RouteOption",
+  ROUTE: "Route",
+  FLIGHT: "Flight",
+  SAILING_HOUR: "Sailing Hour",
+  SAILING_MINUTES: "Sailing Minutes",
+  DATE: "Date",
+};
+
+const ERROR_TYPES = {
+  DATE_FORMAT: "date.format",
+  DATE_REQUIRED: "date.required",
+  STRING_EMPTY: "string.empty",
+  PATTERN_BASE: "string.pattern.base",
+  ANY_REQUIRED: "any.required",
+};
+
+const ERROR_MESSAGES = {
+  DATE_REQUIRED_TEXT: "The date is required.",
+  DATE_EMPTY: "The date cannot be empty.",
+};
+
+const isLeapYear = (year) =>
+  (year % LEAP_YEAR_DIVISOR_4 === ZERO_HOUR_START &&
+    year % LEAP_YEAR_DIVISOR_100 !== ZERO_HOUR_START) ||
+  year % LEAP_YEAR_DIVISOR_400 === ZERO_HOUR_START;
+
+const getDaysInMonth = (month, year) => {
+  if (MONTHS_WITH_31_DAYS.includes(month)) return DAYS_31;
+  if (MONTHS_WITH_30_DAYS.includes(month)) return DAYS_30;
+  return isLeapYear(year) ? FEBRUARY_LEAP_DAYS : FEBRUARY_NORMAL_DAYS;
+};
+
 const routeOptionRadioSchema = Joi.string()
   .required()
-  .label("RouteOption")
+  .label(SCHEMA_LABELS.ROUTE_OPTION)
   .messages({
-    "string.empty": CurrentSailingMainModelErrors.routeOptionError,
-    "any.required": CurrentSailingMainModelErrors.routeOptionError,
+    [ERROR_TYPES.STRING_EMPTY]: CurrentSailingMainModelErrors.routeOptionError,
+    [ERROR_TYPES.ANY_REQUIRED]: CurrentSailingMainModelErrors.routeOptionError,
   });
 
-const routeRadioSchema = Joi.string().required().label("Route").messages({
-  "string.empty": CurrentSailingMainModelErrors.routeError,
-  "any.required": CurrentSailingMainModelErrors.routeError,
-});
+const routeRadioSchema = Joi.string()
+  .required()
+  .label(SCHEMA_LABELS.ROUTE)
+  .messages({
+    [ERROR_TYPES.STRING_EMPTY]: CurrentSailingMainModelErrors.routeError,
+    [ERROR_TYPES.ANY_REQUIRED]: CurrentSailingMainModelErrors.routeError,
+  });
 
 const flightSchema = Joi.string()
-  .pattern(/^(?=.{1,8}$)[A-Za-z0-9]+( [A-Za-z0-9]+)*$/)
+  .pattern(FLIGHT_NUMBER_REGEX)
   .required()
-  .label("Flight")
+  .label(SCHEMA_LABELS.FLIGHT)
   .messages({
-    "string.empty": CurrentSailingMainModelErrors.flightNoEmptyError,
-    "string.pattern.base":
+    [ERROR_TYPES.STRING_EMPTY]:
+      CurrentSailingMainModelErrors.flightNoEmptyError,
+    [ERROR_TYPES.PATTERN_BASE]:
       CurrentSailingMainModelErrors.flightNumberFormatError,
-    "any.required": CurrentSailingMainModelErrors.flightNoEmptyError,
+    [ERROR_TYPES.ANY_REQUIRED]:
+      CurrentSailingMainModelErrors.flightNoEmptyError,
   });
 
 const sailingHourSchema = Joi.string()
-  .pattern(/^\d{2}$/)
+  .pattern(TWO_DIGIT_REGEX)
   .required()
-  .label("Sailing Hour")
+  .label(SCHEMA_LABELS.SAILING_HOUR)
   .messages({
-    "string.empty": CurrentSailingMainModelErrors.timeError,
-    "string.pattern.base": CurrentSailingMainModelErrors.timeError,
-    "any.required": CurrentSailingMainModelErrors.timeError,
+    [ERROR_TYPES.STRING_EMPTY]: CurrentSailingMainModelErrors.timeError,
+    [ERROR_TYPES.PATTERN_BASE]: CurrentSailingMainModelErrors.timeError,
+    [ERROR_TYPES.ANY_REQUIRED]: CurrentSailingMainModelErrors.timeError,
   });
 
 const sailingMinutesSchema = Joi.string()
-  .pattern(/^\d{2}$/)
+  .pattern(TWO_DIGIT_REGEX)
   .required()
-  .label("Sailing Minutes")
+  .label(SCHEMA_LABELS.SAILING_MINUTES)
   .messages({
-    "string.empty": CurrentSailingMainModelErrors.timeError,
-    "string.pattern.base": CurrentSailingMainModelErrors.timeError,
-    "any.required": CurrentSailingMainModelErrors.timeError,
+    [ERROR_TYPES.STRING_EMPTY]: CurrentSailingMainModelErrors.timeError,
+    [ERROR_TYPES.PATTERN_BASE]: CurrentSailingMainModelErrors.timeError,
+    [ERROR_TYPES.ANY_REQUIRED]: CurrentSailingMainModelErrors.timeError,
   });
-
-// Function to check if a year is a leap year
-function isLeapYear(year) {
-  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-}
-
-// Function to get the number of days in a month
-function daysInMonth(month, year) {
-  // Months with 31 days
-  const month31Days = [1, 3, 5, 7, 8, 10, 12];
-  if (month31Days.includes(month)) {
-    return 31;
-  }
-  // Months with 30 days
-  if ([4, 6, 9, 11].includes(month)) {
-    return 30;
-  }
-  // February
-  return isLeapYear(year) ? 29 : 28;
-}
 
 const dateSchema = Joi.string()
   .required()
   .custom((value, helpers) => {
-    const parts = value.split("/");
-
+    const parts = value.split(DATE_PARTS_SEPARATOR);
     const noDateProvided = parts.every((part) => part.trim() === "");
-    if (noDateProvided) {
-      return helpers.error("date.required");
-    }
-
-    // Regex to match the format D/M/YYYY or DD/MM/YYYY
-    const regex = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
-    const match = value.match(regex);
-
-    if (!match) {
-      return helpers.error("date.format");
-    }
-
-    // Extract day, month, and year
+    if (noDateProvided) return helpers.error(ERROR_TYPES.DATE_REQUIRED);
+    const match = value.match(DATE_FORMAT_REGEX);
+    if (!match) return helpers.error(ERROR_TYPES.DATE_FORMAT);
     const [_, day, month, year] = match.map((part) => parseInt(part, 10));
-
-    // Validate day and month ranges
-    if (month < 1 || month > 12) {
-      return helpers.error("date.format");
-    }
-
-    // Validate day range based on month and year
-    const maxDays = daysInMonth(month, year);
-    if (day < 1 || day > maxDays) {
-      return helpers.error("date.format");
-    }
-
-    return value; // Valid date string
+    if (month < MIN_MONTH || month > MAX_MONTH)
+      return helpers.error(ERROR_TYPES.DATE_FORMAT);
+    const maxDays = getDaysInMonth(month, year);
+    if (day < MIN_DAY || day > maxDays)
+      return helpers.error(ERROR_TYPES.DATE_FORMAT);
+    return value;
   })
-  .label("Date")
+  .label(SCHEMA_LABELS.DATE)
   .messages({
-    "date.format": CurrentSailingMainModelErrors.departureDateFormatError,
-    "date.required": CurrentSailingMainModelErrors.departureDateRequiredError,
-    "any.required": "The date is required.",
-    "string.empty": "The date cannot be empty.",
+    [ERROR_TYPES.DATE_FORMAT]:
+      CurrentSailingMainModelErrors.departureDateFormatError,
+    [ERROR_TYPES.DATE_REQUIRED]:
+      CurrentSailingMainModelErrors.departureDateRequiredError,
+    [ERROR_TYPES.ANY_REQUIRED]: ERROR_MESSAGES.DATE_REQUIRED_TEXT,
+    [ERROR_TYPES.STRING_EMPTY]: ERROR_MESSAGES.DATE_EMPTY,
   });
 
-const validateRouteRadio = (radioSelection) => {
-  const { error } = routeRadioSchema.validate(radioSelection);
+const validateRouteOptionRadio = (radioOptionSelection) => {
+  const { error } = routeOptionRadioSchema.validate(radioOptionSelection);
   return {
     isValid: !error,
     error: error ? error.details[0].message : null,
   };
 };
 
-const validateRouteOptionRadio = (radioOptionSelection) => {
-  const { error } = routeOptionRadioSchema.validate(radioOptionSelection);
+const validateRouteRadio = (radioSelection) => {
+  const { error } = routeRadioSchema.validate(radioSelection);
   return {
     isValid: !error,
     error: error ? error.details[0].message : null,
@@ -159,28 +190,48 @@ const validateSailingMinutes = (sailingMinutes) => {
 const validateDateRange = (
   dateString,
   isZeroHour = false,
-  sailingHour = 0,
-  sailingMinutes = 0
+  sailingHour = ZERO_HOUR_START,
+  sailingMinutes = ZERO_MINUTES_START
 ) => {
   const now = new Date();
-  const [day, month, year] = dateString.split("/").map(Number);
-  const sailingDate = new Date(year, month - 1, day);
+  const [day, month, year] = dateString.split(DATE_PARTS_SEPARATOR).map(Number);
+  const sailingDate = new Date(year, month - MONTH_INDEX_OFFSET, day);
 
   if (!isZeroHour) {
-    sailingDate.setHours(sailingHour, sailingMinutes, 0, 0);
+    sailingDate.setHours(
+      sailingHour,
+      sailingMinutes,
+      ZERO_SECONDS_START,
+      ZERO_MS_START
+    );
   } else {
-    sailingDate.setHours(0, 0, 0, 0);
+    sailingDate.setHours(
+      ZERO_HOUR_START,
+      ZERO_MINUTES_START,
+      ZERO_SECONDS_START,
+      ZERO_MS_START
+    );
   }
 
   const lowerBound = new Date(now);
-  lowerBound.setHours(lowerBound.getHours() - 48);
+  lowerBound.setHours(lowerBound.getHours() - PAST_HOURS_LIMIT);
 
   const upperBound = new Date(now);
-  upperBound.setHours(upperBound.getHours() + 24);
+  upperBound.setHours(upperBound.getHours() + FUTURE_HOURS_LIMIT);
 
   if (isZeroHour) {
-    lowerBound.setHours(0, 0, 0, 0);
-    upperBound.setHours(23, 59, 59, 999);
+    lowerBound.setHours(
+      ZERO_HOUR_START,
+      ZERO_MINUTES_START,
+      ZERO_SECONDS_START,
+      ZERO_MS_START
+    );
+    upperBound.setHours(
+      ZERO_HOUR_END,
+      ZERO_MINUTES_END,
+      ZERO_SECONDS_END,
+      ZERO_MS_END
+    );
   }
 
   if (sailingDate < lowerBound || sailingDate > upperBound) {
@@ -201,6 +252,6 @@ export {
   validateFlightNumber,
   validateDate,
   validateDateRange,
-  isLeapYear, 
-  daysInMonth, 
+  isLeapYear,
+  getDaysInMonth,
 };
