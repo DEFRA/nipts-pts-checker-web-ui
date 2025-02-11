@@ -59,8 +59,8 @@ const isLeapYear = (year) =>
   year % LEAP_YEAR_DIVISOR_400 === ZERO_HOUR_START;
 
 const getDaysInMonth = (month, year) => {
-  if (MONTHS_WITH_31_DAYS.includes(month)) return DAYS_31;
-  if (MONTHS_WITH_30_DAYS.includes(month)) return DAYS_30;
+  if (MONTHS_WITH_31_DAYS.includes(month)) {return DAYS_31;}
+  if (MONTHS_WITH_30_DAYS.includes(month)) {return DAYS_30;}
   return isLeapYear(year) ? FEBRUARY_LEAP_DAYS : FEBRUARY_NORMAL_DAYS;
 };
 
@@ -118,15 +118,19 @@ const dateSchema = Joi.string()
   .custom((value, helpers) => {
     const parts = value.split(DATE_PARTS_SEPARATOR);
     const noDateProvided = parts.every((part) => part.trim() === "");
-    if (noDateProvided) return helpers.error(ERROR_TYPES.DATE_REQUIRED);
+    if (noDateProvided) {return helpers.error(ERROR_TYPES.DATE_REQUIRED);}
     const match = value.match(DATE_FORMAT_REGEX);
-    if (!match) return helpers.error(ERROR_TYPES.DATE_FORMAT);
+    if (!match) {return helpers.error(ERROR_TYPES.DATE_FORMAT);}
     const [_, day, month, year] = match.map((part) => parseInt(part, 10));
     if (month < MIN_MONTH || month > MAX_MONTH)
+    {
       return helpers.error(ERROR_TYPES.DATE_FORMAT);
+    }
     const maxDays = getDaysInMonth(month, year);
     if (day < MIN_DAY || day > maxDays)
+    {
       return helpers.error(ERROR_TYPES.DATE_FORMAT);
+    }
     return value;
   })
   .label(SCHEMA_LABELS.DATE)

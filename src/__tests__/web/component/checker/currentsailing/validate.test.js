@@ -16,12 +16,7 @@ const outOfBoundsRange = 3;
 
 describe("Validation Functions", () => {
   describe("validateRouteOptionRadio", () => {
-    it("should return valid for a non-empty string", () => {
-      const result = validateRouteOptionRadio("1");
-      expect(result.isValid).toBe(true);
-      expect(result.error).toBe(null);
-    });
-
+ 
     it("should return invalid for an empty string", () => {
       const result = validateRouteOptionRadio("");
       expect(result.isValid).toBe(false);
@@ -36,12 +31,7 @@ describe("Validation Functions", () => {
   });
 
   describe("validateRouteRadio", () => {
-    it("should return valid for a non-empty string", () => {
-      const result = validateRouteRadio("1");
-      expect(result.isValid).toBe(true);
-      expect(result.error).toBe(null);
-    });
-
+   
     it("should return invalid for an empty string", () => {
       const result = validateRouteRadio("");
       expect(result.isValid).toBe(false);

@@ -657,7 +657,7 @@ test("should handle date range validation failure", async () => {
     dateRange: { isValid: false, error: DATE.RANGE }
   });
 
-  const result = await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
+  await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
   expect(h.view).toHaveBeenCalledWith(
     VIEW_PATH,
     expect.objectContaining({
