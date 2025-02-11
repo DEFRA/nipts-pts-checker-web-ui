@@ -156,10 +156,11 @@ describe('Validation Functions', () => {
   });
 
   describe('validateDateRange', () => {
-    it('should return valid for a non-empty string, todays date', () => {
-      const now = new Date(); // Get today's date
-      const formattedDate = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`; // Format as dd/MM/yyyy
-    
+    it("should return valid for a non-empty string, todays date", () => {
+      const now = new Date();
+      const formattedDate = `${String(now.getDate()).padStart(2, "0")}/${String(
+        now.getMonth() + 1
+      ).padStart(2, "0")}/${now.getFullYear()}`;
       const result = validateDateRange(formattedDate, false);
       expect(result.isValid).toBe(true);
       expect(result.error).toBe(null);
@@ -184,14 +185,20 @@ describe('Validation Functions', () => {
       expect(result.error).toBe("The flight or ferry must have departed in the past 48 hours or departs within the next 24 hours");
     });
 
-    it('should return invalid for a non-empty string, 3 days in the past, with time', () => {
-      const now = new Date(); // Get today's date
-      now.setDate(now.getDate() - outOfBoundsRange); // Subtract 3 days
-      const formattedDateWithTime = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`; // Format as dd/MM/yyyy hh:mm
-    
-      const result = validateDateRange(formattedDateWithTime, false);
+    it("should return invalid for a non-empty string, 3 days in the past, with time", () => {
+      const now = new Date();
+      now.setDate(now.getDate() - outOfBoundsRange);
+      const formattedDate = `${String(now.getDate()).padStart(2, "0")}/${String(
+        now.getMonth() + 1
+      ).padStart(2, "0")}/${now.getFullYear()}`;
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+
+      const result = validateDateRange(formattedDate, false, hours, minutes);
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe("The flight or ferry must have departed in the past 48 hours or departs within the next 24 hours");
+      expect(result.error).toBe(
+        CurrentSailingMainModelErrors.timeOutOfBoundsError
+      );
     });
   });
 
