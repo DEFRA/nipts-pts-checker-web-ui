@@ -160,9 +160,9 @@
             const identifier = button.getAttribute('data-identifier');
 
             // Check if this link was clicked before
-            if (localStorage.getItem(identifier)) { // sems to be adding visited to all but the 5th entry 
+            if (localStorage.getItem(identifier)) {
                 button.classList.add('visited');
-            }// something is happening here, adding the visited class
+            }
 
             button.addEventListener('click', function () {
                 // Mark this link as visited
