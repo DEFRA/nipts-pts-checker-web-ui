@@ -77,16 +77,19 @@ const submitCurrentSailingSlot = async (request, h) => {
   const departureDate = `${departureDateDayPadded.trim()}/${departureDateMonthPadded.trim()}/${departureDateYear.trim()}`;
   const validateDepartureDateResult = validateDate(departureDate);
 
+  
   const validateDepartureDateRangeZeroHourResult = validateDateRange(
     departureDate,
     true
   );
 
-  const dateWithTime = `${departureDateDayPadded.trim()}/${departureDateMonthPadded.trim()}/${departureDateYear.trim()} ${sailingHour}:${sailingMinutes}`;
-  const validateDepartureDateRangeActualHourResult = validateDateRange(
-    dateWithTime,
-    false
-  );
+
+const validateDepartureDateRangeActualHourResult = validateDateRange(
+  departureDate,
+  false,
+  parseInt(sailingHour, 10),
+  parseInt(sailingMinutes, 10)
+);
 
   const currentSailingMainModelData = request.yar.get("CurrentSailingModel");
 

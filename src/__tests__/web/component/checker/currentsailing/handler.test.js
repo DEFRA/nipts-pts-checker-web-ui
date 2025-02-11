@@ -1,4 +1,6 @@
 import { CurrentSailingHandlers } from "../../../../../web/component/checker/currentsailing/handler.js";
+import currentSailingMainService from "../../../../../api/services/currentSailingMainService.js";
+
 import {
   validateRouteOptionRadio,
   validateRouteRadio,
@@ -640,4 +642,118 @@ describe("submitCurrentSailingSlot Error Handling", () => {
       })
     );
   });
+});
+
+
+
+test("should handle date range validation failure", async () => {
+  const request = createMockRequest({
+    payload: createMockPayload(),
+  });
+  const h = createMockH();
+
+  setupValidationMocks({
+    date: { isValid: true, error: null },
+    dateRange: { isValid: false, error: DATE.RANGE }
+  });
+
+  await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
+  expect(h.view).toHaveBeenCalledWith(
+    VIEW_PATH,
+    expect.objectContaining({
+      errorSummary: expect.arrayContaining([
+        { fieldId: "departureDateDay", message: DATE.RANGE },
+      ])
+    })
+  );
+});
+
+
+describe("getCurrentSailings Service Tests", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test("should handle empty sailing routes", async () => {
+    const request = createMockRequest({
+      yar: {
+        organisationId: "123",
+      },
+    });
+    const h = createMockH();
+
+    jest.spyOn(currentSailingMainService, 'getCurrentSailingMain')
+      .mockResolvedValue({
+        sailingRoutes: [],
+        routeOptions: []
+      });
+
+    await CurrentSailingHandlers.getCurrentSailings(request, h);
+    expect(request.yar.set).toHaveBeenCalledWith("SailingRoutes", []);
+  });
+
+  test("should handle null service response", async () => {
+    const request = createMockRequest({
+      yar: {
+        organisationId: "123",
+      },
+    });
+    const h = createMockH();
+
+    jest.spyOn(currentSailingMainService, 'getCurrentSailingMain')
+      .mockResolvedValue(null);
+
+    await CurrentSailingHandlers.getCurrentSailings(request, h);
+    expect(request.yar.set).toHaveBeenCalledWith("CurrentSailingModel", {});
+  });
+});
+
+
+test("should handle invalid flight number format", async () => {
+  const request = createMockRequest({
+    payload: createMockPayload({
+      routeOption: "2",
+      routeFlight: "INVALIDFLIGHT123",
+    }),
+  });
+  const h = createMockH();
+  
+  setupValidationMocks({
+    flightNumber: { 
+      isValid: false, 
+      error: ERROR_MESSAGES.flightNoEmptyError
+    },
+  });
+
+  await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
+  expect(h.view).toHaveBeenCalledWith(
+    VIEW_PATH,
+    expect.objectContaining({
+      errorFlight: ERROR_MESSAGES.flightNoEmptyError,
+      formSubmitted: true,
+    })
+  );
+});
+
+test("should handle invalid date format correctly", async () => {
+  const request = createMockRequest({
+    payload: createMockPayload({
+      departureDateDay: "invalid",
+    }),
+  });
+  const h = createMockH();
+  
+  setupValidationMocks({
+    date: { isValid: false, error: ERROR_MESSAGES.departureDateFormatError },
+  });
+
+  await CurrentSailingHandlers.submitCurrentSailingSlot(request, h);
+  expect(h.view).toHaveBeenCalledWith(
+    VIEW_PATH,
+    expect.objectContaining({
+      errorDepartureDate: ERROR_MESSAGES.departureDateFormatError,
+      errorDateRangeDate: null,
+      errorDateRangeTime: null,
+    })
+  );
 });
