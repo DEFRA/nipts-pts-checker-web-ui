@@ -201,4 +201,6 @@ export {
   validateFlightNumber,
   validateDate,
   validateDateRange,
+  isLeapYear, 
+  daysInMonth, 
 };
