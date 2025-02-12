@@ -22,7 +22,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            <p class="govuk-body">Scan result: <strong>PTD12345678</strong></p>
+            <p class="govuk-body">Scan result: <strong id="ptdOrApplicationNumber"></strong></p>
 
             <p class="govuk-body">You can scan again or search by:</p>
             <ul class="govuk-list govuk-list--bullet">
@@ -36,4 +36,15 @@
 
 
 </main>
+<script>
+    function getPTDOrApplicationNumber() {
+        const urlSearch = window.location.search;
+        const ptdOrApplicationNumber = decodeURIComponent(urlSearch.split`=`[1])
+        document.getElementById('ptdOrApplicationNumber').innerHTML = ptdOrApplicationNumber;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        getPTDOrApplicationNumber()
+    })
+</script>
 {% endblock %}
