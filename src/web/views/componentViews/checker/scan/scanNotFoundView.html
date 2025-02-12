@@ -7,15 +7,33 @@
 {% endblock %}
 
 {% block content %}
-<div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-0">
-    <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
-        <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
-            Document not found
-        </h1>
-        <p class="govuk-body">{{searchValue}} has not been found.</p>
-        <p class="govuk-body">
-            <a href="/checker/scan" class="govuk-link">Go back to scan</a>
-        </p>
+<main class="govuk-main-wrapper pts-checker govuk-!-margin-bottom-9 govuk-!-padding-top-4" id="main-content">
+
+    <div class="govuk-grid-row govuk-!-margin-bottom-2 govuk-!-margin-top-4">
+        <div class="govuk-grid-column-two-thirds govuk-!-margin-top-0">
+            <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
+                No document found
+            </h1>
+        </div>
     </div>
-</div>
+
+    <br>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <p class="govuk-body">Scan result: <strong>PTD12345678</strong></p>
+
+            <p class="govuk-body">You can scan again or search by:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>PTD number</li>
+                <li>application number</li>
+                <li>microchip number</li>
+            </ul>
+
+        </div>
+    </div>
+
+
+</main>
 {% endblock %}
