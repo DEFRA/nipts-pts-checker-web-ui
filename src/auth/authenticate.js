@@ -19,7 +19,7 @@ const authenticate = async (request) => {
   const redeemResponse = await redeemAuthorizationCodeForAccessToken(request);
 
   await jwtVerify(redeemResponse.access_token);
-  
+
   const accessToken = decodeJwt(redeemResponse.access_token);
 
   const idToken = decodeJwt(redeemResponse.id_token);
@@ -39,27 +39,34 @@ const authenticate = async (request) => {
   );
 
   cookieAuthentication.set(request, accessToken);
-  
+
   // Add or update checker user
   try {
-    
     const organisation = userService.getUserOrganisation(request);
 
     let organisationId = null;
     let isGBCheck = true;
-    
-    if(organisation.organisationId !== "")
-    {
+
+    if (organisation.organisationId !== "") {
       organisationId = organisation.organisationId;
+      request.yar.set("organisationId", organisationId);
+    }
+    else{
+      request.yar.clear("organisationId");
     }
 
-    const userOrganisation = await apiService.getOrganisation(organisationId, request);
+    const userOrganisation = await apiService.getOrganisation(
+      organisationId,
+      request
+    );
 
-    if (userOrganisation?.Location && typeof userOrganisation.Location === 'string' && userOrganisation.Location.toLowerCase().includes('ni')) {
-        isGBCheck = false;
+    if (
+      userOrganisation?.Location &&
+      typeof userOrganisation.Location === "string" &&
+      userOrganisation.Location.toLowerCase().includes("ni")
+    ) {
+      isGBCheck = false;
     }
-    
-    
 
     const checker = {
       id: accessToken.sub,
@@ -73,7 +80,6 @@ const authenticate = async (request) => {
     request.yar.set("isGBCheck", isGBCheck);
     request.yar.set("checkerId", accessToken.sub);
     session.setToken(request, sessionKeys.tokens.sso, "");
-
   } catch (error) {
     console.error("Error saving checker user:", error);
 

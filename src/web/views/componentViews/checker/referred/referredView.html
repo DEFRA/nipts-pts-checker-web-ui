@@ -69,7 +69,7 @@
                             <th scope="row" class="govuk-table__header">
                                 <form method="POST" action="/checker/checkreport" class="referred-form">
                                     <button type="submit" class="govuk-button--link referred-button"
-                                        data-identifier="referred-{{ loop.index }}">
+                                        data-identifier="referred-{{ spsCheck.PTDNumber }}">
                                         {{spsCheck.PTDNumberFormatted}}<span class="govuk-visually-hidden"> reported</span>
                                     </button>
                                     <input type="hidden" name="CheckSummaryId" value="{{ spsCheck.CheckSummaryId }}">                                    
