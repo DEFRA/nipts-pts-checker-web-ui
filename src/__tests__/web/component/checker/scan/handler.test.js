@@ -2,13 +2,15 @@ import { ScanHandlers } from "../../../../../web/component/checker/scan/handler.
 import apiService from "../../../../../api/services/apiService.js";
 import headerData from "../../../../../web/helper/constants.js";
 
+const pageTitle = "Pet Travel Scheme Test";
+
 jest.mock("../../../../../api/services/apiService.js");
 jest.mock("../../../../../web/helper/constants.js");
 jest.mock("../../../../../constants/dashBoardConstant.js", () => ({
   __esModule: true,
   default: {
     dashboardMainModelData: {
-      pageTitle: "Pet Travel Scheme Test",
+      pageTitle: pageTitle,
     },
   },
 }));
@@ -43,7 +45,7 @@ const testGetScanNotFound = async () => {
 
   expect(response.viewPath).toBe(NOT_FOUND_VIEW_PATH);
   expect(response.data).toEqual({
-    pageTitle: "Pet Travel Scheme Test",
+    pageTitle: pageTitle,
   });
   expect(headerData.section).toBe("scan");
 };
@@ -114,7 +116,7 @@ const testGetAllowCameraPermissions = async () => {
 
   expect(response.viewPath).toBe(ALLOW_CAMERA_PERMISSIONS);
   expect(response.data).toEqual({
-    pageTitle: "Pet Travel Scheme Test",
+    pageTitle: pageTitle,
   });
 };
 
