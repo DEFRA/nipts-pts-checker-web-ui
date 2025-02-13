@@ -16,6 +16,7 @@ jest.mock("../../../../../constants/dashBoardConstant.js", () => ({
 const SEARCH_RESULTS_PATH = "/checker/search-results";
 const SCAN_VIEW_PATH = "componentViews/checker/scan/scanView";
 const NOT_FOUND_VIEW_PATH = "componentViews/checker/scan/scanNotFoundView";
+const ALLOW_CAMERA_PERMISSIONS = "componentViews/checker/scan/allowCameraPermissions";
 
 const mockData = {
   issuedDate: "2023-10-01",
@@ -105,6 +106,18 @@ const testValidApplicationRef = async () => {
   );
 };
 
+const testGetAllowCameraPermissions = async () => {
+  const mockRequest = { yar: { set: jest.fn() } };
+  const mockH = { view: jest.fn((viewPath, data) => ({ viewPath, data })) };
+
+  const response = await ScanHandlers.getAllowCameraPermissions(mockRequest, mockH);
+
+  expect(response.viewPath).toBe(ALLOW_CAMERA_PERMISSIONS);
+  expect(response.data).toEqual({
+    pageTitle: "Pet Travel Scheme Test",
+  });
+};
+
 describe("Scan Handlers", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -115,6 +128,10 @@ describe("Scan Handlers", () => {
     it(
       "should return the not found view with correct data",
       testGetScanNotFound
+    );
+    it(
+      "should return the Allow Caera Perissions view",
+      testGetAllowCameraPermissions
     );
   });
 
