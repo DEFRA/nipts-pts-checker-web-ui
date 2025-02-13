@@ -111,6 +111,7 @@ class QRScanner {
           aspectRatio: 1.0,
           width: containerWidth,
           height: containerWidth,
+          showTorchButtonIfSupported: true,
         },
         this.handleQRCodeSuccess.bind(this),
         (errorMessage) => {}
