@@ -140,7 +140,8 @@ class QRScanner {
       : "Turn flash on";
 
     let constraints = {
-      advanced: [{ torch: this.flashOn }] // Enable or disable torch
+      "torch": this.flashOn,
+      advanced: [{ torch: this.flashOn }] // Enable or disable torch - need to set twice for backward compatibility
     };
 
     this.qrScanner.applyVideoConstraints(constraints)
