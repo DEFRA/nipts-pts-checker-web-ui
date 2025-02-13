@@ -138,6 +138,14 @@ class QRScanner {
     this.toggleFlashButton.textContent = this.flashOn
       ? "Turn flash off"
       : "Turn flash on";
+
+    let constraints = {
+      advanced: [{ torch: this.flashOn }] // Enable or disable torch
+    };
+
+    this.qrScanner.applyVideoConstraints(constraints)
+        .then(() => console.log(`Flash ${this.flashOn ? "enabled" : "disabled"}`))
+        .catch(err => console.error("Torch control error:", err));
   }
 
   async handleQRCodeSuccess(decodedText) {
