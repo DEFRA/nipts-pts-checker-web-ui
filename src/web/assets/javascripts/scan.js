@@ -52,6 +52,7 @@ class QRScanner {
             await this.startCamera();
           } else {
             this.showCameraDenied();
+            window.location.href = "/checker/scan/allow-camera-permissions";
           }
         });
       } else {
