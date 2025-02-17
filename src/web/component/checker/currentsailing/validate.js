@@ -2,8 +2,33 @@
 import Joi from "joi";
 import { CurrentSailingMainModelErrors } from "../../../../constants/currentSailingConstant.js";
 
-const MONTHS_WITH_31_DAYS = [1, 3, 5, 7, 8, 10, 12];
-const MONTHS_WITH_30_DAYS = [4, 6, 9, 11];
+export const MONTH_CONSTANTS = {
+  JANUARY: 1,
+  FEBRUARY: 2,
+  MARCH: 3,
+  APRIL: 4,
+  MAY: 5,
+  JUNE: 6,
+  JULY: 7,
+  AUGUST: 8,
+  SEPTEMBER: 9,
+  OCTOBER: 10,
+  NOVEMBER: 11,
+  DECEMBER: 12,
+};
+
+const MONTHS_WITH_31_DAYS = [MONTH_CONSTANTS.JANUARY,
+      MONTH_CONSTANTS.MARCH,
+      MONTH_CONSTANTS.MAY,
+      MONTH_CONSTANTS.JULY,
+      MONTH_CONSTANTS.AUGUST,
+      MONTH_CONSTANTS.OCTOBER,
+      MONTH_CONSTANTS.DECEMBER].map(month => MONTH_CONSTANTS[Object.keys(MONTH_CONSTANTS).find(key => MONTH_CONSTANTS[key] === month)]);
+const MONTHS_WITH_30_DAYS = [MONTH_CONSTANTS.APRIL,
+      MONTH_CONSTANTS.JUNE,
+      MONTH_CONSTANTS.SEPTEMBER,
+      MONTH_CONSTANTS.NOVEMBER].map(month => MONTH_CONSTANTS[Object.keys(MONTH_CONSTANTS).find(key => MONTH_CONSTANTS[key] === month)]);
+
 const DATE_FORMAT_REGEX = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
 const TWO_DIGIT_REGEX = /^\d{2}$/;
 const FLIGHT_NUMBER_REGEX = /^(?=.{1,8}$)[A-Za-z0-9]+( [A-Za-z0-9]+)*$/;
