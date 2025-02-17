@@ -1,29 +1,31 @@
 // validate.test.constants.js
 "use strict";
 
+export const MONTH_CONSTANTS = {
+  DAYS_28: 28,
+  DAYS_29: 29,
+  DAYS_30: 30,
+  DAYS_31: 31,
+  JANUARY: 1,
+  FEBRUARY: 2,
+  MARCH: 3,
+  APRIL: 4,
+  MAY: 5,
+  JUNE: 6,
+  JULY: 7,
+  AUGUST: 8,
+  SEPTEMBER: 9,
+  OCTOBER: 10,
+  NOVEMBER: 11,
+  DECEMBER: 12,
+};
+
 export const TEST_CONSTANTS = {
-  MONTH_CONSTANTS: {
-    DAYS_28: 28,
-    DAYS_29: 29,
-    DAYS_30: 30,
-    DAYS_31: 31,
-    JANUARY: 1,
-    FEBRUARY: 2,
-    MARCH: 3,
-    APRIL: 4,
-    MAY: 5,
-    JUNE: 6,
-    JULY: 7,
-    AUGUST: 8,
-    SEPTEMBER: 9,
-    OCTOBER: 10,
-    NOVEMBER: 11,
-    DECEMBER: 12,
-  },
+  MONTH_CONSTANTS,
 
   MONTH_GROUPS: {
-    MONTHS_WITH_31_DAYS: [1, 3, 5, 7, 8, 10, 12],
-    MONTHS_WITH_30_DAYS: [4, 6, 9, 11],
+    MONTHS_WITH_31_DAYS: [1, 3, 5, 7, 8, 10, 12].map(month => MONTH_CONSTANTS[Object.keys(MONTH_CONSTANTS).find(key => MONTH_CONSTANTS[key] === month)]),
+    MONTHS_WITH_30_DAYS: [4, 6, 9, 11].map(month => MONTH_CONSTANTS[Object.keys(MONTH_CONSTANTS).find(key => MONTH_CONSTANTS[key] === month)]),
   },
 
   VALID_YEAR: 2024,
