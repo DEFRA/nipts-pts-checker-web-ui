@@ -1,12 +1,12 @@
 <div class="govuk-form-group">
     <h2 class="govuk-label-wrapper">
-      <label class="govuk-label govuk-label--l" for="relevant-comments">
+      <label class="govuk-label govuk-label--l" for="relevantComments">
         Any relevant comments
       </label>
     </h2>
     <div id="relevant-comments-hint" class="govuk-hint">
       This could be more information about the checks or any risks you've identified. Do not include personal or sensitive information.
     </div>
-    <textarea class="govuk-textarea" id="relevant-comments" name="relevantComments" rows="5" aria-describedby="relevant-comments-hint" maxlength="500">{{ payload['relevantComments']|default('') }}</textarea>
+    <textarea class="govuk-textarea" id="relevantComments" name="relevantComments" rows="5" aria-describedby="relevant-comments-hint">{{ payload['relevantComments']|default('') }}</textarea>
 </div>
 <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
