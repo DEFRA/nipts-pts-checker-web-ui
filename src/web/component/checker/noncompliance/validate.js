@@ -61,8 +61,12 @@ const nonComplianceSchema = Joi.object({
   gbRefersToDAERAOrSPS: Joi.boolean().optional(),
   gbAdviseNoTravel: Joi.boolean().optional(),
   gbPassengerSaysNoTravel: Joi.boolean().optional(),
-  relevantComments: Joi.string().max(500).optional(),
-  spsOutcomeDetails: Joi.string().max(500).optional(),
+  relevantComments: Joi.string().max(500).optional().messages({
+    "string.max": errorMessages.relevantComments.length,
+  }),
+  spsOutcomeDetails: Joi.string().max(500).optional().messages({
+    "string.max": errorMessages.spsOutcomeDetails.length,
+  }),
   isGBCheck: Joi.boolean().custom((value, helpers) => {
     const context = helpers.state.ancestors[0] || {};
     const {
