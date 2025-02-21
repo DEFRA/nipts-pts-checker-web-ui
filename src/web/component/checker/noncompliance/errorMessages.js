@@ -36,6 +36,6 @@ export default {
     length: "Outcome details must be 500 characters or less"
   },
   relevantComments: {
-    length: "Relevant Comments must be 500 characters or less"
+    length: "Relevant comments must be 500 characters or less"
   }
 };
