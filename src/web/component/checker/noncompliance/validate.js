@@ -4,6 +4,8 @@ import errorMessages from "./errorMessages.js";
 
 const microchipNumberLength = 15;
 
+const MAX_TEXTAREA_LENGTH = 500;
+
 const nonComplianceSchema = Joi.object({
   mcNotMatch: Joi.any(),
   mcNotMatchActual: Joi.when("mcNotMatch", {
@@ -61,10 +63,10 @@ const nonComplianceSchema = Joi.object({
   gbRefersToDAERAOrSPS: Joi.boolean().optional(),
   gbAdviseNoTravel: Joi.boolean().optional(),
   gbPassengerSaysNoTravel: Joi.boolean().optional(),
-  relevantComments: Joi.string().max(500).allow(null, "").optional().messages({
+  relevantComments: Joi.string().max(MAX_TEXTAREA_LENGTH).allow(null, "").optional().messages({
     "string.max": errorMessages.relevantComments.length,
   }),
-  spsOutcomeDetails: Joi.string().max(500).allow(null, "").optional().messages({
+  spsOutcomeDetails: Joi.string().max(MAX_TEXTAREA_LENGTH).allow(null, "").optional().messages({
     "string.max": errorMessages.spsOutcomeDetails.length,
   }),
   isGBCheck: Joi.boolean().custom((value, helpers) => {
