@@ -2,5 +2,13 @@
     <label class="govuk-label" for="spsOutcomeDetails">
       <b>Details of outcome</b>
     </label>
+    <div>
+      <!-- Display error message inline if the outcome details exceeds 500 chars -->
+      {% if errors['spsOutcomeDetails'] %}
+        <span id="spsOutcomeDetailsError" class="govuk-error-message">
+          {{ errors['spsOutcomeDetails'] }}
+        </span>
+      {% endif %}
+    </div>
     <textarea class="govuk-textarea" id="spsOutcomeDetails" name="spsOutcomeDetails" rows="5">{{ payload['spsOutcomeDetails']|default('') }}</textarea>
   </div>
