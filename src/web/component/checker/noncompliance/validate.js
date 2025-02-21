@@ -61,10 +61,10 @@ const nonComplianceSchema = Joi.object({
   gbRefersToDAERAOrSPS: Joi.boolean().optional(),
   gbAdviseNoTravel: Joi.boolean().optional(),
   gbPassengerSaysNoTravel: Joi.boolean().optional(),
-  relevantComments: Joi.string().max(500).optional().messages({
+  relevantComments: Joi.string().max(500).allow(null, "").optional().messages({
     "string.max": errorMessages.relevantComments.length,
   }),
-  spsOutcomeDetails: Joi.string().max(500).optional().messages({
+  spsOutcomeDetails: Joi.string().max(500).allow(null, "").optional().messages({
     "string.max": errorMessages.spsOutcomeDetails.length,
   }),
   isGBCheck: Joi.boolean().custom((value, helpers) => {
