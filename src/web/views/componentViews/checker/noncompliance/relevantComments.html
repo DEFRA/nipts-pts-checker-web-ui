@@ -7,6 +7,14 @@
     <div id="relevant-comments-hint" class="govuk-hint">
       This could be more information about the checks or any risks you've identified. Do not include personal or sensitive information.
     </div>
+    <div>
+      <!-- Display error message inline if the relevant comments exceeds 500 chars -->
+      {% if errors['relevantComments'] %}
+        <span id="relevantCommentsError" class="govuk-error-message">
+          {{ errors['relevantComments'] }}
+        </span>
+      {% endif %}
+    </div>
     <textarea class="govuk-textarea" id="relevantComments" name="relevantComments" rows="5" aria-describedby="relevant-comments-hint">{{ payload['relevantComments']|default('') }}</textarea>
 </div>
 <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
