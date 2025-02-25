@@ -31,7 +31,6 @@ const formatPtdNumber = (ptdNumber) => {
   if (!ptdNumber) {
     return "";
   }
-
   return (
     `${ptdNumber.padStart(PTD_LENGTH, "0").slice(0, PTD_PREFIX_LENGTH)} ` +
     `${ptdNumber
@@ -44,7 +43,6 @@ const formatPtdNumber = (ptdNumber) => {
 describe("SearchResultsHandlers", () => {
   let request;
   let h;
-
   beforeEach(() => {
     request = {
       payload: {},
@@ -63,16 +61,13 @@ describe("SearchResultsHandlers", () => {
       }),
     };
   });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
-
   describe("getSearchResultsHandler", () => {
     test("should return view with microchipNumber and data from session", async () => {
       const mockMicrochipNumber = "123456789012345";
       const mockData = { some: "data" };
-
       request.yar.get.mockImplementation((key) => {
         const values = {
           microchipNumber: mockMicrochipNumber,
@@ -80,16 +75,13 @@ describe("SearchResultsHandlers", () => {
         };
         return values[key] || null;
       });
-
       h = {
         view: jest.fn(() => {
           return { viewRendered: true };
         }),
       };
-
       const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
       await SearchResultsHandlers.getSearchResultsHandler(request, h);
-
       expect(request.yar.get).toHaveBeenCalledWith("microchipNumber");
       expect(request.yar.get).toHaveBeenCalledWith("data");
       expect(h.view).toHaveBeenCalledWith(VIEW_PATH, {
@@ -99,11 +91,9 @@ describe("SearchResultsHandlers", () => {
         checklist: {},
       });
     });
-
     test("should format ptdNumber correctly when present", async () => {
       const mockMicrochipNumber = "123456789012345";
       const mockData = { ptdNumber: "12345678901" };
-
       request.yar.get.mockImplementation((key) => {
         const values = {
           microchipNumber: mockMicrochipNumber,
@@ -111,9 +101,7 @@ describe("SearchResultsHandlers", () => {
         };
         return values[key] || null;
       });
-
       await SearchResultsHandlers.getSearchResultsHandler(request, h);
-
       const expectedFormat = formatPtdNumber("12345678901");
       expect(h.view).toHaveBeenCalledWith(
         VIEW_PATH,
@@ -124,11 +112,9 @@ describe("SearchResultsHandlers", () => {
         })
       );
     });
-
     test("should format ptdNumber correctly when short", async () => {
       const mockMicrochipNumber = "123456789012345";
       const mockData = { ptdNumber: "123" };
-
       request.yar.get.mockImplementation((key) => {
         const values = {
           microchipNumber: mockMicrochipNumber,
@@ -136,9 +122,7 @@ describe("SearchResultsHandlers", () => {
         };
         return values[key] || null;
       });
-
       await SearchResultsHandlers.getSearchResultsHandler(request, h);
-
       const expectedFormat = formatPtdNumber("123");
       expect(h.view).toHaveBeenCalledWith(
         VIEW_PATH,
@@ -149,11 +133,9 @@ describe("SearchResultsHandlers", () => {
         })
       );
     });
-
     test("should handle empty ptdNumber", async () => {
       const mockMicrochipNumber = "123456789012345";
       const mockData = { ptdNumber: "" };
-
       request.yar.get.mockImplementation((key) => {
         const values = {
           microchipNumber: mockMicrochipNumber,
@@ -161,9 +143,7 @@ describe("SearchResultsHandlers", () => {
         };
         return values[key] || null;
       });
-
       await SearchResultsHandlers.getSearchResultsHandler(request, h);
-
       expect(h.view).toHaveBeenCalledWith(
         VIEW_PATH,
         expect.objectContaining({
@@ -173,11 +153,9 @@ describe("SearchResultsHandlers", () => {
         })
       );
     });
-
     test("should set ptdFormatted to empty string when data object has no ptdNumber", async () => {
       const mockMicrochipNumber = "123456789012345";
       const mockData = {};
-
       request.yar.get.mockImplementation((key) => {
         const values = {
           microchipNumber: mockMicrochipNumber,
@@ -185,9 +163,7 @@ describe("SearchResultsHandlers", () => {
         };
         return values[key] || null;
       });
-
       await SearchResultsHandlers.getSearchResultsHandler(request, h);
-
       expect(h.view).toHaveBeenCalledWith(
         VIEW_PATH,
         expect.objectContaining({
@@ -197,12 +173,10 @@ describe("SearchResultsHandlers", () => {
         })
       );
     });
-
     test("should return view with nonComplianceToSearchResults navigation", async () => {
       const mockMicrochipNumber = "123456789012345";
       const mockData = { some: "data" };
       const nonComplianceToSearchResults = true;
-
       request.yar.get.mockImplementation((key) => {
         const values = {
           microchipNumber: mockMicrochipNumber,
@@ -211,15 +185,12 @@ describe("SearchResultsHandlers", () => {
         };
         return values[key] || null;
       });
-
       h = {
         view: jest.fn(() => {
           return { viewRendered: true };
         }),
       };
-
       await SearchResultsHandlers.getSearchResultsHandler(request, h);
-
       expect(request.yar.get).toHaveBeenCalledWith("microchipNumber");
       expect(request.yar.get).toHaveBeenCalledWith("data");
       expect(request.yar.get).toHaveBeenCalledWith(
@@ -238,10 +209,9 @@ describe("SearchResultsHandlers", () => {
   });
 });
 
-describe("SaveAndContinueHandler", () => {
+describe("SaveAndContinueHandler_ValidationTests", () => {
   let request;
   let h;
-
   beforeEach(() => {
     request = {
       payload: {},
@@ -259,11 +229,9 @@ describe("SaveAndContinueHandler", () => {
         return { redirected: true };
       }),
     };
-
     validatePassOrFail.mockReset();
     apiService.recordCheckOutCome.mockReset();
   });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -272,7 +240,6 @@ describe("SaveAndContinueHandler", () => {
     request.payload = { checklist: "" };
     const mockMicrochipNumber = "123456789012345";
     const mockData = { ptdNumber: "123" };
-
     request.yar.get.mockImplementation((key) => {
       const values = {
         microchipNumber: mockMicrochipNumber,
@@ -280,14 +247,11 @@ describe("SaveAndContinueHandler", () => {
       };
       return values[key] || null;
     });
-
     validatePassOrFail.mockReturnValue({
       isValid: false,
       error: errorMessages.passOrFailOption.empty,
     });
-
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
-
     expect(h.view).toHaveBeenCalledWith(
       VIEW_PATH,
       expect.objectContaining({
@@ -305,21 +269,17 @@ describe("SaveAndContinueHandler", () => {
   test("should return validation error if data state is active", async () => {
     request.payload.checklist = "";
     const mockData = { documentState: "active", ptdNumber: "GB8262C39F9" };
-
     request.yar.get.mockImplementation((key) => {
       const values = {
         data: mockData,
       };
       return values[key] || null;
     });
-
     validatePassOrFail.mockReturnValueOnce({
       isValid: false,
       error: errorMessages.passOrFailOption.empty,
     });
-
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
-
     expect(h.view).toHaveBeenCalledWith(
       VIEW_PATH,
       expect.objectContaining({
@@ -341,21 +301,17 @@ describe("SaveAndContinueHandler", () => {
   test("should return error if documentstate is revoked", async () => {
     request.payload.checklist = "";
     const mockData = { documentState: "revoked", ptdNumber: "GB8262C39F9" };
-
     request.yar.get.mockImplementation((key) => {
       const values = {
         data: mockData,
       };
       return values[key] || null;
     });
-
     validatePassOrFail.mockReturnValueOnce({
       isValid: false,
       error: errorMessages.passOrFailOption.empty,
     });
-
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
-
     expect(h.view).toHaveBeenCalledWith(
       VIEW_PATH,
       expect.objectContaining({
@@ -373,6 +329,34 @@ describe("SaveAndContinueHandler", () => {
       })
     );
   });
+});
+
+describe("SaveAndContinueHandler_SuccessTests", () => {
+  let request;
+  let h;
+  beforeEach(() => {
+    request = {
+      payload: {},
+      yar: {
+        get: jest.fn(),
+        set: jest.fn(),
+        clear: jest.fn(),
+      },
+    };
+    h = {
+      view: jest.fn(() => {
+        return { viewRendered: true };
+      }),
+      redirect: jest.fn(() => {
+        return { redirected: true };
+      }),
+    };
+    validatePassOrFail.mockReset();
+    apiService.recordCheckOutCome.mockReset();
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   test("should redirect to dashboard if checks pass", async () => {
     request.payload.checklist = CheckOutcomeConstants.Pass;
@@ -381,7 +365,6 @@ describe("SaveAndContinueHandler", () => {
       ptdNumber: "GB8262C39F9",
       applicationId: "app123",
     };
-
     const mockSailingSlot = {
       departureDate: "12/10/2023",
       sailingHour: "14",
@@ -390,7 +373,6 @@ describe("SaveAndContinueHandler", () => {
       selectedRouteOption: { id: "option456" },
       routeFlight: "FL1234",
     };
-
     request.yar.get.mockImplementation((key) => {
       const values = {
         data: mockData,
@@ -400,12 +382,9 @@ describe("SaveAndContinueHandler", () => {
       };
       return values[key] || null;
     });
-
     validatePassOrFail.mockReturnValueOnce({ isValid: true });
     apiService.recordCheckOutCome.mockResolvedValueOnce({});
-
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
-
     expect(apiService.recordCheckOutCome).toHaveBeenCalledWith(
       expect.objectContaining({
         applicationId: "app123",
@@ -415,7 +394,6 @@ describe("SaveAndContinueHandler", () => {
       }),
       request
     );
-
     expect(request.yar.clear).toHaveBeenCalledWith("IsFailSelected");
     expect(request.yar.set).toHaveBeenCalledWith("successConfirmation", true);
     expect(h.redirect).toHaveBeenCalledWith("/checker/dashboard");
@@ -428,7 +406,6 @@ describe("SaveAndContinueHandler", () => {
       ptdNumber: "GB8262C39F9",
       applicationId: "app123",
     };
-
     const mockSailingSlot = {
       departureDate: "12/10/2023",
       sailingHour: "14",
@@ -436,7 +413,6 @@ describe("SaveAndContinueHandler", () => {
       selectedRoute: { id: "route123" },
       selectedRouteOption: { id: "option456" },
     };
-
     request.yar.get.mockImplementation((key) => {
       const values = {
         data: mockData,
@@ -447,14 +423,11 @@ describe("SaveAndContinueHandler", () => {
       };
       return values[key] || null;
     });
-
     validatePassOrFail.mockReturnValueOnce({ isValid: true });
     apiService.recordCheckOutCome.mockResolvedValueOnce({
       error: "API Error",
     });
-
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
-
     expect(h.view).toHaveBeenCalledWith(
       VIEW_PATH,
       expect.objectContaining({
@@ -471,22 +444,46 @@ describe("SaveAndContinueHandler", () => {
       })
     );
   });
+});
+
+describe("SaveAndContinueHandler_FailureTests", () => {
+  let request;
+  let h;
+  beforeEach(() => {
+    request = {
+      payload: {},
+      yar: {
+        get: jest.fn(),
+        set: jest.fn(),
+        clear: jest.fn(),
+      },
+    };
+    h = {
+      view: jest.fn(() => {
+        return { viewRendered: true };
+      }),
+      redirect: jest.fn(() => {
+        return { redirected: true };
+      }),
+    };
+    validatePassOrFail.mockReset();
+    apiService.recordCheckOutCome.mockReset();
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   test("should redirect to non-compliance if checks fail", async () => {
     request.payload.checklist = CheckOutcomeConstants.Fail;
     const mockData = { documentState: "active", ptdNumber: "GB8262C39F9" };
-
     request.yar.get.mockImplementation((key) => {
       const values = {
         data: mockData,
       };
       return values[key] || null;
     });
-
     validatePassOrFail.mockReturnValueOnce({ isValid: true });
-
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
-
     expect(request.yar.set).toHaveBeenCalledWith("IsFailSelected", true);
     expect(h.redirect).toHaveBeenCalledWith("/checker/non-compliance");
   });
@@ -494,18 +491,14 @@ describe("SaveAndContinueHandler", () => {
   test("should force Fail if documentState is rejected", async () => {
     request.payload.checklist = CheckOutcomeConstants.Pass;
     const mockData = { documentState: "rejected", ptdNumber: "GB8262C39F9" };
-
     request.yar.get.mockImplementation((key) => {
       const values = {
         data: mockData,
       };
       return values[key] || null;
     });
-
     validatePassOrFail.mockReturnValueOnce({ isValid: true });
-
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
-
     expect(request.yar.set).toHaveBeenCalledWith("IsFailSelected", true);
     expect(h.redirect).toHaveBeenCalledWith("/checker/non-compliance");
   });
@@ -517,7 +510,6 @@ describe("SaveAndContinueHandler", () => {
       ptdNumber: "GB8262C39F9",
       applicationId: "app123",
     };
-
     request.yar.get.mockImplementation((key) => {
       if (key === "data") {
         return mockData;
@@ -527,11 +519,8 @@ describe("SaveAndContinueHandler", () => {
       }
       return null;
     });
-
     validatePassOrFail.mockReturnValueOnce({ isValid: true });
-
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
-
     expect(h.view).toHaveBeenCalledWith(VIEW_PATH, {
       error: "An error occurred while processing your request",
       errorSummary: [
