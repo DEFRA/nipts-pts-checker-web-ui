@@ -176,7 +176,8 @@ it("should return a validation error if checklist is invalid & data is invalid",
   request.payload.checklist = "";
   const mockData = { documentState: "active", ptdNumber: "GB8262C39F9" };
   request.yar.get.mockImplementation((key) => {
-    if (key === "data") return mockData;
+    if (key === "data")
+      { return mockData;}
     return null;
   });
   validatePassOrFail.mockReturnValueOnce({
@@ -205,7 +206,8 @@ it("should return error if documentstate is revoked", async () => {
   request.payload.checklist = "";
   const mockData = { documentState: "revoked", ptdNumber: "GB8262C39F9" };
   request.yar.get.mockImplementation((key) => {
-    if (key === "data") return mockData;
+    if (key === "data") 
+      {return mockData;}
     return null;
   });
   validatePassOrFail.mockReturnValueOnce({
