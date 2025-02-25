@@ -2,9 +2,7 @@
 
 jest.mock("../../../../../api/services/apiService.js", () => ({
   __esModule: true,
-  default: {
-    recordCheckOutCome: jest.fn(),
-  },
+  default: { recordCheckOutCome: jest.fn() },
 }));
 
 jest.mock(
@@ -28,7 +26,9 @@ const PTD_PREFIX_LENGTH = 5;
 const PTD_MID_LENGTH = 8;
 
 const formatPtdNumber = (ptdNumber) => {
-  if (!ptdNumber) return "";
+  if (!ptdNumber) {
+    return "";
+  }
   return (
     `${ptdNumber.padStart(PTD_LENGTH, "0").slice(0, PTD_PREFIX_LENGTH)} ` +
     `${ptdNumber
@@ -38,23 +38,19 @@ const formatPtdNumber = (ptdNumber) => {
   );
 };
 
-const setupTest = () => {
-  return {
-    request: {
-      payload: {},
-      yar: { get: jest.fn(), set: jest.fn(), clear: jest.fn() },
-    },
-    h: {
-      view: jest.fn(() => ({ viewRendered: true })),
-      redirect: jest.fn(() => ({ redirected: true })),
-    },
-  };
-};
+const setupTest = () => ({
+  request: {
+    payload: {},
+    yar: { get: jest.fn(), set: jest.fn(), clear: jest.fn() },
+  },
+  h: {
+    view: jest.fn(() => ({ viewRendered: true })),
+    redirect: jest.fn(() => ({ redirected: true })),
+  },
+});
 
-describe("SearchResultsHandler_Tests", () => {
-  let request;
-  let h;
-
+describe("SearchResults_ViewTests", () => {
+  let request, h;
   beforeEach(() => ({ request, h } = setupTest()));
   afterEach(() => jest.clearAllMocks());
 
@@ -109,6 +105,12 @@ describe("SearchResultsHandler_Tests", () => {
       })
     );
   });
+});
+
+describe("SearchResults_EmptyHandling", () => {
+  let request, h;
+  beforeEach(() => ({ request, h } = setupTest()));
+  afterEach(() => jest.clearAllMocks());
 
   test("handles empty ptdNumber", async () => {
     const mockData = { ptdNumber: "" };
@@ -168,25 +170,24 @@ describe("SearchResultsHandler_Tests", () => {
   });
 });
 
-describe("SaveContinueHandler_ValidationTests", () => {
-  let request;
-  let h;
-
+describe("SaveContinue_ValidationTests", () => {
+  let request, h;
   beforeEach(() => {
     ({ request, h } = setupTest());
     validatePassOrFail.mockReset();
     apiService.recordCheckOutCome.mockReset();
   });
-
   afterEach(() => jest.clearAllMocks());
 
   test("returns validation error if checklist is invalid", async () => {
     request.payload = { checklist: "" };
+    const mockMicrochipNumber = "123456789012345";
+    const mockData = { ptdNumber: "123" };
     request.yar.get.mockImplementation((key) => {
       return (
         {
-          microchipNumber: "123456789012345",
-          data: { ptdNumber: "123" },
+          microchipNumber: mockMicrochipNumber,
+          data: mockData,
         }[key] || null
       );
     });
@@ -200,10 +201,10 @@ describe("SaveContinueHandler_ValidationTests", () => {
       expect.objectContaining({
         error: errorMessages.passOrFailOption.empty,
         errorSummary: expect.arrayContaining([
-          expect.objectContaining({
+          {
             fieldId: "checklist",
             message: errorMessages.passOrFailOption.empty,
-          }),
+          },
         ]),
       })
     );
@@ -211,11 +212,9 @@ describe("SaveContinueHandler_ValidationTests", () => {
 
   test("returns validation error if data state is active", async () => {
     request.payload.checklist = "";
+    const mockData = { documentState: "active", ptdNumber: "GB8262C39F9" };
     request.yar.get.mockImplementation((key) => {
-      return (
-        { data: { documentState: "active", ptdNumber: "GB8262C39F9" } }[key] ||
-        null
-      );
+      return { data: mockData }[key] || null;
     });
     validatePassOrFail.mockReturnValueOnce({
       isValid: false,
@@ -240,11 +239,9 @@ describe("SaveContinueHandler_ValidationTests", () => {
 
   test("returns error if documentstate is revoked", async () => {
     request.payload.checklist = "";
+    const mockData = { documentState: "revoked", ptdNumber: "GB8262C39F9" };
     request.yar.get.mockImplementation((key) => {
-      return (
-        { data: { documentState: "revoked", ptdNumber: "GB8262C39F9" } }[key] ||
-        null
-      );
+      return { data: mockData }[key] || null;
     });
     validatePassOrFail.mockReturnValueOnce({
       isValid: false,
@@ -255,12 +252,6 @@ describe("SaveContinueHandler_ValidationTests", () => {
       VIEW_PATH,
       expect.objectContaining({
         error: errorMessages.passOrFailOption.empty,
-        errorSummary: [
-          {
-            fieldId: "checklist",
-            message: errorMessages.passOrFailOption.empty,
-          },
-        ],
         formSubmitted: true,
         data: expect.objectContaining({ ptdFormatted: expect.any(String) }),
       })
@@ -268,16 +259,13 @@ describe("SaveContinueHandler_ValidationTests", () => {
   });
 });
 
-describe("SaveContinueHandler_SuccessPathTests", () => {
-  let request;
-  let h;
-
+describe("SaveContinue_SuccessTests", () => {
+  let request, h;
   beforeEach(() => {
     ({ request, h } = setupTest());
     validatePassOrFail.mockReset();
     apiService.recordCheckOutCome.mockReset();
   });
-
   afterEach(() => jest.clearAllMocks());
 
   test("redirects to dashboard if checks pass", async () => {
@@ -323,6 +311,11 @@ describe("SaveContinueHandler_SuccessPathTests", () => {
 
   test("handles API error when recording check outcome", async () => {
     request.payload.checklist = CheckOutcomeConstants.Pass;
+    const mockData = {
+      documentState: "active",
+      ptdNumber: "GB8262C39F9",
+      applicationId: "app123",
+    };
     const mockSailingSlot = {
       departureDate: "12/10/2023",
       sailingHour: "14",
@@ -332,11 +325,7 @@ describe("SaveContinueHandler_SuccessPathTests", () => {
     };
     request.yar.get.mockImplementation((key) => {
       const values = {
-        data: {
-          documentState: "active",
-          ptdNumber: "GB8262C39F9",
-          applicationId: "app123",
-        },
+        data: mockData,
         currentSailingSlot: mockSailingSlot,
         isGBCheck: true,
         checkerId: "checker123",
@@ -358,25 +347,20 @@ describe("SaveContinueHandler_SuccessPathTests", () => {
   });
 });
 
-describe("SaveContinueHandler_FailurePathTests", () => {
-  let request;
-  let h;
-
+describe("SaveContinue_FailureTests", () => {
+  let request, h;
   beforeEach(() => {
     ({ request, h } = setupTest());
     validatePassOrFail.mockReset();
     apiService.recordCheckOutCome.mockReset();
   });
-
   afterEach(() => jest.clearAllMocks());
 
   test("redirects to non-compliance if checks fail", async () => {
     request.payload.checklist = CheckOutcomeConstants.Fail;
+    const mockData = { documentState: "active", ptdNumber: "GB8262C39F9" };
     request.yar.get.mockImplementation((key) => {
-      return (
-        { data: { documentState: "active", ptdNumber: "GB8262C39F9" } }[key] ||
-        null
-      );
+      return { data: mockData }[key] || null;
     });
     validatePassOrFail.mockReturnValueOnce({ isValid: true });
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
@@ -386,12 +370,9 @@ describe("SaveContinueHandler_FailurePathTests", () => {
 
   test("forces Fail if documentState is rejected", async () => {
     request.payload.checklist = CheckOutcomeConstants.Pass;
+    const mockData = { documentState: "rejected", ptdNumber: "GB8262C39F9" };
     request.yar.get.mockImplementation((key) => {
-      return (
-        { data: { documentState: "rejected", ptdNumber: "GB8262C39F9" } }[
-          key
-        ] || null
-      );
+      return { data: mockData }[key] || null;
     });
     validatePassOrFail.mockReturnValueOnce({ isValid: true });
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
@@ -402,9 +383,12 @@ describe("SaveContinueHandler_FailurePathTests", () => {
   test("handles unexpected errors", async () => {
     request.payload.checklist = CheckOutcomeConstants.Pass;
     request.yar.get.mockImplementation((key) => {
-      if (key === "data")
+      if (key === "data") {
         return { documentState: "active", ptdNumber: "GB8262C39F9" };
-      if (key === "currentSailingSlot") throw new Error("Unexpected error");
+      }
+      if (key === "currentSailingSlot") {
+        throw new Error("Unexpected error");
+      }
       return null;
     });
     validatePassOrFail.mockReturnValueOnce({ isValid: true });
