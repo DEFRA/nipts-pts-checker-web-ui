@@ -25,7 +25,9 @@ import errorMessages from "../../../../../web/component/checker/searchresults/er
 const VIEW_PATH = "componentViews/checker/searchresults/searchResultsView";
 
 const formatPtdNumber = (ptdNumber) => {
-  if (!ptdNumber) return "";
+  if (!ptdNumber) {
+    return "";
+  }
 
   const PTD_LENGTH = 11;
   const PTD_PREFIX_LENGTH = 5;
@@ -71,8 +73,12 @@ describe("SearchResultsHandlers", () => {
       request = {
         yar: {
           get: jest.fn((key) => {
-            if (key === "microchipNumber") return mockMicrochipNumber;
-            if (key === "data") return mockData;
+            if (key === "microchipNumber") {
+              return mockMicrochipNumber;
+            }
+            if (key === "data") {
+              return mockData;
+            }
             return null;
           }),
         },
@@ -107,8 +113,12 @@ describe("SearchResultsHandlers", () => {
       const mockData = { ptdNumber: "12345678901" };
 
       request.yar.get.mockImplementation((key) => {
-        if (key === "microchipNumber") return mockMicrochipNumber;
-        if (key === "data") return mockData;
+        if (key === "microchipNumber") {
+          return mockMicrochipNumber;
+        }
+        if (key === "data") {
+          return mockData;
+        }
         return null;
       });
 
@@ -130,8 +140,12 @@ describe("SearchResultsHandlers", () => {
       const mockData = { ptdNumber: "123" };
 
       request.yar.get.mockImplementation((key) => {
-        if (key === "microchipNumber") return mockMicrochipNumber;
-        if (key === "data") return mockData;
+        if (key === "microchipNumber") {
+          return mockMicrochipNumber;
+        }
+        if (key === "data") {
+          return mockData;
+        }
         return null;
       });
 
@@ -153,8 +167,12 @@ describe("SearchResultsHandlers", () => {
       const mockData = { ptdNumber: "" };
 
       request.yar.get.mockImplementation((key) => {
-        if (key === "microchipNumber") return mockMicrochipNumber;
-        if (key === "data") return mockData;
+        if (key === "microchipNumber") {
+          return mockMicrochipNumber;
+        }
+        if (key === "data") {
+          return mockData;
+        }
         return null;
       });
 
@@ -175,8 +193,12 @@ describe("SearchResultsHandlers", () => {
       const mockData = {};
 
       request.yar.get.mockImplementation((key) => {
-        if (key === "microchipNumber") return mockMicrochipNumber;
-        if (key === "data") return mockData;
+        if (key === "microchipNumber") {
+          return mockMicrochipNumber;
+        }
+        if (key === "data") {
+          return mockData;
+        }
         return null;
       });
 
@@ -200,10 +222,15 @@ describe("SearchResultsHandlers", () => {
       request = {
         yar: {
           get: jest.fn((key) => {
-            if (key === "microchipNumber") return mockMicrochipNumber;
-            if (key === "data") return mockData;
-            if (key === "nonComplianceToSearchResults")
+            if (key === "microchipNumber") {
+              return mockMicrochipNumber;
+            }
+            if (key === "data") {
+              return mockData;
+            }
+            if (key === "nonComplianceToSearchResults") {
               return nonComplianceToSearchResults;
+            }
             return null;
           }),
           clear: jest.fn(),
@@ -242,7 +269,9 @@ describe("SearchResultsHandlers", () => {
   describe("saveAndContinueHandler", () => {
     beforeEach(() => {
       validatePassOrFail.mockImplementation((value) => {
-        if (!value) return { isValid: false, error: "Missing value" };
+        if (!value) {
+          return { isValid: false, error: "Missing value" };
+        }
         return { isValid: true };
       });
 
@@ -285,6 +314,7 @@ describe("SearchResultsHandlers", () => {
         })
       );
     });
+
     it("should return a validation error if checklist is invalid & data is invalid", async () => {
       request.payload.checklist = "";
       const mockData = { documentState: "active", ptdNumber: "GB8262C39F9" };
@@ -351,6 +381,210 @@ describe("SearchResultsHandlers", () => {
           }),
         })
       );
+    });
+
+    it("should return to dashboard if checks pass", async () => {
+      request.payload.checklist = CheckOutcomeConstants.Pass;
+      const mockData = {
+        documentState: "active",
+        ptdNumber: "GB8262C39F9",
+        applicationId: "app123",
+      };
+
+      const mockSailingSlot = {
+        departureDate: "12/10/2023",
+        sailingHour: "14",
+        sailingMinutes: "30",
+        selectedRoute: { id: "route123" },
+        selectedRouteOption: { id: "option456" },
+        routeFlight: "FL1234",
+      };
+
+      request.yar.get.mockImplementation((key) => {
+        if (key === "data") {
+          return mockData;
+        }
+        if (key === "currentSailingSlot") {
+          return mockSailingSlot;
+        }
+        if (key === "isGBCheck") {
+          return true;
+        }
+        if (key === "checkerId") {
+          return "checker123";
+        }
+        return null;
+      });
+
+      validatePassOrFail.mockReturnValueOnce({ isValid: true });
+      apiService.recordCheckOutCome.mockResolvedValueOnce({});
+
+      await SearchResultsHandlers.saveAndContinueHandler(request, h);
+
+      expect(apiService.recordCheckOutCome).toHaveBeenCalledWith(
+        expect.objectContaining({
+          applicationId: "app123",
+          checkOutcome: CheckOutcomeConstants.Pass,
+          isGBCheck: true,
+          checkerId: "checker123",
+        }),
+        request
+      );
+
+      expect(request.yar.clear).toHaveBeenCalledWith("IsFailSelected");
+      expect(request.yar.clear).toHaveBeenCalledWith("routeId");
+      expect(request.yar.clear).toHaveBeenCalledWith("routeName");
+      expect(request.yar.clear).toHaveBeenCalledWith("departureDate");
+      expect(request.yar.clear).toHaveBeenCalledWith("departureTime");
+      expect(request.yar.clear).toHaveBeenCalledWith("checkSummaryId");
+      expect(request.yar.set).toHaveBeenCalledWith("successConfirmation", true);
+      expect(h.redirect).toHaveBeenCalledWith("/checker/dashboard");
+    });
+
+    it("should handle API error when recording check outcome", async () => {
+      request.payload.checklist = CheckOutcomeConstants.Pass;
+      const mockData = {
+        documentState: "active",
+        ptdNumber: "GB8262C39F9",
+        applicationId: "app123",
+      };
+
+      const mockSailingSlot = {
+        departureDate: "12/10/2023",
+        sailingHour: "14",
+        sailingMinutes: "30",
+        selectedRoute: { id: "route123" },
+        selectedRouteOption: { id: "option456" },
+      };
+
+      request.yar.get.mockImplementation((key) => {
+        if (key === "data") {
+          return mockData;
+        }
+        if (key === "currentSailingSlot") {
+          return mockSailingSlot;
+        }
+        if (key === "isGBCheck") {
+          return true;
+        }
+        if (key === "checkerId") {
+          return "checker123";
+        }
+        if (key === "microchipNumber") {
+          return "123456789012345";
+        }
+        return null;
+      });
+
+      validatePassOrFail.mockReturnValueOnce({ isValid: true });
+      apiService.recordCheckOutCome.mockResolvedValueOnce({
+        error: "API Error",
+      });
+
+      await SearchResultsHandlers.saveAndContinueHandler(request, h);
+
+      expect(h.view).toHaveBeenCalledWith(
+        VIEW_PATH,
+        expect.objectContaining({
+          error: errorMessages.serviceError.message,
+          errorSummary: [
+            {
+              fieldId: "unexpected",
+              message: errorMessages.serviceError.message,
+              dispalyAs: "text",
+            },
+          ],
+          formSubmitted: true,
+          checklist: CheckOutcomeConstants.Pass,
+        })
+      );
+    });
+
+    it("should redirect to non-compliance if checks fail", async () => {
+      request.payload.checklist = CheckOutcomeConstants.Fail;
+      const mockData = { documentState: "active", ptdNumber: "GB8262C39F9" };
+
+      request.yar.get.mockImplementation((key) => {
+        if (key === "data") {
+          return mockData;
+        }
+        return null;
+      });
+
+      validatePassOrFail.mockReturnValueOnce({ isValid: true });
+
+      await SearchResultsHandlers.saveAndContinueHandler(request, h);
+
+      expect(request.yar.set).toHaveBeenCalledWith("IsFailSelected", true);
+      expect(h.redirect).toHaveBeenCalledWith("/checker/non-compliance");
+    });
+
+    it("should force Fail if documentState is rejected", async () => {
+      request.payload.checklist = CheckOutcomeConstants.Pass;
+      const mockData = { documentState: "rejected", ptdNumber: "GB8262C39F9" };
+
+      request.yar.get.mockImplementation((key) => {
+        if (key === "data") {
+          return mockData;
+        }
+        return null;
+      });
+
+      validatePassOrFail.mockReturnValueOnce({ isValid: true });
+
+      await SearchResultsHandlers.saveAndContinueHandler(request, h);
+
+      expect(request.yar.set).toHaveBeenCalledWith("IsFailSelected", true);
+      expect(h.redirect).toHaveBeenCalledWith("/checker/non-compliance");
+    });
+
+    it("should force Fail if documentState is awaiting", async () => {
+      request.payload.checklist = CheckOutcomeConstants.Pass;
+      const mockData = { documentState: "awaiting", ptdNumber: "GB8262C39F9" };
+
+      request.yar.get.mockImplementation((key) => {
+        if (key === "data") {
+          return mockData;
+        }
+        return null;
+      });
+
+      validatePassOrFail.mockReturnValueOnce({ isValid: true });
+
+      await SearchResultsHandlers.saveAndContinueHandler(request, h);
+
+      expect(request.yar.set).toHaveBeenCalledWith("IsFailSelected", true);
+      expect(h.redirect).toHaveBeenCalledWith("/checker/non-compliance");
+    });
+
+    it("should handle unexpected errors", async () => {
+      request.payload.checklist = CheckOutcomeConstants.Pass;
+      const mockData = {
+        documentState: "active",
+        ptdNumber: "GB8262C39F9",
+        applicationId: "app123",
+      };
+
+      request.yar.get.mockImplementation((key) => {
+        if (key === "data") {
+          return mockData;
+        }
+        if (key === "currentSailingSlot") {
+          throw new Error("Unexpected error");
+        }
+        return null;
+      });
+
+      validatePassOrFail.mockReturnValueOnce({ isValid: true });
+
+      await SearchResultsHandlers.saveAndContinueHandler(request, h);
+
+      expect(h.view).toHaveBeenCalledWith(VIEW_PATH, {
+        error: "An error occurred while processing your request",
+        errorSummary: [
+          { fieldId: "general", message: "An unexpected error occurred" },
+        ],
+      });
     });
   });
 });
