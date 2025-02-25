@@ -172,33 +172,63 @@ describe("SearchResultsHandlers", () => {
       jest.clearAllMocks();
     });
 
-    it('should return a validation error if checklist is invalid & data is invalid', async () => {
-      request.payload.checklist = '';
-      request.yar.get.mockReturnValueOnce({ documentState: 'active' }); // Mock get call for data
-      validatePassOrFail.mockReturnValueOnce({ isValid: false, error: errorMessages.passOrFailOption.empty });
+it("should return a validation error if checklist is invalid & data is invalid", async () => {
+  request.payload.checklist = "";
+  const mockData = { documentState: "active", ptdNumber: "GB8262C39F9" };
+  request.yar.get.mockImplementation((key) => {
+    if (key === "data") return mockData;
+    return null;
+  });
+  validatePassOrFail.mockReturnValueOnce({
+    isValid: false,
+    error: errorMessages.passOrFailOption.empty,
+  });
 
-      await SearchResultsHandlers.saveAndContinueHandler(request, h);
+  await SearchResultsHandlers.saveAndContinueHandler(request, h);
 
-      expect(h.view).toHaveBeenCalledWith(searchResultsView, expect.objectContaining({
-        error: errorMessages.passOrFailOption.empty,
-        errorSummary: [{ fieldId: 'checklist', message: errorMessages.passOrFailOption.empty }],
-        formSubmitted: true,
-      }));
-    });
+  expect(h.view).toHaveBeenCalledWith(
+    searchResultsView,
+    expect.objectContaining({
+      error: errorMessages.passOrFailOption.empty,
+      errorSummary: [
+        { fieldId: "checklist", message: errorMessages.passOrFailOption.empty },
+      ],
+      formSubmitted: true,
+      data: expect.objectContaining({
+        ptdFormatted: expect.any(String),
+      }),
+    })
+  );
+});
 
-    it('should return error if documentstate is revoked', async () => {
-      request.payload.checklist = '';
-      request.yar.get.mockReturnValueOnce({ documentState: 'revoked' }); // Mock get call for data
-      validatePassOrFail.mockReturnValueOnce({ isValid: false, error: errorMessages.passOrFailOption.empty });
+it("should return error if documentstate is revoked", async () => {
+  request.payload.checklist = "";
+  const mockData = { documentState: "revoked", ptdNumber: "GB8262C39F9" };
+  request.yar.get.mockImplementation((key) => {
+    if (key === "data") return mockData;
+    return null;
+  });
+  validatePassOrFail.mockReturnValueOnce({
+    isValid: false,
+    error: errorMessages.passOrFailOption.empty,
+  });
 
-      await SearchResultsHandlers.saveAndContinueHandler(request, h);
+  await SearchResultsHandlers.saveAndContinueHandler(request, h);
 
-      expect(h.view).toHaveBeenCalledWith(searchResultsView, expect.objectContaining({
-        error: errorMessages.passOrFailOption.empty,
-        errorSummary: [{ fieldId: 'checklist', message: errorMessages.passOrFailOption.empty }],
-        formSubmitted: true,
-      }));
-    });
+  expect(h.view).toHaveBeenCalledWith(
+    searchResultsView,
+    expect.objectContaining({
+      error: errorMessages.passOrFailOption.empty,
+      errorSummary: [
+        { fieldId: "checklist", message: errorMessages.passOrFailOption.empty },
+      ],
+      formSubmitted: true,
+      data: expect.objectContaining({
+        ptdFormatted: expect.any(String),
+      }),
+    })
+  );
+});
 
     it('should return to document search if checks pass', async () => {
       request.payload.checklist = 'Pass';
