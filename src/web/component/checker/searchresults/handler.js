@@ -140,7 +140,6 @@ const saveAndContinueHandler = async (request, h) => {
       request.yar.clear("departureDate");
       request.yar.clear("departureTime");
       request.yar.clear("checkSummaryId");
-
       request.yar.set("successConfirmation", true);
       return h.redirect("/checker/dashboard");
     }
