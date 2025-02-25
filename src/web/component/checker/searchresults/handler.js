@@ -8,7 +8,9 @@ import { validatePassOrFail } from "./validate.js";
 const VIEW_PATH = "componentViews/checker/searchresults/searchResultsView";
 
 const formatPtdNumber = (ptdNumber) => {
-  if (!ptdNumber) return "";
+  if (!ptdNumber) {
+    return "";
+  }
 
   const PTD_LENGTH = 11;
   const PTD_PREFIX_LENGTH = 5;
