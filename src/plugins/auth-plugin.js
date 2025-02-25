@@ -104,7 +104,7 @@ export default {
         }
 
         const isStaticAsset = request.path.startsWith('/static/') || request.path.endsWith('.css') || request.path.endsWith('.js') || request.path.endsWith('.jpg') || request.path.endsWith('.png') || request.path.endsWith('.ico');
-        const isLandingPage = ['/login', '/logout', '/', '/500error', '/timeout', '/password', '/timeout-warning'].includes(request.path);
+        const isLandingPage = ['/login', '/logout', '/', '/500error', '/timeout', '/password', '/timeout-warning', '/unplannedMaintenance', '/plannedMaintenance'].includes(request.path);
 
         const token = session.getToken(request, sessionKeys.tokens.accessToken);
         const sessionCreationCookie = request.state.sessionCreationTime;

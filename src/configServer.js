@@ -11,6 +11,7 @@ const directoryName = dirname(fileName);
 const HTTP_STATUS = {
   FORBIDDEN: 403,
   SERVER_ERROR: 500,
+  SERVICE_UNAVALABLE: 503,
 };
 
 const PATHS = {
@@ -27,6 +28,16 @@ const ERROR_VIEWS = {
 const ERROR_ROUTES = {
   SERVER_ERROR: "/500error",
 };
+
+const MAINTENANCE_ROUTES = {
+  PLANNED: "/plannedMaintenance",
+  UNPLANNED: "/unplannedMaintenance",
+}
+
+const MAINTENANCE_VIEWS = {
+  PLANNED: "maintenance/plannedMaintenance",
+  UNPLANNED: "maintenance/unplannedMaintenance",
+}
 
 async function serveStaticErrorPage() {
   const filePath = Path.join(PATHS.VIEWS, "errors", "500Error.html");
@@ -115,10 +126,31 @@ const configureErrorRoutes = (server) => {
   });
 };
 
+const configureMaintenanceRoutes = (server) => {
+  server.route({
+    method: "GET",
+    path: MAINTENANCE_ROUTES.UNPLANNED,
+    handler: (_request, h) => {
+      return h.view(MAINTENANCE_VIEWS.UNPLANNED).takeover();
+    },
+  });
+  server.route({
+    method: "GET",
+    path: MAINTENANCE_ROUTES.PLANNED,
+    handler: (_request, h) => {
+      return h.view(MAINTENANCE_VIEWS.PLANNED, {
+        date: 'Thursday 4 April 2024', // need to change
+        time: '8pm'
+      }).takeover();
+    },
+  });
+};
+
 const setup = (server) => {
   configureViews(server);
   configureStaticRoutes(server);
   configureErrorRoutes(server);
+  configureMaintenanceRoutes(server);
 
   server.validator(Joi);
 
@@ -136,6 +168,12 @@ const setup = (server) => {
         return h
           .view(ERROR_VIEWS.FORBIDDEN)
           .code(HTTP_STATUS.FORBIDDEN)
+          .takeover();
+      }
+      if (response.output.statusCode === HTTP_STATUS.SERVICE_UNAVALABLE) {
+        return h
+          .view(MAINTENANCE_VIEWS.UNPLANNED)
+          .code(HTTP_STATUS.SERVICE_UNAVALABLE)
           .takeover();
       }
     }
