@@ -170,7 +170,7 @@ describe("SearchResults_EmptyHandling", () => {
   });
 });
 
-describe("SaveContinue_ValidationTests", () => {
+describe("SaveContinue_ValidationTestsPartOne", () => {
   let request, h;
   beforeEach(() => {
     ({ request, h } = setupTest());
@@ -209,6 +209,16 @@ describe("SaveContinue_ValidationTests", () => {
       })
     );
   });
+});
+
+describe("SaveContinue_ValidationTestsPartTwo", () => {
+  let request, h;
+  beforeEach(() => {
+    ({ request, h } = setupTest());
+    validatePassOrFail.mockReset();
+    apiService.recordCheckOutCome.mockReset();
+  });
+  afterEach(() => jest.clearAllMocks());
 
   test("returns validation error if data state is active", async () => {
     request.payload.checklist = "";
@@ -236,6 +246,16 @@ describe("SaveContinue_ValidationTests", () => {
       })
     );
   });
+});
+
+describe("SaveContinue_ValidationTestsPartThree", () => {
+  let request, h;
+  beforeEach(() => {
+    ({ request, h } = setupTest());
+    validatePassOrFail.mockReset();
+    apiService.recordCheckOutCome.mockReset();
+  });
+  afterEach(() => jest.clearAllMocks());
 
   test("returns error if documentstate is revoked", async () => {
     request.payload.checklist = "";
@@ -259,7 +279,7 @@ describe("SaveContinue_ValidationTests", () => {
   });
 });
 
-describe("SaveContinue_SuccessTests", () => {
+describe("SaveContinue_SuccessTests_PartOne", () => {
   let request, h;
   beforeEach(() => {
     ({ request, h } = setupTest());
@@ -308,6 +328,16 @@ describe("SaveContinue_SuccessTests", () => {
     expect(request.yar.set).toHaveBeenCalledWith("successConfirmation", true);
     expect(h.redirect).toHaveBeenCalledWith("/checker/dashboard");
   });
+});
+
+describe("SaveContinue_SuccessTests_PartTwo", () => {
+  let request, h;
+  beforeEach(() => {
+    ({ request, h } = setupTest());
+    validatePassOrFail.mockReset();
+    apiService.recordCheckOutCome.mockReset();
+  });
+  afterEach(() => jest.clearAllMocks());
 
   test("handles API error when recording check outcome", async () => {
     request.payload.checklist = CheckOutcomeConstants.Pass;
