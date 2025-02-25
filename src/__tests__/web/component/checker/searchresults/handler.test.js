@@ -40,195 +40,219 @@ const formatPtdNumber = (ptdNumber) => {
   );
 };
 
-describe("SearchResultsHandlers", () => {
+const setupTest = () => {
+  const request = {
+    payload: {},
+    yar: {
+      get: jest.fn(),
+      set: jest.fn(),
+      clear: jest.fn(),
+    },
+  };
+  const h = {
+    view: jest.fn(() => {
+      return { viewRendered: true };
+    }),
+    redirect: jest.fn(() => {
+      return { redirected: true };
+    }),
+  };
+  return { request, h };
+};
+
+describe("SearchResults_ViewAndFormat", () => {
   let request;
   let h;
   beforeEach(() => {
-    request = {
-      payload: {},
-      yar: {
-        get: jest.fn(),
-        set: jest.fn(),
-        clear: jest.fn(),
-      },
-    };
-    h = {
-      view: jest.fn(() => {
-        return { viewRendered: true };
-      }),
-      redirect: jest.fn(() => {
-        return { redirected: true };
-      }),
-    };
+    const setup = setupTest();
+    request = setup.request;
+    h = setup.h;
   });
   afterEach(() => {
     jest.clearAllMocks();
   });
-  describe("getSearchResultsHandler", () => {
-    test("should return view with microchipNumber and data from session", async () => {
-      const mockMicrochipNumber = "123456789012345";
-      const mockData = { some: "data" };
-      request.yar.get.mockImplementation((key) => {
-        const values = {
-          microchipNumber: mockMicrochipNumber,
-          data: mockData,
-        };
-        return values[key] || null;
-      });
-      h = {
-        view: jest.fn(() => {
-          return { viewRendered: true };
-        }),
-      };
-      const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
-      await SearchResultsHandlers.getSearchResultsHandler(request, h);
-      expect(request.yar.get).toHaveBeenCalledWith("microchipNumber");
-      expect(request.yar.get).toHaveBeenCalledWith("data");
-      expect(h.view).toHaveBeenCalledWith(VIEW_PATH, {
-        microchipNumber: mockMicrochipNumber,
-        pageTitle,
-        data: mockData,
-        checklist: {},
-      });
-    });
-    test("should format ptdNumber correctly when present", async () => {
-      const mockMicrochipNumber = "123456789012345";
-      const mockData = { ptdNumber: "12345678901" };
-      request.yar.get.mockImplementation((key) => {
-        const values = {
-          microchipNumber: mockMicrochipNumber,
-          data: mockData,
-        };
-        return values[key] || null;
-      });
-      await SearchResultsHandlers.getSearchResultsHandler(request, h);
-      const expectedFormat = formatPtdNumber("12345678901");
-      expect(h.view).toHaveBeenCalledWith(
-        VIEW_PATH,
-        expect.objectContaining({
-          data: expect.objectContaining({
-            ptdFormatted: expectedFormat,
-          }),
-        })
-      );
-    });
-    test("should format ptdNumber correctly when short", async () => {
-      const mockMicrochipNumber = "123456789012345";
-      const mockData = { ptdNumber: "123" };
-      request.yar.get.mockImplementation((key) => {
-        const values = {
-          microchipNumber: mockMicrochipNumber,
-          data: mockData,
-        };
-        return values[key] || null;
-      });
-      await SearchResultsHandlers.getSearchResultsHandler(request, h);
-      const expectedFormat = formatPtdNumber("123");
-      expect(h.view).toHaveBeenCalledWith(
-        VIEW_PATH,
-        expect.objectContaining({
-          data: expect.objectContaining({
-            ptdFormatted: expectedFormat,
-          }),
-        })
-      );
-    });
-    test("should handle empty ptdNumber", async () => {
-      const mockMicrochipNumber = "123456789012345";
-      const mockData = { ptdNumber: "" };
-      request.yar.get.mockImplementation((key) => {
-        const values = {
-          microchipNumber: mockMicrochipNumber,
-          data: mockData,
-        };
-        return values[key] || null;
-      });
-      await SearchResultsHandlers.getSearchResultsHandler(request, h);
-      expect(h.view).toHaveBeenCalledWith(
-        VIEW_PATH,
-        expect.objectContaining({
-          data: expect.objectContaining({
-            ptdFormatted: "",
-          }),
-        })
-      );
-    });
-    test("should set ptdFormatted to empty string when data object has no ptdNumber", async () => {
-      const mockMicrochipNumber = "123456789012345";
-      const mockData = {};
-      request.yar.get.mockImplementation((key) => {
-        const values = {
-          microchipNumber: mockMicrochipNumber,
-          data: mockData,
-        };
-        return values[key] || null;
-      });
-      await SearchResultsHandlers.getSearchResultsHandler(request, h);
-      expect(h.view).toHaveBeenCalledWith(
-        VIEW_PATH,
-        expect.objectContaining({
-          data: expect.objectContaining({
-            ptdFormatted: "",
-          }),
-        })
-      );
-    });
-    test("should return view with nonComplianceToSearchResults navigation", async () => {
-      const mockMicrochipNumber = "123456789012345";
-      const mockData = { some: "data" };
-      const nonComplianceToSearchResults = true;
-      request.yar.get.mockImplementation((key) => {
-        const values = {
-          microchipNumber: mockMicrochipNumber,
-          data: mockData,
-          nonComplianceToSearchResults: nonComplianceToSearchResults,
-        };
-        return values[key] || null;
-      });
-      h = {
-        view: jest.fn(() => {
-          return { viewRendered: true };
-        }),
-      };
-      await SearchResultsHandlers.getSearchResultsHandler(request, h);
-      expect(request.yar.get).toHaveBeenCalledWith("microchipNumber");
-      expect(request.yar.get).toHaveBeenCalledWith("data");
-      expect(request.yar.get).toHaveBeenCalledWith(
-        "nonComplianceToSearchResults"
-      );
-      expect(h.view).toHaveBeenCalledWith(VIEW_PATH, {
-        microchipNumber: mockMicrochipNumber,
-        pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
-        data: mockData,
-        checklist: CheckOutcomeConstants.Fail,
-      });
-      expect(request.yar.clear).toHaveBeenCalledWith(
-        "nonComplianceToSearchResults"
-      );
-    });
-  });
-});
 
-describe("SaveAndContinueHandler_ValidationTests", () => {
-  let request;
-  let h;
-  beforeEach(() => {
-    request = {
-      payload: {},
-      yar: {
-        get: jest.fn(),
-        set: jest.fn(),
-        clear: jest.fn(),
-      },
-    };
+  test("should return view with microchipNumber and data from session", async () => {
+    const mockMicrochipNumber = "123456789012345";
+    const mockData = { some: "data" };
+    request.yar.get.mockImplementation((key) => {
+      const values = {
+        microchipNumber: mockMicrochipNumber,
+        data: mockData,
+      };
+      return values[key] || null;
+    });
     h = {
       view: jest.fn(() => {
         return { viewRendered: true };
       }),
-      redirect: jest.fn(() => {
-        return { redirected: true };
+    };
+    const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
+    await SearchResultsHandlers.getSearchResultsHandler(request, h);
+    expect(request.yar.get).toHaveBeenCalledWith("microchipNumber");
+    expect(request.yar.get).toHaveBeenCalledWith("data");
+    expect(h.view).toHaveBeenCalledWith(VIEW_PATH, {
+      microchipNumber: mockMicrochipNumber,
+      pageTitle,
+      data: mockData,
+      checklist: {},
+    });
+  });
+});
+
+describe("SearchResults_PTDFormatting", () => {
+  let request;
+  let h;
+  beforeEach(() => {
+    const setup = setupTest();
+    request = setup.request;
+    h = setup.h;
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test("should format ptdNumber correctly when present", async () => {
+    const mockMicrochipNumber = "123456789012345";
+    const mockData = { ptdNumber: "12345678901" };
+    request.yar.get.mockImplementation((key) => {
+      const values = {
+        microchipNumber: mockMicrochipNumber,
+        data: mockData,
+      };
+      return values[key] || null;
+    });
+    await SearchResultsHandlers.getSearchResultsHandler(request, h);
+    const expectedFormat = formatPtdNumber("12345678901");
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        data: expect.objectContaining({
+          ptdFormatted: expectedFormat,
+        }),
+      })
+    );
+  });
+
+  test("should format ptdNumber correctly when short", async () => {
+    const mockMicrochipNumber = "123456789012345";
+    const mockData = { ptdNumber: "123" };
+    request.yar.get.mockImplementation((key) => {
+      const values = {
+        microchipNumber: mockMicrochipNumber,
+        data: mockData,
+      };
+      return values[key] || null;
+    });
+    await SearchResultsHandlers.getSearchResultsHandler(request, h);
+    const expectedFormat = formatPtdNumber("123");
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        data: expect.objectContaining({
+          ptdFormatted: expectedFormat,
+        }),
+      })
+    );
+  });
+});
+
+describe("SearchResults_EmptyHandling", () => {
+  let request;
+  let h;
+  beforeEach(() => {
+    const setup = setupTest();
+    request = setup.request;
+    h = setup.h;
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test("should handle empty ptdNumber", async () => {
+    const mockMicrochipNumber = "123456789012345";
+    const mockData = { ptdNumber: "" };
+    request.yar.get.mockImplementation((key) => {
+      const values = {
+        microchipNumber: mockMicrochipNumber,
+        data: mockData,
+      };
+      return values[key] || null;
+    });
+    await SearchResultsHandlers.getSearchResultsHandler(request, h);
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        data: expect.objectContaining({
+          ptdFormatted: "",
+        }),
+      })
+    );
+  });
+
+  test("should set ptdFormatted to empty string when data object has no ptdNumber", async () => {
+    const mockMicrochipNumber = "123456789012345";
+    const mockData = {};
+    request.yar.get.mockImplementation((key) => {
+      const values = {
+        microchipNumber: mockMicrochipNumber,
+        data: mockData,
+      };
+      return values[key] || null;
+    });
+    await SearchResultsHandlers.getSearchResultsHandler(request, h);
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        data: expect.objectContaining({
+          ptdFormatted: "",
+        }),
+      })
+    );
+  });
+
+  test("should return view with nonComplianceToSearchResults navigation", async () => {
+    const mockMicrochipNumber = "123456789012345";
+    const mockData = { some: "data" };
+    const nonComplianceToSearchResults = true;
+    request.yar.get.mockImplementation((key) => {
+      const values = {
+        microchipNumber: mockMicrochipNumber,
+        data: mockData,
+        nonComplianceToSearchResults: nonComplianceToSearchResults,
+      };
+      return values[key] || null;
+    });
+    h = {
+      view: jest.fn(() => {
+        return { viewRendered: true };
       }),
     };
+    await SearchResultsHandlers.getSearchResultsHandler(request, h);
+    expect(request.yar.get).toHaveBeenCalledWith("microchipNumber");
+    expect(request.yar.get).toHaveBeenCalledWith("data");
+    expect(request.yar.get).toHaveBeenCalledWith(
+      "nonComplianceToSearchResults"
+    );
+    expect(h.view).toHaveBeenCalledWith(VIEW_PATH, {
+      microchipNumber: mockMicrochipNumber,
+      pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
+      data: mockData,
+      checklist: CheckOutcomeConstants.Fail,
+    });
+    expect(request.yar.clear).toHaveBeenCalledWith(
+      "nonComplianceToSearchResults"
+    );
+  });
+});
+
+describe("SaveContinue_ValidationErrors", () => {
+  let request;
+  let h;
+  beforeEach(() => {
+    const setup = setupTest();
+    request = setup.request;
+    h = setup.h;
     validatePassOrFail.mockReset();
     apiService.recordCheckOutCome.mockReset();
   });
@@ -264,6 +288,21 @@ describe("SaveAndContinueHandler_ValidationTests", () => {
         ]),
       })
     );
+  });
+});
+
+describe("SaveContinue_DocumentState", () => {
+  let request;
+  let h;
+  beforeEach(() => {
+    const setup = setupTest();
+    request = setup.request;
+    h = setup.h;
+    validatePassOrFail.mockReset();
+    apiService.recordCheckOutCome.mockReset();
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   test("should return validation error if data state is active", async () => {
@@ -331,26 +370,13 @@ describe("SaveAndContinueHandler_ValidationTests", () => {
   });
 });
 
-describe("SaveAndContinueHandler_SuccessTests", () => {
+describe("SaveContinue_SuccessPath", () => {
   let request;
   let h;
   beforeEach(() => {
-    request = {
-      payload: {},
-      yar: {
-        get: jest.fn(),
-        set: jest.fn(),
-        clear: jest.fn(),
-      },
-    };
-    h = {
-      view: jest.fn(() => {
-        return { viewRendered: true };
-      }),
-      redirect: jest.fn(() => {
-        return { redirected: true };
-      }),
-    };
+    const setup = setupTest();
+    request = setup.request;
+    h = setup.h;
     validatePassOrFail.mockReset();
     apiService.recordCheckOutCome.mockReset();
   });
@@ -397,6 +423,21 @@ describe("SaveAndContinueHandler_SuccessTests", () => {
     expect(request.yar.clear).toHaveBeenCalledWith("IsFailSelected");
     expect(request.yar.set).toHaveBeenCalledWith("successConfirmation", true);
     expect(h.redirect).toHaveBeenCalledWith("/checker/dashboard");
+  });
+});
+
+describe("SaveContinue_APIErrors", () => {
+  let request;
+  let h;
+  beforeEach(() => {
+    const setup = setupTest();
+    request = setup.request;
+    h = setup.h;
+    validatePassOrFail.mockReset();
+    apiService.recordCheckOutCome.mockReset();
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   test("should handle API error when recording check outcome", async () => {
@@ -446,26 +487,13 @@ describe("SaveAndContinueHandler_SuccessTests", () => {
   });
 });
 
-describe("SaveAndContinueHandler_FailureTests", () => {
+describe("SaveContinue_FailurePath", () => {
   let request;
   let h;
   beforeEach(() => {
-    request = {
-      payload: {},
-      yar: {
-        get: jest.fn(),
-        set: jest.fn(),
-        clear: jest.fn(),
-      },
-    };
-    h = {
-      view: jest.fn(() => {
-        return { viewRendered: true };
-      }),
-      redirect: jest.fn(() => {
-        return { redirected: true };
-      }),
-    };
+    const setup = setupTest();
+    request = setup.request;
+    h = setup.h;
     validatePassOrFail.mockReset();
     apiService.recordCheckOutCome.mockReset();
   });
@@ -501,6 +529,21 @@ describe("SaveAndContinueHandler_FailureTests", () => {
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
     expect(request.yar.set).toHaveBeenCalledWith("IsFailSelected", true);
     expect(h.redirect).toHaveBeenCalledWith("/checker/non-compliance");
+  });
+});
+
+describe("SaveContinue_ErrorHandling", () => {
+  let request;
+  let h;
+  beforeEach(() => {
+    const setup = setupTest();
+    request = setup.request;
+    h = setup.h;
+    validatePassOrFail.mockReset();
+    apiService.recordCheckOutCome.mockReset();
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   test("should handle unexpected errors", async () => {
