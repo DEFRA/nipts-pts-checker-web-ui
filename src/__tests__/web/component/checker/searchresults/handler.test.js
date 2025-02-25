@@ -73,20 +73,14 @@ describe("SearchResultsHandlers", () => {
       const mockMicrochipNumber = "123456789012345";
       const mockData = { some: "data" };
 
-      request = {
-        yar: {
-          get: jest.fn((key) => {
-            if (key === "microchipNumber") {
-              return mockMicrochipNumber;
-            }
-            if (key === "data") {
-              return mockData;
-            }
-            return null;
-          }),
-        },
-      };
-
+     request.yar.get.mockImplementation((key) => {
+       const values = {
+         microchipNumber: mockMicrochipNumber,
+         data: mockData,
+       };
+       return values[key] || null;
+     });
+     
       h = {
         view: jest.fn(() => {
           return { viewRendered: true };
@@ -110,15 +104,14 @@ describe("SearchResultsHandlers", () => {
       const mockMicrochipNumber = "123456789012345";
       const mockData = { ptdNumber: "12345678901" };
 
-      request.yar.get.mockImplementation((key) => {
-        if (key === "microchipNumber") {
-          return mockMicrochipNumber;
-        }
-        if (key === "data") {
-          return mockData;
-        }
-        return null;
-      });
+
+     request.yar.get.mockImplementation((key) => {
+       const values = {
+         microchipNumber: mockMicrochipNumber,
+         data: mockData,
+       };
+       return values[key] || null;
+     });
 
       await SearchResultsHandlers.getSearchResultsHandler(request, h);
 
@@ -138,15 +131,12 @@ describe("SearchResultsHandlers", () => {
       const mockData = { ptdNumber: "123" };
 
       request.yar.get.mockImplementation((key) => {
-        if (key === "microchipNumber") {
-          return mockMicrochipNumber;
-        }
-        if (key === "data") {
-          return mockData;
-        }
-        return null;
+        const values = {
+          microchipNumber: mockMicrochipNumber,
+          data: mockData,
+        };
+        return values[key] || null;
       });
-
       await SearchResultsHandlers.getSearchResultsHandler(request, h);
 
       const expectedFormat = formatPtdNumber("123");
@@ -161,18 +151,16 @@ describe("SearchResultsHandlers", () => {
     });
 
     test("should handle empty ptdNumber", async () => {
-      const mockMicrochipNumber = "123456789012345";
-      const mockData = { ptdNumber: "" };
+     const mockMicrochipNumber = "123456789012345";
+     const mockData = { ptdNumber: "" };
 
-      request.yar.get.mockImplementation((key) => {
-        if (key === "microchipNumber") {
-          return mockMicrochipNumber;
-        }
-        if (key === "data") {
-          return mockData;
-        }
-        return null;
-      });
+     request.yar.get.mockImplementation((key) => {
+       const values = {
+         microchipNumber: mockMicrochipNumber,
+         data: mockData,
+       };
+       return values[key] || null;
+     });
 
       await SearchResultsHandlers.getSearchResultsHandler(request, h);
 
@@ -187,18 +175,16 @@ describe("SearchResultsHandlers", () => {
     });
 
     test("should set ptdFormatted to empty string when data object has no ptdNumber", async () => {
-      const mockMicrochipNumber = "123456789012345";
-      const mockData = {};
+     const mockMicrochipNumber = "123456789012345";
+     const mockData = {};
 
-      request.yar.get.mockImplementation((key) => {
-        if (key === "microchipNumber") {
-          return mockMicrochipNumber;
-        }
-        if (key === "data") {
-          return mockData;
-        }
-        return null;
-      });
+     request.yar.get.mockImplementation((key) => {
+       const values = {
+         microchipNumber: mockMicrochipNumber,
+         data: mockData,
+       };
+       return values[key] || null;
+     });
 
       await SearchResultsHandlers.getSearchResultsHandler(request, h);
 
@@ -217,23 +203,15 @@ describe("SearchResultsHandlers", () => {
       const mockData = { some: "data" };
       const nonComplianceToSearchResults = true;
 
-      request = {
-        yar: {
-          get: jest.fn((key) => {
-            if (key === "microchipNumber") {
-              return mockMicrochipNumber;
-            }
-            if (key === "data") {
-              return mockData;
-            }
-            if (key === "nonComplianceToSearchResults") {
-              return nonComplianceToSearchResults;
-            }
-            return null;
-          }),
-          clear: jest.fn(),
-        },
+    
+    request.yar.get.mockImplementation((key) => {
+      const values = {
+        microchipNumber: mockMicrochipNumber,
+        data: mockData,
+        nonComplianceToSearchResults: nonComplianceToSearchResults,
       };
+      return values[key] || null;
+    });
 
       h = {
         view: jest.fn(() => {
@@ -263,15 +241,16 @@ describe("SearchResultsHandlers", () => {
   describe("saveAndContinueHandler", () => {
     test("should return validation error if checklist is invalid", async () => {
       request.payload = { checklist: "" };
-      request.yar.get.mockImplementation((key) => {
-        if (key === "microchipNumber") {
-          return "123456789012345";
-        }
-        if (key === "data") {
-          return { ptdNumber: "123" };
-        }
-        return null;
-      });
+     const mockMicrochipNumber = "123456789012345";
+     const mockData = { ptdNumber: "123" };
+
+     request.yar.get.mockImplementation((key) => {
+       const values = {
+         microchipNumber: mockMicrochipNumber,
+         data: mockData,
+       };
+       return values[key] || null;
+     });
 
       validatePassOrFail.mockReturnValue({
         isValid: false,
@@ -431,23 +410,16 @@ describe("SearchResultsHandlers", () => {
         selectedRouteOption: { id: "option456" },
       };
 
+      
       request.yar.get.mockImplementation((key) => {
-        if (key === "data") {
-          return mockData;
-        }
-        if (key === "currentSailingSlot") {
-          return mockSailingSlot;
-        }
-        if (key === "isGBCheck") {
-          return true;
-        }
-        if (key === "checkerId") {
-          return "checker123";
-        }
-        if (key === "microchipNumber") {
-          return "123456789012345";
-        }
-        return null;
+        const values = {
+          data: mockData,
+          currentSailingSlot: mockSailingSlot,
+          isGBCheck: true,
+          checkerId: "checker123",
+          microchipNumber: "123456789012345",
+        };
+        return values[key] || null;
       });
 
       validatePassOrFail.mockReturnValueOnce({ isValid: true });
