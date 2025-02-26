@@ -172,7 +172,7 @@ describe("postNonComplianceHandler", () => {
     expect(h.view).toHaveBeenCalledWith(
       VIEW_PATH,
       expect.objectContaining({
-        data: {"documentState": "awaiting", "some": "data"},
+        data: {"documentState": "awaiting", "some": "data", "ptdFormatted": ""},
         documentStatus,
         documentStatusColourMapping,
         errors: {
@@ -249,7 +249,7 @@ describe("postNonComplianceHandler", () => {
     expect(h.view).toHaveBeenCalledWith(
       VIEW_PATH,
       expect.objectContaining({
-        data: {"applicationId": "testApplicationId", "documentState": "approved"},
+        data: {"applicationId": "testApplicationId", "documentState": "approved", "ptdFormatted": ""},
         errors: { passengerType: passengerTypeErrorMessage },
         errorSummary: [{ fieldId: 'passengerType', message: passengerTypeErrorMessage }],
         formSubmitted: true,
@@ -292,7 +292,7 @@ describe("postNonComplianceHandler", () => {
     request.payload = payload;
     request.yar.get.mockImplementation((key) => {
       const mockData = {
-        data: { applicationId: "testApplicationId", documentState: "approved" },
+        data: { applicationId: "testApplicationId", documentState: "approved", "ptdFormatted": "" },
         IsFailSelected: { value: true },  // Return as an object
         currentSailingSlot: {
           departureDate: departureDate,
@@ -329,7 +329,6 @@ describe("postNonComplianceHandler", () => {
 
     expect(h.view).toHaveBeenCalledWith(
       VIEW_PATH, {
-        //error: errorMessage,
         errorSummary: [
           {
             fieldId: "unexpected",
@@ -339,7 +338,7 @@ describe("postNonComplianceHandler", () => {
         ],
         documentStatus,
         documentStatusColourMapping,
-        data: { applicationId: "testApplicationId", documentState: "approved" },
+        data: { applicationId: "testApplicationId", documentState: "approved", "ptdFormatted": "" },
         model: {"setting1": "value1"},
         formSubmitted: true,
         payload,
