@@ -26,20 +26,22 @@ const statusColourMapping = {
   rejected: "govuk-tag govuk-tag--red",
 };
 
-const getNonComplianceHandler = async (request, h) => {
-  const data = request.yar.get("data");
-
-
+const getPtdFormatted = (data) => {
   const PTD_LENGTH = 11; 
   const PTD_PREFIX_LENGTH = 5;
   const PTD_MID_LENGTH = 8;
 
-  data.ptdFormatted = data?.ptdNumber 
+  return data?.ptdNumber 
     ? `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(0, PTD_PREFIX_LENGTH)} ` +
       `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(PTD_PREFIX_LENGTH, PTD_MID_LENGTH)} ` +
       `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(PTD_MID_LENGTH)}`
     : "";
+};
 
+const getNonComplianceHandler = async (request, h) => {
+  const data = request.yar.get("data");
+
+  data.ptdFormatted = getPtdFormatted(data);
 
   const appSettings = appSettingsService.getAppSettings();
   const model = { ...appSettings };
@@ -69,6 +71,7 @@ const postNonComplianceHandler = async (request, h) => {
     const validationResult = validateNonCompliance(payload);
     const appSettings = appSettingsService.getAppSettings();
     const model = { ...appSettings };
+    
 
     console.log("Validation Result:", validationResult);
     const data = request.yar.get("data");
@@ -76,6 +79,8 @@ const postNonComplianceHandler = async (request, h) => {
     const documentStatus = statusMapping[applicationStatus] || applicationStatus;
     const documentStatusColourMapping =
       statusColourMapping[applicationStatus] || applicationStatus;
+
+    data.ptdFormatted = getPtdFormatted(data);
 
     if (!validationResult.isValid) {
       const errors = {};
