@@ -61,7 +61,6 @@
   
     const ferryRadioButton = document.getElementById('routeOption');
     const flightRadioButton = document.getElementById('routeOption-2');
-    const conditionalContent = document.getElementById('conditional-routeOption');
     const conditionalContentFlight = document.getElementById('conditional-routeOption-2');
     const selectRouteLink = document.querySelector('a[href="#routeOption"]');
     const ferryError = document.getElementById('ferry-error');
@@ -115,10 +114,6 @@
     if (selectRouteLink) {
         selectRouteLink.addEventListener('click', function(e) {
             e.preventDefault();
-            ferryRadioButton.checked = true;
-            conditionalContent.hidden = false;
-            conditionalContent.classList.remove('govuk-radios__conditional--hidden');
-            ferryRadioButton.setAttribute('aria-expanded', 'true');
             if (!conditionalContentFlight.classList.contains('govuk-radios__conditional--hidden')) {
                 conditionalContentFlight.classList.add('govuk-radios__conditional--hidden');
             }
