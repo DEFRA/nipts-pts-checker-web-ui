@@ -115,10 +115,6 @@
     if (selectRouteLink) {
         selectRouteLink.addEventListener('click', function(e) {
             e.preventDefault();
-            ferryRadioButton.checked = true;
-            conditionalContent.hidden = false;
-            conditionalContent.classList.remove('govuk-radios__conditional--hidden');
-            ferryRadioButton.setAttribute('aria-expanded', 'true');
             if (!conditionalContentFlight.classList.contains('govuk-radios__conditional--hidden')) {
                 conditionalContentFlight.classList.add('govuk-radios__conditional--hidden');
             }
