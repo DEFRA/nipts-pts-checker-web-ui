@@ -122,58 +122,6 @@
             </div>
             {% endif %}
             
-            {% if data['documentState'] === "approved"  or data['documentState'] === "revoked"  or data['documentState'] === "rejected"%}
-            <div id="document-IssuingAuthority-card" class="govuk-summary-card">
-                <div class="govuk-summary-card__title-wrapper">
-                    <h2 class="govuk-summary-card__title">Issuing authority</h2>
-                </div>
-                <div class="govuk-summary-card__content">
-                    <dl class="govuk-summary-list">
-                        <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key">
-                                Name and address of competent authority
-                            </dt>
-                            <dd class="govuk-summary-list__value">
-                                {%if issuingAuthorityName.trim() !== '' %}
-                                    <strong>{{ issuingAuthorityName }}</strong>
-                                    <br class="pet-br-print">
-                                {% endif %} 
-                                {%if issuingAuthorityAddressLineOne.trim() !== '' %}
-                                    {{ issuingAuthorityAddressLineOne }}
-                                    <br class="pet-br-print">
-                                {% endif %}
-                                {%if issuingAuthorityAddressLineTwo.trim() !== '' %}                             
-                                    {{ issuingAuthorityAddressLineTwo }}
-                                    <br class="pet-br-print">
-                                {% endif %}
-                                {%if issuingAuthorityAddressLineThree.trim() !== '' %}                             
-                                    {{ issuingAuthorityAddressLineThree }}
-                                    <br class="pet-br-print">
-                                {% endif %}
-                                {%if issuingAuthorityAddressTownOrCity.trim() !== '' %}                             
-                                    {{ issuingAuthorityAddressTownOrCity }}
-                                    <br class="pet-br-print">
-                                {% endif %}
-                                {%if issuingAuthorityAddressCounty.trim() !== '' %}                             
-                                    {{ issuingAuthorityAddressCounty }}
-                                    <br class="pet-br-print">
-                                {% endif %}
-                                {{ issuingAuthorityAddressPostCode }}
-                            </dd>
-                        </div>
-                        <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key">
-                                Signed on behalf of the competent authority (APHA)
-                            </dt>
-                            <dd class="govuk-summary-list__value">
-                                {{ issuingAuthorityAddressSignature }}
-                            </dd>
-                        </div>
-                    </dl>
-                </div>
-            </div>
-            {% endif %}
-
             <div id="document-microchip-card" class="govuk-summary-card">
                 <div class="govuk-summary-card__title-wrapper">
                     <h2 class="govuk-summary-card__title">Microchip information</h2>
