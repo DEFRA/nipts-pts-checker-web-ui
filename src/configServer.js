@@ -9,6 +9,7 @@ const fileName = fileURLToPath(import.meta.url);
 const directoryName = dirname(fileName);
 
 const HTTP_STATUS = {
+  NOT_FOUND: 404,
   FORBIDDEN: 403,
   SERVER_ERROR: 500,
 };
@@ -20,12 +21,14 @@ const PATHS = {
 };
 
 const ERROR_VIEWS = {
+  NOT_FOUND: "errors/404Error",
   FORBIDDEN: "errors/403Error",
   SERVER_ERROR: "errors/500Error",
 };
 
 const ERROR_ROUTES = {
   SERVER_ERROR: "/500error",
+  NOT_FOUND: "/404error",
 };
 
 async function serveStaticErrorPage() {
@@ -103,6 +106,17 @@ const configureStaticRoutes = (server) => {
       },
     },
   });
+
+  server.route({
+    method: "*",
+    path: "/{any*}",
+    handler: function (_request, h) {
+      return h
+        .view(ERROR_VIEWS.NOT_FOUND)
+        .code(HTTP_STATUS.NOT_FOUND)
+        .takeover();
+    },
+  });
 };
 
 const configureErrorRoutes = (server) => {
@@ -111,6 +125,17 @@ const configureErrorRoutes = (server) => {
     path: ERROR_ROUTES.SERVER_ERROR,
     handler: (_request, h) => {
       return h.view(ERROR_VIEWS.SERVER_ERROR).takeover();
+    },
+  });
+
+  server.route({
+    method: "GET",
+    path: ERROR_ROUTES.NOT_FOUND,
+    handler: (_request, h) => {
+      return h
+        .view(ERROR_VIEWS.NOT_FOUND)
+        .code(HTTP_STATUS.NOT_FOUND)
+        .takeover();
     },
   });
 };
@@ -136,6 +161,12 @@ const setup = (server) => {
         return h
           .view(ERROR_VIEWS.FORBIDDEN)
           .code(HTTP_STATUS.FORBIDDEN)
+          .takeover();
+      }
+      if (response.output.statusCode === HTTP_STATUS.NOT_FOUND) {
+        return h
+          .view(ERROR_VIEWS.NOT_FOUND)
+          .code(HTTP_STATUS.NOT_FOUND)
           .takeover();
       }
     }
