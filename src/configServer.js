@@ -107,11 +107,10 @@ const configureStaticRoutes = (server) => {
     },
   });
 
-  // Add catch-all route for undefined paths (will trigger the 404)
   server.route({
     method: "*",
     path: "/{any*}",
-    handler: function (request, h) {
+    handler: function (_request, h) {
       return h
         .view(ERROR_VIEWS.NOT_FOUND)
         .code(HTTP_STATUS.NOT_FOUND)
