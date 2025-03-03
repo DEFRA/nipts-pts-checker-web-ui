@@ -20,4 +20,16 @@
     </div>
   </div>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const navigation = document.querySelector('.pts-checker-navigation');
+    if (navigation) {
+      navigation.style.display = 'none';
+    }
+  });
+
+  if (window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+  }
+</script>
 {% endblock %}

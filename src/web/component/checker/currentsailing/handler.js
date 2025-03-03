@@ -48,7 +48,7 @@ const getCurrentSailings = async (request, h) => {
   });
 };
 
-// Rest of your original submitCurrentSailingSlot function remains unchanged
+
 const submitCurrentSailingSlot = async (request, h) => {
   const {
     routeOption,
