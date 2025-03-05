@@ -173,7 +173,7 @@ describe("postNonComplianceHandler", () => {
     expect(h.view).toHaveBeenCalledWith(
       VIEW_PATH,
       expect.objectContaining({
-        data: {"documentState": "awaiting", "some": "data", "ptdFormatted": ""},
+        data: {"documentState": "awaiting", "isGBCheck": true, "some": "data", "ptdFormatted": ""},
         documentStatus,
         documentStatusColourMapping,
         errors: {
@@ -220,7 +220,7 @@ describe("postNonComplianceHandler", () => {
     request.payload = payload;
     request.yar.get.mockImplementation((key) => {
       const mockData = {
-        data: { applicationId: "testApplicationId", documentState: "approved" },
+        data: { applicationId: "testApplicationId", documentState: "approved"},
         IsFailSelected: { value: true },  // Return as an object
         currentSailingSlot: {
           departureDate: departureDate,
@@ -228,7 +228,8 @@ describe("postNonComplianceHandler", () => {
           sailingMinutes: "30",
           selectedRoute: { id: 1 },
           selectedRouteOption: { id: 1 },
-        }
+        },
+        isGBCheck: true,
       };
     
       return mockData[key] || null;
@@ -250,7 +251,7 @@ describe("postNonComplianceHandler", () => {
     expect(h.view).toHaveBeenCalledWith(
       VIEW_PATH,
       expect.objectContaining({
-        data: {"applicationId": "testApplicationId", "documentState": "approved", "ptdFormatted": ""},
+        data: {"applicationId": "testApplicationId", "documentState": "approved", "isGBCheck": true, "ptdFormatted": ""},
         errors: { passengerType: passengerTypeErrorMessage },
         errorSummary: [{ fieldId: 'passengerType', message: passengerTypeErrorMessage }],
         formSubmitted: true,
@@ -301,7 +302,8 @@ describe("postNonComplianceHandler", () => {
           sailingMinutes: "30",
           selectedRoute: { id: 1 },
           selectedRouteOption: { id: 1 },
-        }
+        },
+        isGBCheck: true,
       };
     
       return mockData[key] || null;
@@ -339,7 +341,7 @@ describe("postNonComplianceHandler", () => {
         ],
         documentStatus,
         documentStatusColourMapping,
-        data: { applicationId: "testApplicationId", documentState: "approved", "ptdFormatted": "" },
+        data: { applicationId: "testApplicationId", documentState: "approved", "isGBCheck": true, "ptdFormatted": "" },
         model: {"setting1": "value1"},
         formSubmitted: true,
         payload,
