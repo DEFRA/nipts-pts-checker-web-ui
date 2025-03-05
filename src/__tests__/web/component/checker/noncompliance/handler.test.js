@@ -17,11 +17,12 @@ jest.mock("../../../../../api/services/apiService.js");
 jest.mock('../../../../../web/component/checker/noncompliance/validate.js');
 
 const genericErrorMessage = "The information wasn't recorded, please try to submit again. If you close the application, the information will be lost. You can printscreen or save the information and submit it later.";
-const awaitingVerification = "Awaiting verification";
+const awaitingVerification = "Pending";
 const greenTag = "govuk-tag govuk-tag--green";
 const yellowTag = "govuk-tag govuk-tag--yellow";
 const orangeTag = "govuk-tag govuk-tag--orange";
 const redTag = "govuk-tag govuk-tag--red";
+const blueTag = "govuk-tag govuk-tag--blue";
 const departureDate = "12/10/2024";
 const departuerDateForSPS = "13/10/2024";
 const departuerTimeForSPS = "17:30";
@@ -44,7 +45,7 @@ describe("getNonComplianceHandler", () => {
   });
 
   it("should render the view with the correct data", async () => {
-    const mockData = { some: "data", documentState: "awaiting" };
+    const mockData = { some: "data", documentState: "awaiting", isGBCheck: true };
     const mockAppSettings = { setting1: "value1" };
 
     request.yar.get.mockReturnValueOnce(mockData);
@@ -53,14 +54,14 @@ describe("getNonComplianceHandler", () => {
     const statusMapping = {
       approved: "Approved",
       awaiting: awaitingVerification,
-      revoked: "Revoked",
+      revoked: "Cancelled",
       rejected: "	Unsuccessful",
     };
   
     const statusColourMapping = {
       approved: greenTag,
-      awaiting: yellowTag,
-      revoked: orangeTag,
+      awaiting: blueTag,
+      revoked: redTag,
       rejected: redTag,
     };
     
@@ -129,14 +130,14 @@ describe("postNonComplianceHandler", () => {
     const statusMapping = {
       approved: "Approved",
       awaiting: awaitingVerification,
-      revoked: "Revoked",
+      revoked: "Cancelled",
       rejected: "	Unsuccessful",
     };
   
     const statusColourMapping = {
       approved: greenTag,
-      awaiting: yellowTag,
-      revoked: orangeTag,
+      awaiting: blueTag,
+      revoked: redTag,
       rejected: redTag,
     };
     
