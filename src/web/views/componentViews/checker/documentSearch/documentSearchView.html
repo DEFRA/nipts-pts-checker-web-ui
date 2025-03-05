@@ -232,12 +232,14 @@
   });
 
   // Clear all fields and reset radio buttons
-  function clearSearchFields(_event) {
+  function clearSearchFields(_event) { // ensure that radio btn not selected  -----
     _event.preventDefault(); // Prevent default link behavior
     resetField('ptdNumberSearch', 'ptd-form-group', 'ptd-error');
     resetField('applicationNumberSearch', 'application-form-group', 'application-error');
     resetField('microchipNumber', 'microchip-form-group', 'microchip-error');
-    document.getElementById('documentSearch-1').checked = true;
+    document.getElementById('documentSearch-1').checked = false;
+    document.getElementById('documentSearch-2').checked = false;
+    document.getElementById('documentSearch-3').checked = false;
     toggleConditionals(conditionalDocumentSearch1Id);
   }
 
