@@ -28,7 +28,13 @@ const getDashboard = async (request, h) => {
   );
   
   if (Array.isArray(response)) {
-    checks = response;
+
+    if (currentSailingSlot.selectedRoute && currentSailingSlot.selectedRouteOption.value === 'Ferry') {
+      checks = response.filter(check => check.routeName === currentSailingSlot.selectedRoute.value); // filter checks by ferry
+    } else {
+      checks = response; // otherwise just give everything
+    }
+
   } else {
     console.error("Unexpected checks response: ", response.error.error);
   }
