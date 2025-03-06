@@ -32,7 +32,6 @@ const getDocumentSearch = async (_request, h) => {
     return h.view(VIEW_PATH, {
       documentSearchMainModelData,
       successConfirmation,
-      //activeTab: "ptd", // Default active tab
       formSubmitted: false,
       // Initialize empty values for input fields
       ptdNumberSearch: "",
