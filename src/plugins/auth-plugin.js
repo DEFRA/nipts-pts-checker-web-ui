@@ -12,10 +12,7 @@ const HTTP_STATUS = {
 };
 
 const isTokenValid = (token) => {
-  if (!token) {
-    return false;
-  }
-  return true;
+  return !!token;
 };
 
 const isSessionExpired = (sessionCreationCookie) => {

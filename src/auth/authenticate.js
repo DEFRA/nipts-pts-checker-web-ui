@@ -2,16 +2,14 @@ import state from "./auth-code-grant/state.js";
 import redeemAuthorizationCodeForAccessToken from "./auth-code-grant/redeem-authorization-code-for-access-token.js";
 import jwtVerify from "./token-verify/jwt-verify.js";
 import decodeJwt from "./token-verify/jwt-decode.js";
-import validateToken from "./auth-token-validator.js";
+import validateToken from "./validateToken.js";
 import nonce from "./id-token/nonce.js";
 import expiresIn from "./auth-code-grant/expires-in.js";
-import session from "../session/index.js";
 import sessionKeys from "../session/keys.js";
 import cookieAuthentication from "./cookie-auth/cookie-auth.js";
 import {
   InvalidStateError,
   UnauthorizedError,
-  ForbiddenError,
 } from "../exceptions/index.js";
 import apiService from "../api/services/apiService.js";
 
