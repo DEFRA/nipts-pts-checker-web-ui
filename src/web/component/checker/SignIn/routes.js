@@ -6,6 +6,12 @@ import auth from "../../../../auth/index.js";
 import session from "../../../../session/index.js";
 import logout from "../../../../lib/logout.js";
 
+const HTTP_STATUS = {
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  BAD_REQUEST: 400,
+};
+
 const Routes = [
   {
     method: HttpMethod.GET,
@@ -52,31 +58,43 @@ const Routes = [
           logout(request);
 
           try {
-            if (err.name === "UnauthorizedError" || err.statusCode === 401) {
+            if (
+              err.name === "UnauthorizedError" ||
+              err.statusCode === HTTP_STATUS.UNAUTHORIZED
+            ) {
               console.log("Unauthorized error detected, rendering 401 page");
 
               const errorData = {
                 signOutUrl: config.authConfig.defraId.signOutUrl,
               };
 
-              return h.view("errors/401Error", errorData).code(401).takeover();
+              return h
+                .view("errors/401Error", errorData)
+                .code(HTTP_STATUS.UNAUTHORIZED)
+                .takeover();
             }
-            if (err.name === "ForbiddenError" || err.statusCode === 403) {
+            if (
+              err.name === "ForbiddenError" ||
+              err.statusCode === HTTP_STATUS.FORBIDDEN
+            ) {
               console.log("Forbidden error detected, rendering 403 page");
-              return h.view("errors/403Error").code(403).takeover();
+              return h
+                .view("errors/403Error")
+                .code(HTTP_STATUS.FORBIDDEN)
+                .takeover();
             }
 
             console.log("General error, returning basic response");
             return h
               .response("Authentication failed: " + err.message)
-              .code(401)
+              .code(HTTP_STATUS.UNAUTHORIZED)
               .takeover();
           } catch (viewError) {
             console.error("Error rendering view:", viewError);
 
             return h
               .response("Authentication failed. No roles found in token.")
-              .code(401)
+              .code(HTTP_STATUS.UNAUTHORIZED)
               .takeover();
           }
         }
