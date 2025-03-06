@@ -90,10 +90,11 @@
               
               {% include "componentViews/checker/noncompliance/relevantComments.html" %}
 
-              {% include "componentViews/checker/noncompliance/gbOutCome.html" %}
-
-              {% include "componentViews/checker/noncompliance/spsOutcome.html" %}
-
+              {% if data['isGBCheck'] %}
+                {% include "componentViews/checker/noncompliance/gbOutCome.html" %}
+              {% else %}
+                {% include "componentViews/checker/noncompliance/spsOutcome.html" %}
+              {% endif %}
               {% include "componentViews/checker/noncompliance/outcomeDetails.html" %}
           </div>
         </div>
@@ -113,44 +114,6 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-
-
-  // Select the checkboxes and radios
-  const gbCheckboxes = document.querySelectorAll('input[name="gbRefersToDAERAOrSPS"], #gbAdviseNoTravel, #gbPassengerSaysNoTravel');
-  const spsRadios = document.querySelectorAll('input[name="spsOutcome"]');
-
-  // Function to clear the SPS radio buttons
-  function clearSpsRadios() {
-    spsRadios.forEach(radio => {
-      radio.checked = false;
-    });
-  }
-
-  // Function to clear the GB checkboxes
-  function clearGbCheckboxes() {
-    gbCheckboxes.forEach(checkbox => {
-      checkbox.checked = false;
-    });
-  }
-
-  // Add change event listeners to the GB checkboxes
-  gbCheckboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-      // When a GB checkbox is changed, clear the SPS radios
-      clearSpsRadios();
-    });
-  });
-
-  // Add change event listeners to the SPS radios
-  spsRadios.forEach(radio => {
-    radio.addEventListener('change', function() {
-      // When an SPS radio is changed, clear the GB checkboxes
-      clearGbCheckboxes();
-    });
-  });
-});
-
 if(window.history.replaceState) {
     window.history.replaceState(null, null, window.location.href);
   }

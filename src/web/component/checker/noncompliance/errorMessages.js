@@ -33,7 +33,7 @@ export default {
     required: "Select at least one GB outcome",
   },
   spsOutcomeDetails: {
-    length: "Outcome details must be 500 characters or less"
+    length: "Outcome summary must be 500 characters or less"
   },
   relevantComments: {
     length: "Relevant comments must be 500 characters or less"

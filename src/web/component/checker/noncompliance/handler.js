@@ -14,16 +14,17 @@ const genericErrorMessage = "The information wasn't recorded, please try to subm
 
 const statusMapping = {
   approved: "Approved",
-  awaiting: "Awaiting verification",
-  revoked: "Revoked",
+  awaiting: "Pending",
+  revoked: "Cancelled",
   rejected: "	Unsuccessful",
 };
 
 const statusColourMapping = {
   approved: "govuk-tag govuk-tag--green",
-  awaiting: "govuk-tag govuk-tag--yellow",
-  revoked: "govuk-tag govuk-tag--orange",
+  awaiting: "govuk-tag govuk-tag--blue",
+  revoked: "govuk-tag govuk-tag--red",
   rejected: "govuk-tag govuk-tag--red",
+
 };
 
 const getPtdFormatted = (data) => {
@@ -42,6 +43,7 @@ const getNonComplianceHandler = async (request, h) => {
   const data = request.yar.get("data");
 
   data.ptdFormatted = getPtdFormatted(data);
+  data.isGBCheck = request.yar.get("isGBCheck");
 
   const appSettings = appSettingsService.getAppSettings();
   const model = { ...appSettings };
@@ -81,6 +83,7 @@ const postNonComplianceHandler = async (request, h) => {
       statusColourMapping[applicationStatus] || applicationStatus;
 
     data.ptdFormatted = getPtdFormatted(data);
+    data.isGBCheck = request.yar.get("isGBCheck");
 
     if (!validationResult.isValid) {
       const errors = {};
