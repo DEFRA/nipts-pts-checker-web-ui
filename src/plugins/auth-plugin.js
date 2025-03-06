@@ -6,6 +6,10 @@ import logout from "../lib/logout.js";
 import decodeJwt from "../auth/token-verify/jwt-decode.js";
 
 const SIGNIN_OIDC_PATH = "signin-oidc";
+const HTTP_STATUS = {
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+};
 
 const isTokenValid = (token) => {
   if (!token) {
@@ -42,7 +46,8 @@ const validateSession = async (request, _s) => {
   if (isTokenValid(token)) {
     result.valid = true;
   } else {
-    if (isSessionExpired(sessionCreationCookie)) {
+    const isExpired = isSessionExpired(sessionCreationCookie);
+    if (isExpired) {
       request.cookieAuth.clear();
       return { valid: false };
     }
@@ -130,7 +135,7 @@ const checkAuthorization = (request, h) => {
     const isValid = validateTokenRoles(token);
     if (!isValid) {
       logout(request);
-      return h.redirect("/401error").takeover();
+      return h.redirect(`/${HTTP_STATUS.UNAUTHORIZED}error`).takeover();
     }
   } else {
     console.log("No token found - redirecting to login");
