@@ -10,6 +10,7 @@ const directoryName = dirname(fileName);
 
 const HTTP_STATUS = {
   NOT_FOUND: 404,
+  UNAUTHORIZED: 401,
   FORBIDDEN: 403,
   SERVER_ERROR: 500,
 };
@@ -22,6 +23,7 @@ const PATHS = {
 
 const ERROR_VIEWS = {
   NOT_FOUND: "errors/404Error",
+  UNAUTHORIZED: "errors/401Error",
   FORBIDDEN: "errors/403Error",
   SERVER_ERROR: "errors/500Error",
 };
@@ -29,6 +31,7 @@ const ERROR_VIEWS = {
 const ERROR_ROUTES = {
   SERVER_ERROR: "/500error",
   NOT_FOUND: "/404error",
+  UNAUTHORIZED: "/401error",
 };
 
 async function serveStaticErrorPage() {
@@ -123,6 +126,9 @@ const configureErrorRoutes = (server) => {
   server.route({
     method: "GET",
     path: ERROR_ROUTES.SERVER_ERROR,
+    options: {
+      auth: false,
+    },
     handler: (_request, h) => {
       return h.view(ERROR_VIEWS.SERVER_ERROR).takeover();
     },
@@ -131,10 +137,27 @@ const configureErrorRoutes = (server) => {
   server.route({
     method: "GET",
     path: ERROR_ROUTES.NOT_FOUND,
+    options: {
+      auth: false,
+    },
     handler: (_request, h) => {
       return h
         .view(ERROR_VIEWS.NOT_FOUND)
         .code(HTTP_STATUS.NOT_FOUND)
+        .takeover();
+    },
+  });
+
+  server.route({
+    method: "GET",
+    path: ERROR_ROUTES.UNAUTHORIZED,
+    options: {
+      auth: false,
+    },
+    handler: (_request, h) => {
+      return h
+        .view(ERROR_VIEWS.UNAUTHORIZED)
+        .code(HTTP_STATUS.UNAUTHORIZED)
         .takeover();
     },
   });
@@ -161,6 +184,12 @@ const setup = (server) => {
         return h
           .view(ERROR_VIEWS.FORBIDDEN)
           .code(HTTP_STATUS.FORBIDDEN)
+          .takeover();
+      }
+      if (response.output.statusCode === HTTP_STATUS.UNAUTHORIZED) {
+        return h
+          .view(ERROR_VIEWS.UNAUTHORIZED)
+          .code(HTTP_STATUS.UNAUTHORIZED)
           .takeover();
       }
       if (response.output.statusCode === HTTP_STATUS.NOT_FOUND) {

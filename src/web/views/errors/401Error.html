@@ -1,0 +1,38 @@
+<!-- File: src/web/views/errors/401Error.html -->
+{% extends "./layouts/errorLayout.html" %}
+{% block headContent %}
+<style>
+    body {
+        padding-top: 110px;
+    }
+</style>
+{% endblock %}
+
+{% block pageTitle %} Unauthorized Access – GOV.UK {% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">[DUMMY PAGE] You are not authorized to access this service</h1>
+            <p class="govuk-body">
+                Your account does not have the required permissions to access the Compliance Portal.
+            </p>
+            <p class="govuk-body">
+                This could be because:
+            </p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>Your account does not have the Checker role assigned</li>
+                <li>You need to contact your system administrator to request access</li>
+            </ul>
+            <p>
+                Contact your team leader with any queries.
+            </p>
+
+            <p class="govuk-body">
+                If you continue to see this error, please clear your browser cookies and try again.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

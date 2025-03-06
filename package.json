@@ -89,7 +89,9 @@
       "/api/services/userService.js",
       "/api/services/httpService.js",
       "/config/",
-      "/plugins/magic-password.js",
+      "/plugins/",
+      "/exceptions/",
+      "/lib/",
       "/web/component/checker/magicPassword/",
       "/web/assets/",
       "/assets/"
