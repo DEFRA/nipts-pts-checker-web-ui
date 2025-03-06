@@ -5,6 +5,8 @@ import sessionKeys from "../session/keys.js";
 import logout from "../lib/logout.js";
 import decodeJwt from "../auth/token-verify/jwt-decode.js";
 
+const SIGNIN_OIDC_PATH = "signin-oidc";
+
 const isTokenValid = (token) => {
   if (!token) {
     return false;
@@ -39,9 +41,11 @@ const validateSession = async (request, _s) => {
 
   if (isTokenValid(token)) {
     result.valid = true;
-  } else if (isSessionExpired(sessionCreationCookie)) {
-    request.cookieAuth.clear();
-    return { valid: false };
+  } else {
+    if (isSessionExpired(sessionCreationCookie)) {
+      request.cookieAuth.clear();
+      return { valid: false };
+    }
   }
 
   if (result.valid) {
@@ -79,7 +83,7 @@ const isExemptRoute = (path) => {
     "/timeout-warning",
   ];
 
-  return path.includes("signin-oidc") || exemptPaths.includes(path);
+  return path.includes(SIGNIN_OIDC_PATH) || exemptPaths.includes(path);
 };
 
 const validateTokenRoles = (token) => {
@@ -250,7 +254,7 @@ export default {
       createTimeoutRoute(server);
 
       server.ext("onPreAuth", (request, h) => {
-        const isIdm2Page = request.path.includes("signin-oidc");
+        const isIdm2Page = request.path.includes(SIGNIN_OIDC_PATH);
 
         if (isIdm2Page) {
           return h.continue;
@@ -264,7 +268,7 @@ export default {
       });
 
       server.ext("onPostAuth", (request, h) => {
-        const isIdm2Page = request.path.includes("signin-oidc");
+        const isIdm2Page = request.path.includes(SIGNIN_OIDC_PATH);
 
         if (isIdm2Page) {
           return h.continue;
