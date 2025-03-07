@@ -234,11 +234,13 @@
   // Clear all fields and reset radio buttons
   function clearSearchFields(_event) {
     _event.preventDefault(); // Prevent default link behavior
+
+    document.getElementById('documentSearch-1').checked = false;
+    document.getElementById('documentSearch-2').checked = false;
+    document.getElementById('documentSearch-3').checked = false;
     resetField('ptdNumberSearch', 'ptd-form-group', 'ptd-error');
     resetField('applicationNumberSearch', 'application-form-group', 'application-error');
     resetField('microchipNumber', 'microchip-form-group', 'microchip-error');
-    document.getElementById('documentSearch-1').checked = true;
-    toggleConditionals(conditionalDocumentSearch1Id);
   }
 
   document.getElementById('clearSearchButton').addEventListener('click', clearSearchFields);
@@ -261,7 +263,8 @@
   });
 
   // On page load, ensure correct conditional content is displayed
-  document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function (e) {
+    clearSearchFields(e)
     toggleConditionals('conditional-documentSearch-' + getSelectedOptionId());
   });
 
