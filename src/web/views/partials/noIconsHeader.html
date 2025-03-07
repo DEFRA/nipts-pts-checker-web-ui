@@ -1,0 +1,25 @@
+
+
+{% block stylesheets %}
+
+<link href="/assets/javascripts/autocomplete/accessible-autocomplete.min.css" rel="stylesheet" type="text/css"
+  media="all" />
+{% endblock %}
+
+
+{% block header %}
+<header class="pts-checker-header">
+
+  <div class="govuk-width-container pts-header-title">
+    <div class="govuk-grid-row pet-declaration-logos">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l" style="color: #ffffff; margin-bottom: 0; white-space: nowrap;">
+          {{ headerData['checkerShortTitle'] }}
+        </h1>
+      </div>
+      <div class="govuk-grid-column-one-third">
+      </div>      
+    </div>
+  </div>
+</header>
+{% endblock %}
