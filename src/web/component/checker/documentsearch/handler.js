@@ -10,6 +10,7 @@ import {
 } from "./validate.js";
 import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
 import headerData from "../../../../web/helper/constants.js";
+import DocumentSearchModel from "../../../../constants/documentSearchConstant.js";
 
 const VIEW_PATH = "componentViews/checker/documentsearch/documentSearchView";
 const NOT_FOUND_VIEW_PATH =
@@ -258,8 +259,7 @@ const submitSearch = async (request, h) => {
         ptdNumberSearch: "",
         applicationNumberSearch: "",
         microchipNumber: "",
-        pageHeading: "Find a document",
-        pageTitle: "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
+        documentSearchMainModelData: DocumentSearchModel.documentSearchMainModelData,
       });
     }
 
