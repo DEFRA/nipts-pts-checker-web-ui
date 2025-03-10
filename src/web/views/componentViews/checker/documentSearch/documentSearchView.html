@@ -275,10 +275,17 @@
 
     const selectedOption = documentSearchField.value;
 
-    if (selectedOption === 'ptd') return '1'
-    if (selectedOption === 'application') return '2';
-    if (selectedOption === 'microchip') return '3';
-    
+    switch (selectedOption) {
+      case 'ptd':
+          return '1';
+      case 'application':
+          return '2';
+      case 'microchip':
+          return '3';
+      default:
+          return undefined;
+    }
+
   }
   
   if(window.history.replaceState) {
