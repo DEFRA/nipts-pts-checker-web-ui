@@ -161,6 +161,37 @@ function handleError(error) {
   return { error: unexpectedErrorText };
 }
 
+function getMicrochipAppPtdMainModel(item, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth) {
+  return new MicrochipAppPtdMainModel({
+    petId: item.pet ? item.pet.petId : undefined,
+    petName: item.pet ? item.pet.petName : undefined,
+    petSpecies: item.pet ? item.pet.species : undefined,
+    petBreed: item.pet && item.pet.breedName === "Mixed breed or unknown" && item.pet.breedAdditionalInfo
+      ? item.pet.breedAdditionalInfo
+      : item.pet?.breedName,
+    documentState,
+    ptdNumber,
+    issuedDate: formattedIssuedDate || undefined,
+    microchipNumber: item.pet ? item.pet.microchipNumber : undefined,
+    microchipDate: formattedMicrochippedDate || undefined,
+    petSex: item.pet ? item.pet.sex : undefined,
+    petDoB: formattedDateOfBirth || undefined,
+    petColour: item.pet ? item.pet.colourName : undefined,
+    petFeaturesDetail: item.pet ? item.pet.significantFeatures : undefined,
+    applicationId: item.application
+      ? item.application.applicationId
+      : undefined,
+    travelDocumentId: item.travelDocument
+      ? item.travelDocument.travelDocumentId
+      : null,
+    dateOfIssue: item.travelDocument ? item.travelDocument.dateOfIssue : null,
+    petOwnerName: item.petOwner ? item.petOwner.name : null,
+    petOwnerEmail: item.petOwner ? item.petOwner.email : null,
+    petOwnerTelephone: item.petOwner ? item.petOwner.telephone : null,
+    petOwnerAddress: item.petOwner.address ? item.petOwner.address : null,
+    issuingAuthority: issuingAuthorityModelData,
+  });
+}
 
 const getApplicationByApplicationNumber = async (
   applicationNumber,
@@ -231,37 +262,8 @@ const getApplicationByApplicationNumber = async (
     const formattedDateOfBirth = formatDate(dateOfBirthRaw);
     
 
-    const transformedItem = new MicrochipAppPtdMainModel({
-      petId: item.pet ? item.pet.petId : undefined,
-      petName: item.pet ? item.pet.petName : undefined,
-      petSpecies: item.pet ? item.pet.species : undefined,
-      petBreed: item.pet && item.pet.breedName === "Mixed breed or unknown" && item.pet.breedAdditionalInfo
-      ? item.pet.breedAdditionalInfo  
-      : item.pet?.breedName,
-      documentState,
-      ptdNumber,
-      issuedDate: formattedIssuedDate || undefined,
-      microchipNumber: item.pet ? item.pet.microchipNumber : undefined,
-      microchipDate: formattedMicrochippedDate || undefined,
-      petSex: item.pet ? item.pet.sex : undefined,
-      petDoB: formattedDateOfBirth || undefined,
-      petColour: item.pet ? item.pet.colourName : undefined,
-      petFeaturesDetail: item.pet ? item.pet.significantFeatures : undefined,
-      applicationId: item.application
-        ? item.application.applicationId
-        : undefined,
-      travelDocumentId: item.travelDocument
-        ? item.travelDocument.travelDocumentId
-        : null,
-      dateOfIssue: item.travelDocument ? item.travelDocument.dateOfIssue : null,
-      petOwnerName: item.petOwner ? item.petOwner.name : null,
-      petOwnerEmail: item.petOwner ? item.petOwner.email : null,
-      petOwnerTelephone: item.petOwner ? item.petOwner.telephone : null,
-      petOwnerAddress: item.petOwner.address ? item.petOwner.address : null,
-      issuingAuthority: issuingAuthorityModelData,
-    });
-
-    return transformedItem;
+    return getMicrochipAppPtdMainModel(item, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth);
+     
   } catch (error) {
     console.error(errorText, error.message);
 
