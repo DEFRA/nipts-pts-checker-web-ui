@@ -84,37 +84,9 @@ const getMicrochipData = async (microchipNumber, request) => {
     const dateOfBirthRaw = item.pet ? item.pet.dateOfBirth : undefined;
     const formattedDateOfBirth = formatDate(dateOfBirthRaw);
 
-    const transformedItem = new MicrochipAppPtdMainModel({
-      petId: item.pet ? item.pet.petId : undefined,
-      petName: item.pet ? item.pet.petName : undefined,
-      petSpecies: item.pet ? item.pet.species : undefined,
-      petBreed: item.pet && item.pet.breedName === "Mixed breed or unknown" && item.pet.breedAdditionalInfo
-      ? item.pet.breedAdditionalInfo 
-      : item.pet?.breedName,
-      documentState,
-      ptdNumber,
-      issuedDate: formattedIssuedDate || undefined,
-      microchipNumber,
-      microchipDate: formattedMicrochippedDate || undefined,
-      petSex: item.pet ? item.pet.sex : undefined,
-      petDoB: formattedDateOfBirth || undefined,
-      petColour: item.pet ? item.pet.colourName : undefined,
-      petFeaturesDetail: item.pet ? item.pet.significantFeatures : undefined,
-      applicationId: item.application
-        ? item.application.applicationId
-        : undefined,
-      travelDocumentId: item.travelDocument
-        ? item.travelDocument.travelDocumentId
-        : null,
-      dateOfIssue: item.travelDocument ? item.travelDocument.dateOfIssue : null,
-      petOwnerName: item.petOwner ? item.petOwner.name : null,
-      petOwnerEmail: item.petOwner ? item.petOwner.email : null,
-      petOwnerTelephone: item.petOwner ? item.petOwner.telephone : null,
-      petOwnerAddress: item.petOwner.address ? item.petOwner.address : null,
-      issuingAuthority: issuingAuthorityModelData,
-    });
+    return getMicrochipAppPtdMainModel(item, documentState, ptdNumber, formattedIssuedDate, microchipNumber, formattedMicrochippedDate, formattedDateOfBirth);
 
-    return transformedItem;
+
   } catch (error) {
     console.error("Error fetching data:", error.message);
 
@@ -165,3 +137,36 @@ export default {
   getMicrochipData,
   checkMicrochipNumberExistWithPtd,
 };
+
+function getMicrochipAppPtdMainModel(item, documentState, ptdNumber, formattedIssuedDate, microchipNumber, formattedMicrochippedDate, formattedDateOfBirth) {
+  const getValue = (obj, key, fallback = null) => obj?.[key] ?? fallback;
+
+  const pet = item.pet || {};
+  const application = item.application || {};
+  const travelDocument = item.travelDocument || {};
+  const petOwner = item.petOwner || {};
+
+  return new MicrochipAppPtdMainModel({
+    petId: getValue(pet, "petId"),
+    petName: getValue(pet, "petName"),
+    petSpecies: getValue(pet, "species"),
+    petBreed: pet.breedName === "Mixed breed or unknown" && pet.breedAdditionalInfo ? pet.breedAdditionalInfo : getValue(pet, "breedName"),
+    documentState,
+    ptdNumber,
+    issuedDate: formattedIssuedDate,
+    microchipNumber,
+    microchipDate: formattedMicrochippedDate,
+    petSex: getValue(pet, "sex"),
+    petDoB: formattedDateOfBirth,
+    petColour: getValue(pet, "colourName"),
+    petFeaturesDetail: getValue(pet, "significantFeatures"),
+    applicationId: getValue(application, "applicationId"),
+    travelDocumentId: getValue(travelDocument, "travelDocumentId"),
+    dateOfIssue: getValue(travelDocument, "dateOfIssue"),
+    petOwnerName: getValue(petOwner, "name"),
+    petOwnerEmail: getValue(petOwner, "email"),
+    petOwnerTelephone: getValue(petOwner, "telephone"),
+    petOwnerAddress: getValue(petOwner, "address"),
+    issuingAuthority: issuingAuthorityModelData,
+  });
+}
