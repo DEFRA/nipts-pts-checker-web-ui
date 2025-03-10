@@ -33,6 +33,7 @@ const getDocumentSearch = async (_request, h) => {
       documentSearchMainModelData,
       successConfirmation,
       formSubmitted: false,
+      activeTab: 'ptd',
       // Initialize empty values for input fields
       ptdNumberSearch: "",
       applicationNumberSearch: "",
