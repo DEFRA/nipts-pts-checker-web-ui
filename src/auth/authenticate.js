@@ -7,10 +7,7 @@ import nonce from "./id-token/nonce.js";
 import expiresIn from "./auth-code-grant/expires-in.js";
 import sessionKeys from "../session/keys.js";
 import cookieAuthentication from "./cookie-auth/cookie-auth.js";
-import {
-  InvalidStateError,
-  UnauthorizedError,
-} from "../exceptions/index.js";
+import { InvalidStateError, UnauthorizedError } from "../exceptions/index.js";
 import apiService from "../api/services/apiService.js";
 
 const authenticate = async (request, sessionInstance) => {
@@ -58,14 +55,14 @@ const authenticate = async (request, sessionInstance) => {
     );
 
     if (userOrganisation.error) {
-      throw new UnauthorizedError(
-        `Unauthorized as organization not found: ${organisationId}`
+      throw new ForbiddenError(
+        `Forbidden: Organization not found: ${organisationId}`
       );
     }
 
     if (!userOrganisation.IsActive) {
-      throw new UnauthorizedError(
-        `Unauthorized as organization is inactive: ${organisationId}`
+      throw new ForbiddenError(
+        `Forbidden: Organization is inactive: ${organisationId}`
       );
     }
 
