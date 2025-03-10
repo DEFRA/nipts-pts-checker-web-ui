@@ -163,7 +163,7 @@ function handleError(error) {
 
 function getMicrochipAppPtdMainModel(item, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth) {
   const getSafeValue = (obj, key, fallback = null) => obj?.[key] ?? fallback;
-  const pet = item.pet || {};
+  const pet = item.pet || undefined;
   const application = item.application || {};
   const travelDocument = item.travelDocument || {};
   const petOwner = item.petOwner || {};

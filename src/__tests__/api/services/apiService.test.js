@@ -607,16 +607,6 @@ describe("apiService", () => {
         format: () => multiUseDate,
       }));
 
-      const result = await apiService.getApplicationByApplicationNumber(
-        "app123",
-        request
-      );
-      expect(httpService.postAsync).toHaveBeenCalledWith(
-        `${baseUrl}/Checker/checkApplicationNumber`,
-        { applicationNumber: "app123" },
-        request
-      );
-
       const expectedInstance = new MicrochipAppPtdMainModel({
         petId: "1",
         petName: "Buddy",
@@ -645,19 +635,30 @@ describe("apiService", () => {
               county: "",
               postCode: "EC1N 2PB"
             },
-            issuingAuthority:  {
-              address: {
-                      addressLineOne: issuingAuthorityAddressLineOne,
-                      addressLineThree: issuingAuthorityAddressLineThree,
-                      addressLineTwo: issuingAuthorityAddressLineTwo,
-                      county: "",
-                      postCode: "CA3 8DX",
-                      townOrCity: "Carlisle",
-                      },
-              name: agencyName,
-              signature: signatoryName,
-            },
+        issuingAuthority:  {
+          address: {
+                  addressLineOne: issuingAuthorityAddressLineOne,
+                  addressLineThree: issuingAuthorityAddressLineThree,
+                  addressLineTwo: issuingAuthorityAddressLineTwo,
+                  county: "",
+                  postCode: "CA3 8DX",
+                  townOrCity: "Carlisle",
+                  },
+          name: agencyName,
+          signature: signatoryName,
+        },
       });
+
+      const result = await apiService.getApplicationByApplicationNumber(
+        "app123",
+        request
+      );
+
+      expect(httpService.postAsync).toHaveBeenCalledWith(
+        `${baseUrl}/Checker/checkApplicationNumber`,
+        { applicationNumber: "app123" },
+        request
+      );  
 
       expect(result).toEqual(expectedInstance);
     });
