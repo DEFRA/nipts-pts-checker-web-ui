@@ -7,7 +7,7 @@ import nonce from "./id-token/nonce.js";
 import expiresIn from "./auth-code-grant/expires-in.js";
 import sessionKeys from "../session/keys.js";
 import cookieAuthentication from "./cookie-auth/cookie-auth.js";
-import { InvalidStateError, UnauthorizedError } from "../exceptions/index.js";
+import { InvalidStateError, ForbiddenError } from "../exceptions/index.js";
 import apiService from "../api/services/apiService.js";
 
 const authenticate = async (request, sessionInstance) => {
