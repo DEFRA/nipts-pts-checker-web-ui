@@ -264,26 +264,27 @@
 
   // On page load, ensure correct conditional content is displayed
   document.addEventListener('DOMContentLoaded', function (e) {
-    clearSearchFields(e)
-    toggleConditionals('conditional-documentSearch-' + getSelectedOptionId());
+    setTimeout(() => {
+      const selectedOptionId = getSelectedOptionId();
+      toggleConditionals('conditional-documentSearch-' + selectedOptionId);
+    }, 10);
   });
 
   function getSelectedOptionId() {
-    const selectedOption = document.querySelector('input[name="documentSearch"]:checked').value;
-    
-    let result;
+    const documentSearchField = document.querySelector('input[name="documentSearch"]:checked');
 
-    if (selectedOption === 'ptd') {
-        result = '1';
-    } 
-    else if (selectedOption === 'application') {
-       result = '2';
-    } 
-    else {
-        result = '3';
+    const selectedOption = documentSearchField.value;
+
+    switch (selectedOption) {
+      case 'ptd':
+          return '1';
+      case 'application':
+          return '2';
+      case 'microchip':
+          return '3';
+      default:
+          return undefined;
     }
-
-    return result;
 
   }
   
