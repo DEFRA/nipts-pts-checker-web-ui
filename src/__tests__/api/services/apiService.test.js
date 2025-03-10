@@ -746,6 +746,98 @@ describe("apiService", () => {
       expect(result).toEqual(expectedInstance);
     });
 
+    it("should return default null values when properties are undefined", async () => {
+      const mockResponse = {
+        data: {
+          pet: { petName : undefined, },
+          application: {
+            status: "authorised",
+            applicationId: undefined,
+            dateAuthorised: "2023-01-01",
+          },
+          travelDocument: {
+            travelDocumentReferenceNumber: "GB826TD123",
+            travelDocumentId: undefined,
+            dateOfIssue: dateOfIssue
+          },
+          petOwner: {
+            name: undefined,
+            telephone: null,
+            email:null,
+            address: {
+              addressLineOne: null,
+              addressLineTwo: null,
+              townOrCity: null,
+              county: null,
+              postCode: null
+            }
+          },
+        },
+      };
+
+      httpService.postAsync.mockResolvedValue({
+        status: 200,
+        data: mockResponse.data,
+      });
+      moment.mockImplementation((_date) => ({
+        format: () => multiUseDate,
+      }));
+
+      const expectedInstance = new MicrochipAppPtdMainModel({
+        petId: null,
+        petName: null,
+        petSpecies: null,
+        petBreed: null,
+        documentState: "approved",
+        ptdNumber: "GB826TD123",
+        issuedDate: multiUseDate,
+        microchipNumber: null,
+        microchipDate: undefined,
+        petSex: null,
+        petDoB: undefined,
+        petColour: null,
+        petFeaturesDetail: null,
+        applicationId: null,
+        travelDocumentId: null,
+        dateOfIssue: dateOfIssue,
+        petOwnerName: null,
+        petOwnerTelephone: null,
+        petOwnerEmail: null,
+        petOwnerAddress: 
+            {
+              addressLineOne: null,
+              addressLineTwo: null,
+              townOrCity: null,
+              county: null,
+              postCode: null
+            },
+        issuingAuthority:  {
+          address: {
+                  addressLineOne: issuingAuthorityAddressLineOne,
+                  addressLineThree: issuingAuthorityAddressLineThree,
+                  addressLineTwo: issuingAuthorityAddressLineTwo,
+                  county: "",
+                  postCode: "CA3 8DX",
+                  townOrCity: "Carlisle",
+                  },
+          name: agencyName,
+          signature: signatoryName,
+        },
+      });
+
+      const result = await apiService.getApplicationByApplicationNumber(
+        "app123",
+        request
+      );
+
+      expect(httpService.postAsync).toHaveBeenCalledWith(
+        `${baseUrl}/Checker/checkApplicationNumber`,
+        { applicationNumber: "app123" },
+        request
+      );  
+
+      expect(result).toEqual(expectedInstance);
+    });
 
     it("should return breedAdditionalInfo when breedName is 'Mixed breed or unknown'", async () => {
       const mockResponse = {
