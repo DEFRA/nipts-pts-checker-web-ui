@@ -557,6 +557,21 @@ describe("apiService", () => {
 
       expect(result).toEqual(expectedError);
     });
+
+    it("should handle errors without a message and return unexpectedErrorText - getApplicationByPTDNumber", async () => {
+      const mockError = new Error();
+      delete mockError.message; 
+
+      httpService.postAsync.mockRejectedValue(mockError);
+    
+      const result = await apiService.getApplicationByPTDNumber(
+        "app123",
+        request
+      );
+      
+      expect(result).toEqual({ error: unexpectedErrorText });
+    });
+
   });
 
   describe("getApplicationByApplicationNumber", () => {
