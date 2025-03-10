@@ -559,6 +559,101 @@ describe("apiService", () => {
   });
 
   describe("getApplicationByApplicationNumber", () => {
+
+    it("should handle missing pet details gracefully", async () => {
+      const mockResponse = {
+        data: {
+          pet: {},
+          application: {
+            status: "authorised",
+            applicationId: "app123",
+            dateAuthorised: "2023-01-01",
+          },
+          travelDocument: {
+            travelDocumentReferenceNumber: "GB826TD123",
+            travelDocumentId: "td123",
+            dateOfIssue: dateOfIssue
+          },
+          petOwner: {
+            name: petOwnerName,
+            telephone: "07894465438",
+            email: petOwnerEmail,
+            address: {
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
+              townOrCity: "LONDON",
+              county: "",
+              postCode: "EC1N 2PB"
+            }
+          },
+        },
+      };
+
+      httpService.postAsync.mockResolvedValue({
+        status: 200,
+        data: mockResponse.data,
+      });
+      moment.mockImplementation((_date) => ({
+        format: () => multiUseDate,
+      }));
+
+      const expectedInstance = new MicrochipAppPtdMainModel({
+        petId: null,
+        petName: null,
+        petSpecies: null,
+        petBreed: null,
+        documentState: "approved",
+        ptdNumber: "GB826TD123",
+        issuedDate: multiUseDate,
+        microchipNumber: null,
+        microchipDate: undefined,
+        petSex: null,
+        petDoB: undefined,
+        petColour: null,
+        petFeaturesDetail: null,
+        applicationId: "app123",
+        travelDocumentId: "td123",
+        dateOfIssue: dateOfIssue,
+        petOwnerName: petOwnerName,
+        petOwnerTelephone: "07894465438",
+        petOwnerEmail: petOwnerEmail,
+        petOwnerAddress: 
+            {
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
+              townOrCity: "LONDON",
+              county: "",
+              postCode: "EC1N 2PB"
+            },
+        issuingAuthority:  {
+          address: {
+                  addressLineOne: issuingAuthorityAddressLineOne,
+                  addressLineThree: issuingAuthorityAddressLineThree,
+                  addressLineTwo: issuingAuthorityAddressLineTwo,
+                  county: "",
+                  postCode: "CA3 8DX",
+                  townOrCity: "Carlisle",
+                  },
+          name: agencyName,
+          signature: signatoryName,
+        },
+      });
+
+      const result = await apiService.getApplicationByApplicationNumber(
+        "app123",
+        request
+      );
+
+      expect(httpService.postAsync).toHaveBeenCalledWith(
+        `${baseUrl}/Checker/checkApplicationNumber`,
+        { applicationNumber: "app123" },
+        request
+      );  
+
+      expect(result).toEqual(expectedInstance);
+    });
+
+
     it("should return transformed data when application number is valid", async () => {
       const mockResponse = {
         data: {
