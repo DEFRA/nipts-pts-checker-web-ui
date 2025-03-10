@@ -749,7 +749,7 @@ describe("apiService", () => {
     it("should return default null values when properties are undefined", async () => {
       const mockResponse = {
         data: {
-          pet: { petName : undefined, },
+          pet: { petName : undefined },
           application: {
             status: "authorised",
             applicationId: undefined,
@@ -804,13 +804,13 @@ describe("apiService", () => {
         petOwnerTelephone: null,
         petOwnerEmail: null,
         petOwnerAddress: 
-            {
-              addressLineOne: null,
-              addressLineTwo: null,
-              townOrCity: null,
-              county: null,
-              postCode: null
-            },
+        {
+          addressLineOne: null,
+          addressLineTwo: null,
+          townOrCity: null,
+          county: null,
+          postCode: null
+        },
         issuingAuthority:  {
           address: {
                   addressLineOne: issuingAuthorityAddressLineOne,
