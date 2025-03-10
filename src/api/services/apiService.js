@@ -162,32 +162,35 @@ function handleError(error) {
 }
 
 function getMicrochipAppPtdMainModel(item, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth) {
+  const getSafeValue = (obj, key, fallback = null) => obj?.[key] ?? fallback;
   const pet = item.pet || {};
   const application = item.application || {};
   const travelDocument = item.travelDocument || {};
   const petOwner = item.petOwner || {};
   
   return new MicrochipAppPtdMainModel({
-    petId: pet.petId,
-    petName: pet.petName,
-    petSpecies: pet.species,
-    petBreed: pet.breedName === "Mixed breed or unknown" && pet.breedAdditionalInfo ? pet.breedAdditionalInfo : pet?.breedName,
+    petId: getSafeValue(pet, "petId"),
+    petName: getSafeValue(pet, "petName"),
+    petSpecies: getSafeValue(pet, "species"),
+    petBreed: pet.breedName === "Mixed breed or unknown" && pet.breedAdditionalInfo
+      ? pet.breedAdditionalInfo
+      : getSafeValue(pet, "breedName"),
     documentState,
     ptdNumber,
     issuedDate: formattedIssuedDate || undefined,
-    microchipNumber: pet.microchipNumber,
+    microchipNumber: getSafeValue(pet, "microchipNumber"),
     microchipDate: formattedMicrochippedDate || undefined,
-    petSex: pet.sex,
+    petSex: getSafeValue(pet, "sex"),
     petDoB: formattedDateOfBirth || undefined,
-    petColour: pet.colourName,
-    petFeaturesDetail: pet.significantFeatures,
-    applicationId: application.applicationId,
-    travelDocumentId: travelDocument.travelDocumentId || null,
-    dateOfIssue: travelDocument.dateOfIssue || null,
-    petOwnerName: petOwner.name || null,
-    petOwnerEmail: petOwner.email || null,
-    petOwnerTelephone: petOwner.telephone || null,
-    petOwnerAddress: petOwner.address || null,
+    petColour: getSafeValue(pet, "colourName"),
+    petFeaturesDetail: getSafeValue(pet, "significantFeatures"),
+    applicationId: getSafeValue(application, "applicationId"),
+    travelDocumentId: getSafeValue(travelDocument, "travelDocumentId"),
+    dateOfIssue: getSafeValue(travelDocument, "dateOfIssue"),
+    petOwnerName: getSafeValue(petOwner, "name"),
+    petOwnerEmail: getSafeValue(petOwner, "email"),
+    petOwnerTelephone: getSafeValue(petOwner, "telephone"),
+    petOwnerAddress: getSafeValue(petOwner, "address"),
     issuingAuthority: issuingAuthorityModelData,
   });
 }
