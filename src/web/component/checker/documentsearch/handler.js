@@ -33,7 +33,6 @@ const getDocumentSearch = async (_request, h) => {
       documentSearchMainModelData,
       successConfirmation,
       formSubmitted: false,
-      // activeTab: 'ptd',
       // Initialize empty values for input fields
       ptdNumberSearch: "",
       applicationNumberSearch: "",
@@ -244,6 +243,24 @@ const submitSearch = async (request, h) => {
       request.yar.set("data", microchipAppPtdMainData);
 
       return h.redirect(SEARCH_RESULT_VIEW_PATH);
+    }
+
+    if (documentSearch === '' || documentSearch === null || documentSearch === undefined) {
+      return h.view(VIEW_PATH, {
+        error: "Please select a document search option",
+        errorSummary: [
+          {
+            fieldId: "general",
+            message: "Please select a document search option",
+          },
+        ],
+        formSubmitted: true,
+        ptdNumberSearch: "",
+        applicationNumberSearch: "",
+        microchipNumber: "",
+        pageHeading: "Find a document",
+        pageTitle: "Pet Travel Scheme: Check a pet travelling from Great Britain to Northern Ireland",
+      });
     }
 
     // Default redirect if none of the above conditions are met

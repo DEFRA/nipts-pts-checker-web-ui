@@ -63,7 +63,6 @@ describe("DocumentSearchHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(documentSearchView, {
         documentSearchMainModelData: mockData,
         successConfirmation: true,
-        activeTab: 'ptd',
         formSubmitted: false,
         ptdNumberSearch: "",
         applicationNumberSearch: "",
@@ -89,7 +88,6 @@ describe("DocumentSearchHandlers", () => {
         documentSearchMainModelData: mockData,
         successConfirmation: false,
         formSubmitted: false,
-        activeTab: 'ptd',
         ptdNumberSearch: "",
         applicationNumberSearch: "",
         microchipNumber: "",
