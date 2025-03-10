@@ -649,7 +649,13 @@ describe("apiService", () => {
         `${baseUrl}/Checker/checkApplicationNumber`,
         { applicationNumber: "app123" },
         request
-      );  
+      ); 
+      
+      expect(result.petId).toBeNull();
+      expect(result.petName).toBeNull();
+      expect(result.petSpecies).toBeNull();
+      expect(result.petBreed).toBeNull();
+      expect(result.microchipNumber).toBeNull();
 
       expect(result).toEqual(expectedInstance);
     });
