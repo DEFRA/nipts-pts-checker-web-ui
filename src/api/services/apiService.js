@@ -161,7 +161,7 @@ function handleError(error) {
   return { error: unexpectedErrorText };
 }
 
-function getMicrochipAppPtdMainModel(pet, application, travelDocument, petOwner, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth) {
+function getMicrochipAppPtdMainModel({pet, application, travelDocument, petOwner, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth}) {
   const getSafeValue = (obj, key, fallback = null) => obj?.[key] ?? fallback;
 
   
@@ -266,7 +266,7 @@ const getApplicationByApplicationNumber = async (
     const formattedDateOfBirth = formatDate(dateOfBirthRaw);
     
 
-    return getMicrochipAppPtdMainModel(pet, application, travelDocument, petOwner, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth);
+    return getMicrochipAppPtdMainModel({pet, application, travelDocument, petOwner, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth});
      
   } catch (error) {
     console.error(errorText, error.message);
