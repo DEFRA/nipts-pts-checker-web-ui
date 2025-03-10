@@ -161,12 +161,9 @@ function handleError(error) {
   return { error: unexpectedErrorText };
 }
 
-function getMicrochipAppPtdMainModel(item, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth) {
+function getMicrochipAppPtdMainModel(pet, application, travelDocument, petOwner, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth) {
   const getSafeValue = (obj, key, fallback = null) => obj?.[key] ?? fallback;
-  const pet = item.pet || {};
-  const application = item.application || {};
-  const travelDocument = item.travelDocument || {};
-  const petOwner = item.petOwner || {};
+
   
   return new MicrochipAppPtdMainModel({
     petId: getSafeValue(pet, "petId"),
@@ -213,6 +210,11 @@ const getApplicationByApplicationNumber = async (
     if (!item || typeof item !== "object") {
       throw new Error(unexpectedResponseErrorText);
     }
+
+    const pet = item.pet || {};
+    const application = item.application || {};
+    const travelDocument = item.travelDocument || {};
+    const petOwner = item.petOwner || {};
 
     // Ensure the item structure is as expected
     if (!item.pet) {
@@ -264,7 +266,7 @@ const getApplicationByApplicationNumber = async (
     const formattedDateOfBirth = formatDate(dateOfBirthRaw);
     
 
-    return getMicrochipAppPtdMainModel(item, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth);
+    return getMicrochipAppPtdMainModel(pet, application, travelDocument, petOwner, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth);
      
   } catch (error) {
     console.error(errorText, error.message);
