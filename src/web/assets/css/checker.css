@@ -1875,4 +1875,23 @@ html {
   width: 1px;
 }
 
+
+.govuk-skip-link:focus {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 10px;
+  overflow: visible;
+  clip: auto;
+  -webkit-clip-path: none;
+  clip-path: none;
+  white-space: inherit;
+  background-color: #ffdd00;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
 /*# sourceMappingURL=checker.css.map */
