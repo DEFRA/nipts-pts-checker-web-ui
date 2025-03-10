@@ -675,6 +675,111 @@ describe("apiService", () => {
       expect(result).toEqual(expectedInstance);
     });
 
+    it("should handle missing application details gracefully", async () => {
+      const mockResponse = {
+        data: {
+          pet: {
+            petId: "1",
+            petName: "Buddy",
+            species: "Dog",
+            breedName: "Beagle",
+            microchipNumber: "123456789",
+            microchippedDate: "2022-01-01",
+            dateOfBirth: "2020-01-01",
+            sex: "Male",
+            colourName: "Brown",
+            significantFeatures: "None",
+          },
+          application: {
+            status: "authorised",
+            applicationId: undefined,
+            dateAuthorised: undefined,
+          },
+          travelDocument: {
+            travelDocumentReferenceNumber: "GB826TD123",
+            travelDocumentId: "td123",
+            dateOfIssue: dateOfIssue
+          },
+          petOwner: {
+            name: petOwnerName,
+            telephone: "07894465438",
+            email: petOwnerEmail,
+            address: {
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
+              townOrCity: "LONDON",
+              county: "",
+              postCode: "EC1N 2PB"
+            }
+          },
+        },
+      };
+
+      httpService.postAsync.mockResolvedValue({
+        status: 200,
+        data: mockResponse.data,
+      });
+      moment.mockImplementation((_date) => ({
+        format: () => multiUseDate,
+      }));
+
+      const expectedInstance = new MicrochipAppPtdMainModel({
+        petId: "1",
+        petName: "Buddy",
+        petSpecies: "Dog",
+        petBreed: "Beagle",
+        documentState: "approved",
+        ptdNumber: "GB826TD123",
+        issuedDate: undefined,
+        microchipNumber: "123456789",
+        microchipDate: multiUseDate,
+        petSex: "Male",
+        petDoB: "01/01/2022",
+        petColour: "Brown",
+        petFeaturesDetail: "None",
+        applicationId: null,
+        travelDocumentId: "td123",
+        dateOfIssue: dateOfIssue,
+        petOwnerName: petOwnerName,
+        petOwnerTelephone: "07894465438",
+        petOwnerEmail: petOwnerEmail,
+        petOwnerAddress: 
+            {
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
+              townOrCity: "LONDON",
+              county: "",
+              postCode: "EC1N 2PB"
+            },
+        issuingAuthority:  {
+          address: {
+                  addressLineOne: issuingAuthorityAddressLineOne,
+                  addressLineThree: issuingAuthorityAddressLineThree,
+                  addressLineTwo: issuingAuthorityAddressLineTwo,
+                  county: "",
+                  postCode: "CA3 8DX",
+                  townOrCity: "Carlisle",
+                  },
+          name: agencyName,
+          signature: signatoryName,
+        },
+      });
+
+      const result = await apiService.getApplicationByApplicationNumber(
+        "app123",
+        request
+      );
+
+      expect(httpService.postAsync).toHaveBeenCalledWith(
+        `${baseUrl}/Checker/checkApplicationNumber`,
+        { applicationNumber: "app123" },
+        request
+      ); 
+      
+      expect(result).toEqual(expectedInstance);
+    });
+
+
     it("should return null for all values if item is empty", async () => {
       const mockResponse = {
         data: {
