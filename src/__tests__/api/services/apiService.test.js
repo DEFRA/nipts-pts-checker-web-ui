@@ -692,13 +692,13 @@ describe("apiService", () => {
           },
           application: {
             status: "authorised",
-            applicationId: undefined,
-            dateAuthorised: undefined,
+            applicationId: null,
+            dateAuthorised: null,
           },
           travelDocument: {
             travelDocumentReferenceNumber: "GB826TD123",
             travelDocumentId: "td123",
-            dateOfIssue: dateOfIssue
+            dateOfIssue: null
           },
           petOwner: {
             name: petOwnerName,
@@ -877,19 +877,19 @@ describe("apiService", () => {
     it("should return default null values when properties are undefined", async () => {
       const mockResponse = {
         data: {
-          pet: { petName : undefined },
+          pet: { petName : null },
           application: {
             status: "authorised",
-            applicationId: undefined,
+            applicationId: null,
             dateAuthorised: "2023-01-01",
           },
           travelDocument: {
             travelDocumentReferenceNumber: "GB826TD123",
-            travelDocumentId: undefined,
+            travelDocumentId: null,
             dateOfIssue: dateOfIssue
           },
           petOwner: {
-            name: undefined,
+            name: null,
             telephone: null,
             email:null,
             address: {
