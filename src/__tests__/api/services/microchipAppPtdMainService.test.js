@@ -197,20 +197,20 @@ describe("getMicrochipData", () => {
     const microchipNumber = null;
     const apiResponse = {
       data: {
-        pet: { petName : undefined },
+        pet: { petName : null },
         application: {
-          applicationId: undefined,
+          applicationId: null,
           referenceNumber: "SZWPFXEG",
           dateOfApplication: "2024-02-09T11:31:29.7165377",
           status: awaitingVerification,
         },
         travelDocument: {
-          travelDocumentId: undefined,
+          travelDocumentId: null,
           travelDocumentReferenceNumber: "GB826J40C050",
           dateOfIssue: "2024-06-12T10:26:52.0391239",
         },
         petOwner: {
-          name: undefined,
+          name: null,
           telephone: null,
             email:null,
             address: {
