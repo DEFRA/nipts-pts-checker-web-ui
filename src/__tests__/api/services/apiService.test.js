@@ -698,7 +698,7 @@ describe("apiService", () => {
           travelDocument: {
             travelDocumentReferenceNumber: "GB826TD123",
             travelDocumentId: "td123",
-            dateOfIssue: null
+            dateOfIssue: dateOfIssue
           },
           petOwner: {
             name: petOwnerName,
@@ -731,7 +731,6 @@ describe("apiService", () => {
         petBreed: "Beagle",
         documentState: "approved",
         ptdNumber: "GB826TD123",
-        issuedDate: undefined,
         microchipNumber: "123456789",
         microchipDate: multiUseDate,
         petSex: "Male",
