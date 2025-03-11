@@ -609,9 +609,9 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((_date) => ({
-        format: () => multiUseDate,
-      }));
+
+      const mockMomentFormat = () => multiUseDate;
+      moment.mockImplementation(() => ({ format: mockMomentFormat }));     
 
       const expectedInstance = new MicrochipAppPtdMainModel({
         petId: null,
@@ -719,9 +719,10 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((_date) => ({
-        format: () => multiUseDate,
-      }));
+
+
+      const mockMomentFormat = () => multiUseDate;
+      moment.mockImplementation(() => ({ format: mockMomentFormat }));
 
       const expectedInstance = new MicrochipAppPtdMainModel({
         petId: "1",
@@ -813,9 +814,9 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((_date) => ({
-        format: () => multiUseDate,
-      }));
+
+      const mockMomentFormat = () => multiUseDate;
+      moment.mockImplementation(() => ({ format: mockMomentFormat }));
 
       const expectedInstance = new MicrochipAppPtdMainModel({
         petId: null,
@@ -906,9 +907,9 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((_date) => ({
-        format: () => multiUseDate,
-      }));
+      
+      const mockMomentFormat = () => multiUseDate;
+      moment.mockImplementation(() => ({ format: mockMomentFormat }));
 
       const expectedInstance = new MicrochipAppPtdMainModel({
         petId: null,
@@ -1011,9 +1012,9 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((_date) => ({
-        format: () => multiUseDate,
-      }));
+
+      const mockMomentFormat = () => multiUseDate;
+      moment.mockImplementation(() => ({ format: mockMomentFormat }));
 
       const expectedInstance = new MicrochipAppPtdMainModel({
         petId: "1",
@@ -1115,9 +1116,9 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((_date) => ({
-        format: () => multiUseDate,
-      }));
+
+      const mockMomentFormat = () => multiUseDate;
+      moment.mockImplementation(() => ({ format: mockMomentFormat }));
 
       const expectedInstance = new MicrochipAppPtdMainModel({
         petId: "1",
@@ -1219,9 +1220,9 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((_date) => ({
-        format: () => multiUseDate,
-      }));
+
+      const mockMomentFormat = () => multiUseDate;
+      moment.mockImplementation(() => ({ format: mockMomentFormat }));
 
       const result = await apiService.getApplicationByApplicationNumber(
         "app123",
@@ -1321,9 +1322,9 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((_date) => ({
-        format: () => multiUseDate,
-      }));
+
+      const mockMomentFormat = () => multiUseDate;
+      moment.mockImplementation(() => ({ format: mockMomentFormat }));
 
       const result = await apiService.getApplicationByApplicationNumber(
         "app123",
@@ -1422,9 +1423,9 @@ describe("apiService", () => {
         status: 200,
         data: mockResponse.data,
       });
-      moment.mockImplementation((_date) => ({
-        format: () => multiUseDate,
-      }));
+    
+      const mockMomentFormat = () => multiUseDate;
+      moment.mockImplementation(() => ({ format: mockMomentFormat }));
 
       const result = await apiService.getApplicationByApplicationNumber(
         "app123",
