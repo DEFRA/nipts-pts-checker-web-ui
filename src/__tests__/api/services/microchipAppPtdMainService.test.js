@@ -75,9 +75,9 @@ describe("getMicrochipData", () => {
       ptdNumber: "SZWPFXEG",
       issuedDate: issedDate, // Formatted date
       microchipNumber: null,
-      microchipDate: undefined, // Formatted date
+      microchipDate: null, // Formatted date
       petSex: null,
-      petDoB: undefined, // Formatted date
+      petDoB: null, // Formatted date
       petColour: null,
       petFeaturesDetail: null,
       applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
@@ -155,9 +155,9 @@ describe("getMicrochipData", () => {
       ptdNumber: "SZWPFXEG",
       issuedDate: issedDate, // Formatted date
       microchipNumber: null,
-      microchipDate: undefined,
+      microchipDate: null,
       petSex: null,
-      petDoB: undefined,
+      petDoB: null,
       petColour: null,
       petFeaturesDetail: null,
       applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
@@ -235,9 +235,9 @@ describe("getMicrochipData", () => {
       ptdNumber: "SZWPFXEG",
       issuedDate: issedDate, // Formatted date
       microchipNumber: null,
-      microchipDate: undefined,
+      microchipDate: null,
       petSex: null,
-      petDoB: undefined,
+      petDoB: null,
       petColour: null,
       petFeaturesDetail: null,
       applicationId: null,
@@ -516,6 +516,7 @@ describe("getMicrochipData", () => {
       petOwnerName: petOwnerName,
       petOwnerTelephone: "07894465438",
       petOwnerEmail: petOwnerEmail,
+      issuedDate: null,
       petOwnerAddress: 
       {
         addressLineOne: addressLineOne,
@@ -605,6 +606,7 @@ describe("getMicrochipData", () => {
       petOwnerName: petOwnerName,
       petOwnerTelephone: "07894465438",
       petOwnerEmail: petOwnerEmail,
+      issuedDate: null,
       petOwnerAddress: 
       {
         addressLineOne: addressLineOne,
@@ -694,6 +696,7 @@ describe("getMicrochipData", () => {
       petOwnerName: petOwnerName,
       petOwnerTelephone: "07894465438",
       petOwnerEmail: petOwnerEmail,
+      issuedDate: null,
       petOwnerAddress: 
       {
         addressLineOne: addressLineOne,

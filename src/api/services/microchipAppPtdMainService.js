@@ -25,7 +25,7 @@ const unexpectedErrorText =  "Unexpected error occurred";
 
 const formatDate = (dateRaw) => {
   const date = dateRaw ? new Date(dateRaw) : null;
-  return date ? moment(date).format("DD/MM/YYYY") : undefined;
+  return date ? moment(date).format("DD/MM/YYYY") : null;
 };
 
 const getMicrochipData = async (microchipNumber, request) => {
