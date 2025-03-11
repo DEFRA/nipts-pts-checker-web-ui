@@ -622,9 +622,9 @@ describe("apiService", () => {
         ptdNumber: "GB826TD123",
         issuedDate: multiUseDate,
         microchipNumber: null,
-        microchipDate: undefined,
+        microchipDate: null,
         petSex: null,
-        petDoB: undefined,
+        petDoB: null,
         petColour: null,
         petFeaturesDetail: null,
         applicationId: "app123",
@@ -743,6 +743,7 @@ describe("apiService", () => {
         petOwnerName: petOwnerName,
         petOwnerTelephone: "07894465438",
         petOwnerEmail: petOwnerEmail,
+        issuedDate: null,
         petOwnerAddress: 
             {
               addressLineOne: addressLineOne,
@@ -826,9 +827,9 @@ describe("apiService", () => {
         ptdNumber: "GB826TD123",
         issuedDate: multiUseDate,
         microchipNumber: null,
-        microchipDate: undefined,
+        microchipDate: null,
         petSex: null,
-        petDoB: undefined,
+        petDoB: null,
         petColour: null,
         petFeaturesDetail: null,
         applicationId: "app123",
@@ -919,9 +920,9 @@ describe("apiService", () => {
         ptdNumber: "GB826TD123",
         issuedDate: multiUseDate,
         microchipNumber: null,
-        microchipDate: undefined,
+        microchipDate: null,
         petSex: null,
-        petDoB: undefined,
+        petDoB: null,
         petColour: null,
         petFeaturesDetail: null,
         applicationId: null,
@@ -1252,6 +1253,7 @@ describe("apiService", () => {
         petOwnerName: petOwnerName,
         petOwnerTelephone: "07894465438",
         petOwnerEmail: petOwnerEmail,
+        issuedDate: null,
         petOwnerAddress: 
             {
               addressLineOne: addressLineOne,
@@ -1353,6 +1355,7 @@ describe("apiService", () => {
         petOwnerName: petOwnerName,
         petOwnerTelephone: "07894465438",
         petOwnerEmail: petOwnerEmail,
+        issuedDate: null,
         petOwnerAddress: 
             {
               addressLineOne: addressLineOne,
@@ -1454,6 +1457,7 @@ describe("apiService", () => {
         petOwnerName: petOwnerName,
         petOwnerTelephone: "07894465438",
         petOwnerEmail: petOwnerEmail,
+        issuedDate: null,
         petOwnerAddress: 
             {
               addressLineOne: addressLineOne,
