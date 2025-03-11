@@ -132,7 +132,7 @@ const checkAuthorization = (request, h) => {
     const isValid = validateTokenRoles(token);
     if (!isValid) {
       logout(request);
-      return h.redirect(`/${HTTP_STATUS.UNAUTHORIZED}error`).takeover();
+      return h.redirect(`/${HTTP_STATUS.FORBIDDEN}error`).takeover();
     }
   } else {
     console.log("No token found - redirecting to login");
