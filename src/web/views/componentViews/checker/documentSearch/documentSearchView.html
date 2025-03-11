@@ -20,7 +20,7 @@
     <form id="documentSearchForm" action="/checker/document-search" method="POST">
       <div class="govuk-grid-row govuk-!-margin-bottom-0 govuk-!-margin-top-0">
         <div class="govuk-grid-column-full govuk-!-margin-top-0">
-          <div class="govuk-form-group {% if errorRadioUnchecked %}govuk-form-group--error{% endif %}">
+          <div id="form-group" class="govuk-form-group {% if errorRadioUnchecked %}govuk-form-group--error{% endif %}">
             <fieldset class="govuk-fieldset" role="group" aria-labelledby="search-options-heading">
               <legend id="search-options-heading">
                 <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
@@ -29,7 +29,7 @@
               </legend>
               <div>
                 {% if errorRadioUnchecked %}
-                  <p class="govuk-error-message">
+                  <p id="errorRadioUnchecked-msg" class="govuk-error-message">
                     {{ error }}
                   </p>
                 {% endif %}
@@ -247,6 +247,16 @@
     resetField('ptdNumberSearch', 'ptd-form-group', 'ptd-error');
     resetField('applicationNumberSearch', 'application-form-group', 'application-error');
     resetField('microchipNumber', 'microchip-form-group', 'microchip-error');
+
+    clearEmptyError()
+  }
+
+  function clearEmptyError() {
+    document.getElementById('form-group').classList.remove("govuk-form-group--error");
+    const errorElement = document.getElementById('errorRadioUnchecked-msg');
+    if (errorElement) {
+      errorElement.remove();
+    }
   }
 
   document.getElementById('clearSearchButton').addEventListener('click', clearSearchFields);
