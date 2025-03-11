@@ -20,14 +20,20 @@
     <form id="documentSearchForm" action="/checker/document-search" method="POST">
       <div class="govuk-grid-row govuk-!-margin-bottom-0 govuk-!-margin-top-0">
         <div class="govuk-grid-column-full govuk-!-margin-top-0">
-          <div class="govuk-form-group">
+          <div class="govuk-form-group {% if errorRadioUnchecked %}govuk-form-group--error{% endif %}">
             <fieldset class="govuk-fieldset" role="group" aria-labelledby="search-options-heading">
               <legend id="search-options-heading">
                 <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
                   {{ documentSearchMainModelData.pageHeading }}
                 </h1>
               </legend>
-
+              <div>
+                {% if errorRadioUnchecked %}
+                  <p class="govuk-error-message">
+                    {{ error }}
+                  </p>
+                {% endif %}
+              </div>
               <div class="govuk-radios" data-module="govuk-radios" role="radiogroup" aria-labelledby="search-options-heading">
                 <h2 id="search-options-heading" class="govuk-radios__label govuk-visually-hidden">Search options</h2>
                    

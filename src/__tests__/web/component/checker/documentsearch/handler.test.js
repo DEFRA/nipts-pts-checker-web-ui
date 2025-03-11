@@ -350,6 +350,7 @@ describe("DocumentSearchHandlers", () => {
             message: "Select if you are searching for a PTD, application or microchip number",
           },
         ],
+        errorRadioUnchecked: true,
         formSubmitted: true,
         ptdNumberSearch: "",
         applicationNumberSearch: "",
