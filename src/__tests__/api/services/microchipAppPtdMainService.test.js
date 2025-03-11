@@ -15,6 +15,8 @@ const issuingAuthorityAddressLineThree = "Lowther Street";
 const agencyName = "Animal and Plant Health Agency";
 const signatoryName = "John Smith (APHA) (Signed digitally)";
 const bearerToken = "Bearer mockToken"
+const awaitingVerification = "AWAITING VERIFICATION";
+const issedDate = "09/02/2024";
 
 const unexpectedErrorMessage = "Unexpected error occurred";
 
@@ -40,7 +42,7 @@ describe("getMicrochipData", () => {
           applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
           referenceNumber: "SZWPFXEG",
           dateOfApplication: "2024-02-09T11:31:29.7165377",
-          status: "AWAITING VERIFICATION",
+          status: awaitingVerification,
         },
         travelDocument: {
           travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
@@ -71,7 +73,7 @@ describe("getMicrochipData", () => {
       petBreed: null,
       documentState: "awaiting",
       ptdNumber: "SZWPFXEG",
-      issuedDate: "09/02/2024", // Formatted date
+      issuedDate: issedDate, // Formatted date
       microchipNumber: null,
       microchipDate: undefined, // Formatted date
       petSex: null,
@@ -120,7 +122,7 @@ describe("getMicrochipData", () => {
           applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
           referenceNumber: "SZWPFXEG",
           dateOfApplication: "2024-02-09T11:31:29.7165377",
-          status: "AWAITING VERIFICATION",
+          status: awaitingVerification,
         },
         travelDocument: {
           travelDocumentId: null,
@@ -151,7 +153,7 @@ describe("getMicrochipData", () => {
       petBreed: null,
       documentState: "awaiting",
       ptdNumber: "SZWPFXEG",
-      issuedDate: "09/02/2024", // Formatted date
+      issuedDate: issedDate, // Formatted date
       microchipNumber: null,
       microchipDate: undefined,
       petSex: null,
@@ -200,7 +202,7 @@ describe("getMicrochipData", () => {
           applicationId: undefined,
           referenceNumber: "SZWPFXEG",
           dateOfApplication: "2024-02-09T11:31:29.7165377",
-          status: "AWAITING VERIFICATION",
+          status: awaitingVerification,
         },
         travelDocument: {
           travelDocumentId: undefined,
@@ -231,7 +233,7 @@ describe("getMicrochipData", () => {
       petBreed: null,
       documentState: "awaiting",
       ptdNumber: "SZWPFXEG",
-      issuedDate: "09/02/2024", // Formatted date
+      issuedDate: issedDate, // Formatted date
       microchipNumber: null,
       microchipDate: undefined,
       petSex: null,
@@ -291,7 +293,7 @@ describe("getMicrochipData", () => {
           applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
           referenceNumber: "SZWPFXEG",
           dateOfApplication: "2024-02-09T11:31:29.7165377",
-          status: "AWAITING VERIFICATION",
+          status: awaitingVerification,
         },
         travelDocument: {
           travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
@@ -322,7 +324,7 @@ describe("getMicrochipData", () => {
       petBreed: "Labrador Mix",
       documentState: "awaiting",
       ptdNumber: "SZWPFXEG",
-      issuedDate: "09/02/2024", // Formatted date
+      issuedDate: issedDate, // Formatted date
       microchipNumber,
       microchipDate: "01/02/2021", // Formatted date
       petSex: "Male",
@@ -381,7 +383,7 @@ describe("getMicrochipData", () => {
           applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
           referenceNumber: "SZWPFXEG",
           dateOfApplication: "2024-02-09T11:31:29.7165377",
-          status: "AWAITING VERIFICATION",
+          status: awaitingVerification,
         },
         travelDocument: {
           travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
@@ -412,7 +414,7 @@ describe("getMicrochipData", () => {
       petBreed: "Bulldog",
       documentState: "awaiting",
       ptdNumber: "SZWPFXEG",
-      issuedDate: "09/02/2024", // Formatted date
+      issuedDate: issedDate, // Formatted date
       microchipNumber,
       microchipDate: "01/02/2021", // Formatted date
       petSex: "Male",
