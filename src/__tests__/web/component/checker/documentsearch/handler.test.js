@@ -346,7 +346,7 @@ describe("DocumentSearchHandlers", () => {
         error: "Please select a document search option",
         errorSummary: [
           {
-            fieldId: "general",
+            fieldId: "documentSearch-1",
             message: "Please select a document search option",
           },
         ],
