@@ -248,11 +248,11 @@ const submitSearch = async (request, h) => {
 
     if (documentSearch === '' || documentSearch === null || documentSearch === undefined) {
       return h.view(VIEW_PATH, {
-        error: "Please select a document search option",
+        error: "Select if you are searching for a PTD, application or microchip number",
         errorSummary: [
           {
             fieldId: "documentSearch-1",
-            message: "Please select a document search option",
+            message: "Select if you are searching for a PTD, application or microchip number",
           },
         ],
         formSubmitted: true,
