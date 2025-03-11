@@ -161,6 +161,36 @@ function handleError(error) {
   return { error: unexpectedErrorText };
 }
 
+function getMicrochipAppPtdMainModel({pet, application, travelDocument, petOwner, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth}) {
+  const getSafeValue = (obj, key, fallback = null) => obj?.[key] ?? fallback;
+
+  
+  return new MicrochipAppPtdMainModel({
+    petId: getSafeValue(pet, "petId"),
+    petName: getSafeValue(pet, "petName"),
+    petSpecies: getSafeValue(pet, "species"),
+    petBreed: pet.breedName === "Mixed breed or unknown" && pet.breedAdditionalInfo
+      ? pet.breedAdditionalInfo
+      : getSafeValue(pet, "breedName"),
+    documentState,
+    ptdNumber,
+    issuedDate: formattedIssuedDate || null,
+    microchipNumber: getSafeValue(pet, "microchipNumber"),
+    microchipDate: formattedMicrochippedDate || null,
+    petSex: getSafeValue(pet, "sex"),
+    petDoB: formattedDateOfBirth || null,
+    petColour: getSafeValue(pet, "colourName"),
+    petFeaturesDetail: getSafeValue(pet, "significantFeatures"),
+    applicationId: getSafeValue(application, "applicationId"),
+    travelDocumentId: getSafeValue(travelDocument, "travelDocumentId"),
+    dateOfIssue: getSafeValue(travelDocument, "dateOfIssue"),
+    petOwnerName: getSafeValue(petOwner, "name"),
+    petOwnerEmail: getSafeValue(petOwner, "email"),
+    petOwnerTelephone: getSafeValue(petOwner, "telephone"),
+    petOwnerAddress: getSafeValue(petOwner, "address"),
+    issuingAuthority: issuingAuthorityModelData,
+  });
+}
 
 const getApplicationByApplicationNumber = async (
   applicationNumber,
@@ -180,6 +210,11 @@ const getApplicationByApplicationNumber = async (
     if (!item || typeof item !== "object") {
       throw new Error(unexpectedResponseErrorText);
     }
+
+    const pet = item.pet || {};
+    const application = item.application || {};
+    const travelDocument = item.travelDocument || {};
+    const petOwner = item.petOwner || {};
 
     // Ensure the item structure is as expected
     if (!item.pet) {
@@ -231,37 +266,8 @@ const getApplicationByApplicationNumber = async (
     const formattedDateOfBirth = formatDate(dateOfBirthRaw);
     
 
-    const transformedItem = new MicrochipAppPtdMainModel({
-      petId: item.pet ? item.pet.petId : undefined,
-      petName: item.pet ? item.pet.petName : undefined,
-      petSpecies: item.pet ? item.pet.species : undefined,
-      petBreed: item.pet && item.pet.breedName === "Mixed breed or unknown" && item.pet.breedAdditionalInfo
-      ? item.pet.breedAdditionalInfo  
-      : item.pet?.breedName,
-      documentState,
-      ptdNumber,
-      issuedDate: formattedIssuedDate || undefined,
-      microchipNumber: item.pet ? item.pet.microchipNumber : undefined,
-      microchipDate: formattedMicrochippedDate || undefined,
-      petSex: item.pet ? item.pet.sex : undefined,
-      petDoB: formattedDateOfBirth || undefined,
-      petColour: item.pet ? item.pet.colourName : undefined,
-      petFeaturesDetail: item.pet ? item.pet.significantFeatures : undefined,
-      applicationId: item.application
-        ? item.application.applicationId
-        : undefined,
-      travelDocumentId: item.travelDocument
-        ? item.travelDocument.travelDocumentId
-        : null,
-      dateOfIssue: item.travelDocument ? item.travelDocument.dateOfIssue : null,
-      petOwnerName: item.petOwner ? item.petOwner.name : null,
-      petOwnerEmail: item.petOwner ? item.petOwner.email : null,
-      petOwnerTelephone: item.petOwner ? item.petOwner.telephone : null,
-      petOwnerAddress: item.petOwner.address ? item.petOwner.address : null,
-      issuingAuthority: issuingAuthorityModelData,
-    });
-
-    return transformedItem;
+    return getMicrochipAppPtdMainModel({pet, application, travelDocument, petOwner, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth});
+     
   } catch (error) {
     console.error(errorText, error.message);
 
