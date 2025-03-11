@@ -1,9 +1,9 @@
 import decodeJwt from "./token-verify/jwt-decode.js";
-import { UnauthorizedError, ForbiddenError } from "../exceptions/index.js";
+import { ForbiddenError } from "../exceptions/index.js";
 
 const validateTokenExists = (token) => {
   if (!token) {
-    throw new UnauthorizedError("No token provided");
+    throw new ForbiddenError("No token provided");
   }
   return true;
 };
@@ -14,7 +14,7 @@ const validateUserRoles = (decodedToken) => {
     !Array.isArray(decodedToken.roles) ||
     decodedToken.roles.length === 0
   ) {
-    throw new UnauthorizedError("User has no roles in token");
+    throw new ForbiddenError("User has no roles in token");
   }
   return true;
 };
@@ -25,7 +25,7 @@ const validateCheckerRole = (decodedToken) => {
   );
 
   if (!hasCheckerRole) {
-    throw new UnauthorizedError("User does not have Checker role");
+    throw new ForbiddenError("User does not have Checker role");
   }
   return true;
 };
@@ -62,12 +62,10 @@ const createUserObject = (decodedToken, organisationId) => {
 };
 
 const handleTokenValidationError = (error) => {
-  if (error instanceof UnauthorizedError) {
-    throw error;
-  } else if (error instanceof ForbiddenError) {
+  if (error instanceof ForbiddenError) {
     throw error;
   } else {
-    throw new UnauthorizedError("Token validation failed: " + error.message);
+    throw new ForbiddenError("Token validation failed: " + error.message);
   }
 };
 
