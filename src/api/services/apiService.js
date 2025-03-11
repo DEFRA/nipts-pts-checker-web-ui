@@ -192,6 +192,20 @@ function getMicrochipAppPtdMainModel({pet, application, travelDocument, petOwner
   });
 }
 
+function getFormattedDates(issuedDateRaw, item) {
+  const formattedIssuedDate = formatDate(issuedDateRaw);
+
+  const microchippedDateRaw = item.pet
+    ? item.pet.microchippedDate
+    : undefined;
+  const formattedMicrochippedDate = formatDate(microchippedDateRaw);
+
+  const dateOfBirthRaw = item.pet ? item.pet.dateOfBirth : undefined;
+  const formattedDateOfBirth = formatDate(dateOfBirthRaw);
+  return { formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth };
+}
+
+
 const getApplicationByApplicationNumber = async (
   applicationNumber,
   request
@@ -255,15 +269,7 @@ const getApplicationByApplicationNumber = async (
         break;
     }
 
-    const formattedIssuedDate = formatDate(issuedDateRaw);
-
-    const microchippedDateRaw = item.pet
-      ? item.pet.microchippedDate
-      : undefined;
-    const formattedMicrochippedDate = formatDate(microchippedDateRaw);
-
-    const dateOfBirthRaw = item.pet ? item.pet.dateOfBirth : undefined;
-    const formattedDateOfBirth = formatDate(dateOfBirthRaw);
+    const { formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth } = getFormattedDates(issuedDateRaw, item);
     
 
     return getMicrochipAppPtdMainModel({pet, application, travelDocument, petOwner, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth});
@@ -416,3 +422,4 @@ export default {
   saveCheckerUser,
   getOrganisation
 };
+
