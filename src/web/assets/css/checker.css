@@ -1877,21 +1877,32 @@ html {
 
 
 .govuk-skip-link:focus {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  z-index: 1001;
   width: 100%;
   height: auto;
   margin: 0;
-  padding: 10px;
-  overflow: visible;
+  padding: 10px 15px;
+  background-color: #ffdd00;
+  color: #0b0c0c;
+  text-align: left;
+  font-size: 16px;
+  line-height: 1.25;
+  z-index: 1001;
   clip: auto;
   -webkit-clip-path: none;
   clip-path: none;
-  white-space: inherit;
-  background-color: #ffdd00;
-  text-align: center;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  white-space: normal;
+  overflow: visible;
+}
+
+.pts-checker-header {
+  margin-top: 0;
+  z-index: 100;
+}
+
+body:focus-within .govuk-skip-link:focus~.pts-checker-header {
+  margin-top: 40px;
 }
 /*# sourceMappingURL=checker.css.map */

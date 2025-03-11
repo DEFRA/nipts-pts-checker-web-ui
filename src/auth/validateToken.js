@@ -64,8 +64,6 @@ const createUserObject = (decodedToken, organisationId) => {
 const handleTokenValidationError = (error) => {
   if (error instanceof ForbiddenError) {
     throw error;
-  } else if (error instanceof ForbiddenError) {
-    throw error;
   } else {
     throw new ForbiddenError("Token validation failed: " + error.message);
   }
