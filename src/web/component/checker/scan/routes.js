@@ -25,6 +25,13 @@ const Routes = [
       handler: ScanHandlers.getScanNotFound,
     },
   },
+  {
+    method: HttpMethod.GET,
+    path: "/checker/scan/allow-camera-permissions",
+    options: {
+      handler: ScanHandlers.getAllowCameraPermissions,
+    },
+  },
 ];
 
 export default Routes;

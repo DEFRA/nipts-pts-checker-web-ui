@@ -198,19 +198,7 @@ describe("Date Edge Cases", () => {
 });
 
 describe("Date Range Basic Validations", () => {
-  const formatTestDate = (date) => {
-    return [
-      String(date.getDate()).padStart(
-        TEST_CONSTANTS.DATE_FORMAT.DAY_PAD_LENGTH,
-        TEST_CONSTANTS.DATE_FORMAT.PAD_CHAR
-      ),
-      String(date.getMonth() + 1).padStart(
-        TEST_CONSTANTS.DATE_FORMAT.MONTH_PAD_LENGTH,
-        TEST_CONSTANTS.DATE_FORMAT.PAD_CHAR
-      ),
-      date.getFullYear(),
-    ].join(TEST_CONSTANTS.DATE_FORMAT.SEPARATOR);
-  };
+  const formatTestDate = newFormattedDate();
 
   it("should validate current date and time", () => {
     const now = new Date();
@@ -233,19 +221,7 @@ describe("Date Range Basic Validations", () => {
 });
 
 describe("Date Range Time Bounds", () => {
-  const formatTestDate = (date) => {
-    return [
-      String(date.getDate()).padStart(
-        TEST_CONSTANTS.DATE_FORMAT.DAY_PAD_LENGTH,
-        TEST_CONSTANTS.DATE_FORMAT.PAD_CHAR
-      ),
-      String(date.getMonth() + 1).padStart(
-        TEST_CONSTANTS.DATE_FORMAT.MONTH_PAD_LENGTH,
-        TEST_CONSTANTS.DATE_FORMAT.PAD_CHAR
-      ),
-      date.getFullYear(),
-    ].join(TEST_CONSTANTS.DATE_FORMAT.SEPARATOR);
-  };
+  const formatTestDate = newFormattedDate();
 
   describe("Past Time Bounds", () => {
     it("should validate near past boundary", () => {
@@ -397,3 +373,19 @@ describe("Date Format Special Cases", () => {
     expect(result.error).toBe(CurrentSailingMainModelErrors.departureDateFormatError);
   });
 });
+
+function newFormattedDate() {
+  return (date) => {
+    return [
+      String(date.getDate()).padStart(
+        TEST_CONSTANTS.DATE_FORMAT.DAY_PAD_LENGTH,
+        TEST_CONSTANTS.DATE_FORMAT.PAD_CHAR
+      ),
+      String(date.getMonth() + 1).padStart(
+        TEST_CONSTANTS.DATE_FORMAT.MONTH_PAD_LENGTH,
+        TEST_CONSTANTS.DATE_FORMAT.PAD_CHAR
+      ),
+      date.getFullYear(),
+    ].join(TEST_CONSTANTS.DATE_FORMAT.SEPARATOR);
+  };
+}

@@ -2,16 +2,15 @@ import state from "./auth-code-grant/state.js";
 import redeemAuthorizationCodeForAccessToken from "./auth-code-grant/redeem-authorization-code-for-access-token.js";
 import jwtVerify from "./token-verify/jwt-verify.js";
 import decodeJwt from "./token-verify/jwt-decode.js";
+import validateToken from "./validateToken.js";
 import nonce from "./id-token/nonce.js";
 import expiresIn from "./auth-code-grant/expires-in.js";
-import session from "../session/index.js";
 import sessionKeys from "../session/keys.js";
 import cookieAuthentication from "./cookie-auth/cookie-auth.js";
-import { InvalidStateError } from "../exceptions/index.js";
+import { InvalidStateError, ForbiddenError } from "../exceptions/index.js";
 import apiService from "../api/services/apiService.js";
-import userService from "../api/services/userService.js";
 
-const authenticate = async (request) => {
+const authenticate = async (request, sessionInstance) => {
   if (!state.verify(request)) {
     throw new InvalidStateError("Invalid state");
   }
@@ -20,38 +19,33 @@ const authenticate = async (request) => {
 
   await jwtVerify(redeemResponse.access_token);
 
-  const accessToken = decodeJwt(redeemResponse.access_token);
+  const tokenData = validateToken(redeemResponse.access_token);
 
   const idToken = decodeJwt(redeemResponse.id_token);
 
   nonce.verify(request, idToken);
 
-  session.setToken(
+  sessionInstance.setToken(
     request,
     sessionKeys.tokens.accessToken,
     redeemResponse.access_token
   );
 
-  session.setToken(
+  sessionInstance.setToken(
     request,
     sessionKeys.tokens.tokenExpiry,
     expiresIn.toISOString(redeemResponse.expires_in)
   );
 
-  cookieAuthentication.set(request, accessToken);
+  cookieAuthentication.set(request, tokenData);
 
-  // Add or update checker user
   try {
-    const organisation = userService.getUserOrganisation(request);
-
-    let organisationId = null;
+    const organisationId = tokenData.organisationId;
     let isGBCheck = true;
 
-    if (organisation.organisationId !== "") {
-      organisationId = organisation.organisationId;
+    if (organisationId) {
       request.yar.set("organisationId", organisationId);
-    }
-    else{
+    } else {
       request.yar.clear("organisationId");
     }
 
@@ -59,6 +53,18 @@ const authenticate = async (request) => {
       organisationId,
       request
     );
+
+    if (userOrganisation.error) {
+      throw new ForbiddenError(
+        `Forbidden: Organization not found: ${organisationId}`
+      );
+    }
+
+    if (!userOrganisation.IsActive) {
+      throw new ForbiddenError(
+        `Forbidden: Organization is inactive: ${organisationId}`
+      );
+    }
 
     if (
       userOrganisation?.Location &&
@@ -69,25 +75,25 @@ const authenticate = async (request) => {
     }
 
     const checker = {
-      id: accessToken.sub,
-      firstName: accessToken.firstName,
-      lastName: accessToken.lastName,
+      id: tokenData.userId,
+      firstName: tokenData.firstName,
+      lastName: tokenData.lastName,
       roleId: null,
-      organisationId,
+      organisationId: tokenData.organisationId,
     };
 
     await apiService.saveCheckerUser(checker, request);
-    request.yar.set("isGBCheck", isGBCheck);
-    request.yar.set("checkerId", accessToken.sub);
-    session.setToken(request, sessionKeys.tokens.sso, "");
-  } catch (error) {
-    console.error("Error saving checker user:", error);
 
-    // Rethrow the error
+    request.yar.set("isGBCheck", isGBCheck);
+    request.yar.set("checkerId", tokenData.userId);
+    request.yar.set("isAuthorized", true);
+    sessionInstance.setToken(request, sessionKeys.tokens.sso, "");
+  } catch (error) {
+    console.error("Error during authentication:", error);
     throw error;
   }
 
-  return accessToken;
+  return tokenData;
 };
 
 export default authenticate;

@@ -1,0 +1,35 @@
+{% extends "./layouts/noIconsLayout.html" %}
+
+{% block pageTitle %} Page not found - Check a pet travelling from GB to NI {% endblock %}
+
+
+{% block content %}
+<div class="govuk-width-container" style="margin-top: -60px;">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l" style="margin-top: 0;">Page not found</h1>
+      <p class="govuk-body">
+        If you typed the web address, check it is correct.
+      </p>
+      <p class="govuk-body">
+        If you pasted the web address, check you copied the entire address.
+      </p>
+      <p>
+        If the web address is correct or you selected a link or button, contact your team leader.
+      </p>
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const navigation = document.querySelector('.pts-checker-navigation');
+    if (navigation) {
+      navigation.style.display = 'none';
+    }
+  });
+
+  if (window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+  }
+</script>
+{% endblock %}

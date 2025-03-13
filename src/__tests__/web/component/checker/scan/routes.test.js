@@ -32,4 +32,14 @@ describe("Scan Routes", () => {
     expect(foundRoute).toBeDefined();
     expect(foundRoute.options.handler).toBeDefined();
   });
+  it("should have a GET route for /checker/scan/allow-camera-permissions", () => {
+    const foundRoute = Routes.find(
+      (route) =>
+        route.path === "/checker/scan/allow-camera-permissions" &&
+        route.method === HttpMethod.GET
+    );
+
+    expect(foundRoute).toBeDefined();
+    expect(foundRoute.options.handler).toBeDefined();
+  });
 });

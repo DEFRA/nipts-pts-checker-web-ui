@@ -1,242 +1,36 @@
-<!DOCTYPE html>
-<html lang="en" class="govuk-template">
-
-<head>
-  <meta charset="utf-8">
-  <title>Find a document - Pet Travel Scheme: Check a pet from Great Britain to Northern Ireland – GOV.UK</title>
-  <style>
-    :root {
-      --govuk-frontend-version: "5.2.0";
-      --govuk-frontend-breakpoint-mobile: 20rem;
-      --govuk-frontend-breakpoint-tablet: 40.0625rem;
-      --govuk-frontend-breakpoint-desktop: 48.0625rem
-    }
-
-    a {
-      font-family: "GDS Transport", arial, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      text-decoration-thickness: max(1px, .0625rem);
-      text-underline-offset: 0.1578em;
-    }
-
-    a:hover,
-    .govuk-link:hover {
-      text-decoration-thickness: max(3px, .1875rem, .12em);
-      -webkit-text-decoration-skip-ink: none;
-      text-decoration-skip-ink: none;
-      -webkit-text-decoration-skip: none;
-      text-decoration-skip: none;
-    }
-
-    a:focus,
-    .govuk-link:focus {
-      outline: 3px solid transparent;
-      color: #0b0c0c;
-      background-color: #ffdd00;
-      box-shadow: 0 -2px #ffdd00, 0 4px #0b0c0c;
-      text-decoration: none;
-      -webkit-box-decoration-break: clone;
-      box-decoration-break: clone;
-    }
-
-    .govuk-heading-xl {
-      color: #0b0c0c;
-      font-family: "GDS Transport", arial, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      font-weight: 700;
-      font-size: 2rem;
-      line-height: 1.09375;
-      display: block;
-      margin-top: 0;
-      margin-bottom: 30px;
-    }
-
-    @media (min-width: 40.0625em) {
-      .govuk-heading-xl {
-        font-size: 3rem;
-        line-height: 1.0416666667;
-        margin-bottom: 50px;
-      }
-    }
-
-    .govuk-width-container {
-      max-width: 960px;
-      margin-right: 15px;
-      margin-left: 15px;
-    }
-
-    @media (min-width: 40.0625em) {
-      .govuk-width-container {
-        margin-right: 30px;
-        margin-left: 30px;
-      }
-    }
-
-    @media (min-width: 1020px) {
-      .govuk-width-container {
-        margin-right: auto;
-        margin-left: auto;
-      }
-    }
-
-    .govuk-back-link {
-      font-size: 0.875rem;
-      line-height: 1.1428571429;
-      font-family: "GDS Transport", arial, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      text-decoration: underline;
-      text-decoration-thickness: max(1px, .0625rem);
-      text-underline-offset: 0.1578em;
-      display: inline-block;
-      position: relative;
-      margin-bottom: 15px;
-      padding-left: 0.875em;
-      color: #0b0c0c;
-    }
-
-    .govuk-back-link:hover {
-      color: rgba(11, 12, 12, 0.99);
-    }
-
-    .govuk-back-link::before {
-      content: "";
-      display: block;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0.1875em;
-      width: 0.4375em;
-      height: 0.4375em;
-      margin: auto 0;
-      transform: rotate(225deg);
-      border: solid;
-      border-width: 1px 1px 0 0;
-      border-color: #505a5f;
-    }
-
-    .govuk-grid-column-two-thirds {
-      box-sizing: border-box;
-      width: 100%;
-      padding: 0 15px;
-    }
-
-    @media (min-width: 40.0625em) {
-      .govuk-grid-column-two-thirds {
-        width: 66.6666666667%;
-        float: left;
-      }
-    }
-
-    .govuk-body {
-      color: #0b0c0c;
-      font-family: "GDS Transport", arial, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      font-weight: 400;
-      font-size: 1rem;
-      line-height: 1.25;
-      margin-top: 0;
-      margin-bottom: 15px;
-    }
-
-    @media (min-width: 40.0625em) {
-      .govuk-body {
-        font-size: 1.1875rem;
-        line-height: 1.3157894737;
-        margin-bottom: 20px;
-      }
-    }
-
-    .govuk-\!-margin-bottom-9 {
-      margin-bottom: 40px !important;
-    }
-
-    @media (min-width: 40.0625em) {
-      .govuk-\!-margin-bottom-9 {
-        margin-bottom: 60px !important;
-      }
-    }
-
-    .govuk-\!-padding-top-4 {
-      padding-top: 15px !important;
-    }
-
-    @media (min-width: 40.0625em) {
-      .govuk-\!-padding-top-4 {
-        padding-top: 20px !important;
-      }
-    }
-
-    /* Custom styles */
-    * {
-      font-family: Helvetica, Arial, sans-serif !important;
-    }
-
+{% extends "./layouts/errorLayout.html" %}
+{% block headContent %}
+<!-- Include custom styles directly in the page -->
+<style>
     body {
-      background-color: #f3f2f1 !important;
-      padding-top: 80px;
-      min-width: 380px;
+      padding-top: 110px;
     }
 
-    .pts-checker-header {
-      background-color: #000000;
-      padding: 1em 0;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 80px;
-      box-sizing: border-box;
-      z-index: 100;
-      filter: drop-shadow(rgba(0, 0, 0, 0.15) 0.5rem 0.5rem 0.3rem);
-      -moz-box-shadow: 0.5rem 0.5rem 0.3rem rgba(0, 0, 0, 0.15);
-      -webkit-box-shadow: 0.5rem 0.5rem 0.3rem rgba(0, 0, 0, 0.15);
-      box-shadow: 0.5rem 0.5rem 0.3rem rgba(0, 0, 0, 0.15);
-    }
+</style>
+{% endblock %}
 
-    .pts-checker-header h1 {
-      color: #ffffff;
-      margin-bottom: 0;
-      white-space: nowrap;
-    }
+{% block pageTitle %} You cannot access this page or perform this action – GOV.UK {% endblock %}
 
-    @supports not (caret-color: auto) {
-      .govuk-fieldset {
-        display: table-cell;
-      }
-    }
-  </style>
-</head>
-
-<body class="govuk-frontend-supported">
-  <div class="pts-checker-header">
-    <div class="govuk-width-container">
-      <div class="govuk-grid-row pet-declaration-logos">
-        <div class="govuk-grid-column-two-thirds">
-          <h1 class="govuk-heading-l">Check a pet from GB to NI</h1>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="govuk-width-container">
-    <a href="javascript: history.back();" class="govuk-back-link" id="backButton">Back</a>
-
-    <div class="pts-checker govuk-!-margin-bottom-9 govuk-!-padding-top-4">
+{% block content %}
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        <h1 id="dialog-title-notsignedin" class="govuk-heading-xl">
-          [Placeholder page] You cannot access this page or perform this action
-        </h1>
-        <div class="govuk-body">
-          <p>If you were in the middle of a compliance check, <a href="javascript: history.back();">go back to the
-              previous page</a> and try again.</p>
+          <h1 class="govuk-heading-l">You cannot access this page or perform this action</h1>
+          <p class="govuk-body">
+            If you typed the web address, check it is correct.
+          </p>
+          <p class="govuk-body">
+            If you pasted the web address, check you copied the entire address.
+          </p>
+          <p>
+            If you tried to save some information in the service, <a href="javascript: history.back();">go back to the previous page</a> and try again.
+          </p>
+          <p>
+            Contact your team leader with any queries.
+          </p>
         </div>
-      </div>
-    </div>
   </div>
-</body>
+</div>
 
-</html>
+
+{% endblock %}

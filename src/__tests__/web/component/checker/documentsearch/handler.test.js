@@ -9,6 +9,7 @@ import {
   validateMicrochipNumber,
   validateApplicationNumber,
 } from "../../../../../web/component/checker/documentsearch/validate.js";
+import DocumentSearchModel from "../../../../../constants/documentSearchConstant.js";
 
 jest.mock("../../../../../api/services/documentSearchMainService.js");
 jest.mock("../../../../../api/services/microchipAppPtdMainService.js");
@@ -63,7 +64,6 @@ describe("DocumentSearchHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(documentSearchView, {
         documentSearchMainModelData: mockData,
         successConfirmation: true,
-        activeTab: "ptd",
         formSubmitted: false,
         ptdNumberSearch: "",
         applicationNumberSearch: "",
@@ -88,7 +88,6 @@ describe("DocumentSearchHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(documentSearchView, {
         documentSearchMainModelData: mockData,
         successConfirmation: false,
-        activeTab: "ptd",
         formSubmitted: false,
         ptdNumberSearch: "",
         applicationNumberSearch: "",
@@ -327,6 +326,36 @@ describe("DocumentSearchHandlers", () => {
       expect(h.view).toHaveBeenCalledWith(documentNotFoundView, {
         pageTitle: pageTitleDefault,
         searchValue: "GB826" + request.payload.ptdNumberSearch,
+      });
+    });
+
+    it("should handle search with no option selected", async () => {
+      const request = {
+        payload: {
+          documentSearch: null,
+        },
+      };
+      const h = {
+        redirect: jest.fn().mockReturnValue({}),
+        view: jest.fn().mockReturnValue({}),
+      };
+
+      await DocumentSearchHandlers.submitSearch(request, h);
+
+      expect(h.view).toHaveBeenCalledWith(documentSearchView, {
+        error: "Select if you are searching for a PTD, application or microchip number",
+        errorSummary: [
+          {
+            fieldId: "documentSearch-1",
+            message: "Select if you are searching for a PTD, application or microchip number",
+          },
+        ],
+        errorRadioUnchecked: true,
+        formSubmitted: true,
+        ptdNumberSearch: "",
+        applicationNumberSearch: "",
+        microchipNumber: "",
+        documentSearchMainModelData: DocumentSearchModel.documentSearchMainModelData,
       });
     });
 

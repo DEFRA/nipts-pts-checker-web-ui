@@ -32,4 +32,10 @@ export default {
     incorrectSelection: "You cannot select a GB outcome",
     required: "Select at least one GB outcome",
   },
+  spsOutcomeDetails: {
+    length: "Outcome summary must be 500 characters or less"
+  },
+  relevantComments: {
+    length: "Relevant comments must be 500 characters or less"
+  }
 };

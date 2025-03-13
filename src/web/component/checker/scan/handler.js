@@ -6,6 +6,7 @@ import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
 const VIEW_PATH = "componentViews/checker/scan/scanView";
 const SEARCH_RESULT_VIEW_PATH = "/checker/search-results";
 const NOT_FOUND_VIEW_PATH = "componentViews/checker/scan/scanNotFoundView";
+const ALLOW_CAMERA_PERMISSIONS = "componentViews/checker/scan/allowCameraPermissions";
 
 const getScan = async (_request, h) => {
   headerData.section = "scan";
@@ -15,6 +16,12 @@ const getScan = async (_request, h) => {
 const getScanNotFound = async (_request, h) => {
   headerData.section = "scan";
   return h.view(NOT_FOUND_VIEW_PATH, {
+    pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
+  });
+};
+
+const getAllowCameraPermissions = async (_request, h) => {
+  return h.view(ALLOW_CAMERA_PERMISSIONS,{
     pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
   });
 };
@@ -76,4 +83,5 @@ export const ScanHandlers = {
   getScan,
   getScanNotFound,
   postScan,
+  getAllowCameraPermissions,
 };

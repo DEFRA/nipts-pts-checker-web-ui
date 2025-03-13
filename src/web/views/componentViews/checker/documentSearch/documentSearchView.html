@@ -20,14 +20,20 @@
     <form id="documentSearchForm" action="/checker/document-search" method="POST">
       <div class="govuk-grid-row govuk-!-margin-bottom-0 govuk-!-margin-top-0">
         <div class="govuk-grid-column-full govuk-!-margin-top-0">
-          <div class="govuk-form-group">
+          <div id="form-group" class="govuk-form-group {% if errorRadioUnchecked %}govuk-form-group--error{% endif %}">
             <fieldset class="govuk-fieldset" role="group" aria-labelledby="search-options-heading">
               <legend id="search-options-heading">
                 <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
                   {{ documentSearchMainModelData.pageHeading }}
                 </h1>
               </legend>
-
+              <div>
+                {% if errorRadioUnchecked %}
+                  <p id="errorRadioUnchecked-msg" class="govuk-error-message">
+                    {{ error }}
+                  </p>
+                {% endif %}
+              </div>
               <div class="govuk-radios" data-module="govuk-radios" role="radiogroup" aria-labelledby="search-options-heading">
                 <h2 id="search-options-heading" class="govuk-radios__label govuk-visually-hidden">Search options</h2>
                    
@@ -234,11 +240,23 @@
   // Clear all fields and reset radio buttons
   function clearSearchFields(_event) {
     _event.preventDefault(); // Prevent default link behavior
+
+    document.getElementById('documentSearch-1').checked = false;
+    document.getElementById('documentSearch-2').checked = false;
+    document.getElementById('documentSearch-3').checked = false;
     resetField('ptdNumberSearch', 'ptd-form-group', 'ptd-error');
     resetField('applicationNumberSearch', 'application-form-group', 'application-error');
     resetField('microchipNumber', 'microchip-form-group', 'microchip-error');
-    document.getElementById('documentSearch-1').checked = true;
-    toggleConditionals(conditionalDocumentSearch1Id);
+
+    clearEmptyError()
+  }
+
+  function clearEmptyError() {
+    document.getElementById('form-group').classList.remove("govuk-form-group--error");
+    const errorElement = document.getElementById('errorRadioUnchecked-msg');
+    if (errorElement) {
+      errorElement.remove();
+    }
   }
 
   document.getElementById('clearSearchButton').addEventListener('click', clearSearchFields);
@@ -261,26 +279,28 @@
   });
 
   // On page load, ensure correct conditional content is displayed
-  document.addEventListener('DOMContentLoaded', function () {
-    toggleConditionals('conditional-documentSearch-' + getSelectedOptionId());
+  document.addEventListener('DOMContentLoaded', function (e) {
+    setTimeout(() => {
+      const selectedOptionId = getSelectedOptionId();
+      toggleConditionals('conditional-documentSearch-' + selectedOptionId);
+    }, 10);
   });
 
   function getSelectedOptionId() {
-    const selectedOption = document.querySelector('input[name="documentSearch"]:checked').value;
-    
-    let result;
+    const documentSearchField = document.querySelector('input[name="documentSearch"]:checked');
 
-    if (selectedOption === 'ptd') {
-        result = '1';
-    } 
-    else if (selectedOption === 'application') {
-       result = '2';
-    } 
-    else {
-        result = '3';
+    const selectedOption = documentSearchField.value;
+
+    switch (selectedOption) {
+      case 'ptd':
+          return '1';
+      case 'application':
+          return '2';
+      case 'microchip':
+          return '3';
+      default:
+          return undefined;
     }
-
-    return result;
 
   }
   

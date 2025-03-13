@@ -10,6 +10,7 @@ import {
 } from "./validate.js";
 import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
 import headerData from "../../../../web/helper/constants.js";
+import DocumentSearchModel from "../../../../constants/documentSearchConstant.js";
 
 const VIEW_PATH = "componentViews/checker/documentsearch/documentSearchView";
 const NOT_FOUND_VIEW_PATH =
@@ -32,7 +33,6 @@ const getDocumentSearch = async (_request, h) => {
     return h.view(VIEW_PATH, {
       documentSearchMainModelData,
       successConfirmation,
-      activeTab: "ptd", // Default active tab
       formSubmitted: false,
       // Initialize empty values for input fields
       ptdNumberSearch: "",
@@ -244,6 +244,25 @@ const submitSearch = async (request, h) => {
       request.yar.set("data", microchipAppPtdMainData);
 
       return h.redirect(SEARCH_RESULT_VIEW_PATH);
+    }
+
+    if (documentSearch === '' || documentSearch === null || documentSearch === undefined) {
+      const errorMsg = "Select if you are searching for a PTD, application or microchip number"
+      return h.view(VIEW_PATH, {
+        error: errorMsg,
+        errorSummary: [
+          {
+            fieldId: "documentSearch-1",
+            message: errorMsg,
+          },
+        ],
+        errorRadioUnchecked: true,
+        formSubmitted: true,
+        ptdNumberSearch: "",
+        applicationNumberSearch: "",
+        microchipNumber: "",
+        documentSearchMainModelData: DocumentSearchModel.documentSearchMainModelData,
+      });
     }
 
     // Default redirect if none of the above conditions are met
