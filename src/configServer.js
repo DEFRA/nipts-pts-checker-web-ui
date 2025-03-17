@@ -115,7 +115,9 @@ const configureStaticRoutes = (server) => {
     path: "/{any*}",
     handler: function (_request, h) {
       return h
-        .view(ERROR_VIEWS.NOT_FOUND)
+        .view(ERROR_VIEWS.NOT_FOUND, {
+          isAuthorized: _request.yar.get("isAuthorized"),
+        })
         .code(HTTP_STATUS.NOT_FOUND)
         .takeover();
     },
@@ -142,7 +144,9 @@ const configureErrorRoutes = (server) => {
     },
     handler: (_request, h) => {
       return h
-        .view(ERROR_VIEWS.NOT_FOUND)
+        .view(ERROR_VIEWS.NOT_FOUND, {
+          isAuthorized: _request.yar.get("isAuthorized"),
+        })
         .code(HTTP_STATUS.NOT_FOUND)
         .takeover();
     },
@@ -194,7 +198,9 @@ const setup = (server) => {
       }
       if (response.output.statusCode === HTTP_STATUS.NOT_FOUND) {
         return h
-          .view(ERROR_VIEWS.NOT_FOUND)
+          .view(ERROR_VIEWS.NOT_FOUND, {
+            isAuthorized: request.yar.get("isAuthorized"),
+          })
           .code(HTTP_STATUS.NOT_FOUND)
           .takeover();
       }
