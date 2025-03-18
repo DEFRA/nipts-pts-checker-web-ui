@@ -28,6 +28,24 @@
         {% endif %}
       </dd>
     </div>
+
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Details of outcome</dt>
+      <dd class="govuk-summary-list__value">
+        {% if checkDetails.detailsComments|length > 1 %}
+        <ul class="govuk-list govuk-list--bullet">
+          {% for comment in checkDetails.detailsComments %}
+          <li>{{ comment }}</li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="govuk-body">
+          {{ checkDetails.detailsComments[0] if checkDetails.detailsComments else "None" }}
+        </p>
+        {% endif %}
+      </dd>
+    </div>
+
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">Reason for referral</dt>
       <dd class="govuk-summary-list__value">
@@ -70,6 +88,7 @@
     </dd>
   </div>
 
+  
   </dl>
 
   <h2 class="govuk-heading-m">Check details</h2>
