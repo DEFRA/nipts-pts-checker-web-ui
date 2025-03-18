@@ -8,7 +8,7 @@ const dateNotavailableText = "Not available";
 
 async function getCheckDetails(request, h) {
   try {
-    const ref = request.yar.get("identifier");   
+    const ref = request.yar.get("identifier");
     const checkSummaryId = request.yar.get("checkSummaryId");
 
     const checkDetails = await spsReferralMainService.GetCompleteCheckDetails(
@@ -38,10 +38,8 @@ async function getCheckDetails(request, h) {
       (reason) => reason === "Microchip number does not match the PTD"
     );
 
-    
     const hasValidComments = (comments) => {
-      if (!comments || !Array.isArray(comments)) 
-      {
+      if (!comments || !Array.isArray(comments)) {
         return false;
       }
 
@@ -60,6 +58,9 @@ async function getCheckDetails(request, h) {
         : null,
       additionalComments: hasValidComments(checkDetails.additionalComments)
         ? checkDetails.additionalComments
+        : ["None"],
+      detailsComments: hasValidComments(checkDetails.detailsComments)
+        ? checkDetails.detailsComments
         : ["None"],
       gbCheckerName: checkDetails.gbCheckerName || "Unknown",
       dateTimeChecked: formatDateTime(checkDetails.dateAndTimeChecked),
@@ -90,7 +91,9 @@ async function conductSpsCheck(request, h) {
     const identifier = request.yar.get("identifier");
 
     if (!identifier) {
-      return h.response({ error: "Identifier is required" }).code(HttpStatusConstants.BAD_REQUEST);
+      return h
+        .response({ error: "Identifier is required" })
+        .code(HttpStatusConstants.BAD_REQUEST);
     }
 
     let responseData;

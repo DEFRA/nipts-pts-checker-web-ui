@@ -1,4 +1,3 @@
-// File: handler.test.js
 import { CheckReportHandlers } from "../../../../../web/component/checker/checkreportdetails/handler.js";
 import spsReferralMainService from "../../../../../api/services/spsReferralMainService.js";
 import apiService from "../../../../../api/services/apiService.js";
@@ -19,7 +18,7 @@ const reportDetailsView = "componentViews/checker/checkReport/reportDetails";
 const referralReason = "Potential commercial movement";
 const dateNotAvailable = "Not available";
 const searchResultsPage = "/checker/search-results";
-const identifier = "GB826123456"; // Mock identifier for reference
+const identifier = "GB826123456";
 
 describe("CheckReportHandlers", () => {
   afterEach(() => {
@@ -32,8 +31,8 @@ describe("CheckReportHandlers", () => {
         yar: {
           get: jest
             .fn()
-            .mockReturnValueOnce(identifier) // Mock identifier
-            .mockReturnValueOnce("invalid-guid"), // Mock checkSummaryId
+            .mockReturnValueOnce(identifier)
+            .mockReturnValueOnce("invalid-guid"),
         },
       };
 
@@ -57,8 +56,8 @@ describe("CheckReportHandlers", () => {
         yar: {
           get: jest
             .fn()
-            .mockReturnValueOnce(identifier) // Mock identifier
-            .mockReturnValueOnce(validGuid), // Mock checkSummaryId
+            .mockReturnValueOnce(identifier)
+            .mockReturnValueOnce(validGuid),
         },
       };
 
@@ -87,11 +86,12 @@ describe("CheckReportHandlers", () => {
       await CheckReportHandlers.getCheckDetails(mockRequest, h);
 
       const expectedFormattedDetails = {
-        reference: identifier, // Use the mocked identifier
+        reference: identifier,
         checkOutcome: [checkOutcome],
         reasonForReferral: ["Microchip number does not match the PTD"],
         microchipNumber: "1234567890",
         additionalComments: ["Comment 1"],
+        detailsComments: ["None"],
         gbCheckerName: checkerName,
         dateTimeChecked: "13/12/2024 14:22",
         route: "Route A",
@@ -109,8 +109,8 @@ describe("CheckReportHandlers", () => {
         yar: {
           get: jest
             .fn()
-            .mockReturnValueOnce(identifier) // Mock identifier
-            .mockReturnValueOnce(validGuid), // Mock checkSummaryId
+            .mockReturnValueOnce(identifier)
+            .mockReturnValueOnce(validGuid),
         },
       };
 
@@ -139,11 +139,12 @@ describe("CheckReportHandlers", () => {
       await CheckReportHandlers.getCheckDetails(mockRequest, h);
 
       const expectedFormattedDetails = {
-        reference: identifier, // Use the mocked identifier
+        reference: identifier,
         checkOutcome: [checkOutcome],
         reasonForReferral: [referralReason],
         microchipNumber: null,
         additionalComments: ["Comment 1"],
+        detailsComments: ["None"],
         gbCheckerName: checkerName,
         dateTimeChecked: "13/12/2024 14:22",
         route: "Route A",
@@ -161,8 +162,8 @@ describe("CheckReportHandlers", () => {
         yar: {
           get: jest
             .fn()
-            .mockReturnValueOnce(identifier) // Mock identifier
-            .mockReturnValueOnce(validGuid), // Mock checkSummaryId
+            .mockReturnValueOnce(identifier)
+            .mockReturnValueOnce(validGuid),
         },
       };
 
@@ -185,11 +186,12 @@ describe("CheckReportHandlers", () => {
       await CheckReportHandlers.getCheckDetails(mockRequest, h);
 
       const expectedFormattedDetails = {
-        reference: identifier, // Use the mocked identifier
+        reference: identifier,
         checkOutcome: [checkOutcome],
         reasonForReferral: [referralReason],
         microchipNumber: null,
         additionalComments: ["None"],
+        detailsComments: ["None"],
         gbCheckerName: checkerName,
         dateTimeChecked: dateNotAvailable,
         route: "Route A",
@@ -207,8 +209,8 @@ describe("CheckReportHandlers", () => {
         yar: {
           get: jest
             .fn()
-            .mockReturnValueOnce(identifier) // Mock identifier
-            .mockReturnValueOnce(validGuid), // Mock checkSummaryId
+            .mockReturnValueOnce(identifier)
+            .mockReturnValueOnce(validGuid),
         },
       };
 
@@ -365,23 +367,122 @@ describe("CheckReportHandlers", () => {
           set: jest.fn(),
         },
       };
-    
+
       const errorMessage = "Something went wrong";
-      apiService.getApplicationByApplicationNumber.mockRejectedValue(new Error(errorMessage));
-    
+      apiService.getApplicationByApplicationNumber.mockRejectedValue(
+        new Error(errorMessage)
+      );
+
       const h = {
         response: jest.fn().mockReturnThis(),
         code: jest.fn(),
       };
-    
+
       await CheckReportHandlers.conductSpsCheck(mockRequest, h);
-    
+
       expect(h.response).toHaveBeenCalledWith({
         error: "Internal Server Error",
         details: errorMessage,
       });
       expect(h.code).toHaveBeenCalledWith(errorCode500);
     });
-    
+  });
+
+  describe("getCheckDetails - detailsComments handling part one", () => {
+    let mockRequest, h;
+    beforeEach(() => {
+      mockRequest = {
+        yar: {
+          get: jest
+            .fn()
+            .mockReturnValueOnce(identifier)
+            .mockReturnValueOnce(validGuid),
+        },
+      };
+      h = {
+        view: jest.fn(),
+        response: jest.fn().mockReturnThis(),
+        code: jest.fn(),
+      };
+    });
+    it("should set detailsComments to the provided array if it has valid comments", async () => {
+      const mockCheckDetails = {
+        detailsComments: ["Some valid comment", "Another comment"],
+      };
+      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+        mockCheckDetails
+      );
+      await CheckReportHandlers.getCheckDetails(mockRequest, h);
+      expect(h.view).toHaveBeenCalledWith(reportDetailsView, {
+        checkDetails: expect.objectContaining({
+          detailsComments: ["Some valid comment", "Another comment"],
+        }),
+      });
+    });
+    it("should set detailsComments to ['None'] if the array is empty", async () => {
+      const mockCheckDetails = {
+        detailsComments: [],
+      };
+      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+        mockCheckDetails
+      );
+      await CheckReportHandlers.getCheckDetails(mockRequest, h);
+      expect(h.view).toHaveBeenCalledWith(reportDetailsView, {
+        checkDetails: expect.objectContaining({
+          detailsComments: ["None"],
+        }),
+      });
+    });
+  });
+
+  describe("getCheckDetails - detailsComments handling part two", () => {
+    let mockRequest, h;
+    beforeEach(() => {
+      mockRequest = {
+        yar: {
+          get: jest
+            .fn()
+            .mockReturnValueOnce(identifier)
+            .mockReturnValueOnce(validGuid),
+        },
+      };
+      h = {
+        view: jest.fn(),
+        response: jest.fn().mockReturnThis(),
+        code: jest.fn(),
+      };
+    });
+    it("should set detailsComments to ['None'] if the array contains only empty or blank strings", async () => {
+      const mockCheckDetails = {
+        detailsComments: ["   ", ""],
+      };
+      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+        mockCheckDetails
+      );
+      await CheckReportHandlers.getCheckDetails(mockRequest, h);
+      expect(h.view).toHaveBeenCalledWith(reportDetailsView, {
+        checkDetails: expect.objectContaining({
+          detailsComments: ["None"],
+        }),
+      });
+    });
+
+    it("should set detailsComments to ['None'] if detailsComments is null or undefined", async () => {
+      const mockCheckDetails = {
+        detailsComments: null,
+      };
+
+      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+        mockCheckDetails
+      );
+
+      await CheckReportHandlers.getCheckDetails(mockRequest, h);
+
+      expect(h.view).toHaveBeenCalledWith(reportDetailsView, {
+        checkDetails: expect.objectContaining({
+          detailsComments: ["None"],
+        }),
+      });
+    });
   });
 });
