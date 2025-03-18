@@ -61,6 +61,9 @@ async function getCheckDetails(request, h) {
       additionalComments: hasValidComments(checkDetails.additionalComments)
         ? checkDetails.additionalComments
         : ["None"],
+      detailsComments: hasValidComments(checkDetails.detailsComments)
+        ? checkDetails.detailsComments
+        : ["None"],
       gbCheckerName: checkDetails.gbCheckerName || "Unknown",
       dateTimeChecked: formatDateTime(checkDetails.dateAndTimeChecked),
       route: checkDetails.route || "Not specified",
