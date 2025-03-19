@@ -252,7 +252,7 @@ const submitSearch = async (request, h) => {
       
     }
 
-    if (documentSearch === '' || documentSearch === null || documentSearch === undefined) {
+    if (documentSearch === '' || !documentSearch) {
       const errorMsg = "Select if you are searching for a PTD, application or microchip number"
       return h.view(VIEW_PATH, {
         error: errorMsg,
