@@ -287,7 +287,7 @@ const submitSearch = async (request, h) => {
     // Default redirect if none of the above conditions are met
     return h.redirect(SEARCH_RESULT_VIEW_PATH);
   } catch (error) {
-    return await handleError(request, h, error)
+    return handleError(request, h, error)
   }
 };
 
