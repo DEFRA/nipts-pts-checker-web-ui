@@ -225,10 +225,7 @@ const getApplicationByApplicationNumber = async (
       throw new Error(unexpectedResponseErrorText);
     }
 
-    const pet = item.pet || {};
-    const application = item.application || {};
-    const travelDocument = item.travelDocument || {};
-    const petOwner = item.petOwner || {};
+    const {pet = {}, application = {}, travelDocument = {}, petOwner = {}} = item
 
     // Ensure the item structure is as expected
     if (!item.pet) {
