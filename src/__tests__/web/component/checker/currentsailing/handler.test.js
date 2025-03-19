@@ -599,7 +599,7 @@ describe("getCurrentSailingSlot", () => {
   });
 
   test("should handle undefined sailing slot", async () => {
-    const request = createMockRequest({ yar: { defaultValue: undefined } });
+    const request = createMockRequest({ yar: {} });
     const h = createMockH();
 
     const response = await CurrentSailingHandlers.getCurrentSailingSlot(
