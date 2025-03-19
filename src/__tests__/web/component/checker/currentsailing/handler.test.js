@@ -175,7 +175,7 @@ describe("submitCurrentSailingSlot Route Option Validation", () => {
 
   test("should validate route option selection", async () => {
     const request = createMockRequest({
-      payload: createMockPayload({ routeOption: undefined }),
+      payload: createMockPayload({ routeOption: undefined }), /// 
     });
     const h = createMockH();
     setupValidationMocks({
@@ -200,7 +200,7 @@ describe("submitCurrentSailingSlot Ferry Route Validation", () => {
 
   test("should validate ferry route selection", async () => {
     const request = createMockRequest({
-      payload: createMockPayload({ routeRadio: undefined }),
+      payload: createMockPayload({ routeRadio: undefined }), ///
     });
     const h = createMockH();
     setupValidationMocks({
@@ -442,7 +442,7 @@ describe("submitCurrentSailingSlot Flight Success", () => {
       payload: createMockPayload({
         routeOption: "2",
         routeFlight: "RK103",
-        routeRadio: undefined,
+        routeRadio: undefined, /// 
       }),
       yar: {
         currentSailingModel: {
@@ -459,7 +459,7 @@ describe("submitCurrentSailingSlot Flight Success", () => {
     expect(request.yar.set).toHaveBeenCalledWith("currentSailingSlot", {
       sailingHour: "12",
       sailingMinutes: "30",
-      selectedRoute: undefined,
+      selectedRoute: undefined, ////
       departureDate: DATE.DEP_DATE,
       selectedRouteOption: routeOptions[1],
       routeFlight: "RK103",
@@ -603,7 +603,6 @@ describe("getCurrentSailingSlot", () => {
     expect(response.code).toBe(HTTP_STATUS.OK);
     expect(response.source).toEqual({
       message: ROUTE_SLOT.RET_SLOT,
-      currentSailingSlot: undefined,
     });
   });
 });
