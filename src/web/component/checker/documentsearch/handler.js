@@ -214,8 +214,49 @@ async function handleMicrochip(searchText, request, h) {
       }
 }
 
+function handleEmptyDocumentSearch(h) {
+  const errorMsg = "Select if you are searching for a PTD, application or microchip number"
+  return h.view(VIEW_PATH, {
+    error: errorMsg,
+    errorSummary: [
+      {
+        fieldId: "documentSearch-1",
+        message: errorMsg,
+      },
+    ],
+    errorRadioUnchecked: true,
+    formSubmitted: true,
+    ptdNumberSearch: "",
+    applicationNumberSearch: "",
+    microchipNumber: "",
+    documentSearchMainModelData: DocumentSearchModel.documentSearchMainModelData,
+  });
+}
+
+async function handleError(request, h, error) {
+  console.log(error.message)
+    // Handle unexpected errors
+    const ptdNumberSearch = request.payload.ptdNumberSearch || "";
+    const applicationNumberSearch = request.payload.applicationNumberSearch || "";
+    const microchipNumberSearch = request.payload.microchipNumber || "";
+    const activeTab = request.payload.documentSearch || "ptd";
+
+    return h.view(VIEW_PATH, {
+      error: errorProcessingText,
+      errorSummary: [
+        { fieldId: "general", message: "An unexpected error occurred" },
+      ],
+      formSubmitted: true,
+      activeTab,
+      ptdNumberSearch,
+      applicationNumberSearch,
+      microchipNumber: microchipNumberSearch,
+      documentSearchMainModelData:
+        await documentSearchMainService.getDocumentSearchMain(''),
+    });
+}
+
 const submitSearch = async (request, h) => {
-  let searchText = "";
   try {
     const {
       documentSearch,
@@ -240,47 +281,13 @@ const submitSearch = async (request, h) => {
     }
 
     if (documentSearch === '' || !documentSearch) {
-      const errorMsg = "Select if you are searching for a PTD, application or microchip number"
-      return h.view(VIEW_PATH, {
-        error: errorMsg,
-        errorSummary: [
-          {
-            fieldId: "documentSearch-1",
-            message: errorMsg,
-          },
-        ],
-        errorRadioUnchecked: true,
-        formSubmitted: true,
-        ptdNumberSearch: "",
-        applicationNumberSearch: "",
-        microchipNumber: "",
-        documentSearchMainModelData: DocumentSearchModel.documentSearchMainModelData,
-      });
+      return handleEmptyDocumentSearch(h)
     }
 
     // Default redirect if none of the above conditions are met
     return h.redirect(SEARCH_RESULT_VIEW_PATH);
   } catch (error) {
-    console.log(error.message)
-    // Handle unexpected errors
-    const ptdNumberSearch = request.payload.ptdNumberSearch || "";
-    const applicationNumberSearch = request.payload.applicationNumberSearch || "";
-    const microchipNumberSearch = request.payload.microchipNumber || "";
-    const activeTab = request.payload.documentSearch || "ptd";
-
-    return h.view(VIEW_PATH, {
-      error: errorProcessingText,
-      errorSummary: [
-        { fieldId: "general", message: "An unexpected error occurred" },
-      ],
-      formSubmitted: true,
-      activeTab,
-      ptdNumberSearch,
-      applicationNumberSearch,
-      microchipNumber: microchipNumberSearch,
-      documentSearchMainModelData:
-        await documentSearchMainService.getDocumentSearchMain(searchText),
-    });
+    return await handleError(request, h, error)
   }
 };
 
