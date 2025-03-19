@@ -205,6 +205,39 @@ function getFormattedDates(issuedDateRaw, item) {
   return { formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth };
 }
 
+function getPtdNumberByDocState(documentState, item) {
+  return (documentState === "approved" || documentState === "revoked")
+  ? item?.travelDocument?.travelDocumentReferenceNumber
+  : item?.application?.referenceNumber;
+}
+
+function getIssueDateByDocState(documentState, item) {
+  switch (documentState) {
+    case "approved":
+      return item?.application?.dateAuthorised;
+    case "revoked":
+      return item?.application?.dateRevoked;
+    case "rejected":
+      return item?.application?.dateRejected;
+    default:
+      return item?.application?.dateOfApplication;
+  }
+}
+
+function errorIfAttributeMissing(item) {
+  if (!item.pet) {
+    return { error: petNotFoundErrorText };
+  }
+  
+  if (!item.application) {
+    return { error: applicationNotFoundErrorText };
+  }
+    
+  if (!item.travelDocument) {
+    return { error: "TravelDocument not found" };
+  }
+  return {}
+}
 
 const getApplicationByApplicationNumber = async (
   applicationNumber,
@@ -228,43 +261,17 @@ const getApplicationByApplicationNumber = async (
     const {pet = {}, application = {}, travelDocument = {}, petOwner = {}} = item
 
     // Ensure the item structure is as expected
-    if (!item.pet) {
-      return { error: petNotFoundErrorText };
-    }
+    const errorObj = errorIfAttributeMissing(item)
 
-    if (!item.application) {
-      return { error: applicationNotFoundErrorText };
-    }
-
-    if (!item.travelDocument) {
-      return { error: "TravelDocument not found" };
-    }
+    if (errorObj.error) return errorObj
 
     // Convert application status to lowercase and trim for consistent comparison
     const applicationStatus = item.application.status.toLowerCase().trim();
     const documentState = statusMapping[applicationStatus] || applicationStatus;
 
-    const ptdNumber =
-      documentState === "approved" || documentState === "revoked"
-        ? item?.travelDocument?.travelDocumentReferenceNumber
-        : item?.application?.referenceNumber;
+    const ptdNumber = getPtdNumberByDocState(documentState, item)
 
-    let issuedDateRaw;
-
-    switch (documentState) {
-      case "approved":
-        issuedDateRaw = item?.application?.dateAuthorised;
-        break;
-      case "revoked":
-        issuedDateRaw = item?.application?.dateRevoked;
-        break;
-      case "rejected":
-        issuedDateRaw = item?.application?.dateRejected;
-        break;
-      default:
-        issuedDateRaw = item?.application?.dateOfApplication;
-        break;
-    }
+    const issuedDateRaw = getIssueDateByDocState(documentState, item)
 
     const { formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth } = getFormattedDates(issuedDateRaw, item);
     
@@ -310,11 +317,7 @@ const recordCheckOutCome = async (checkOutcome, request) => {
 
     // Check for specific error message and return a structured error
     if (error?.message) {
-      if (error.message === applicationNotFoundErrorText) {
-        return { error: "not_found" };
-      } else {
-        return { error: error.message };
-      }
+      return handleApplicationNotFoundError(error.message)
     }
     return { error: unexpectedErrorText };
   }
@@ -341,15 +344,18 @@ const reportNonCompliance = async (checkOutcome, request) => {
 
     // Check for specific error message and return a structured error
     if (error?.message) {
-      if (error.message === applicationNotFoundErrorText) {
-        return { error: "not_found" };
-      } else {
-        return { error: error.message };
-      }
+      return handleApplicationNotFoundError(error.message)
     }
     return { error: unexpectedErrorText };
   }
 };
+
+function handleApplicationNotFoundError(errorMessage) {
+  if (errorMessage === applicationNotFoundErrorText) {
+    return { error: "not_found" }
+  }
+  return { error: errorMessage };
+}
 
 const saveCheckerUser = async (checker, request) => {
   try {
