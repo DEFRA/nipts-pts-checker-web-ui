@@ -282,14 +282,7 @@ const getApplicationByApplicationNumber = async (
     console.error(errorText, error.message);
 
     if (error?.message) {
-      if (
-        error.message === applicationNotFoundErrorText ||
-        error.message === petNotFoundErrorText
-      ) {
-        return { error: "not_found" };
-      } else {
-        return { error: error.message };
-      }
+      return handleNotFoundError(error.message, applicationNotFoundErrorText, petNotFoundErrorText)
     }
 
     return { error: unexpectedErrorText };
@@ -317,7 +310,7 @@ const recordCheckOutCome = async (checkOutcome, request) => {
 
     // Check for specific error message and return a structured error
     if (error?.message) {
-      return handleApplicationNotFoundError(error.message)
+      return handleNotFoundError(error.message, applicationNotFoundErrorText)
     }
     return { error: unexpectedErrorText };
   }
@@ -344,14 +337,14 @@ const reportNonCompliance = async (checkOutcome, request) => {
 
     // Check for specific error message and return a structured error
     if (error?.message) {
-      return handleApplicationNotFoundError(error.message)
+      return handleNotFoundError(error.message, applicationNotFoundErrorText)
     }
     return { error: unexpectedErrorText };
   }
 };
 
-function handleApplicationNotFoundError(errorMessage) {
-  if (errorMessage === applicationNotFoundErrorText) {
+function handleNotFoundError(errorMessage, ...possibleErrMsgs) {
+  if (possibleErrMsgs.includes(errorMessage)) {
     return { error: "not_found" }
   }
   return { error: errorMessage };
