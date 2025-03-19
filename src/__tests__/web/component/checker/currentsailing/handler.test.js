@@ -109,17 +109,26 @@ const createMockH = () => ({
   response: jest.fn((val) => ({ code: HTTP_STATUS.OK, source: val })),
 });
 
-const createMockPayload = (overrides = {}) => ({
-  routeOption: "1",
-  routeRadio: "1",
-  sailingHour: "12",
-  sailingMinutes: "30",
-  departureDateDay: "1",
-  departureDateMonth: "1",
-  departureDateYear: "2024",
-  routeFlight: "",
-  ...overrides,
-});
+const createMockPayload = (overrides = {}, excludeFields=[]) => {
+  
+  const obj = {
+    routeOption: "1",
+    routeRadio: "1",
+    sailingHour: "12",
+    sailingMinutes: "30",
+    departureDateDay: "1",
+    departureDateMonth: "1",
+    departureDateYear: "2024",
+    routeFlight: "",
+    ...overrides,
+  }
+
+  for (const field of excludeFields) {
+    delete obj[field]
+  }
+
+  return obj
+};
 
 const setupValidationMocks = (config = {}) => {
   const defaultValidResult = { isValid: true, error: null };
@@ -175,7 +184,7 @@ describe("submitCurrentSailingSlot Route Option Validation", () => {
 
   test("should validate route option selection", async () => {
     const request = createMockRequest({
-      payload: createMockPayload({ routeOption: undefined }), /// 
+      payload: createMockPayload({}, ['routeOption']),
     });
     const h = createMockH();
     setupValidationMocks({
@@ -200,7 +209,7 @@ describe("submitCurrentSailingSlot Ferry Route Validation", () => {
 
   test("should validate ferry route selection", async () => {
     const request = createMockRequest({
-      payload: createMockPayload({ routeRadio: undefined }), ///
+      payload: createMockPayload({}, ['routeRadio']),
     });
     const h = createMockH();
     setupValidationMocks({
@@ -442,8 +451,7 @@ describe("submitCurrentSailingSlot Flight Success", () => {
       payload: createMockPayload({
         routeOption: "2",
         routeFlight: "RK103",
-        routeRadio: undefined, /// 
-      }),
+      }, ['routeRadio']),
       yar: {
         currentSailingModel: {
           routeOptions,
@@ -616,10 +624,9 @@ describe("submitCurrentSailingSlot Error Handling", () => {
   test("should handle validation errors gracefully", async () => {
     const request = createMockRequest({
       payload: createMockPayload({
-        routeOption: undefined,
         sailingHour: "25",
         sailingMinutes: "61",
-      }),
+      }, ['routeOption']),
     });
     const h = createMockH();
 
