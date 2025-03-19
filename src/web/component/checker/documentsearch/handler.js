@@ -46,8 +46,217 @@ const getDocumentSearch = async (_request, h) => {
   }
 };
 
+async function handlePTD(searchText, request, h) {
+  const validationResult = validatePtdNumber(searchText);
+  if (!validationResult.isValid) {
+    return h.view(VIEW_PATH, {
+      error: validationResult.error,
+      errorSummary: [{
+        fieldId: "ptdNumberSearch",
+        message: validationResult.error,
+      }],
+      activeTab: "ptd",
+      formSubmitted: true,
+      ptdNumberSearch: searchText,
+      applicationNumberSearch: "",
+      microchipNumber: "",
+      documentSearchMainModelData:
+        await documentSearchMainService.getDocumentSearchMain(searchText),
+    });
+  }
+
+  const ptdNumber = `GB826${searchText}`;
+  const responseData = await apiService.getApplicationByPTDNumber(
+    ptdNumber,
+    request
+  );
+
+  if (!responseData.error) {
+    request.yar.set("ptdNumber", ptdNumber);
+    request.yar.set("data", responseData);
+
+    return h.redirect(SEARCH_RESULT_VIEW_PATH);
+  }
+
+  if (responseData.error === "Application not found") {
+    return h.view(NOT_FOUND_VIEW_PATH, {
+      searchValue: ptdNumber,
+      pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
+    });
+  } else {
+    return h.view(VIEW_PATH, {
+      error: errorProcessingText,
+      errorSummary: [{
+        fieldId: "ptdNumberSearch",
+        message: errorProcessingText,
+      }],
+      activeTab: "ptd",
+      formSubmitted: true,
+      ptdNumberSearch: searchText,
+      applicationNumberSearch: "",
+      microchipNumber: "",
+      documentSearchMainModelData:
+        await documentSearchMainService.getDocumentSearchMain(
+          searchText
+        ),
+    });
+  }
+}
+
+async function handleApplication(searchText, request, h) {
+  const validationResult = validateApplicationNumber(searchText);
+
+  if (!validationResult.isValid) {
+    return h.view(VIEW_PATH, {
+      error: validationResult.error,
+      errorSummary: [{
+        fieldId: "applicationNumberSearch",
+        message: validationResult.error,
+      }],
+      activeTab: "application",
+      formSubmitted: true,
+      ptdNumberSearch: "",
+      applicationNumberSearch: searchText,
+      microchipNumber: "",
+      documentSearchMainModelData:
+        await documentSearchMainService.getDocumentSearchMain(searchText),
+    });
+  }
+
+  const applicationNumber = searchText;
+  const responseData = await apiService.getApplicationByApplicationNumber(
+    applicationNumber,
+    request
+  );
+
+  if (!responseData.error) {
+    request.yar.set("applicationNumber", applicationNumber);
+    request.yar.set("data", responseData);
+
+    return h.redirect(SEARCH_RESULT_VIEW_PATH);
+  }
+
+
+  if (responseData.error === "not_found") {
+    return h.view(NOT_FOUND_VIEW_PATH, {
+      searchValue: applicationNumber,
+      pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
+    });
+  } else {
+    return h.view(VIEW_PATH, {
+      error: errorProcessingText,
+      errorSummary: [{
+        fieldId: "applicationNumberSearch",
+        message: errorProcessingText,
+      }],
+      activeTab: "application",
+      formSubmitted: true,
+      ptdNumberSearch: "",
+      applicationNumberSearch: searchText,
+      microchipNumber: "",
+      documentSearchMainModelData:
+        await documentSearchMainService.getDocumentSearchMain(searchText),
+    });
+  }
+}
+
+async function handleMicrochip(searchText, request, h) {
+  const validationResult = validateMicrochipNumber(searchText);
+  if (!validationResult.isValid) {
+    return h.view(VIEW_PATH, {
+      error: validationResult.error,
+      errorSummary: [{
+        fieldId: "microchipNumber",
+        message: validationResult.error,
+      }],
+      activeTab: "microchip",
+      formSubmitted: true,
+      ptdNumberSearch: "",
+      applicationNumberSearch: "",
+      microchipNumber: searchText,
+      documentSearchMainModelData:
+        await documentSearchMainService.getDocumentSearchMain(searchText),
+    });
+  }
+
+  const microchipAppPtdMainData = await microchipApi.getMicrochipData(
+    searchText,
+    request
+  );
+
+  if (!microchipAppPtdMainData.error) {
+    request.yar.set("microchipNumber", searchText);
+    request.yar.set("data", microchipAppPtdMainData);
+
+    return h.redirect(SEARCH_RESULT_VIEW_PATH);
+  }
+
+  if (microchipAppPtdMainData.error === "not_found") {
+    return h.view(NOT_FOUND_VIEW_PATH, {
+      searchValue: searchText,
+      pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
+    });
+  } else {
+    return h.view(VIEW_PATH, {
+      error: errorProcessingText,
+      errorSummary: [{
+        fieldId: "microchipNumber",
+        message: errorProcessingText,
+      }],
+      activeTab: "microchip",
+      formSubmitted: true,
+      ptdNumberSearch: "",
+      applicationNumberSearch: "",
+      microchipNumber: searchText,
+      documentSearchMainModelData:
+        await documentSearchMainService.getDocumentSearchMain(searchText),
+    });
+  }
+}
+
+function handleEmptyDocumentSearch(h) {
+  const errorMsg = "Select if you are searching for a PTD, application or microchip number"
+  return h.view(VIEW_PATH, {
+    error: errorMsg,
+    errorSummary: [
+      {
+        fieldId: "documentSearch-1",
+        message: errorMsg,
+      },
+    ],
+    errorRadioUnchecked: true,
+    formSubmitted: true,
+    ptdNumberSearch: "",
+    applicationNumberSearch: "",
+    microchipNumber: "",
+    documentSearchMainModelData: DocumentSearchModel.documentSearchMainModelData,
+  });
+}
+
+async function handleError(request, h, error) {
+  console.log(error.message)
+  // Handle unexpected errors
+  const ptdNumberSearch = request.payload.ptdNumberSearch || "";
+  const applicationNumberSearch = request.payload.applicationNumberSearch || "";
+  const microchipNumberSearch = request.payload.microchipNumber || "";
+  const activeTab = request.payload.documentSearch || "ptd";
+
+  return h.view(VIEW_PATH, {
+    error: errorProcessingText,
+    errorSummary: [
+      { fieldId: "general", message: "An unexpected error occurred" },
+    ],
+    formSubmitted: true,
+    activeTab,
+    ptdNumberSearch,
+    applicationNumberSearch,
+    microchipNumber: microchipNumberSearch,
+    documentSearchMainModelData:
+      await documentSearchMainService.getDocumentSearchMain(''),
+  });
+}
+
 const submitSearch = async (request, h) => {
-  let searchText = "";
   try {
     const {
       documentSearch,
@@ -56,237 +265,29 @@ const submitSearch = async (request, h) => {
       microchipNumber,
     } = request.payload;
 
-    // Initialize variables to pass to the template
-    let error = null;
-    const errorSummary = [];
-
     // Search by PTD Number
     if (documentSearch === "ptd") {
-      searchText = ptdNumberSearch || "";
-      const validationResult = validatePtdNumber(searchText);
-      if (!validationResult.isValid) {
-        error = validationResult.error;
-        errorSummary.push({
-          fieldId: "ptdNumberSearch",
-          message: validationResult.error,
-        });
-        return h.view(VIEW_PATH, {
-          error,
-          errorSummary,
-          activeTab: "ptd",
-          formSubmitted: true,
-          ptdNumberSearch: searchText,
-          applicationNumberSearch: "",
-          microchipNumber: "",
-          documentSearchMainModelData:
-            await documentSearchMainService.getDocumentSearchMain(searchText),
-        });
-      }
-
-      const ptdNumber = `GB826${searchText}`;
-      const responseData = await apiService.getApplicationByPTDNumber(
-        ptdNumber,
-        request
-      );
-
-      if (responseData.error) {
-         if (responseData.error === "Application not found") {
-           return h.view(NOT_FOUND_VIEW_PATH, {
-             searchValue: ptdNumber,
-             pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
-           });
-         } else {
-           error = errorProcessingText;
-           errorSummary.push({
-             fieldId: "ptdNumberSearch",
-             message: errorProcessingText,
-           });
-           return h.view(VIEW_PATH, {
-             error,
-             errorSummary,
-             activeTab: "ptd",
-             formSubmitted: true,
-             ptdNumberSearch: searchText,
-             applicationNumberSearch: "",
-             microchipNumber: "",
-             documentSearchMainModelData:
-               await documentSearchMainService.getDocumentSearchMain(
-                 searchText
-               ),
-           });
-         }
-      }
-
-      request.yar.set("ptdNumber", ptdNumber);
-      request.yar.set("data", responseData);
-
-      return h.redirect(SEARCH_RESULT_VIEW_PATH);
+      return await handlePTD(ptdNumberSearch, request, h)
     }
 
     // Search by Application Number
     if (documentSearch === "application") {
-      searchText = applicationNumberSearch || "";
-
-      const validationResult = validateApplicationNumber(searchText);
-
-      if (!validationResult.isValid) {
-        error = validationResult.error;
-        errorSummary.push({
-          fieldId: "applicationNumberSearch",
-          message: validationResult.error,
-        });
-        return h.view(VIEW_PATH, {
-          error,
-          errorSummary,
-          activeTab: "application",
-          formSubmitted: true,
-          ptdNumberSearch: "",
-          applicationNumberSearch: searchText,
-          microchipNumber: "",
-          documentSearchMainModelData:
-            await documentSearchMainService.getDocumentSearchMain(searchText),
-        });
-      }
-
-      const applicationNumber = searchText;
-      const responseData = await apiService.getApplicationByApplicationNumber(
-        applicationNumber,
-        request
-      );
-
-      if (responseData.error) {
-        if (responseData.error === "not_found") {
-          return h.view(NOT_FOUND_VIEW_PATH, {
-            searchValue: applicationNumber,
-            pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
-          });
-        } else {
-          error = errorProcessingText;
-          errorSummary.push({
-            fieldId: "applicationNumberSearch",
-            message: errorProcessingText,
-          });
-          return h.view(VIEW_PATH, {
-            error,
-            errorSummary,
-            activeTab: "application",
-            formSubmitted: true,
-            ptdNumberSearch: "",
-            applicationNumberSearch: searchText,
-            microchipNumber: "",
-            documentSearchMainModelData:
-              await documentSearchMainService.getDocumentSearchMain(searchText),
-          });
-        }
-      }
-      request.yar.set("applicationNumber", applicationNumber);
-      request.yar.set("data", responseData);
-
-      return h.redirect(SEARCH_RESULT_VIEW_PATH);
+      return await handleApplication(applicationNumberSearch, request, h)
     }
 
     // Search by Microchip Number
     if (documentSearch === "microchip") {
-      searchText = microchipNumber || "";
-
-      const validationResult = validateMicrochipNumber(searchText);
-      if (!validationResult.isValid) {
-        error = validationResult.error;
-        errorSummary.push({
-          fieldId: "microchipNumber",
-          message: validationResult.error,
-        });
-        return h.view(VIEW_PATH, {
-          error,
-          errorSummary,
-          activeTab: "microchip",
-          formSubmitted: true,
-          ptdNumberSearch: "",
-          applicationNumberSearch: "",
-          microchipNumber: searchText,
-          documentSearchMainModelData:
-            await documentSearchMainService.getDocumentSearchMain(searchText),
-        });
-      }
-
-      const microchipAppPtdMainData = await microchipApi.getMicrochipData(
-        searchText,
-        request
-      );
-
-      if (microchipAppPtdMainData.error) {
-        if (microchipAppPtdMainData.error === "not_found") {
-          return h.view(NOT_FOUND_VIEW_PATH, {
-            searchValue: microchipNumber,
-            pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
-          });
-        } else {
-          error = errorProcessingText;
-          errorSummary.push({
-            fieldId: "microchipNumber",
-            message: errorProcessingText,
-          });
-          return h.view(VIEW_PATH, {
-            error,
-            errorSummary,
-            activeTab: "microchip",
-            formSubmitted: true,
-            ptdNumberSearch: "",
-            applicationNumberSearch: "",
-            microchipNumber: searchText,
-            documentSearchMainModelData:
-              await documentSearchMainService.getDocumentSearchMain(searchText),
-          });
-        }
-      }
-
-      request.yar.set("microchipNumber", microchipNumber);
-      request.yar.set("data", microchipAppPtdMainData);
-
-      return h.redirect(SEARCH_RESULT_VIEW_PATH);
+      return await handleMicrochip(microchipNumber, request, h)
     }
 
-    if (documentSearch === '' || documentSearch === null || documentSearch === undefined) {
-      const errorMsg = "Select if you are searching for a PTD, application or microchip number"
-      return h.view(VIEW_PATH, {
-        error: errorMsg,
-        errorSummary: [
-          {
-            fieldId: "documentSearch-1",
-            message: errorMsg,
-          },
-        ],
-        errorRadioUnchecked: true,
-        formSubmitted: true,
-        ptdNumberSearch: "",
-        applicationNumberSearch: "",
-        microchipNumber: "",
-        documentSearchMainModelData: DocumentSearchModel.documentSearchMainModelData,
-      });
+    if (documentSearch === '' || !documentSearch) {
+      return handleEmptyDocumentSearch(h)
     }
 
     // Default redirect if none of the above conditions are met
     return h.redirect(SEARCH_RESULT_VIEW_PATH);
   } catch (error) {
-    // Handle unexpected errors
-    const ptdNumberSearch = request.payload.ptdNumberSearch || "";
-    const applicationNumberSearch = request.payload.applicationNumberSearch || "";
-    const microchipNumberSearch = request.payload.microchipNumber || "";
-    const activeTab = request.payload.documentSearch || "ptd";
-
-    return h.view(VIEW_PATH, {
-      error: errorProcessingText,
-      errorSummary: [
-        { fieldId: "general", message: "An unexpected error occurred" },
-      ],
-      formSubmitted: true,
-      activeTab,
-      ptdNumberSearch,
-      applicationNumberSearch,
-      microchipNumber: microchipNumberSearch,
-      documentSearchMainModelData:
-        await documentSearchMainService.getDocumentSearchMain(searchText),
-    });
+    return handleError(request, h, error)
   }
 };
 
