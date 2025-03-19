@@ -467,7 +467,6 @@ describe("submitCurrentSailingSlot Flight Success", () => {
     expect(request.yar.set).toHaveBeenCalledWith("currentSailingSlot", {
       sailingHour: "12",
       sailingMinutes: "30",
-      selectedRoute: undefined, ////
       departureDate: DATE.DEP_DATE,
       selectedRouteOption: routeOptions[1],
       routeFlight: "RK103",
