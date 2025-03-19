@@ -598,7 +598,7 @@ describe("getCurrentSailingSlot", () => {
     });
   });
 
-  test("should handle undefined sailing slot", async () => {
+  test("should handle unset sailing slot", async () => {
     const request = createMockRequest({ yar: {} });
     const h = createMockH();
 
