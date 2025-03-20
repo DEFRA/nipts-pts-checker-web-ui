@@ -273,10 +273,10 @@ const getApplicationByApplicationNumber = async (
   }
 };
 
-const recordCheckOutCome = async (checkOutcome, request) => {
+const recordOutCome = async (checkOutcome, request, urlSuffix) => {
   try {
     const data = checkOutcome;
-    const url = buildApiUrl("Checker/CheckOutcome");
+    const url = buildApiUrl(urlSuffix);
     const response = await httpService.postAsync(url, data, request);
 
     if (response.status === HttpStatusCode.NotFound) {
@@ -300,31 +300,12 @@ const recordCheckOutCome = async (checkOutcome, request) => {
   }
 };
 
+const recordCheckOutCome = async (checkOutcome, request) => {
+  return recordOutCome(checkOutcome, request, "Checker/CheckOutcome")
+};
+
 const reportNonCompliance = async (checkOutcome, request) => {
-  try {
-    const data = checkOutcome;
-    const url = buildApiUrl("Checker/ReportNonCompliance");
-    const response = await httpService.postAsync(url, data, request);
-
-    if (response.status === HttpStatusCode.NotFound) {
-      throw new Error(response.error);
-    }
-
-    const item = response.data;
-    if (!item || typeof item !== "object") {
-      throw new Error(unexpectedResponseErrorText);
-    }
-
-    return item.checkSummaryId;
-  } catch (error) {
-    console.error(errorText, error.message);
-
-    // Check for specific error message and return a structured error
-    if (error?.message) {
-      return handleNotFoundError(error.message, applicationNotFoundErrorText)
-    }
-    return { error: unexpectedErrorText };
-  }
+  return recordOutCome(checkOutcome, request, "Checker/ReportNonCompliance")
 };
 
 const saveCheckerUser = async (checker, request) => {
