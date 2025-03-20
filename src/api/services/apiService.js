@@ -5,8 +5,7 @@ import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js"
 import httpService from "./httpService.js";
 import { issuingAuthorityModelData } from "../../constants/issuingAuthority.js";
 import moment from "moment";
-import { getIssueDateByDocState, getPtdNumberByDocState } from "../../helper/service-helper.js";
-import { handleNotFoundError } from "../../helper/service-helper.js";
+import { getIssueDateByDocState, getPtdNumberByDocState, handleNotFoundError } from "../../helper/service-helper.js";
 
 const errorText = "Error fetching data:";
 
