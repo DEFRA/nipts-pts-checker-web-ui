@@ -246,7 +246,9 @@ const getApplicationByApplicationNumber = async (
     // Ensure the item structure is as expected
     const errorObj = errorIfAttributeMissing(item)
 
-    if (errorObj.error) return errorObj
+    if (errorObj.error) {
+      return errorObj
+    }
 
     // Convert application status to lowercase and trim for consistent comparison
     const applicationStatus = item.application.status.toLowerCase().trim();
