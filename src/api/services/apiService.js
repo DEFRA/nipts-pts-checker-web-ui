@@ -5,6 +5,7 @@ import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js"
 import httpService from "./httpService.js";
 import { issuingAuthorityModelData } from "../../constants/issuingAuthority.js";
 import moment from "moment";
+import { getIssueDateByDocState, getPtdNumberByDocState } from "../../helper/service-helper.js";
 
 const errorText = "Error fetching data:";
 
@@ -203,25 +204,6 @@ function getFormattedDates(issuedDateRaw, item) {
   const dateOfBirthRaw = item.pet ? item.pet.dateOfBirth : undefined;
   const formattedDateOfBirth = formatDate(dateOfBirthRaw);
   return { formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth };
-}
-
-function getPtdNumberByDocState(documentState, item) {
-  return (documentState === "approved" || documentState === "revoked")
-  ? item?.travelDocument?.travelDocumentReferenceNumber
-  : item?.application?.referenceNumber;
-}
-
-function getIssueDateByDocState(documentState, item) {
-  switch (documentState) {
-    case "approved":
-      return item?.application?.dateAuthorised;
-    case "revoked":
-      return item?.application?.dateRevoked;
-    case "rejected":
-      return item?.application?.dateRejected;
-    default:
-      return item?.application?.dateOfApplication;
-  }
 }
 
 function errorIfAttributeMissing(item) {
