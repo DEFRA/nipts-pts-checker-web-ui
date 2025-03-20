@@ -5,6 +5,7 @@ import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js"
 import httpService from "./httpService.js";
 import { issuingAuthorityModelData } from "../../constants/issuingAuthority.js";
 import moment from "moment";
+import { getIssueDateByDocState, getPtdNumberByDocState, handleNotFoundError } from "../../helper/service-helper.js";
 
 const errorText = "Error fetching data:";
 
@@ -205,6 +206,20 @@ function getFormattedDates(issuedDateRaw, item) {
   return { formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth };
 }
 
+function errorIfAttributeMissing(item) {
+  if (!item.pet) {
+    return { error: petNotFoundErrorText };
+  }
+  
+  if (!item.application) {
+    return { error: applicationNotFoundErrorText };
+  }
+    
+  if (!item.travelDocument) {
+    return { error: "TravelDocument not found" };
+  }
+  return {}
+}
 
 const getApplicationByApplicationNumber = async (
   applicationNumber,
@@ -225,49 +240,22 @@ const getApplicationByApplicationNumber = async (
       throw new Error(unexpectedResponseErrorText);
     }
 
-    const pet = item.pet || {};
-    const application = item.application || {};
-    const travelDocument = item.travelDocument || {};
-    const petOwner = item.petOwner || {};
+    const {pet = {}, application = {}, travelDocument = {}, petOwner = {}} = item
 
     // Ensure the item structure is as expected
-    if (!item.pet) {
-      return { error: petNotFoundErrorText };
-    }
+    const errorObj = errorIfAttributeMissing(item)
 
-    if (!item.application) {
-      return { error: applicationNotFoundErrorText };
-    }
-
-    if (!item.travelDocument) {
-      return { error: "TravelDocument not found" };
+    if (errorObj.error) {
+      return errorObj
     }
 
     // Convert application status to lowercase and trim for consistent comparison
     const applicationStatus = item.application.status.toLowerCase().trim();
     const documentState = statusMapping[applicationStatus] || applicationStatus;
 
-    const ptdNumber =
-      documentState === "approved" || documentState === "revoked"
-        ? item?.travelDocument?.travelDocumentReferenceNumber
-        : item?.application?.referenceNumber;
+    const ptdNumber = getPtdNumberByDocState(documentState, item)
 
-    let issuedDateRaw;
-
-    switch (documentState) {
-      case "approved":
-        issuedDateRaw = item?.application?.dateAuthorised;
-        break;
-      case "revoked":
-        issuedDateRaw = item?.application?.dateRevoked;
-        break;
-      case "rejected":
-        issuedDateRaw = item?.application?.dateRejected;
-        break;
-      default:
-        issuedDateRaw = item?.application?.dateOfApplication;
-        break;
-    }
+    const issuedDateRaw = getIssueDateByDocState(documentState, item)
 
     const { formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth } = getFormattedDates(issuedDateRaw, item);
     
@@ -278,80 +266,46 @@ const getApplicationByApplicationNumber = async (
     console.error(errorText, error.message);
 
     if (error?.message) {
-      if (
-        error.message === applicationNotFoundErrorText ||
-        error.message === petNotFoundErrorText
-      ) {
-        return { error: "not_found" };
-      } else {
-        return { error: error.message };
-      }
+      return handleNotFoundError(error.message, applicationNotFoundErrorText, petNotFoundErrorText)
     }
 
+    return { error: unexpectedErrorText };
+  }
+};
+
+const recordOutCome = async (checkOutcome, request, urlSuffix) => {
+  try {
+    const data = checkOutcome;
+    const url = buildApiUrl(urlSuffix);
+    const response = await httpService.postAsync(url, data, request);
+
+    if (response.status === HttpStatusCode.NotFound) {
+      throw new Error(response.error);
+    }
+
+    const item = response.data;
+    if (!item || typeof item !== "object") {
+      throw new Error(unexpectedResponseErrorText);
+    }
+
+    return item.checkSummaryId;
+  } catch (error) {
+    console.error(errorText, error.message);
+
+    // Check for specific error message and return a structured error
+    if (error?.message) {
+      return handleNotFoundError(error.message, applicationNotFoundErrorText)
+    }
     return { error: unexpectedErrorText };
   }
 };
 
 const recordCheckOutCome = async (checkOutcome, request) => {
-  try {
-    const data = checkOutcome;
-    const url = buildApiUrl("Checker/CheckOutcome");
-    const response = await httpService.postAsync(url, data, request);
-
-    if (response.status === HttpStatusCode.NotFound) {
-      throw new Error(response.error);
-    }
-
-    const item = response.data;
-    if (!item || typeof item !== "object") {
-      throw new Error(unexpectedResponseErrorText);
-    }
-
-    return item.checkSummaryId;
-  } catch (error) {
-    console.error(errorText, error.message);
-
-    // Check for specific error message and return a structured error
-    if (error?.message) {
-      if (error.message === applicationNotFoundErrorText) {
-        return { error: "not_found" };
-      } else {
-        return { error: error.message };
-      }
-    }
-    return { error: unexpectedErrorText };
-  }
+  return recordOutCome(checkOutcome, request, "Checker/CheckOutcome")
 };
 
 const reportNonCompliance = async (checkOutcome, request) => {
-  try {
-    const data = checkOutcome;
-    const url = buildApiUrl("Checker/ReportNonCompliance");
-    const response = await httpService.postAsync(url, data, request);
-
-    if (response.status === HttpStatusCode.NotFound) {
-      throw new Error(response.error);
-    }
-
-    const item = response.data;
-    if (!item || typeof item !== "object") {
-      throw new Error(unexpectedResponseErrorText);
-    }
-
-    return item.checkSummaryId;
-  } catch (error) {
-    console.error(errorText, error.message);
-
-    // Check for specific error message and return a structured error
-    if (error?.message) {
-      if (error.message === applicationNotFoundErrorText) {
-        return { error: "not_found" };
-      } else {
-        return { error: error.message };
-      }
-    }
-    return { error: unexpectedErrorText };
-  }
+  return recordOutCome(checkOutcome, request, "Checker/ReportNonCompliance")
 };
 
 const saveCheckerUser = async (checker, request) => {
