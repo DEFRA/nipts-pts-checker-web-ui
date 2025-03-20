@@ -34,7 +34,7 @@ function getValueAttributeOrUndefined(value, attribute) {
   return value ? value[attribute] : undefined
 }
 
-const getMicrochipData = async (microchipNumber, request) => {/// --- this is complex, refactor  --- 
+const getMicrochipData = async (microchipNumber, request) => {
   try {
     const response = await httpService.postAsync(
       `${baseUrl}/Checker/checkMicrochipNumber`,
