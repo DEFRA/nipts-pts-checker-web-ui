@@ -6,6 +6,7 @@ import httpService from "./httpService.js";
 import { issuingAuthorityModelData } from "../../constants/issuingAuthority.js";
 import moment from "moment";
 import { getIssueDateByDocState, getPtdNumberByDocState } from "../../helper/service-helper.js";
+import { handleNotFoundError } from "../../helper/service-helper.js";
 
 const errorText = "Error fetching data:";
 
@@ -324,13 +325,6 @@ const reportNonCompliance = async (checkOutcome, request) => {
     return { error: unexpectedErrorText };
   }
 };
-
-function handleNotFoundError(errorMessage, ...possibleErrMsgs) {
-  if (possibleErrMsgs.includes(errorMessage)) {
-    return { error: "not_found" }
-  }
-  return { error: errorMessage };
-}
 
 const saveCheckerUser = async (checker, request) => {
   try {

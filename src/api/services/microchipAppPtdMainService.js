@@ -4,6 +4,7 @@ import httpService from "./httpService.js";
 import { issuingAuthorityModelData } from '../../constants/issuingAuthority.js';
 import moment from "moment";
 import { getIssueDateByDocState, getPtdNumberByDocState } from "../../helper/service-helper.js";
+import { handleNotFoundError } from "../../helper/service-helper.js";
 
 dotenv.config();
 
@@ -31,13 +32,6 @@ const formatDate = (dateRaw) => {
 
 function getValueAttributeOrUndefined(value, attribute) {
   return value ? value[attribute] : undefined
-}
-
-function handleNotFoundError(errorVal) {
-    if (errorVal === "Application not found" || errorVal === "Pet not found") {
-      return { error: "not_found" };
-    }
-    return { error: errorVal };
 }
 
 const getMicrochipData = async (microchipNumber, request) => {/// --- this is complex, refactor  --- 
@@ -80,7 +74,7 @@ const getMicrochipData = async (microchipNumber, request) => {/// --- this is co
 
     // Check for specific error message and return a structured error
     if (error.response?.data?.error) {
-      return handleNotFoundError(error.response.data.error)
+      return handleNotFoundError(error.response.data.error, "Application not found", "Pet not found")
     }
     return { error: unexpectedErrorText };
   }

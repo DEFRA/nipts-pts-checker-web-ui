@@ -17,3 +17,10 @@ export function getIssueDateByDocState(documentState, item) {
       return item?.application?.dateOfApplication;
   }
 }
+
+export function handleNotFoundError(errorMessage, ...possibleErrMsgs) {
+    if (possibleErrMsgs.includes(errorMessage)) {
+        return { error: "not_found" }
+    }
+    return { error: errorMessage };
+}
