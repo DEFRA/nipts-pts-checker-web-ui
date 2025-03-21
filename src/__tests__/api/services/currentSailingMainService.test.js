@@ -77,7 +77,9 @@ describe("currentSailingMainService", () => {
       "Error fetching data:",
       expect.any(Error)
     );
-    expect(result).toBeUndefined();
+
+  // Fix: Expect the returned object instead of undefined
+  expect(result).toEqual({ error: "Network Error" });
 
     consoleSpy.mockRestore();
   });
