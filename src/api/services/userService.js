@@ -29,23 +29,19 @@ const getUserOrganisation = (request) => {
   organisation.relationshipId = token.currentRelationshipId;
 
   if (token.relationships && token.relationships.length > 0) {
-    for (const relationship of token.relationships) {
+    token.relationships.forEach((relationship) => {
       const relationArray = relationship.split(":");
       if (relationArray.length > 0 && token.currentRelationshipId === relationArray[0]) {
-        // organisationId is a string value
-        if (relationArray.length > 1) {
-          organisation.organisationId = relationArray[1];
-        }
-        if (relationArray.length > 2) {
-          organisation.organisationName = relationArray[2];
-        }
-        break; // Stop looping once we find a match
+        // Update organisation details
+        organisation.organisationId = relationArray[1] || "";
+        organisation.organisationName = relationArray[2] || "";
       }
-    }
+    });
   }
 
   return organisation;
 };
+
 
 
 export default {
