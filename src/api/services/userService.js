@@ -12,6 +12,7 @@ const userHasOrganisation = (request) => {
   return organisation?.organisationId?.length > 0;
 };
 
+
 const getUserOrganisation = (request) => {
   const organisation = {
     relationshipId: "",
@@ -25,32 +26,27 @@ const getUserOrganisation = (request) => {
   }
 
   const token = decodeJwt(accessToken);
-
   organisation.relationshipId = token.currentRelationshipId;
 
   if (token.relationships && token.relationships.length > 0) {
-    token.relationships.forEach(async (relationship) => {
+    for (const relationship of token.relationships) {
       const relationArray = relationship.split(":");
-      if (
-        relationArray.length > 0 &&
-        token.currentRelationshipId === relationArray[0]
-      ) {
+      if (relationArray.length > 0 && token.currentRelationshipId === relationArray[0]) {
         // organisationId is a string value
         if (relationArray.length > 1) {
           organisation.organisationId = relationArray[1];
         }
-
         if (relationArray.length > 2) {
           organisation.organisationName = relationArray[2];
         }
-
-        return organisation;
+        break; // Stop looping once we find a match
       }
-    });
+    }
   }
 
   return organisation;
 };
+
 
 export default {
   getToken,
