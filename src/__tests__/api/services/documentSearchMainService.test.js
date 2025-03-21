@@ -31,4 +31,16 @@ describe('getDocumentSearchMain', () => {
     
     expect(result).toBe(mockModelInstance);
   });
+
+  it("handles errors correctly", async () => {
+    DocumentSearchMainModel.mockImplementation(() => {
+      throw new Error("Network Error"); // Simulate constructor failure
+    });
+    const result = await documentSearchMainService.getDocumentSearchMain("test search text");
+    expect(DocumentSearchMainModel).toHaveBeenCalledWith(DocumentSearchModel.documentSearchMainModelData);
+    
+    // Fix: Expect the returned object instead of undefined
+    expect(result).toEqual({ error: "Network Error" });
+  });
+
 });
