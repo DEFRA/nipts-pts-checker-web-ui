@@ -15,6 +15,7 @@ jest.mock("../../../../../api/services/dashboardMainService.js", () => ({
 
 const flightView = "flightView.html";
 const ferryView = "ferryView.html";
+const ferryRoute = "Birkenhead to Belfast (Stena)";
 const dashboardView =  "componentViews/checker/dashboard/dashboardView";
 
 describe("Handler", () => {
@@ -96,8 +97,8 @@ describe("Handler", () => {
         pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
         selectedRoute: {
           id: "1",
-          value: "Birkenhead to Belfast (Stena)",
-          label: "Birkenhead to Belfast (Stena)",
+          value: ferryRoute,
+          label: ferryRoute,
         },
         selectedRouteOption: {
           id: "1",
@@ -111,14 +112,14 @@ describe("Handler", () => {
       const mockRequest = {
         yar: {
           get: jest.fn((key) => {
-            if (key === 'currentSailingSlot') {
-              return {
+            const mockData = {
+              currentSailingSlot: {
                 sailingHour: "15",
                 sailingMinutes: "15",
                 selectedRoute: {
                   id: "1",
-                  value: "Birkenhead to Belfast (Stena)",
-                  label: "Birkenhead to Belfast (Stena)",
+                  value: ferryRoute,
+                  label: ferryRoute,
                 },
                 selectedRouteOption: {
                   id: "1",
@@ -127,17 +128,16 @@ describe("Handler", () => {
                   template: ferryView,
                 },
                 isFlight: false,
-              };
-            } else if (key === 'successConfirmation') {
-              return true;
-            }
-            else {
-              return null;
-            }
+              },
+              successConfirmation: true,
+            };
+      
+            return key in mockData ? mockData[key] : null; // Ensures a consistent return type
           }),
-          clear: jest.fn(), // Ensure this is correctly defined
+          clear: jest.fn(),
         },
       };
+
       // Mock the dashboardMainService.getCheckOutcomes to return data
       dashboardMainService.getCheckOutcomes.mockResolvedValue([{}]);
 
