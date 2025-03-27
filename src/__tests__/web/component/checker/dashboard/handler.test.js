@@ -28,6 +28,13 @@ describe("Handler", () => {
         sailingMinutes: "15",
         currentDate: new Date().toLocaleDateString("en-GB"),
         pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
+        selectedRouteOption: {
+          id: "2",
+          value: "Flight",
+          label: "Flight",
+          template: "flightView.html",
+        },
+        isFlight: true,
       };
 
       const mockRequest = {
@@ -37,6 +44,13 @@ describe("Handler", () => {
               return {
                 sailingHour: "15",
                 sailingMinutes: "15",
+                selectedRouteOption: {
+                  id: "2",
+                  value: "Flight",
+                  label: "Flight",
+                  template: "flightView.html",
+                },
+                isFlight: true,
               };
             } else if (key === 'successConfirmation') {
               return true;
@@ -78,6 +92,13 @@ describe("Handler", () => {
         sailingMinutes: "15",
         currentDate: new Date().toLocaleDateString("en-GB"),
         pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
+        selectedRouteOption: {
+          id: "2",
+          value: "Flight",
+          label: "Flight",
+          template: "flightView.html",
+        },
+        isFlight: true,
       };
 
 
@@ -88,6 +109,13 @@ describe("Handler", () => {
               return {
                 sailingHour: "15",
                 sailingMinutes: "15",
+                selectedRouteOption: {
+                  id: "2",
+                  value: "Flight",
+                  label: "Flight",
+                  template: "flightView.html",
+                },
+                isFlight: true,
               };
             } else if (key === 'successConfirmation') {
               return false;
@@ -127,7 +155,26 @@ describe("Handler", () => {
     it("should handle exceptions from getCheckOutcomes gracefully", async () => {
       const mockRequest = {
         yar: {
-          get: jest.fn().mockReturnValue({}),
+          get: jest.fn((key) => {
+            if (key === 'currentSailingSlot') {
+              return {
+                sailingHour: "15",
+                sailingMinutes: "15",
+                selectedRouteOption: {
+                  id: "2",
+                  value: "Flight",
+                  label: "Flight",
+                  template: "flightView.html",
+                },
+                isFlight: true,
+              };
+            } else if (key === 'successConfirmation') {
+              return false;
+            }
+            else {
+              return null;
+            }
+          }),
           clear: jest.fn(), // Ensure this is correctly defined
         },
       };

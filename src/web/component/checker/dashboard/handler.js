@@ -10,9 +10,13 @@ const getDashboard = async (request, h) => {
 
   const currentSailingSlot = request.yar.get("currentSailingSlot") || {};
   currentSailingSlot.currentDate = new Date().toLocaleDateString("en-GB");
-  currentSailingSlot.pageTitle =
-    DashboardMainModel.dashboardMainModelData.pageTitle;
+  currentSailingSlot.pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
 
+  currentSailingSlot.isFlight = false;
+  if (currentSailingSlot.selectedRouteOption.value === 'Flight') {
+    currentSailingSlot.isFlight = true;
+  }
+  
   let successConfirmation = request.yar.get("successConfirmation");
   if (successConfirmation === null) {
     successConfirmation = false;
@@ -27,8 +31,7 @@ const getDashboard = async (request, h) => {
     request
   );
   
-  if (Array.isArray(response)) {
-
+  if (Array.isArray(response)) {     
     if (currentSailingSlot.selectedRoute && currentSailingSlot.selectedRouteOption.value === 'Ferry') {
       checks = response.filter(check => check.routeName === currentSailingSlot.selectedRoute.value); // filter checks by ferry
     } else {
