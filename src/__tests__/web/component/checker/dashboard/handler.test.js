@@ -14,6 +14,7 @@ jest.mock("../../../../../api/services/dashboardMainService.js", () => ({
 }));
 
 const flightView = "flightView.html";
+const ferryView = "ferryView.html";
 const dashboardView =  "componentViews/checker/dashboard/dashboardView";
 
 describe("Handler", () => {
@@ -23,7 +24,7 @@ describe("Handler", () => {
       jest.clearAllMocks();
     });
 
-    it("should return view with currentSailingSlot model when data exists", async () => {
+    it("Flight should return view with currentSailingSlot model when data exists", async () => {
       const mockData = {
         sailingHour: "15",
         sailingMinutes: "15",
@@ -82,6 +83,80 @@ describe("Handler", () => {
         {
           currentSailingSlot: mockData,
           checks: [{}],
+          successConfirmation: true
+        }
+      );
+    });
+
+    it("Ferry should return view with currentSailingSlot model when data exists", async () => {
+      const mockData = {
+        sailingHour: "15",
+        sailingMinutes: "15",
+        currentDate: new Date().toLocaleDateString("en-GB"),
+        pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
+        selectedRoute: {
+          id: "1",
+          value: "Birkenhead to Belfast (Stena)",
+          label: "Birkenhead to Belfast (Stena)",
+        },
+        selectedRouteOption: {
+          id: "1",
+          value: "Ferry",
+          label: "Ferry",
+          template: ferryView,
+        },
+        isFlight: false,
+      };
+
+      const mockRequest = {
+        yar: {
+          get: jest.fn((key) => {
+            if (key === 'currentSailingSlot') {
+              return {
+                sailingHour: "15",
+                sailingMinutes: "15",
+                selectedRoute: {
+                  id: "1",
+                  value: "Birkenhead to Belfast (Stena)",
+                  label: "Birkenhead to Belfast (Stena)",
+                },
+                selectedRouteOption: {
+                  id: "1",
+                  value: "Ferry",
+                  label: "Ferry",
+                  template: ferryView,
+                },
+                isFlight: false,
+              };
+            } else if (key === 'successConfirmation') {
+              return true;
+            }
+            else {
+              return null;
+            }
+          }),
+          clear: jest.fn(), // Ensure this is correctly defined
+        },
+      };
+      // Mock the dashboardMainService.getCheckOutcomes to return data
+      dashboardMainService.getCheckOutcomes.mockResolvedValue([{}]);
+
+      const h = {
+        view: jest.fn((viewPath, data) => {
+          return { viewPath, data };
+        }),
+      };
+
+      const response = await DashboardHandlers.getDashboard(mockRequest, h);
+
+      expect(response.viewPath).toBe(
+        dashboardView
+      );
+      expect(h.view).toHaveBeenCalledWith(
+        dashboardView,
+        {
+          currentSailingSlot: mockData,
+          checks: [],
           successConfirmation: true
         }
       );
