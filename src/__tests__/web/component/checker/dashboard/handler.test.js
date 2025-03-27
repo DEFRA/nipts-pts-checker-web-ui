@@ -13,6 +13,7 @@ jest.mock("../../../../../api/services/dashboardMainService.js", () => ({
   },
 }));
 
+const flightView = "flightView.html";
 const dashboardView =  "componentViews/checker/dashboard/dashboardView";
 
 describe("Handler", () => {
@@ -32,7 +33,7 @@ describe("Handler", () => {
           id: "2",
           value: "Flight",
           label: "Flight",
-          template: "flightView.html",
+          template: flightView,
         },
         isFlight: true,
       };
@@ -48,7 +49,7 @@ describe("Handler", () => {
                   id: "2",
                   value: "Flight",
                   label: "Flight",
-                  template: "flightView.html",
+                  template: flightView,
                 },
                 isFlight: true,
               };
@@ -96,7 +97,7 @@ describe("Handler", () => {
           id: "2",
           value: "Flight",
           label: "Flight",
-          template: "flightView.html",
+          template: flightView,
         },
         isFlight: true,
       };
@@ -113,7 +114,7 @@ describe("Handler", () => {
                   id: "2",
                   value: "Flight",
                   label: "Flight",
-                  template: "flightView.html",
+                  template: flightView,
                 },
                 isFlight: true,
               };
@@ -156,26 +157,24 @@ describe("Handler", () => {
       const mockRequest = {
         yar: {
           get: jest.fn((key) => {
-            if (key === 'currentSailingSlot') {
-              return {
+            const mockData = {
+              currentSailingSlot: {
                 sailingHour: "15",
                 sailingMinutes: "15",
                 selectedRouteOption: {
                   id: "2",
                   value: "Flight",
                   label: "Flight",
-                  template: "flightView.html",
+                  template: flightView,
                 },
                 isFlight: true,
-              };
-            } else if (key === 'successConfirmation') {
-              return false;
-            }
-            else {
-              return null;
-            }
+              },
+              successConfirmation: false,
+            };
+      
+            return key in mockData ? mockData[key] : null; // Ensures a consistent return type
           }),
-          clear: jest.fn(), // Ensure this is correctly defined
+          clear: jest.fn(),
         },
       };
 
