@@ -112,7 +112,7 @@ describe("Handler", () => {
       const mockRequest = {
         yar: {
           get: jest.fn((key) => {
-            const mockData = {
+            const mockedData = {
               currentSailingSlot: {
                 sailingHour: "15",
                 sailingMinutes: "15",
@@ -132,7 +132,7 @@ describe("Handler", () => {
               successConfirmation: true,
             };
       
-            return key in mockData ? mockData[key] : null; // Ensures a consistent return type
+            return key in mockedData ? mockedData[key] : null; // Ensures a consistent return type
           }),
           clear: jest.fn(),
         },
