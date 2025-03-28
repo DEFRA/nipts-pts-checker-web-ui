@@ -13,6 +13,9 @@ jest.mock("../../../../../api/services/dashboardMainService.js", () => ({
   },
 }));
 
+const flightView = "flightView.html";
+const ferryView = "ferryView.html";
+const ferryRoute = "Birkenhead to Belfast (Stena)";
 const dashboardView =  "componentViews/checker/dashboard/dashboardView";
 
 describe("Handler", () => {
@@ -22,12 +25,19 @@ describe("Handler", () => {
       jest.clearAllMocks();
     });
 
-    it("should return view with currentSailingSlot model when data exists", async () => {
+    it("Flight should return view with currentSailingSlot model when data exists", async () => {
       const mockData = {
         sailingHour: "15",
         sailingMinutes: "15",
         currentDate: new Date().toLocaleDateString("en-GB"),
         pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
+        selectedRouteOption: {
+          id: "2",
+          value: "Flight",
+          label: "Flight",
+          template: flightView,
+        },
+        isFlight: true,
       };
 
       const mockRequest = {
@@ -37,6 +47,13 @@ describe("Handler", () => {
               return {
                 sailingHour: "15",
                 sailingMinutes: "15",
+                selectedRouteOption: {
+                  id: "2",
+                  value: "Flight",
+                  label: "Flight",
+                  template: flightView,
+                },
+                isFlight: true,
               };
             } else if (key === 'successConfirmation') {
               return true;
@@ -72,12 +89,92 @@ describe("Handler", () => {
       );
     });
 
+    it("Ferry should return view with currentSailingSlot model when data exists", async () => {
+      const mockData = {
+        sailingHour: "15",
+        sailingMinutes: "15",
+        currentDate: new Date().toLocaleDateString("en-GB"),
+        pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
+        selectedRoute: {
+          id: "1",
+          value: ferryRoute,
+          label: ferryRoute,
+        },
+        selectedRouteOption: {
+          id: "1",
+          value: "Ferry",
+          label: "Ferry",
+          template: ferryView,
+        },
+        isFlight: false,
+      };
+
+      const mockRequest = {
+        yar: {
+          get: jest.fn((key) => {
+            const mockedData = {
+              currentSailingSlot: {
+                sailingHour: "15",
+                sailingMinutes: "15",
+                selectedRoute: {
+                  id: "1",
+                  value: ferryRoute,
+                  label: ferryRoute,
+                },
+                selectedRouteOption: {
+                  id: "1",
+                  value: "Ferry",
+                  label: "Ferry",
+                  template: ferryView,
+                },
+                isFlight: false,
+              },
+              successConfirmation: true,
+            };
+      
+            return key in mockedData ? mockedData[key] : null; // Ensures a consistent return type
+          }),
+          clear: jest.fn(),
+        },
+      };
+
+      // Mock the dashboardMainService.getCheckOutcomes to return data
+      dashboardMainService.getCheckOutcomes.mockResolvedValue([{}]);
+
+      const h = {
+        view: jest.fn((viewPath, data) => {
+          return { viewPath, data };
+        }),
+      };
+
+      const response = await DashboardHandlers.getDashboard(mockRequest, h);
+
+      expect(response.viewPath).toBe(
+        dashboardView
+      );
+      expect(h.view).toHaveBeenCalledWith(
+        dashboardView,
+        {
+          currentSailingSlot: mockData,
+          checks: [],
+          successConfirmation: true
+        }
+      );
+    });
+
     it('should return view with anyChecks set to "true" when no data exists', async () => {
       const mockData = {
         sailingHour: "15",
         sailingMinutes: "15",
         currentDate: new Date().toLocaleDateString("en-GB"),
         pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
+        selectedRouteOption: {
+          id: "2",
+          value: "Flight",
+          label: "Flight",
+          template: flightView,
+        },
+        isFlight: true,
       };
 
 
@@ -88,6 +185,13 @@ describe("Handler", () => {
               return {
                 sailingHour: "15",
                 sailingMinutes: "15",
+                selectedRouteOption: {
+                  id: "2",
+                  value: "Flight",
+                  label: "Flight",
+                  template: flightView,
+                },
+                isFlight: true,
               };
             } else if (key === 'successConfirmation') {
               return false;
@@ -127,8 +231,25 @@ describe("Handler", () => {
     it("should handle exceptions from getCheckOutcomes gracefully", async () => {
       const mockRequest = {
         yar: {
-          get: jest.fn().mockReturnValue({}),
-          clear: jest.fn(), // Ensure this is correctly defined
+          get: jest.fn((key) => {
+            const mockData = {
+              currentSailingSlot: {
+                sailingHour: "15",
+                sailingMinutes: "15",
+                selectedRouteOption: {
+                  id: "2",
+                  value: "Flight",
+                  label: "Flight",
+                  template: flightView,
+                },
+                isFlight: true,
+              },
+              successConfirmation: false,
+            };
+      
+            return key in mockData ? mockData[key] : null; // Ensures a consistent return type
+          }),
+          clear: jest.fn(),
         },
       };
 

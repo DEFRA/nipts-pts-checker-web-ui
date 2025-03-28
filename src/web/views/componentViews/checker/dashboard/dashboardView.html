@@ -45,6 +45,7 @@
     </div>
 </div>
 
+{% if not currentSailingSlot.isFlight %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
@@ -110,6 +111,19 @@
 
     </div>
 </div>
+{% else %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <p class="govuk-body">You can scan or search for:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>PTD number</li>
+            <li>application number</li>
+            <li>microchip number</li>
+        </ul>
+    </div>
+</div>
+{% endif %}
+
 {% endblock %}
 
 {% block bodyContent %}
