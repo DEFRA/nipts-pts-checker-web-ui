@@ -11,6 +11,7 @@ import {
   validateDateRange,
 } from "./validate.js";
 import headerData from "../../../../web/helper/constants.js";
+import { HttpStatusConstants } from "../../../../constants/httpMethod.js";
 
 const HTTP_STATUS = {
   FORBIDDEN: 403,
@@ -31,6 +32,11 @@ const getCurrentSailings = async (request, h) => {
 
   const currentSailingMainModelData =
     (await currentSailingMainService.getCurrentSailingMain(request)) || {};
+
+  // Check for errors in the response
+  if (currentSailingMainModelData?.error && currentSailingMainModelData?.status === HttpStatusConstants.INTERNAL_SERVER_ERROR) {
+    throw new Error(`Internal Server Error: ${currentSailingMainModelData.error}`);
+  }
 
   request.yar.set("CurrentSailingModel", currentSailingMainModelData);
   request.yar.set("SailingRoutes", currentSailingMainModelData.sailingRoutes);

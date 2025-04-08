@@ -37,6 +37,7 @@ const DATE = {
 const HTTP_STATUS = {
   FORBIDDEN: 403,
   OK: 200,
+  INTERNAL_SERVER_ERROR : 500,
 };
 
 const HTML = {
@@ -107,6 +108,16 @@ const createMockH = () => ({
   }),
   redirect: jest.fn(),
   response: jest.fn((val) => ({ code: HTTP_STATUS.OK, source: val })),
+});
+
+const createMock500 = () => ({
+  view: jest.fn().mockReturnValue({
+    code: jest.fn().mockReturnValue({
+      takeover: jest.fn(),
+    }),
+  }),
+  redirect: jest.fn(),
+  response: jest.fn((val) => ({ code: HTTP_STATUS.INTERNAL_SERVER_ERROR, source: val })),
 });
 
 const createMockPayload = (overrides = {}, excludeFields=[]) => {
@@ -710,6 +721,22 @@ describe("getCurrentSailings Service Tests", () => {
 
     await CurrentSailingHandlers.getCurrentSailings(request, h);
     expect(request.yar.set).toHaveBeenCalledWith("CurrentSailingModel", {});
+  });
+
+  test("should handle 500 Internal Server Error service response", async () => {
+    const request = createMockRequest({
+      yar: {
+        organisationId: "123",
+      },
+    });
+    const h = createMock500();
+
+    jest.spyOn(currentSailingMainService, 'getCurrentSailingMain')
+      .mockResolvedValue({ error: 'Internal Server Error', status : HTTP_STATUS.INTERNAL_SERVER_ERROR  });
+
+    await expect(CurrentSailingHandlers.getCurrentSailings(request, h))
+    .rejects
+    .toThrow("Internal Server Error");
   });
 });
 
