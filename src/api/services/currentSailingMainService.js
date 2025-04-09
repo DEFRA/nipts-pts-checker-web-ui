@@ -14,7 +14,7 @@ const baseUrl =
       const response = await httpService.getAsync(`${baseUrl}/sailing-routes`, request);
   
       if (!response || response.status !== HttpStatusConstants.OK || response.data === undefined) {
-        return response || { error: "No response received" }; // Ensure a valid return value
+        throw new Error(`API Error: ${response?.status}`);
       }
   
       CurrentSailingModel.currentSailingMainModelData.routes = response.data.map(
@@ -31,7 +31,7 @@ const baseUrl =
   
     } catch (error) {
       console.error("Error fetching data:", error);
-      return { error: error.message }; // Ensure an error return
+      throw error;
     }
   };
 

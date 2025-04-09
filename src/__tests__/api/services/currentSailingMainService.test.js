@@ -21,19 +21,52 @@ describe("currentSailingMainService", () => {
     };
   });
 
-  it("Doesnt fetches data and returns CurrentSailingMainModel with out route", async () => {
+  it("Thorows error when the response has status 400", async () => {
     const mockData = undefined;
 
     // Mock axios response
     httpService.getAsync.mockResolvedValue({ status: 400, data: mockData });
 
-    await currentSailingMainService.getCurrentSailingMain(request);
+    await expect(currentSailingMainService.getCurrentSailingMain(request))
+    .rejects
+    .toThrow("API Error: 400");
 
     expect(httpService.getAsync).toHaveBeenCalledWith(
       `${baseUrl}/sailing-routes`,
       request
     );
-    expect(CurrentSailingModel.currentSailingMainModelData.routes).toEqual(mockData);
+  });
+
+  it("Thorows error when the response has status 403", async () => {
+    const mockData = null;
+
+    // Mock axios response
+    httpService.getAsync.mockResolvedValue({ status: 403, data: mockData });
+
+    await expect(currentSailingMainService.getCurrentSailingMain(request))
+    .rejects
+    .toThrow("API Error: 403");
+
+    expect(httpService.getAsync).toHaveBeenCalledWith(
+      `${baseUrl}/sailing-routes`,
+      request
+    );
+  });
+
+  it("Thorows error when the response has status 500", async () => {
+    const mockData = null;
+
+    // Mock axios response
+    httpService.getAsync.mockResolvedValue({ status: 500, data: mockData });
+
+    await expect(currentSailingMainService.getCurrentSailingMain(request))
+    .rejects
+    .toThrow("API Error: 500");
+
+    expect(httpService.getAsync).toHaveBeenCalledWith(
+      `${baseUrl}/sailing-routes`,
+      request
+    );
   });
 
   it("fetches data successfully and returns CurrentSailingMainModel", async () => {
@@ -69,17 +102,14 @@ describe("currentSailingMainService", () => {
       .spyOn(console, "error")
       .mockImplementation(() => {});
 
-    const result = await currentSailingMainService.getCurrentSailingMain(
-      request
-    );
+      await expect(currentSailingMainService.getCurrentSailingMain(request))
+      .rejects
+      .toThrow("Network Error");
 
     expect(console.error).toHaveBeenCalledWith(
       "Error fetching data:",
       expect.any(Error)
     );
-
-  // Fix: Expect the returned object instead of undefined
-  expect(result).toEqual({ error: "Network Error" });
 
     consoleSpy.mockRestore();
   });
