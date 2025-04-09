@@ -38,7 +38,7 @@ describe("currentSailingMainService", () => {
   });
 
   it("Thorows error when the response has status 403", async () => {
-    const mockData = undefined;
+    const mockData = null;
 
     // Mock axios response
     httpService.getAsync.mockResolvedValue({ status: 403, data: mockData });
@@ -54,7 +54,7 @@ describe("currentSailingMainService", () => {
   });
 
   it("Thorows error when the response has status 500", async () => {
-    const mockData = undefined;
+    const mockData = null;
 
     // Mock axios response
     httpService.getAsync.mockResolvedValue({ status: 500, data: mockData });
