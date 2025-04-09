@@ -33,11 +33,6 @@ const getCurrentSailings = async (request, h) => {
   const currentSailingMainModelData =
     (await currentSailingMainService.getCurrentSailingMain(request)) || {};
 
-  // Check for errors in the response
-  if (currentSailingMainModelData?.error) {
-    throw new Error(`Error: ${currentSailingMainModelData?.status} - ${currentSailingMainModelData?.error}`);
-  }
- 
   request.yar.set("CurrentSailingModel", currentSailingMainModelData);
   request.yar.set("SailingRoutes", currentSailingMainModelData.sailingRoutes);
 

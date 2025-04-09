@@ -722,22 +722,6 @@ describe("getCurrentSailings Service Tests", () => {
     await CurrentSailingHandlers.getCurrentSailings(request, h);
     expect(request.yar.set).toHaveBeenCalledWith("CurrentSailingModel", {});
   });
-
-  test("should handle 500 Internal Server Error service response", async () => {
-    const request = createMockRequest({
-      yar: {
-        organisationId: "123",
-      },
-    });
-    const h = createMock500();
-
-    jest.spyOn(currentSailingMainService, 'getCurrentSailingMain')
-      .mockResolvedValue({ error: 'Internal Server Error', status : HTTP_STATUS.INTERNAL_SERVER_ERROR  });
-
-    await expect(CurrentSailingHandlers.getCurrentSailings(request, h))
-    .rejects
-    .toThrow("Internal Server Error");
-  });
 });
 
 
