@@ -32,14 +32,12 @@ const getCurrentSailings = async (request, h) => {
 
   const currentSailingMainModelData =
     (await currentSailingMainService.getCurrentSailingMain(request)) || {};
-    console.log('Before Check');
+
   // Check for errors in the response
-  if (currentSailingMainModelData?.error && currentSailingMainModelData?.status === HttpStatusConstants.INTERNAL_SERVER_ERROR) {
-    console.log('Error 500');
-    console.error(currentSailingMainModelData?.error);
-    throw new Error(`Internal Server Error: ${currentSailingMainModelData.error}`);
+  if (currentSailingMainModelData?.error) {
+    throw new Error(`Error: ${currentSailingMainModelData?.status} - ${currentSailingMainModelData?.error}`);
   }
-  console.log('After Check');
+ 
   request.yar.set("CurrentSailingModel", currentSailingMainModelData);
   request.yar.set("SailingRoutes", currentSailingMainModelData.sailingRoutes);
 
