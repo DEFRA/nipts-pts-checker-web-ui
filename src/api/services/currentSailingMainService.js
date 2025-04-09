@@ -14,7 +14,6 @@ const baseUrl =
       const response = await httpService.getAsync(`${baseUrl}/sailing-routes`, request);
   
       if (!response || response.status !== HttpStatusConstants.OK || response.data === undefined) {
-        //return response || { error: "No response received" }; // Ensure a valid return value
         throw new Error(`API Error: ${response?.status}`);
       }
   
