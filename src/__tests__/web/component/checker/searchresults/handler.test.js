@@ -202,7 +202,7 @@ describe("SaveContinue_ValidationTestsPartOne", () => {
         error: errorMessages.passOrFailOption.empty,
         errorSummary: expect.arrayContaining([
           {
-            fieldId: "checklist",
+            fieldId: "checklist-pass",
             message: errorMessages.passOrFailOption.empty,
           },
         ]),
@@ -237,7 +237,7 @@ describe("SaveContinue_ValidationTestsPartTwo", () => {
         error: errorMessages.passOrFailOption.empty,
         errorSummary: [
           {
-            fieldId: "checklist",
+            fieldId: "checklist-pass",
             message: errorMessages.passOrFailOption.empty,
           },
         ],
