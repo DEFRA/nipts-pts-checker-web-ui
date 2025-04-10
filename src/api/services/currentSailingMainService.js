@@ -9,35 +9,31 @@ dotenv.config();
 const baseUrl =
   process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
 
-const getCurrentSailingMain = async (request) => {
-  // Accept the request parameter here
-  try {
-    const response = await httpService.getAsync(
-      `${baseUrl}/sailing-routes`,
-      request
-    );
-
-    if(response.status !== HttpStatusConstants.OK || response.data === undefined)
-    {
-      return response;
+  const getCurrentSailingMain = async (request) => {
+    try {
+      const response = await httpService.getAsync(`${baseUrl}/sailing-routes`, request);
+  
+      if (!response || response.status !== HttpStatusConstants.OK || response.data === undefined) {
+        throw new Error(`API Error: ${response?.status}`);
+      }
+  
+      CurrentSailingModel.currentSailingMainModelData.routes = response.data.map(
+        (route) => ({
+          id: String(route.id), // Convert id to a string
+          value: route.routeName,
+          label: route.routeName,
+        })
+      );  
+  
+      return new CurrentSailingMainModel(
+        CurrentSailingModel.currentSailingMainModelData
+      );
+  
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
     }
-
-    CurrentSailingModel.currentSailingMainModelData.routes = response.data.map(
-      (route) => ({
-        id: String(route.id), // Convert id to a string
-        value: route.routeName,
-        label: route.routeName,
-      })
-    );    
-
-    return new CurrentSailingMainModel(
-      CurrentSailingModel.currentSailingMainModelData
-    );
-
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-};
+  };
 
 export default {
   getCurrentSailingMain,

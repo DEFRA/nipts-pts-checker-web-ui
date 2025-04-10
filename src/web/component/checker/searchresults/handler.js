@@ -51,7 +51,7 @@ const handleValidationError = (request, h, validationResult) => {
 
   return h.view(VIEW_PATH, {
     error: validationResult.error,
-    errorSummary: [{ fieldId: "checklist", message: validationResult.error }],
+    errorSummary: [{ fieldId: "checklist-pass", message: validationResult.error }],
     microchipNumber,
     data,
     pageTitle,

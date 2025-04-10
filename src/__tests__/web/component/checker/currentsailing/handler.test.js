@@ -37,6 +37,7 @@ const DATE = {
 const HTTP_STATUS = {
   FORBIDDEN: 403,
   OK: 200,
+  INTERNAL_SERVER_ERROR : 500,
 };
 
 const HTML = {
@@ -109,17 +110,36 @@ const createMockH = () => ({
   response: jest.fn((val) => ({ code: HTTP_STATUS.OK, source: val })),
 });
 
-const createMockPayload = (overrides = {}) => ({
-  routeOption: "1",
-  routeRadio: "1",
-  sailingHour: "12",
-  sailingMinutes: "30",
-  departureDateDay: "1",
-  departureDateMonth: "1",
-  departureDateYear: "2024",
-  routeFlight: "",
-  ...overrides,
+const createMock500 = () => ({
+  view: jest.fn().mockReturnValue({
+    code: jest.fn().mockReturnValue({
+      takeover: jest.fn(),
+    }),
+  }),
+  redirect: jest.fn(),
+  response: jest.fn((val) => ({ code: HTTP_STATUS.INTERNAL_SERVER_ERROR, source: val })),
 });
+
+const createMockPayload = (overrides = {}, excludeFields=[]) => {
+  
+  const obj = {
+    routeOption: "1",
+    routeRadio: "1",
+    sailingHour: "12",
+    sailingMinutes: "30",
+    departureDateDay: "1",
+    departureDateMonth: "1",
+    departureDateYear: "2024",
+    routeFlight: "",
+    ...overrides,
+  }
+
+  for (const field of excludeFields) {
+    delete obj[field]
+  }
+
+  return obj
+};
 
 const setupValidationMocks = (config = {}) => {
   const defaultValidResult = { isValid: true, error: null };
@@ -175,7 +195,7 @@ describe("submitCurrentSailingSlot Route Option Validation", () => {
 
   test("should validate route option selection", async () => {
     const request = createMockRequest({
-      payload: createMockPayload({ routeOption: undefined }),
+      payload: createMockPayload({}, ['routeOption']),
     });
     const h = createMockH();
     setupValidationMocks({
@@ -200,7 +220,7 @@ describe("submitCurrentSailingSlot Ferry Route Validation", () => {
 
   test("should validate ferry route selection", async () => {
     const request = createMockRequest({
-      payload: createMockPayload({ routeRadio: undefined }),
+      payload: createMockPayload({}, ['routeRadio']),
     });
     const h = createMockH();
     setupValidationMocks({
@@ -442,8 +462,7 @@ describe("submitCurrentSailingSlot Flight Success", () => {
       payload: createMockPayload({
         routeOption: "2",
         routeFlight: "RK103",
-        routeRadio: undefined,
-      }),
+      }, ['routeRadio']),
       yar: {
         currentSailingModel: {
           routeOptions,
@@ -459,7 +478,6 @@ describe("submitCurrentSailingSlot Flight Success", () => {
     expect(request.yar.set).toHaveBeenCalledWith("currentSailingSlot", {
       sailingHour: "12",
       sailingMinutes: "30",
-      selectedRoute: undefined,
       departureDate: DATE.DEP_DATE,
       selectedRouteOption: routeOptions[1],
       routeFlight: "RK103",
@@ -591,8 +609,8 @@ describe("getCurrentSailingSlot", () => {
     });
   });
 
-  test("should handle undefined sailing slot", async () => {
-    const request = createMockRequest({ yar: { defaultValue: undefined } });
+  test("should handle unset sailing slot", async () => {
+    const request = createMockRequest({ yar: {} });
     const h = createMockH();
 
     const response = await CurrentSailingHandlers.getCurrentSailingSlot(
@@ -603,7 +621,6 @@ describe("getCurrentSailingSlot", () => {
     expect(response.code).toBe(HTTP_STATUS.OK);
     expect(response.source).toEqual({
       message: ROUTE_SLOT.RET_SLOT,
-      currentSailingSlot: undefined,
     });
   });
 });
@@ -617,10 +634,9 @@ describe("submitCurrentSailingSlot Error Handling", () => {
   test("should handle validation errors gracefully", async () => {
     const request = createMockRequest({
       payload: createMockPayload({
-        routeOption: undefined,
         sailingHour: "25",
         sailingMinutes: "61",
-      }),
+      }, ['routeOption']),
     });
     const h = createMockH();
 

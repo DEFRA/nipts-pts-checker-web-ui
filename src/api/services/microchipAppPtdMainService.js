@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import httpService from "./httpService.js";
 import { issuingAuthorityModelData } from '../../constants/issuingAuthority.js';
 import moment from "moment";
+import { getIssueDateByDocState, getPtdNumberByDocState, handleNotFoundError } from "../../helper/service-helper.js";
 
 dotenv.config();
 
@@ -28,6 +29,10 @@ const formatDate = (dateRaw) => {
   return date ? moment(date).format("DD/MM/YYYY") : null;
 };
 
+function getValueAttributeOrUndefined(value, attribute) {
+  return value ? value[attribute] : undefined
+}
+
 const getMicrochipData = async (microchipNumber, request) => {
   try {
     const response = await httpService.postAsync(
@@ -51,37 +56,13 @@ const getMicrochipData = async (microchipNumber, request) => {
     const applicationStatus = item.application.status.toLowerCase().trim();
     const documentState = statusMapping[applicationStatus] || applicationStatus;
 
-    const ptdNumber =
-    documentState === "approved" || documentState === "revoked"
-      ? item.travelDocument?.travelDocumentReferenceNumber
-      : item.application?.referenceNumber;
+    const ptdNumber = getPtdNumberByDocState(documentState, item)
   
-
-    let issuedDateRaw;
-
-    switch (documentState) {
-      case "approved":
-        issuedDateRaw = item.application?.dateAuthorised;
-        break;
-      case "revoked":
-        issuedDateRaw = item.application?.dateRevoked;
-        break;
-      case "rejected":
-        issuedDateRaw = item.application?.dateRejected;
-        break;
-      default:
-        issuedDateRaw = item.application?.dateOfApplication;
-        break;
-    }
-
+    const issuedDateRaw = getIssueDateByDocState(documentState, item)
     const formattedIssuedDate = formatDate(issuedDateRaw);
-
-    const microchippedDateRaw = item.pet
-      ? item.pet.microchippedDate
-      : undefined;
+    const microchippedDateRaw = getValueAttributeOrUndefined(item.pet, 'microchippedDate')
     const formattedMicrochippedDate = formatDate(microchippedDateRaw);
-
-    const dateOfBirthRaw = item.pet ? item.pet.dateOfBirth : undefined;
+    const dateOfBirthRaw = getValueAttributeOrUndefined(item.pet, 'dateOfBirth');
     const formattedDateOfBirth = formatDate(dateOfBirthRaw);
 
     return getMicrochipAppPtdMainModel(item, documentState, ptdNumber, formattedIssuedDate, microchipNumber, formattedMicrochippedDate, formattedDateOfBirth);
@@ -92,16 +73,8 @@ const getMicrochipData = async (microchipNumber, request) => {
 
     // Check for specific error message and return a structured error
     if (error.response?.data?.error) {
-      if (error.response.data.error === "Application not found" || error.response.data.error === "Pet not found") 
-      {
-        return { error: "not_found" };
-      } 
-      else 
-      {
-        return { error: error.response.data.error };
-      }
+      return handleNotFoundError(error.response.data.error, "Application not found", "Pet not found")
     }
-
     return { error: unexpectedErrorText };
   }
 };
