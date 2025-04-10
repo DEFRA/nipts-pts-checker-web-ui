@@ -2,6 +2,9 @@
 
 import httpService from "../../../../api/services/httpService.js";
 
+const HTTP_STATUS_OK = 200;
+const HTTP_STATUS_INTERNAL_SERVER_ERROR = 500;
+
 async function checkApiHealth(request) {
   try {
     const baseUrl =
@@ -49,7 +52,9 @@ const getHealth = async (request, h) => {
       },
     };
 
-    return h.response(response).code(isHealthy ? 200 : 500);
+    return h
+      .response(response)
+      .code(isHealthy ? HTTP_STATUS_OK : HTTP_STATUS_INTERNAL_SERVER_ERROR);
   } catch (error) {
     console.error("Health check failed with error:", error);
     return h
