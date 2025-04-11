@@ -4,6 +4,7 @@ import {
   BadRequestResponse,
   NotFoundResponse,
   ServerErrorResponse,
+  ForbiddenResponse,
 } from "../models/apiResponse.js";
 import { HttpStatusConstants } from "../../constants/httpMethod.js";
 import userService from "./userService.js";
@@ -54,6 +55,9 @@ const statusBasedResponse = (response) => {
     case HttpStatusConstants.BAD_REQUEST:
       result = badRequestResponse(response);
       break;
+    case HttpStatusConstants.FORBIDDEN:
+      result = forbiddenResponse(response.data);
+      break;
     case HttpStatusConstants.NOT_FOUND:
       result = notFoundResponse(response.data);
       break;
@@ -81,6 +85,15 @@ const badRequestResponse = (response) => {
     response.data.title,
     response.data.errors
   );
+};
+
+/*========== forbiddenResponse(): Returns ForbiddenResponse ==========*/
+const forbiddenResponse = (errorMessage) => {
+  if (!errorMessage) {
+    errorMessage = "Forbidden";
+  }
+
+  return new ForbiddenResponse(HttpStatusConstants.FORBIDDEN, errorMessage);
 };
 
 /*========== notFoundResponse(): Returns NotFoundResponse ==========*/

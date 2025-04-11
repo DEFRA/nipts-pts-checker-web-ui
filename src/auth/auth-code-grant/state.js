@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import session from "../../session/index.js";
 import sessionKeys from "../../session/keys.js";
 import config from "../../config/index.js";
+import { ForbiddenError } from "../../exceptions/index.js";
 
 const generate = (request) => {
   const state = {
@@ -29,6 +30,9 @@ const verify = (request) => {
     );
 
     const sessionValue = session.getToken(request, sessionKeys.tokens.state);
+    if (sessionValue == null) {
+      throw new ForbiddenError("Cannot get token from request");
+    }
 
     const savedState = JSON.parse(
       Buffer.from(sessionValue, "base64").toString("ascii")
