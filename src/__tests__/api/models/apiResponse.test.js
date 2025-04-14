@@ -1,6 +1,7 @@
 import {
     OkResponse,
     BadRequestResponse,
+    ForbiddenResponse,
     NotFoundResponse,
     ServerErrorResponse,
   } from "../../../api/models/apiResponse.js";
@@ -33,7 +34,7 @@ describe("apiResponse", () => {
 
   describe("setValues for ForbiddenResponse", () => {
     it("should return correct data Forbidden", async () => {
-      const result = new NotFoundResponse(ForbiddenResponse403, "Forbidden")
+      const result = new ForbiddenResponse(ForbiddenResponse403, "Forbidden")
 
       expect(result.status).toEqual(ForbiddenResponse403);
       expect(result.error).toEqual("Forbidden");
