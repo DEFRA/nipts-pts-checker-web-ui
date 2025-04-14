@@ -13,6 +13,13 @@ class BadRequestResponse {
   }
 }
 
+class ForbiddenResponse {
+  constructor(status, error) {
+    this.status = status;
+    this.error = error;
+  }
+}
+
 class NotFoundResponse {
   constructor(status, error) {
     this.status = status;
@@ -30,6 +37,7 @@ class ServerErrorResponse {
 export {
   OkResponse,
   BadRequestResponse,
+  ForbiddenResponse,
   NotFoundResponse,
   ServerErrorResponse,
 };
