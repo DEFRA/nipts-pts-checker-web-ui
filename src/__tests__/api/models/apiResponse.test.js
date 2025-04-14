@@ -7,6 +7,7 @@ import {
 
   const success200 = 200;
   const badRequestResponse400 = 400;
+  const ForbiddenResponse403 = 403;
   const notFoundResponse404 = 404;
   const serverError500 = 500;
 
@@ -27,6 +28,15 @@ describe("apiResponse", () => {
       expect(result.status).toEqual(badRequestResponse400);
       expect(result.error).toEqual("Error");
       expect(result.validationErrors).toEqual("Validation Error");
+    });
+  });
+
+  describe("setValues for ForbiddenResponse", () => {
+    it("should return correct data Forbidden", async () => {
+      const result = new NotFoundResponse(ForbiddenResponse403, "Forbidden")
+
+      expect(result.status).toEqual(ForbiddenResponse403);
+      expect(result.error).toEqual("Forbidden");
     });
   });
 
