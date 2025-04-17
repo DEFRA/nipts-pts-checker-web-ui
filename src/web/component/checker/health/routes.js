@@ -7,7 +7,7 @@ import HttpMethod from "../../../../constants/httpMethod.js";
 const Routes = [
   {
     method: HttpMethod.GET,
-    path: "/health-check",
+    path: "/health",
     options: {
       auth: false,
       handler: HealthHandlers.getHealth,

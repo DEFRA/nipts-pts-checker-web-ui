@@ -7,7 +7,7 @@ export default {
     name: "magicPassword",
     register: (server, _) => {
       server.ext("onPreResponse", (request, h) => {
-        const ignoredPaths = ["/", "/password", "/signin-oidc", "/signout", "/account", "/timeout",  "/health-check"  ];
+        const ignoredPaths = ["/", "/password", "/signin-oidc", "/signout", "/account", "/timeout",  "/health"  ];
         const currentPath = request.path.toLowerCase();
 
         const ignore = ignoredPaths.includes(currentPath);
