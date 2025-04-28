@@ -32,6 +32,7 @@ const fieldIdSortOrdering = [ // add more fields if needed
   'passengerType',
   'relevantComments',
   'spsOutcome',
+  'isGBCheck',
   'spsOutcomeDetails',
 ]
 
