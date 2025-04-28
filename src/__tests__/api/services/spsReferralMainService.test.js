@@ -16,6 +16,11 @@ describe("GetSpsReferrals", () => {
   const formattedDate = moment(date).toISOString();
   let request;
 
+  global.appInsightsClient = {
+    trackException: jest.fn()
+  };
+
+
   beforeEach(() => {
     // Mock request object with headers
     request = {
@@ -109,6 +114,8 @@ describe("GetSpsReferrals", () => {
       { route, SailingDate: formattedDate, timeWindowInHours },
       request
     );
+
+    expect(global.appInsightsClient.trackException).toHaveBeenCalled();
   });
 
   it("should handle unexpected errors gracefully", async () => {

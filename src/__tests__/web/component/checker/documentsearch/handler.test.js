@@ -30,6 +30,10 @@ const documentNotFoundView =
   "componentViews/checker/documentsearch/documentNotFoundView";
 const errorOccureredText = "An error occurred while processing your request";
 
+global.appInsightsClient = {
+  trackException: jest.fn()
+ };
+
 describe("DocumentSearchHandlers", () => {
   describe("getDocumentSearch", () => {
     let _request, h;
@@ -470,6 +474,7 @@ describe("DocumentSearchHandlers", () => {
         microchipNumber: "",
         documentSearchMainModelData: mockData,
       });
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should handle microchip search with 'not_found' error", async () => {

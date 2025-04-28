@@ -5,11 +5,30 @@ import catboxMemory from "@hapi/catbox-memory";
 import ConfigServer from "./src/configServer.js";
 import pluginList from "./src/helper/pluginList.js";
 import blip from "blipp";
+import appInsights from 'applicationinsights';
+
 
 // Load environment variables from .env file
 if (process.env.NODE_ENV === "local" && !process.env.DEFRA_ID_CLIENT_ID) {
   dotenv.config({ path: "./.env.local", override: true });
 }
+
+
+// Initialize Application Insights
+const connectionString = process.env.APPLICATIONINSIGHTS_CONNECTION_STRING;
+if (connectionString) {
+  appInsights.setup(connectionString)
+  .setAutoCollectRequests(true)
+  .setAutoCollectPerformance(true)
+  .setAutoCollectExceptions(true)
+  .start();
+const client = appInsights.defaultClient;
+ // Make the client available globally
+ global.appInsightsClient = client;
+} else {
+ console.error('APPLICATIONINSIGHTS_CONNECTION_STRING is not set');
+}
+
 
 // Server configuration
 const serverConfig = {

@@ -30,6 +30,7 @@ const initializeFeatureFlags = async () => {
 
     return featureFlags;
   } catch (error) {
+    global.appInsightsClient.trackException({ exception: error });
     console.error("Error initializing feature flags:", error.message);
     throw error; 
   }
@@ -43,6 +44,7 @@ const isFeatureEnabled = async (featureName) => {
     // Check if the feature flag exists and if it's enabled (assuming the value is 'true' or 'enabled')
     return featureFlag && featureFlag.enabled === true;
   } catch (error) {
+    global.appInsightsClient.trackException({ exception: error });
     console.error("Error checking feature flag:", error.message);
     return false;
   }

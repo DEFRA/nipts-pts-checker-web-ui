@@ -19,6 +19,7 @@ async function checkApiHealth(request) {
     const response = await httpService.getAsync(url, request);
     return response.status < HTTP_STATUS_BAD_REQUEST_THRESHOLD;
   } catch (error) {
+    global.appInsightsClient.trackException({ exception: error });
     console.error("API health check failed:", error);
     return false;
   }
@@ -71,6 +72,7 @@ const getHealth = async (request, h) => {
       .response(response)
       .code(isHealthy ? HTTP_STATUS_OK : HTTP_STATUS_INTERNAL_SERVER_ERROR);
   } catch (error) {
+    global.appInsightsClient.trackException({ exception: error });
     console.error("Health check failed with error:", error);
     return h
       .response({

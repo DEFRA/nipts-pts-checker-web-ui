@@ -20,6 +20,11 @@ const dateNotAvailable = "Not available";
 const searchResultsPage = "/checker/search-results";
 const identifier = "GB826123456";
 
+global.appInsightsClient = {
+  trackException: jest.fn()
+ };
+
+
 describe("CheckReportHandlers", () => {
   afterEach(() => {
     jest.clearAllMocks();
@@ -229,7 +234,10 @@ describe("CheckReportHandlers", () => {
         error: internalServerError,
         details: testError,
       });
+      
       expect(h.code).toHaveBeenCalledWith(errorCode500);
+
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
   });
 

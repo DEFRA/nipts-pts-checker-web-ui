@@ -6,6 +6,10 @@ import DocumentSearchModel from "../../../constants/documentSearchConstant";
 jest.mock("../../../api/models/documentSearchMainModel");
 jest.mock("../../../constants/documentSearchConstant");
 
+global.appInsightsClient = {
+  trackException: jest.fn()
+ };
+
 describe('getDocumentSearchMain', () => {
   beforeEach(() => {
     DocumentSearchModel.documentSearchMainModelData = {
@@ -41,6 +45,8 @@ describe('getDocumentSearchMain', () => {
     
     // Fix: Expect the returned object instead of undefined
     expect(result).toEqual({ error: "Network Error" });
+
+    expect(global.appInsightsClient.trackException).toHaveBeenCalled();
   });
 
 });

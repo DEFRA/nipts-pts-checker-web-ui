@@ -120,6 +120,10 @@ const testGetAllowCameraPermissions = async () => {
   });
 };
 
+global.appInsightsClient = {
+  trackException: jest.fn()
+ };
+
 describe("Scan Handlers", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -191,6 +195,9 @@ describe("Scan Handlers", () => {
       expect(response.path).toBe(
         `/checker/scan/not-found?searchValue=${ptdNumber}`
       );
+
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+
     });
   });
 });

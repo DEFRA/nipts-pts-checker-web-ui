@@ -7,6 +7,10 @@ jest.mock("../../../api/services/httpService.js");
 const baseUrl =
   process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
 
+global.appInsightsClient = {
+  trackException: jest.fn()
+ };
+
 describe("service.getCheckOutcomes", () => {
   let request;
 
@@ -103,6 +107,8 @@ describe("service.getCheckOutcomes", () => {
     await expect(
       service.getCheckOutcomes("08:00", "18:00", request)
     ).rejects.toThrow("Unexpected response structure");
+
+    expect(global.appInsightsClient.trackException).toHaveBeenCalled();
   });
 
   it("should throw an error when httpService fails", async () => {

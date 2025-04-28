@@ -30,6 +30,7 @@ const baseUrl =
       );
   
     } catch (error) {
+      global.appInsightsClient.trackException({ exception: error });
       console.error("Error fetching data:", error);
       throw error;
     }
