@@ -27,6 +27,14 @@ const statusColourMapping = {
 
 };
 
+const fieldIdSortOrdering = [ // add more fields if needed
+  'missingReason',
+  'passengerType',
+  'relevantComments',
+  'spsOutcome',
+  'spsOutcomeDetails',
+]
+
 const getPtdFormatted = (data) => {
   const PTD_LENGTH = 11; 
   const PTD_PREFIX_LENGTH = 5;
@@ -101,6 +109,10 @@ const postNonComplianceHandler = async (request, h) => {
         errors[fieldId] = message;
         errorSummary.push({ fieldId, message });
       });
+
+      errorSummary.sort((error1, error2) => {
+        return fieldIdSortOrdering.indexOf(error1.fieldId) - fieldIdSortOrdering.indexOf(error2.fieldId);
+      })
 
       // If there are errors after filtering, render the view with errors
       if (Object.keys(errors).length > 0) {
