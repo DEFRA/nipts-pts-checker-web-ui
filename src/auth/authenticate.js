@@ -89,6 +89,7 @@ const authenticate = async (request, sessionInstance) => {
     request.yar.set("isAuthorized", true);
     sessionInstance.setToken(request, sessionKeys.tokens.sso, "");
   } catch (error) {
+    global.appInsightsClient.trackException({ exception: error });
     console.error("Error during authentication:", error);
     throw error;
   }

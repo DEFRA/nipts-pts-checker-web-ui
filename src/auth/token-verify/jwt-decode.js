@@ -13,6 +13,7 @@ const decodeJwt = (token) => {
     }
     return decodedToken.payload;
   } catch (error) {
+    global.appInsightsClient.trackException({ exception: error });
     console.log(
       `${new Date().toISOString()} Error while decoding JWT token: ${
         error.message

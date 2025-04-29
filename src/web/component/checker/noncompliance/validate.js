@@ -133,6 +133,7 @@ const validateNonCompliance = (payload) => {
       errors,
     };
   } catch (err) {
+    global.appInsightsClient.trackException({ exception: err });
     console.error("Validation error:", err);
     return {
       isValid: false,

@@ -49,6 +49,10 @@ const setupTest = () => ({
   },
 });
 
+global.appInsightsClient = {
+  trackException: jest.fn()
+ };
+
 describe("SearchResults_ViewTests", () => {
   let request, h;
   beforeEach(() => ({ request, h } = setupTest()));
@@ -429,5 +433,7 @@ describe("SaveContinue_FailureTests", () => {
         { fieldId: "general", message: "An unexpected error occurred" },
       ],
     });
+    expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+
   });
 });

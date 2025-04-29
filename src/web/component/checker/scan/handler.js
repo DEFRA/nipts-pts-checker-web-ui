@@ -73,6 +73,7 @@ const postScan = async (request, h) => {
       );
     }
   } catch (error) {
+    global.appInsightsClient.trackException({ exception: error });
     return h.redirect(
       `/checker/scan/not-found?searchValue=${encodeURIComponent(qrCodeData)}`
     );
