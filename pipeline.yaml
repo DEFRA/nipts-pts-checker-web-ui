@@ -50,6 +50,7 @@ extends:
         -DASHBOARD_END_HOUR "24"
         -ENABLE_CONFIGURATION_SERVER "true"
         -AZURE_CONFIGURATION_SERVER "https://$(environment)trd$(nc-function-infrastructure-lower)ac1001.azconfig.io"
+        -DEV_APPLICATIONINSIGHTS_CONNECTION_STRING "$(PTS-APPLICATIONINSIGHTS-CONNECTION-STRING)"
       tst: >-
         -PORT "8080"
         -HOST "0.0.0.0"

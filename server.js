@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === "local" && !process.env.DEFRA_ID_CLIENT_ID) {
 
 
 // Initialize Application Insights
-const connectionString = process.env.APPLICATIONINSIGHTS_CONNECTION_STRING;
+const connectionString = process.env.DEV_APPLICATIONINSIGHTS_CONNECTION_STRING;
 if (connectionString) {
   appInsights.setup(connectionString)
   .setAutoCollectRequests(true)
