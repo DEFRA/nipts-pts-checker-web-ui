@@ -50,7 +50,7 @@ extends:
         -DASHBOARD_END_HOUR "24"
         -ENABLE_CONFIGURATION_SERVER "true"
         -AZURE_CONFIGURATION_SERVER "https://$(environment)trd$(nc-function-infrastructure-lower)ac1001.azconfig.io"
-        tst: >-
+      tst: >-
         -PORT "8080"
         -HOST "0.0.0.0"
         -BASE_API_URL "https://$(internalAPIMUrl)/pts-pet-checker/v1/api"
