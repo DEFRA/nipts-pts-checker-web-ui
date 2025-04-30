@@ -22,6 +22,7 @@ const verify = (request, idToken) => {
       throw new Error("Nonce mismatch");
     }
   } catch (error) {
+    global.appInsightsClient.trackException({ exception: error });
     console.log(
       `${new Date().toISOString()} Error while verifying id_token nonce: ${
         error.message

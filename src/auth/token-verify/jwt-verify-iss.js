@@ -12,6 +12,7 @@ const jwtVerifyIss = async (iss) => {
     }
     return true;
   } catch (error) {
+    global.appInsightsClient.trackException({ exception: error });
     console.log(
       `${new Date().toISOString()} Error while verifying the issuer: ${
         error.message

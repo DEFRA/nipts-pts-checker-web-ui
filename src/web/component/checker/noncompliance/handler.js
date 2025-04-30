@@ -27,6 +27,15 @@ const statusColourMapping = {
 
 };
 
+const fieldIdSortOrdering = [ // add more fields if needed
+  'missingReason',
+  'passengerType',
+  'relevantComments',
+  'spsOutcome',
+  'isGBCheck',
+  'spsOutcomeDetails',
+]
+
 const getPtdFormatted = (data) => {
   const PTD_LENGTH = 11; 
   const PTD_PREFIX_LENGTH = 5;
@@ -102,6 +111,10 @@ const postNonComplianceHandler = async (request, h) => {
         errorSummary.push({ fieldId, message });
       });
 
+      errorSummary.sort((error1, error2) => {
+        return fieldIdSortOrdering.indexOf(error1.fieldId) - fieldIdSortOrdering.indexOf(error2.fieldId);
+      })
+
       // If there are errors after filtering, render the view with errors
       if (Object.keys(errors).length > 0) {
         return h.view(VIEW_PATH, {
@@ -153,6 +166,7 @@ const postNonComplianceHandler = async (request, h) => {
 
     return h.redirect("/checker/dashboard");
   } catch (error) {
+    global.appInsightsClient.trackException({ exception: error });
     console.error("Unexpected Error:", error);
 
     const data = request.yar.get("data");
@@ -204,6 +218,7 @@ const postNonComplianceHandler = async (request, h) => {
 
     return responseData;
   } catch (error) {
+    global.appInsightsClient.trackException({ exception: error });
     console.error("Error fetching data:", error.message);
 
     // Check for specific error message and return a structured error

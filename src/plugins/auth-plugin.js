@@ -83,7 +83,7 @@ const isExemptRoute = (path) => {
     "/timeout",
     "/password",
     "/timeout-warning",
-    "/health-check",
+    "/health",
   ];
 
   return path.includes(SIGNIN_OIDC_PATH) || exemptPaths.includes(path);
@@ -112,6 +112,7 @@ const validateTokenRoles = (token) => {
 
     return true;
   } catch (error) {
+    global.appInsightsClient.trackException({ exception: error });
     console.error("Error validating token:", error);
     return false;
   }

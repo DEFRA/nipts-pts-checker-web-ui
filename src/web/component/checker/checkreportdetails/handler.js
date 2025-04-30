@@ -79,6 +79,7 @@ async function getCheckDetails(request, h) {
       checkDetails: formattedCheckDetails,
     });
   } catch (error) {
+    global.appInsightsClient.trackException({ exception: error });
     console.error("Error in getCheckDetails:", error);
     return h
       .response({ error: "Internal Server Error", details: error.message })
@@ -125,6 +126,7 @@ async function conductSpsCheck(request, h) {
 
     return h.redirect("/checker/search-results");
   } catch (error) {
+    global.appInsightsClient.trackException({ exception: error });
     console.error("Error in conductSpsCheck:", error);
     return h
       .response({ error: "Internal Server Error", details: error.message })

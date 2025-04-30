@@ -51,6 +51,7 @@ const Routes = [
           console.log("authenticated, now redirecting to dashboard");
           return h.redirect("/checker/current-sailings");
         } catch (err) {
+          global.appInsightsClient.trackException({ exception: err });
           console.error(
             `Received error with name ${err.name} and message ${err.message}.`
           );
@@ -90,6 +91,7 @@ const Routes = [
               .code(HTTP_STATUS.UNAUTHORIZED)
               .takeover();
           } catch (viewError) {
+            global.appInsightsClient.trackException({ exception: viewError });
             console.error("Error rendering view:", viewError);
 
             return h

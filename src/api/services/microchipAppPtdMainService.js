@@ -69,6 +69,7 @@ const getMicrochipData = async (microchipNumber, request) => {
 
 
   } catch (error) {
+    global.appInsightsClient.trackException({ exception: error });
     console.error("Error fetching data:", error.message);
 
     // Check for specific error message and return a structured error
@@ -92,6 +93,7 @@ const checkMicrochipNumberExistWithPtd = async (microchipNumber, request) => {
 
     return { exists };
   } catch (error) {
+    global.appInsightsClient.trackException({ exception: error });
     console.error("Error checking microchip number existence:", error.message);
 
     // Handle specific errors if needed

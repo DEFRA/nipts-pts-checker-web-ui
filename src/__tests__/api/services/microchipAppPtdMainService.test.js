@@ -20,6 +20,11 @@ const issedDate = "09/02/2024";
 
 const unexpectedErrorMessage = "Unexpected error occurred";
 
+global.appInsightsClient = {
+  trackException: jest.fn()
+ };
+
+
 describe("getMicrochipData", () => {
   let request;
 
@@ -747,6 +752,8 @@ describe("getMicrochipData", () => {
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
 
     expect(data).toEqual(expectedError);
+
+    expect(global.appInsightsClient.trackException).toHaveBeenCalled();
   });
 
   it("should handle unexpected response structure gracefully", async () => {

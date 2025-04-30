@@ -8,6 +8,12 @@ jest.mock("../../../api/services/httpService.js");
 const baseUrl =
   process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
 
+  
+global.appInsightsClient = {
+   trackException: jest.fn()
+  };
+  
+
 describe("currentSailingMainService", () => {
   let request;
 
@@ -35,6 +41,9 @@ describe("currentSailingMainService", () => {
       `${baseUrl}/sailing-routes`,
       request
     );
+
+    expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+
   });
 
   it("Thorows error when the response has status 403", async () => {

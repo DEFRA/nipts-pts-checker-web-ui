@@ -276,7 +276,6 @@ describe("NonCompliance Validation isGbCheck is True", () => {
     expect(result.isValid).toBe(false);
     expect(result.errors).toEqual(expectedErrorrs);
   });
-
 });
 
 
@@ -674,6 +673,4 @@ test("should validate required fields when noncompliance reason selected on UI",
     expect(result.isValid).toBe(false);
     expect(result.errors).toEqual(expectedErrors);
   });
-  
-
 });

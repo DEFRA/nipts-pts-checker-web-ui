@@ -36,6 +36,12 @@ const baseUrl =
   const unexpectedErrorText = "Unexpected error occurred";
   const notFoundText = "not_found";
 
+
+global.appInsightsClient = {
+  trackException: jest.fn()
+ };
+ 
+
 describe("apiService", () => {
   let request;
 
@@ -475,6 +481,9 @@ describe("apiService", () => {
         request
       );
       expect(result).toEqual({ error: applicationNotFoundMessage });
+
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+
     });
 
     it("should return error when application is not found", async () => {

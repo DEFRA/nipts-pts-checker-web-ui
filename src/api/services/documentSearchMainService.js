@@ -7,6 +7,7 @@ const getDocumentSearchMain = async (searchText) => {
     DocumentSearchModel.documentSearchMainModelData.searchText = searchText;
     return new DocumentSearchMainModel(DocumentSearchModel.documentSearchMainModelData);
   } catch (error) {
+    global.appInsightsClient.trackException({ exception: error });
     console.error("Error fetching data:", error);
     return { error: error.message }; // Ensure function always returns a value
   }
