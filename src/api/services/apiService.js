@@ -145,8 +145,8 @@ function getDocumentAndDateData(item) {
 }
 
 function getPetBreed(item) {
-  return item.pet?.breedName === "Mixed breed or unknown" && item.pet?.additionalBreedInfo
-    ? item.pet.additionalBreedInfo
+  return item.pet?.breedName === "Mixed breed or unknown" && item.pet?.breedAdditionalInfo 
+    ? item.pet?.breedAdditionalInfo 
     : item.pet?.breedName;
 }
 
