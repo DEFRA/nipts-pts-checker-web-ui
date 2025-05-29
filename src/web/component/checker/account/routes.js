@@ -18,7 +18,39 @@ const Routes = [
         session.setToken(request, sessionKeys.tokens.sso, "sso");
 
         const idmLink = process.env.ACCOUNT_MANAGEMENT_URL;
-        return h.redirect(idmLink);
+        
+        const response = h.redirect(idmLink);
+
+        response.header("X-Frame-Options", "DENY");
+        response.header("X-Content-Type-Options", "nosniff");
+        response.header("Referrer-Policy", "strict-origin-when-cross-origin");
+        response.header(
+          "Permissions-Policy",
+          "camera=(), microphone=(), geolocation=(), payment=()"
+        );
+        response.header("Cross-Origin-Embedder-Policy", "unsafe-none");
+        response.header("Cross-Origin-Resource-Policy", "cross-origin");
+        response.header("Cross-Origin-Opener-Policy", "unsafe-none");
+
+        const accountDomain = new URL(idmLink).origin;
+
+        response.header(
+          "Content-Security-Policy",
+          "default-src 'self'; " +
+            "script-src 'self' 'unsafe-inline'; " +
+            "style-src 'self' 'unsafe-inline'; " +
+            "img-src 'self' data: https:; " +
+            "font-src 'self'; " +
+            "connect-src 'self' " +
+            accountDomain +
+            "; " +
+            "frame-ancestors 'none'; " +
+            "base-uri 'self'; " +
+            "form-action 'self' " +
+            accountDomain
+        );
+
+        return response;
       },
     },
   },
