@@ -46,15 +46,17 @@
         <div id="sailingHourHint" class="govuk-hint">
           {{ currentSailingMainModelData.sailingHintText1 }}
         </div>
+        <label for="sailingHour"></label>
         <select class="govuk-select {% if errorSailingHour or errorDateRangeTime %} govuk-select--error {% endif %} govuk-input--width-5 pts-checker-time-select" id="sailingHour" name="sailingHour"
-          tabindex="0" aria-label="departureHour">
+          tabindex="0">
           {% for timeHour in currentSailingMainModelData.sailingTimes.slice(0, 25) %}
           <option value="{{timeHour}}" {% if sailingHour == timeHour %}selected{% endif %}>{{ timeHour }}</option>
           {% endfor %}
         </select>
         <span role="presentation">:</span>
+        <label for="sailingMinutes"></label>
         <select class="govuk-select {% if errorSailingMinutes or errorDateRangeTime %} govuk-select--error {% endif %} govuk-input--width-5 pts-checker-time-select" id="sailingMinutes"
-          name="sailingMinutes" tabindex="0" aria-label="departureMinutes">
+          name="sailingMinutes" tabindex="0">
           {% for timeMinutes in currentSailingMainModelData.sailingTimes %}
           <option value="{{timeMinutes}}" {% if sailingMinutes == timeMinutes %}selected{% endif %}>{{ timeMinutes }}</option>
           {% endfor %}
