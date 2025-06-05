@@ -62,7 +62,6 @@
                   id="conditional-documentSearch-1">
                   <!-- PTD Input -->
                   <div id="ptd-form-group" class="govuk-form-group {% if error and activeTab == 'ptd' %}govuk-form-group--error{% endif %}">
-                    <label for="ptdNumberSearch">PTD Number</label>
                     {% if error and activeTab == "ptd" %}
                     <p id="ptd-error" class="govuk-error-message">
                       <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span>
@@ -79,7 +78,8 @@
                         name="ptdNumberSearch" 
                         type="text" 
                         spellcheck="false" 
-                        value="{{ptdNumberSearch}}">
+                        value="{{ptdNumberSearch}}" 
+                        aria-label="Enter PTD number">
                     </div>
                   </div>
                 </div>
@@ -109,7 +109,6 @@
                   id="conditional-documentSearch-2">
                   <!-- Application Input -->
                   <div id="application-form-group" class="govuk-form-group {% if error and activeTab == 'application' %}govuk-form-group--error{% endif %}">
-                    <label for="applicationNumberSearch">Application number</label>
                     {% if error and activeTab == "application" %}
                     <p id="application-error" class="govuk-error-message">
                       <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span>
@@ -122,7 +121,8 @@
                       name="applicationNumberSearch" 
                       type="text" 
                       spellcheck="false" 
-                      value="{{applicationNumberSearch}}">
+                      value="{{applicationNumberSearch}}" 
+                      aria-label="Enter application number">
                   </div>
                 </div>
               
@@ -150,8 +150,7 @@
                   class="govuk-radios__conditional {% if activeTab == 'microchip' %}{% else %}govuk-radios__conditional--hidden{% endif %}" 
                   id="conditional-documentSearch-3">
                   <!-- Microchip Input -->
-                  <div id="microchip-form-group" class="govuk-form-group {% if error and activeTab == 'microchip' %}govuk-form-group--error{% endif %}">
-                    <label for="microchipNumber">Microchip Number</label>                   
+                  <div id="microchip-form-group" class="govuk-form-group {% if error and activeTab == 'microchip' %}govuk-form-group--error{% endif %}">                 
                     {% if error and activeTab == "microchip" %}
                     <p id="microchip-error" class="govuk-error-message">
                       <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span>
@@ -164,7 +163,8 @@
                       name="microchipNumber" 
                       type="text" 
                       spellcheck="false" 
-                      value="{{microchipNumber}}">
+                      value="{{microchipNumber}}" 
+                      aria-label="Enter microchip number">
                   </div>
                 </div>
               </div>
