@@ -150,7 +150,7 @@
                   class="govuk-radios__conditional {% if activeTab == 'microchip' %}{% else %}govuk-radios__conditional--hidden{% endif %}" 
                   id="conditional-documentSearch-3">
                   <!-- Microchip Input -->
-                  <div id="microchip-form-group" class="govuk-form-group {% if error and activeTab == 'microchip' %}govuk-form-group--error{% endif %}">
+                  <div id="microchip-form-group" class="govuk-form-group {% if error and activeTab == 'microchip' %}govuk-form-group--error{% endif %}">                 
                     {% if error and activeTab == "microchip" %}
                     <p id="microchip-error" class="govuk-error-message">
                       <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span>

@@ -56,7 +56,6 @@ describe("apiService", () => {
   });
 
   describe("getApplicationByPTDNumber", () => {
-
     it("should return transformed data when PTD number is valid", async () => {
       const mockResponse = {
         data: {
