@@ -249,6 +249,14 @@
     resetField('microchipNumber', 'microchip-form-group', 'microchip-error');
 
     clearEmptyError()
+
+    // and collapse fields too
+    const allConditionals = [conditionalDocumentSearch1Id, conditionalDocumentSearch2Id, conditionalDocumentSearch3Id];
+
+    allConditionals.forEach(id => {
+      const element = document.getElementById(id);
+      element.className = 'govuk-radios__conditional govuk-radios__conditional--hidden';
+    });
   }
 
   function clearEmptyError() {
