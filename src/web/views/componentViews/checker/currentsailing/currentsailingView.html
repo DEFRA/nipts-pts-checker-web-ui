@@ -25,10 +25,10 @@
     <form id="sailingForm" action="/checker/current-sailings" method="POST">
       {% include "./includes/sailing/routeView.html" %}
       {% include "./includes/sailing/departureDateView.html" %}
-      <div id="time-group" class="govuk-form-group {% if errorSailingHour or errorSailingMinutes or errorDateRangeTime %}govuk-form-group--error{%endif %}">        
-        <div class="govuk-label">
-          <b> {{ currentSailingMainModelData.sailingTimeSubHeading }} </b>
-        </div>
+      <fieldset style="margin: 0; margin-bottom: 30px; padding: 0; border: none;" id="time-group" role="group" aria-describedby="sailingHourHint" class="govuk-form-group {% if errorSailingHour or errorSailingMinutes or errorDateRangeTime %}govuk-form-group--error{%endif %}">        
+        <legend style="margin: 0;" class="govuk-fieldset__legend govuk-fieldset__legend--s">
+          <h2 class="govuk-fieldset__heading">{{ currentSailingMainModelData.sailingTimeSubHeading }}</h2>
+        </legend>
         <div id="time-error">
           {% if errorSailingHour or errorSailingMinutes %}
           <p class="govuk-error-message">
@@ -61,7 +61,7 @@
           <option value="{{timeMinutes}}" {% if sailingMinutes == timeMinutes %}selected{% endif %}>{{ timeMinutes }}</option>
           {% endfor %}
         </select>       
-    </div>
+    </fieldset>
       <button type="submit" class="govuk-button" data-module="govuk-button">
         Save and continue
       </button>
