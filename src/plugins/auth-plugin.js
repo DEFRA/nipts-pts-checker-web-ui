@@ -124,6 +124,9 @@ const checkAuthorization = (request, h) => {
 
   if (!isAuthorized || !organisationId) {
     console.log("Missing authorization flags - redirecting to login");
+    //we need to clean up the session, else we end up with a deadlocked session
+    request.cookieAuth.clear();
+    h.unstate("sessionCreationTime");
     logout(request);
     return h.redirect("/").takeover();
   }
