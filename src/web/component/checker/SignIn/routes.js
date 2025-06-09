@@ -56,6 +56,8 @@ const Routes = [
             `Received error with name ${err.name} and message ${err.message}.`
           );
 
+          request.cookieAuth.clear();
+          h.unstate("sessionCreationTime");
           logout(request);
 
           try {
