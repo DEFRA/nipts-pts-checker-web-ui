@@ -122,13 +122,17 @@ const checkAuthorization = (request, h) => {
   const isAuthorized = request.yar.get("isAuthorized");
   const organisationId = request.yar.get("organisationId");
 
-  if (!isAuthorized || !organisationId) {
-    console.log("Missing authorization flags - redirecting to login");
+  if (!isAuthorized || !organisationId) 
+  {
     //we need to clean up the session, else we end up with a deadlocked session
     request.cookieAuth.clear();
     h.unstate("sessionCreationTime");
     logout(request);
-    return h.redirect("/").takeover();
+    if (request.path && !request.path.includes("/errors/")) 
+    {
+      console.log("Missing authorization flags - redirecting to login");
+      return h.redirect("/").takeover();
+    }
   }
 
   const token = session.getToken(request, sessionKeys.tokens.accessToken);
@@ -142,7 +146,10 @@ const checkAuthorization = (request, h) => {
   } else {
     console.log("No token found - redirecting to login");
     logout(request);
-    return h.redirect("/").takeover();
+    if (request.path && !request.path.includes("/errors/")) 
+    {
+      return h.redirect("/").takeover();
+    }
   }
 
   return h.continue;
