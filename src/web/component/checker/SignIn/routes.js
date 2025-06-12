@@ -90,6 +90,7 @@ const Routes = [
             console.log("General error, returning basic response");
             return h
               .response("Authentication failed: " + err.message)
+              .view("errors/401Error", errorData)
               .code(HTTP_STATUS.UNAUTHORIZED)
               .takeover();
           } catch (viewError) {
@@ -98,6 +99,7 @@ const Routes = [
 
             return h
               .response("Authentication failed. No roles found in token.")
+              .view("errors/401Error", errorData)
               .code(HTTP_STATUS.UNAUTHORIZED)
               .takeover();
           }
