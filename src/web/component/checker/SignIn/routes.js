@@ -12,6 +12,8 @@ const HTTP_STATUS = {
   BAD_REQUEST: 400,
 };
 
+const unauthorizedPage = "errors/401Error";
+
 const Routes = [
   {
     method: HttpMethod.GET,
@@ -72,7 +74,7 @@ const Routes = [
               };
 
               return h
-                .view("errors/401Error", errorData)
+                .view(unauthorizedPage, errorData)
                 .code(HTTP_STATUS.UNAUTHORIZED)
                 .takeover();
             }
@@ -90,7 +92,7 @@ const Routes = [
             console.log("General error, returning basic response");
             return h
               .response("Authentication failed: " + err.message)
-              .view("errors/401Error", errorData)
+              .view(unauthorizedPage)
               .code(HTTP_STATUS.UNAUTHORIZED)
               .takeover();
           } catch (viewError) {
@@ -99,7 +101,7 @@ const Routes = [
 
             return h
               .response("Authentication failed. No roles found in token.")
-              .view("errors/401Error", errorData)
+              .view(unauthorizedPage)
               .code(HTTP_STATUS.UNAUTHORIZED)
               .takeover();
           }
