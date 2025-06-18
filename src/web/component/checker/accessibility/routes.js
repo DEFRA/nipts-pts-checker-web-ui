@@ -7,7 +7,7 @@ import HttpMethod from "../../../../constants/httpMethod.js";
 const Routes = [
   {
     method: HttpMethod.GET,
-    path: "/as",
+    path: "/accessibility-statement",
     options: {
       auth: false,
       handler: AccessibilityHandlers.getAccessibilityStatement,
