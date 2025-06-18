@@ -278,9 +278,7 @@ describe("postNonComplianceHandler", () => {
       revoked: orangeTag,
       rejected: redTag,
     };
-    
-    const documentStatus = statusMapping[applicationStatus] || applicationStatus;
-    const documentStatusColourMapping = statusColourMapping[applicationStatus] || applicationStatus;      
+        
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "123456789123456",

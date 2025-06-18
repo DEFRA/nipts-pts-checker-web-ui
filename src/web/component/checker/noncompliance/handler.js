@@ -131,7 +131,7 @@ const postNonComplianceHandler = async (request, h) => {
     }
 
     if (request.yar.get("IsFailSelected")) {
-        const responseData = await saveReportNonCompliance(payload, data);
+        await saveReportNonCompliance(payload, data);
     }
 
     request.yar.clear("IsFailSelected");

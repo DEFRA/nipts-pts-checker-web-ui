@@ -186,7 +186,7 @@ function handleEmptyDocumentSearch(h) {
   });
 }
 
-async function handleError(request, h, error) {
+async function handleError(error) {
   global.appInsightsClient.trackException({ exception: error });
   console.log(error.message);
   throw error;
@@ -223,7 +223,7 @@ const submitSearch = async (request, h) => {
     // Default redirect if none of the above conditions are met
     return h.redirect(SEARCH_RESULT_VIEW_PATH);
   } catch (error) {
-    return handleError(request, h, error)
+    return handleError(error)
   }
 };
 
