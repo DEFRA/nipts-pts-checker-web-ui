@@ -44,10 +44,8 @@ const getMicrochipData = async (microchipNumber, request) => {
       request
     );
 
-     if (response.status === HttpStatusCode.NotFound) {
-        if (response?.error?.error) {
+     if (response.status === HttpStatusCode.NotFound && response?.error?.error) {
             return handleNotFoundError(response.error.error, applicationNotFoundErrorText, petNotFoundErrorText);
-        }
     }
 
     

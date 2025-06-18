@@ -49,11 +49,9 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
     const url = buildApiUrl("Checker/checkPTDNumber");
     const response = await httpService.postAsync(url, data, request);
 
-    if (response.status === HttpStatusCode.NotFound) 
+    if (response.status === HttpStatusCode.NotFound && response?.error) 
     {
-      if (response?.error) {
-         return handleNotFoundError(response.error, applicationNotFoundErrorText, petNotFoundErrorText);
-      }
+        return handleNotFoundError(response.error, applicationNotFoundErrorText, petNotFoundErrorText);
     }
 
     if (!response || response.status !== HttpStatusCode.Ok || response.data === undefined) 
@@ -239,10 +237,8 @@ const getApplicationByApplicationNumber = async (
     const url = buildApiUrl("Checker/checkApplicationNumber");
     const response = await httpService.postAsync(url, data, request);
 
-    if (response.status === HttpStatusCode.NotFound) {
-      if (response?.error) {
+    if (response.status === HttpStatusCode.NotFound && response?.error) {
          return handleNotFoundError(response.error, applicationNotFoundErrorText, petNotFoundErrorText);
-      }
     }
 
     if (!response || response.status !== HttpStatusCode.Ok || response.data === undefined) 
