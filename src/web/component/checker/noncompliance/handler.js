@@ -180,9 +180,7 @@ const postNonComplianceHandler = async (request, h) => {
     console.error("Error fetching data:", error.message);
 
     throw error;
-    // Check for specific error message and return a structured error
-    //return { error: genericErrorMessage };
-  }
+   }
   }
 
   function toBooleanOrNull(value, defaultValue) {
