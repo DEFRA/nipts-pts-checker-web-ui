@@ -177,34 +177,34 @@ const setup = (server) => {
   server.ext("onPreResponse", (request, h) => {
     const response = request.response;
 
-    if (response.isBoom) {
-      if (response.output.statusCode === HTTP_STATUS.SERVER_ERROR) {
-        return h
-          .view(ERROR_VIEWS.SERVER_ERROR)
-          .code(HTTP_STATUS.SERVER_ERROR)
-          .takeover();
-      }
-      if (response.output.statusCode === HTTP_STATUS.FORBIDDEN) {
-        return h
-          .view(ERROR_VIEWS.FORBIDDEN)
-          .code(HTTP_STATUS.FORBIDDEN)
-          .takeover();
-      }
-      if (response.output.statusCode === HTTP_STATUS.UNAUTHORIZED) {
-        return h
-          .view(ERROR_VIEWS.UNAUTHORIZED)
-          .code(HTTP_STATUS.UNAUTHORIZED)
-          .takeover();
-      }
-      if (response.output.statusCode === HTTP_STATUS.NOT_FOUND) {
-        return h
-          .view(ERROR_VIEWS.NOT_FOUND, {
-            isAuthorized: request.yar.get("isAuthorized"),
-          })
-          .code(HTTP_STATUS.NOT_FOUND)
-          .takeover();
-      }
-    }
+    // if (response.isBoom) {
+    //   if (response.output.statusCode === HTTP_STATUS.SERVER_ERROR) {
+    //     return h
+    //       .view(ERROR_VIEWS.SERVER_ERROR)
+    //       .code(HTTP_STATUS.SERVER_ERROR)
+    //       .takeover();
+    //   }
+    //   if (response.output.statusCode === HTTP_STATUS.FORBIDDEN) {
+    //     return h
+    //       .view(ERROR_VIEWS.FORBIDDEN)
+    //       .code(HTTP_STATUS.FORBIDDEN)
+    //       .takeover();
+    //   }
+    //   if (response.output.statusCode === HTTP_STATUS.UNAUTHORIZED) {
+    //     return h
+    //       .view(ERROR_VIEWS.UNAUTHORIZED)
+    //       .code(HTTP_STATUS.UNAUTHORIZED)
+    //       .takeover();
+    //   }
+    //   if (response.output.statusCode === HTTP_STATUS.NOT_FOUND) {
+    //     return h
+    //       .view(ERROR_VIEWS.NOT_FOUND, {
+    //         isAuthorized: request.yar.get("isAuthorized"),
+    //       })
+    //       .code(HTTP_STATUS.NOT_FOUND)
+    //       .takeover();
+    //   }
+    // }
 
     return h.continue;
   });
