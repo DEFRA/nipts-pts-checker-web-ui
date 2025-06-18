@@ -20,6 +20,7 @@ const issuingAuthorityAddressLineThree = "Lowther Street";
 const agencyName = "Animal and Plant Health Agency";
 const signatoryName = "John Smith (APHA) (Signed digitally)";
 const additionalDetails = "Non-compliance details";
+const expectedApiError = "API Error: 403";
 
 const baseUrl =
   process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
@@ -556,12 +557,11 @@ describe("apiService", () => {
     
     it("should throw API Error - getApplicationByPTDNumber", async () => {
       httpService.postAsync.mockResolvedValue({ data: null, status: 403 });
-      const expectedError = "API Error: 403";
 
       await expect(apiService.getApplicationByPTDNumber(
         "123456",
         request
-      )).rejects.toThrow(expectedError);
+      )).rejects.toThrow(expectedApiError);
 
       expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
@@ -1573,12 +1573,11 @@ describe("apiService", () => {
 
     it("should throw API Error  - getApplicationByApplicationNumber", async () => {
       httpService.postAsync.mockResolvedValue({ data: null, status: 403 });
-      const expectedError = "API Error: 403";
 
       await expect(apiService.getApplicationByApplicationNumber(
         "app123",
         request
-      )).rejects.toThrow(expectedError);
+      )).rejects.toThrow(expectedApiError);
 
       expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
@@ -1629,9 +1628,8 @@ describe("apiService", () => {
     it("should throw API Error - recordCheckOutCome", async () => {
       const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
       httpService.postAsync.mockResolvedValue({ data: null, status: 403 });
-      const expectedError = "API Error: 403";
 
-      await expect(apiService.recordCheckOutCome(checkOutcome)).rejects.toThrow(expectedError);
+      await expect(apiService.recordCheckOutCome(checkOutcome)).rejects.toThrow(expectedApiError);
 
       expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
@@ -1707,12 +1705,10 @@ describe("apiService", () => {
       const mockCheckOutcome = { applicationId: "app1", checkOutcome: "pass" };
       const mockError = new Error(notFoundText);
       mockError.status = 403;
-
-      const expectedError = "API Error: 403";
-    
+   
       httpService.postAsync.mockResolvedValue(mockError);
     
-      await expect(apiService.recordCheckOutCome(mockCheckOutcome, request)).rejects.toThrow(expectedError);
+      await expect(apiService.recordCheckOutCome(mockCheckOutcome, request)).rejects.toThrow(expectedApiError);
     
       expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
@@ -1865,11 +1861,10 @@ describe("apiService", () => {
 
     it("should throw error when data is not set - reportNonCompliance", async () => {
       const mockCheckOutcome = { compliance: false, details: "Some details" };
-      const expectedError = "API Error: 403";
     
       httpService.postAsync.mockResolvedValue({ status: 403 });
     
-      await expect(apiService.reportNonCompliance(mockCheckOutcome, request)).rejects.toThrow(expectedError);
+      await expect(apiService.reportNonCompliance(mockCheckOutcome, request)).rejects.toThrow(expectedApiError);
     
       expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
