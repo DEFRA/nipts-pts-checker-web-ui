@@ -49,8 +49,16 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
     const url = buildApiUrl("Checker/checkPTDNumber");
     const response = await httpService.postAsync(url, data, request);
 
-    if (response.status === HttpStatusCode.NotFound) {
-      throw new Error(response.error);
+    if (response.status === HttpStatusCode.NotFound) 
+    {
+      if (response?.error) {
+         return handleNotFoundError(response.error, applicationNotFoundErrorText, petNotFoundErrorText);
+      }
+    }
+
+    if (!response || response.status !== HttpStatusCode.Ok || response.data === undefined) 
+    {
+      throw new Error(`API Error: ${response?.status}`);
     }
 
     const item = response.data;
@@ -90,7 +98,7 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
   } catch (error) {
     global.appInsightsClient.trackException({ exception: error });
     console.error(errorText, error.message);
-    return handleError(error);
+    throw error;
   }
 };
 
@@ -232,7 +240,14 @@ const getApplicationByApplicationNumber = async (
     const response = await httpService.postAsync(url, data, request);
 
     if (response.status === HttpStatusCode.NotFound) {
-      throw new Error(response.error);
+      if (response?.error) {
+         return handleNotFoundError(response.error, applicationNotFoundErrorText, petNotFoundErrorText);
+      }
+    }
+
+    if (!response || response.status !== HttpStatusCode.Ok || response.data === undefined) 
+    {
+      throw new Error(`API Error: ${response?.status}`);
     }
 
     const item = response.data;
@@ -266,12 +281,7 @@ const getApplicationByApplicationNumber = async (
   } catch (error) {
     global.appInsightsClient.trackException({ exception: error });
     console.error(errorText, error.message);
-
-    if (error?.message) {
-      return handleNotFoundError(error.message, applicationNotFoundErrorText, petNotFoundErrorText)
-    }
-
-    return { error: unexpectedErrorText };
+     throw error;
   }
 };
 
@@ -285,21 +295,18 @@ const recordOutCome = async (checkOutcome, request, urlSuffix) => {
       throw new Error(response.error);
     }
 
-    const item = response.data;
-    if (!item || typeof item !== "object") {
-      throw new Error(unexpectedResponseErrorText);
+    if (!response || response.status !== HttpStatusCode.Ok || response.data === undefined) 
+    {
+      throw new Error(`API Error: ${response?.status}`);
     }
+
+    const item = response.data;
 
     return item.checkSummaryId;
   } catch (error) {
     global.appInsightsClient.trackException({ exception: error });
     console.error(errorText, error.message);
-
-    // Check for specific error message and return a structured error
-    if (error?.message) {
-      return handleNotFoundError(error.message, applicationNotFoundErrorText)
-    }
-    return { error: unexpectedErrorText };
+    throw error;
   }
 };
 

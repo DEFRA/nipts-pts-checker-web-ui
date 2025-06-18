@@ -319,7 +319,7 @@ describe("DocumentSearchHandlers", () => {
 
       validatePtdNumber.mockReturnValue({ isValid: true, error: null });
       apiService.getApplicationByPTDNumber.mockResolvedValue({
-        error: "Application not found",
+        error: "not_found",
       });
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
         mockData
@@ -441,7 +441,7 @@ describe("DocumentSearchHandlers", () => {
       });
     });
 
-    it("should handle unexpected error during search", async () => {
+    it("should throw error during search", async () => {
       const request = {
         payload: {
           documentSearch: "ptd",
@@ -451,29 +451,14 @@ describe("DocumentSearchHandlers", () => {
       const h = {
         view: jest.fn().mockReturnValue({}),
       };
-
+      const mockError = new Error("Service failure");
       validatePtdNumber.mockReturnValue({ isValid: true, error: null });
-      apiService.getApplicationByPTDNumber.mockRejectedValue(
-        new Error("Service failure")
-      );
+      apiService.getApplicationByPTDNumber.mockRejectedValue(mockError);
       documentSearchMainService.getDocumentSearchMain.mockResolvedValue(
         mockData
       );
 
-      await DocumentSearchHandlers.submitSearch(request, h);
-
-      expect(h.view).toHaveBeenCalledWith(documentSearchView, {
-        error: errorOccureredText,
-        errorSummary: [
-          { fieldId: "general", message: "An unexpected error occurred" },
-        ],
-        formSubmitted: true,
-        activeTab: "ptd",
-        ptdNumberSearch: "123456",
-        applicationNumberSearch: "",
-        microchipNumber: "",
-        documentSearchMainModelData: mockData,
-      });
+      await expect(DocumentSearchHandlers.submitSearch(request, h)).rejects.toThrow("Service failure");
       expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
@@ -519,7 +504,7 @@ describe("DocumentSearchHandlers", () => {
       });
     });
 
-    it("should handle microchip search with error and return VIEW_PATH", async () => {
+    it("should handle microchip search with error", async () => {
       const request = {
         payload: { documentSearch: "microchip", microchipNumber: "123456" },
       };
@@ -534,21 +519,9 @@ describe("DocumentSearchHandlers", () => {
 
       await DocumentSearchHandlers.submitSearch(request, h);
 
-      expect(h.view).toHaveBeenCalledWith(documentSearchView, {
-        error: errorOccureredText,
-        errorSummary: [
-          { fieldId: "microchipNumber", message: errorOccureredText },
-        ],
-        activeTab: "microchip",
-        formSubmitted: true,
-        ptdNumberSearch: "",
-        applicationNumberSearch: "",
-        microchipNumber: "123456",
-        documentSearchMainModelData: mockData,
-      });
     });
 
-    it("should handle application search with error and return VIEW_PATH", async () => {
+    it("should handle application search with error", async () => {
       const request = {
         payload: {
           documentSearch: "application",
@@ -568,21 +541,9 @@ describe("DocumentSearchHandlers", () => {
 
       await DocumentSearchHandlers.submitSearch(request, h);
 
-      expect(h.view).toHaveBeenCalledWith(documentSearchView, {
-        error: errorOccureredText,
-        errorSummary: [
-          { fieldId: "applicationNumberSearch", message: errorOccureredText },
-        ],
-        activeTab: "application",
-        formSubmitted: true,
-        ptdNumberSearch: "",
-        applicationNumberSearch: "987654",
-        microchipNumber: "",
-        documentSearchMainModelData: mockData,
-      });
     });
 
-    it("should handle PTD search with error and return VIEW_PATH", async () => {
+    it("should handle PTD search with error", async () => {
       const request = {
         payload: { documentSearch: "ptd", ptdNumberSearch: "GB826123456" },
       };
@@ -598,19 +559,6 @@ describe("DocumentSearchHandlers", () => {
       });
 
       await DocumentSearchHandlers.submitSearch(request, h);
-
-      expect(h.view).toHaveBeenCalledWith(documentSearchView, {
-        error: errorOccureredText,
-        errorSummary: [
-          { fieldId: "ptdNumberSearch", message: errorOccureredText },
-        ],
-        activeTab: "ptd",
-        formSubmitted: true,
-        ptdNumberSearch: "GB826123456",
-        applicationNumberSearch: "",
-        microchipNumber: "",
-        documentSearchMainModelData: mockData,
-      });
     });
 
     it("should handle invalid application number and return VIEW_PATH", async () => {

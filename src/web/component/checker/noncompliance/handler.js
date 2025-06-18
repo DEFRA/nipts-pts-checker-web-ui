@@ -132,24 +132,6 @@ const postNonComplianceHandler = async (request, h) => {
 
     if (request.yar.get("IsFailSelected")) {
         const responseData = await saveReportNonCompliance(payload, data);
-        if (responseData?.error) {
-          return h.view(VIEW_PATH, {
-            //error: errorMessage,
-            errorSummary: [
-              {
-                fieldId: "unexpected",
-                message: genericErrorMessage,
-                dispalyAs: "text",
-              },
-            ],
-            documentStatus,
-            documentStatusColourMapping,
-            data,
-            model,
-            formSubmitted: true,
-            payload,
-          });
-        }
     }
 
     request.yar.clear("IsFailSelected");
@@ -168,31 +150,7 @@ const postNonComplianceHandler = async (request, h) => {
   } catch (error) {
     global.appInsightsClient.trackException({ exception: error });
     console.error("Unexpected Error:", error);
-
-    const data = request.yar.get("data");
-    const appSettings = appSettingsService.getAppSettings();
-    const model = { ...appSettings };
-    const applicationStatus = data.documentState.toLowerCase().trim();
-    const documentStatus = statusMapping[applicationStatus] || applicationStatus;
-    const documentStatusColourMapping =
-      statusColourMapping[applicationStatus] || applicationStatus;
-
-    return h.view(VIEW_PATH, {
-      documentStatus,
-      documentStatusColourMapping,
-      data,
-      model,
-      errorSummary: [
-        {
-          fieldId: "unexpected",
-          message: genericErrorMessage,
-          dispalyAs: "text",
-        },
-      ],
-      formSubmitted: true,
-      errors: {},
-      payload: request.payload,
-    });
+    throw error;
   }
 
   async function saveReportNonCompliance(payload, data) {
@@ -221,8 +179,9 @@ const postNonComplianceHandler = async (request, h) => {
     global.appInsightsClient.trackException({ exception: error });
     console.error("Error fetching data:", error.message);
 
+    throw error;
     // Check for specific error message and return a structured error
-    return { error: genericErrorMessage };
+    //return { error: genericErrorMessage };
   }
   }
 

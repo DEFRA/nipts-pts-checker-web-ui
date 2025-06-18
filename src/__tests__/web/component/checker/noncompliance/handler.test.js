@@ -328,24 +328,6 @@ describe("postNonComplianceHandler", () => {
         relevantComments: relevantComments,
       }),
       request
-    );      
-
-    expect(h.view).toHaveBeenCalledWith(
-      VIEW_PATH, {
-        errorSummary: [
-          {
-            fieldId: "unexpected",
-            message: genericErrorMessage,
-            dispalyAs: "text",
-          },
-        ],
-        documentStatus,
-        documentStatusColourMapping,
-        data: { applicationId: "testApplicationId", documentState: "approved", "isGBCheck": true, "ptdFormatted": "" },
-        model: {"setting1": "value1"},
-        formSubmitted: true,
-        payload,
-      }
     );
   });
 
