@@ -263,22 +263,6 @@ describe("postNonComplianceHandler", () => {
   });
 
   it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true but api call return generic error", async () => {
-    const mockedStatusData = { some: "data", documentState: "approved" };
-    const applicationStatus = mockedStatusData.documentState.toLowerCase().trim();
-    const statusMapping = {
-      approved: "Approved",
-      awaiting: awaitingVerification,
-      revoked: "Revoked",
-      rejected: "	Unsuccessful",
-    };
-  
-    const statusColourMapping = {
-      approved: greenTag,
-      awaiting: yellowTag,
-      revoked: orangeTag,
-      rejected: redTag,
-    };
-        
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "123456789123456",
