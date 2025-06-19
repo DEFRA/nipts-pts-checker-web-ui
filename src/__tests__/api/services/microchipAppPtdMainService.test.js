@@ -67,6 +67,7 @@ describe("getMicrochipData", () => {
           }
         },
       },
+      status: 200,
     };
 
     httpService.postAsync.mockResolvedValue(apiResponse);
@@ -147,6 +148,7 @@ describe("getMicrochipData", () => {
           }
         },
       },
+      status : 200,
     };
 
     httpService.postAsync.mockResolvedValue(apiResponse);
@@ -227,6 +229,7 @@ describe("getMicrochipData", () => {
             }
         },
       },
+      status: 200,
     };
 
     httpService.postAsync.mockResolvedValue(apiResponse);
@@ -318,6 +321,7 @@ describe("getMicrochipData", () => {
           }
         },
       },
+      status : 200,
     };
 
     httpService.postAsync.mockResolvedValue(apiResponse);
@@ -408,6 +412,7 @@ describe("getMicrochipData", () => {
           }
         },
       },
+      status : 200,
     };
 
     httpService.postAsync.mockResolvedValue(apiResponse);
@@ -498,6 +503,7 @@ describe("getMicrochipData", () => {
           }
         },
       },
+      status: 200,
     };
 
     httpService.postAsync.mockResolvedValue(apiResponse);
@@ -588,6 +594,7 @@ describe("getMicrochipData", () => {
           }
         },
       },
+      status: 200,
     };
 
     httpService.postAsync.mockResolvedValue(apiResponse);
@@ -678,6 +685,7 @@ describe("getMicrochipData", () => {
           }
         },
       },
+      status: 200,
     };
 
     httpService.postAsync.mockResolvedValue(apiResponse);
@@ -731,7 +739,7 @@ describe("getMicrochipData", () => {
 
   it("should return error when pet is not found", async () => {
     const microchipNumber = "123456789012345";
-    const apiResponse = { error: { error: "Pet not found" } };
+    const apiResponse = { error: { error: "Pet not found" }, status: 404 };
 
     httpService.postAsync.mockResolvedValue(apiResponse);
 
@@ -742,62 +750,42 @@ describe("getMicrochipData", () => {
     expect(data).toEqual(expectedError);
   });
 
-  it("should handle unexpected errors gracefully", async () => {
+  it("should throw unexpected errors gracefully", async () => {
     const microchipNumber = "123456789012345";
+    const mockError = new Error("Unexpected error");
+    httpService.postAsync.mockRejectedValue(mockError);
 
-    httpService.postAsync.mockRejectedValue(new Error("Unexpected error"));
-
-    const expectedError = { error: unexpectedErrorMessage };
-
-    const data = await microchipApi.getMicrochipData(microchipNumber, request);
-
-    expect(data).toEqual(expectedError);
+    await expect(microchipApi.getMicrochipData(microchipNumber, request)).rejects.toThrow(mockError.message);
 
     expect(global.appInsightsClient.trackException).toHaveBeenCalled();
   });
 
-  it("should handle unexpected response structure gracefully", async () => {
+  it("should throw error - getMicrochipData", async () => {
     const microchipNumber = "123456789012345";
   
-    httpService.postAsync.mockResolvedValue({ data: null });
+    httpService.postAsync.mockResolvedValue({ data: null, status: 403 });
   
-    const expectedError = { error: unexpectedErrorMessage };
+    const expectedError = "API Error: 403";
   
-    const data = await microchipApi.getMicrochipData(microchipNumber, request);
+    await expect(microchipApi.getMicrochipData(microchipNumber, request)).rejects.toThrow(expectedError);
   
-    expect(data).toEqual(expectedError);
+    expect(global.appInsightsClient.trackException).toHaveBeenCalled();
   });
 
   it("should return 'not_found' for specific error messages", async () => {
     const microchipNumber = "123456789012345";
   
     const errorResponse = {
-      response: { data: { error: "Application not found" } },
+       error: { error: "Application not found" }, status: 404
     };
-    httpService.postAsync.mockRejectedValue(errorResponse);
+    httpService.postAsync.mockResolvedValue(errorResponse);
   
     const expectedError = { error: "not_found" };
   
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
   
     expect(data).toEqual(expectedError);
-  });
-
-  it("should return the error message from the response if it is not 'Application not found' or 'Pet not found'", async () => {
-    const microchipNumber = "123456789012345";
-  
-    const errorResponse = {
-      response: { data: { error: "Unexpected server error" } },
-    };
-    httpService.postAsync.mockRejectedValue(errorResponse);
-  
-    const expectedError = { error: "Unexpected server error" };
-  
-    const data = await microchipApi.getMicrochipData(microchipNumber, request);
-  
-    expect(data).toEqual(expectedError);
-  });
-  
+  });  
 });
 
 describe("checkMicrochipNumberExistWithPtd", () => {

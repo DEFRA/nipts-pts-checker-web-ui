@@ -1,6 +1,7 @@
 "use strict";
 
 import documentSearchMainService from "../../../../api/services/documentSearchMainService.js";
+import { HttpStatusCode } from "axios";
 import apiService from "../../../../api/services/apiService.js";
 import microchipApi from "../../../../api/services/microchipAppPtdMainService.js";
 import {
@@ -18,7 +19,6 @@ const NOT_FOUND_VIEW_PATH =
 
 const SEARCH_RESULT_VIEW_PATH = "/checker/search-results";
 
-const errorProcessingText = "An error occurred while processing your request";
 
 const getDocumentSearch = async (_request, h) => {
   try {
@@ -78,28 +78,14 @@ async function handlePTD(searchText, request, h) {
     return h.redirect(SEARCH_RESULT_VIEW_PATH);
   }
 
-  if (responseData.error === "Application not found") {
+  if (responseData.error === "not_found") {
     return h.view(NOT_FOUND_VIEW_PATH, {
       searchValue: ptdNumber,
       pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
     });
-  } else {
-    return h.view(VIEW_PATH, {
-      error: errorProcessingText,
-      errorSummary: [{
-        fieldId: "ptdNumberSearch",
-        message: errorProcessingText,
-      }],
-      activeTab: "ptd",
-      formSubmitted: true,
-      ptdNumberSearch: searchText,
-      applicationNumberSearch: "",
-      microchipNumber: "",
-      documentSearchMainModelData:
-        await documentSearchMainService.getDocumentSearchMain(
-          searchText
-        ),
-    });
+  }
+  else{
+    throw new Error(`Unexpected Error: ${HttpStatusCode.InternalServerError}`);
   }
 }
 
@@ -142,21 +128,9 @@ async function handleApplication(searchText, request, h) {
       searchValue: applicationNumber,
       pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
     });
-  } else {
-    return h.view(VIEW_PATH, {
-      error: errorProcessingText,
-      errorSummary: [{
-        fieldId: "applicationNumberSearch",
-        message: errorProcessingText,
-      }],
-      activeTab: "application",
-      formSubmitted: true,
-      ptdNumberSearch: "",
-      applicationNumberSearch: searchText,
-      microchipNumber: "",
-      documentSearchMainModelData:
-        await documentSearchMainService.getDocumentSearchMain(searchText),
-    });
+  }
+   else{
+    throw new Error(`Unexpected Error: ${HttpStatusCode.InternalServerError}`);
   }
 }
 
@@ -196,21 +170,9 @@ async function handleMicrochip(searchText, request, h) {
       searchValue: searchText,
       pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
     });
-  } else {
-    return h.view(VIEW_PATH, {
-      error: errorProcessingText,
-      errorSummary: [{
-        fieldId: "microchipNumber",
-        message: errorProcessingText,
-      }],
-      activeTab: "microchip",
-      formSubmitted: true,
-      ptdNumberSearch: "",
-      applicationNumberSearch: "",
-      microchipNumber: searchText,
-      documentSearchMainModelData:
-        await documentSearchMainService.getDocumentSearchMain(searchText),
-    });
+  }
+   else{
+    throw new Error(`Unexpected Error: ${HttpStatusCode.InternalServerError}`);
   }
 }
 
@@ -233,28 +195,10 @@ function handleEmptyDocumentSearch(h) {
   });
 }
 
-async function handleError(request, h, error) {
+async function handleError(error) {
   global.appInsightsClient.trackException({ exception: error });
-  console.log(error.message)
-  // Handle unexpected errors
-  const ptdNumberSearch = request.payload.ptdNumberSearch || "";
-  const applicationNumberSearch = request.payload.applicationNumberSearch || "";
-  const microchipNumberSearch = request.payload.microchipNumber || "";
-  const activeTab = request.payload.documentSearch || "ptd";
-
-  return h.view(VIEW_PATH, {
-    error: errorProcessingText,
-    errorSummary: [
-      { fieldId: "general", message: "An unexpected error occurred" },
-    ],
-    formSubmitted: true,
-    activeTab,
-    ptdNumberSearch,
-    applicationNumberSearch,
-    microchipNumber: microchipNumberSearch,
-    documentSearchMainModelData:
-      await documentSearchMainService.getDocumentSearchMain(''),
-  });
+  console.log(error.message);
+  throw error;
 }
 
 const submitSearch = async (request, h) => {
@@ -288,7 +232,7 @@ const submitSearch = async (request, h) => {
     // Default redirect if none of the above conditions are met
     return h.redirect(SEARCH_RESULT_VIEW_PATH);
   } catch (error) {
-    return handleError(request, h, error)
+    return handleError(error)
   }
 };
 
