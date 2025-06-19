@@ -16,6 +16,7 @@ jest.mock("../../../../../api/services/microchipAppPtdMainService.js");
 jest.mock("../../../../../api/services/apiService.js");
 jest.mock("../../../../../web/component/checker/documentsearch/validate.js");
 
+const unExpectedErrorText = "Unexpected Error: 500";
 const microchipNumberErrorMessage = "Enter a microchip number";
 const microchipLengthErrorMessage = "Enter a 15-digit number";
 const applicationNumberErrorMessage = "Enter 6 characters after 'GB826'";
@@ -504,7 +505,7 @@ describe("DocumentSearchHandlers", () => {
       });
     });
 
-    it("should handle microchip search with error", async () => {
+    it("should throw unexpected error - handleMicrochip", async () => {
       const request = {
         payload: { documentSearch: "microchip", microchipNumber: "123456" },
       };
@@ -517,11 +518,11 @@ describe("DocumentSearchHandlers", () => {
       );
       microchipApi.getMicrochipData.mockResolvedValue({ error: "some_error" });
 
-      await DocumentSearchHandlers.submitSearch(request, h);
-
+      await expect(DocumentSearchHandlers.submitSearch(request, h)).rejects.toThrow(unExpectedErrorText);
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
-    it("should handle application search with error", async () => {
+    it("should throw unexpected error - handleApplication", async () => {
       const request = {
         payload: {
           documentSearch: "application",
@@ -539,11 +540,11 @@ describe("DocumentSearchHandlers", () => {
         error: "some_error",
       });
 
-      await DocumentSearchHandlers.submitSearch(request, h);
-
+      await expect(DocumentSearchHandlers.submitSearch(request, h)).rejects.toThrow(unExpectedErrorText);
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
-    it("should handle PTD search with error", async () => {
+    it("should throw unexpected error - handlePTD", async () => {
       const request = {
         payload: { documentSearch: "ptd", ptdNumberSearch: "GB826123456" },
       };
@@ -558,7 +559,7 @@ describe("DocumentSearchHandlers", () => {
         error: "some_error",
       });
 
-      await expect(DocumentSearchHandlers.submitSearch(request, h)).rejects.toThrow("Unexpected Error: 500");
+      await expect(DocumentSearchHandlers.submitSearch(request, h)).rejects.toThrow(unExpectedErrorText);
 
       expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });

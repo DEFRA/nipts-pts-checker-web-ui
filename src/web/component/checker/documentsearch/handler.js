@@ -129,6 +129,9 @@ async function handleApplication(searchText, request, h) {
       pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
     });
   }
+   else{
+    throw new Error(`Unexpected Error: ${HttpStatusCode.InternalServerError}`);
+  }
 }
 
 async function handleMicrochip(searchText, request, h) {
@@ -167,6 +170,9 @@ async function handleMicrochip(searchText, request, h) {
       searchValue: searchText,
       pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
     });
+  }
+   else{
+    throw new Error(`Unexpected Error: ${HttpStatusCode.InternalServerError}`);
   }
 }
 
