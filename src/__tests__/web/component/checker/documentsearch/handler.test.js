@@ -558,7 +558,9 @@ describe("DocumentSearchHandlers", () => {
         error: "some_error",
       });
 
-      await DocumentSearchHandlers.submitSearch(request, h);
+      await expect(DocumentSearchHandlers.submitSearch(request, h)).rejects.toThrow("Unexpected Error: 500");
+
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should handle invalid application number and return VIEW_PATH", async () => {

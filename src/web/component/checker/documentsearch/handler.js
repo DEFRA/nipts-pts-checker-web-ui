@@ -1,6 +1,7 @@
 "use strict";
 
 import documentSearchMainService from "../../../../api/services/documentSearchMainService.js";
+import { HttpStatusCode } from "axios";
 import apiService from "../../../../api/services/apiService.js";
 import microchipApi from "../../../../api/services/microchipAppPtdMainService.js";
 import {
@@ -18,7 +19,6 @@ const NOT_FOUND_VIEW_PATH =
 
 const SEARCH_RESULT_VIEW_PATH = "/checker/search-results";
 
-const errorProcessingText = "An error occurred while processing your request";
 
 const getDocumentSearch = async (_request, h) => {
   try {
@@ -83,6 +83,9 @@ async function handlePTD(searchText, request, h) {
       searchValue: ptdNumber,
       pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
     });
+  }
+  else{
+    throw new Error(`Unexpected Error: ${HttpStatusCode.InternalServerError}`);
   }
 }
 
