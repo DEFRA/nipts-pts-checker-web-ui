@@ -6,7 +6,7 @@ import headerData from "../../../../web/helper/constants.js";
 
 const VIEW_PATH = "componentViews/checker/accessibility/view";
 
-const getAccessibilityStatement = async (request, h) => {
+const getAccessibilityStatement = async (_request, h) => {
   headerData.section = "accessibility";
 
   const model = {
