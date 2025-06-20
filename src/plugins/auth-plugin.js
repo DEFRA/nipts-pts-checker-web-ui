@@ -142,7 +142,7 @@ const checkAuthorization = (request, h) => {
     const isValid = validateTokenRoles(token);
     if (!isValid) {
       logout(request);
-      return h.redirect(`/${HTTP_STATUS.FORBIDDEN}error`).takeover();
+      return h.redirect(`/${HTTP_STATUS.FORBIDDEN}error`).takeover();      
     }
   } else {
     console.log("No token found - redirecting to login");
@@ -258,8 +258,15 @@ export default {
       server.auth.default({ strategy: "session", mode: "required" });
 
       server.ext("onPreAuth", async (request, h) => {
-        if (isStaticAsset(request.path) || isExemptRoute(request.path)) {
+        const isIdm2Page = request.path.includes(SIGNIN_OIDC_PATH);
+        
+        if (isIdm2Page || isStaticAsset(request.path) || isExemptRoute(request.path)) {
           return h.continue;
+        }
+
+        const timeoutResult = handleSessionTimeout(request, h);
+        if (timeoutResult !== h.continue) {
+          return timeoutResult;
         }
 
         return checkAuthorization(request, h);
@@ -267,20 +274,6 @@ export default {
 
       createCheckSessionRoute(server);
       createTimeoutRoute(server);
-
-      server.ext("onPreAuth", (request, h) => {
-        const isIdm2Page = request.path.includes(SIGNIN_OIDC_PATH);
-
-        if (isIdm2Page) {
-          return h.continue;
-        }
-
-        if (isStaticAsset(request.path) || isExemptRoute(request.path)) {
-          return h.continue;
-        }
-
-        return handleSessionTimeout(request, h);
-      });
 
       server.ext("onPostAuth", (request, h) => {
         const isIdm2Page = request.path.includes(SIGNIN_OIDC_PATH);
