@@ -120,6 +120,10 @@ const validateTokenRoles = (token) => {
 };
 
 const checkAuthorization = (request, h) => {
+  if (isExemptRoute(request.path)) {
+    console.log(`Exempt route in checkAuthorization: ${request.path}`);
+    return h.continue;
+  }
   const isAuthorized = request.yar.get("isAuthorized");
   const organisationId = request.yar.get("organisationId");
 
