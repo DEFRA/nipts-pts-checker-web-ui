@@ -120,10 +120,6 @@ const validateTokenRoles = (token) => {
 };
 
 const checkAuthorization = (request, h) => {
-  if (isExemptRoute(request.path)) {
-    console.log(`Exempt route in checkAuthorization: ${request.path}`);
-    return h.continue;
-  }
   const isAuthorized = request.yar.get("isAuthorized");
   const organisationId = request.yar.get("organisationId");
 
@@ -146,7 +142,7 @@ const checkAuthorization = (request, h) => {
     const isValid = validateTokenRoles(token);
     if (!isValid) {
       logout(request);
-      return h.redirect(`/${HTTP_STATUS.FORBIDDEN}error`).takeover();      
+      return h.redirect(`/${HTTP_STATUS.FORBIDDEN}error`).takeover();
     }
   } else {
     console.log("No token found - redirecting to login");
@@ -254,6 +250,12 @@ export default {
         },
         keepAlive: true,
         redirectTo: (request) => {
+          // Don't redirect if it's an exempt route
+          if (isExemptRoute(request.path) || isStaticAsset(request.path)) {
+            console.log(`🚫 Skipping redirectTo for exempt route: ${request.path}`);
+            return false;
+          }
+          console.log(`🔄 Redirecting to login for: ${request.path}`);
           return auth.requestAuthorizationCodeUrl(session, request);
         },
         validateFunc: validateSession,
@@ -264,7 +266,11 @@ export default {
       server.ext("onPreAuth", async (request, h) => {
         const isIdm2Page = request.path.includes(SIGNIN_OIDC_PATH);
         
+        // Add debug logging
+        console.log(`Auth check for path: ${request.path}`);
+        
         if (isIdm2Page || isStaticAsset(request.path) || isExemptRoute(request.path)) {
+          console.log(`Exempt route detected: ${request.path}, skipping auth`);
           return h.continue;
         }
 
