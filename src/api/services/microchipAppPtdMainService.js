@@ -1,3 +1,4 @@
+import { HttpStatusCode } from "axios";
 import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js";
 import dotenv from "dotenv";
 import httpService from "./httpService.js";
@@ -23,6 +24,8 @@ const statusMapping = {
 };
 
 const unexpectedErrorText =  "Unexpected error occurred";
+const petNotFoundErrorText = "Pet not found";
+const applicationNotFoundErrorText = "Application not found";
 
 const formatDate = (dateRaw) => {
   const date = dateRaw ? new Date(dateRaw) : null;
@@ -41,9 +44,14 @@ const getMicrochipData = async (microchipNumber, request) => {
       request
     );
 
-    // Ensure the item structure is as expected
-    if (response?.error?.error) {
-      return { error: "not_found" };
+     if (response.status === HttpStatusCode.NotFound && response?.error?.error) {
+            return handleNotFoundError(response.error.error, applicationNotFoundErrorText, petNotFoundErrorText);
+    }
+
+    
+    if (!response || response.status !== HttpStatusCode.Ok || response.data === undefined) 
+    {
+      throw new Error(`API Error: ${response?.status}`);
     }
 
     const item = response?.data;
@@ -71,12 +79,7 @@ const getMicrochipData = async (microchipNumber, request) => {
   } catch (error) {
     global.appInsightsClient.trackException({ exception: error });
     console.error("Error fetching data:", error.message);
-
-    // Check for specific error message and return a structured error
-    if (error.response?.data?.error) {
-      return handleNotFoundError(error.response.data.error, "Application not found", "Pet not found")
-    }
-    return { error: unexpectedErrorText };
+    throw error;
   }
 };
 
