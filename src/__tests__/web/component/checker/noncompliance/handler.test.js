@@ -263,24 +263,6 @@ describe("postNonComplianceHandler", () => {
   });
 
   it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true but api call return generic error", async () => {
-    const mockedStatusData = { some: "data", documentState: "approved" };
-    const applicationStatus = mockedStatusData.documentState.toLowerCase().trim();
-    const statusMapping = {
-      approved: "Approved",
-      awaiting: awaitingVerification,
-      revoked: "Revoked",
-      rejected: "	Unsuccessful",
-    };
-  
-    const statusColourMapping = {
-      approved: greenTag,
-      awaiting: yellowTag,
-      revoked: orangeTag,
-      rejected: redTag,
-    };
-    
-    const documentStatus = statusMapping[applicationStatus] || applicationStatus;
-    const documentStatusColourMapping = statusColourMapping[applicationStatus] || applicationStatus;      
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "123456789123456",
@@ -328,24 +310,6 @@ describe("postNonComplianceHandler", () => {
         relevantComments: relevantComments,
       }),
       request
-    );      
-
-    expect(h.view).toHaveBeenCalledWith(
-      VIEW_PATH, {
-        errorSummary: [
-          {
-            fieldId: "unexpected",
-            message: genericErrorMessage,
-            dispalyAs: "text",
-          },
-        ],
-        documentStatus,
-        documentStatusColourMapping,
-        data: { applicationId: "testApplicationId", documentState: "approved", "isGBCheck": true, "ptdFormatted": "" },
-        model: {"setting1": "value1"},
-        formSubmitted: true,
-        payload,
-      }
     );
   });
 

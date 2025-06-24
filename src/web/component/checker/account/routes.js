@@ -5,6 +5,11 @@ import sessionKeys from "../../../../session/keys.js";
 
 import dotenv from "dotenv";
 dotenv.config();
+
+const unsafeNone = "unsafe-none";
+const crossOrigin = "cross-origin";
+const permissions = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()";
+
 if (process.env.NODE_ENV === "local" && !process.env.DEFRA_ID_CLIENT_ID) {
   dotenv.config({ path: "./.env.local", override: true });
 }
@@ -21,7 +26,7 @@ const setSecurityHeaders = (response) => {
   try {
     response.header(
       "Permissions-Policy",
-      "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+      permissions
     );
 
     response.header(
@@ -29,19 +34,19 @@ const setSecurityHeaders = (response) => {
       "accelerometer 'none'; camera 'none'; geolocation 'none'; gyroscope 'none'; magnetometer 'none'; microphone 'none'; payment 'none'; usb 'none'"
     );
 
-    response.header("Cross-Origin-Embedder-Policy", "unsafe-none");
-    response.header("Cross-Origin-Resource-Policy", "cross-origin");
-    response.header("Cross-Origin-Opener-Policy", "unsafe-none");
+    response.header("Cross-Origin-Embedder-Policy", unsafeNone);
+    response.header("Cross-Origin-Resource-Policy", crossOrigin);
+    response.header("Cross-Origin-Opener-Policy", unsafeNone);
   } catch (error) {
     console.log("Error setting some headers:", error);
   }
 
-  if (response.output && response.output.headers) {
+  if (response.output?.headers) {
     response.output.headers["permissions-policy"] =
-      "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()";
-    response.output.headers["cross-origin-embedder-policy"] = "unsafe-none";
-    response.output.headers["cross-origin-resource-policy"] = "cross-origin";
-    response.output.headers["cross-origin-opener-policy"] = "unsafe-none";
+      permissions;
+    response.output.headers["cross-origin-embedder-policy"] = unsafeNone;
+    response.output.headers["cross-origin-resource-policy"] = crossOrigin;
+    response.output.headers["cross-origin-opener-policy"] = unsafeNone;
   }
 
   return response;
@@ -63,7 +68,7 @@ const Routes = [
 
         response.header(
           "Permissions-Policy",
-          "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+          permissions
         );
         response.header("Cross-Origin-Embedder-Policy", "require-corp");
         response.header("Cross-Origin-Resource-Policy", "same-origin");
