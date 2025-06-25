@@ -1910,6 +1910,35 @@ html {
   z-index: 100;
 }
 
+:root{
+    --height-dialog: 400px;
+    --breathing-room: 20px;
+    --scroll-padding: calc(var(--height-dialog) + var(--breathing-room));      
+  }
+
+.fixed-position-banner {
+  background-color: #1d70b8;
+  border:3px solid var(--banner-border);
+  margin-block-end:0.5rem;
+  padding:1rem 1rem 5rem;
+  position:relative;
+  width:calc(100vw - 1rem);
+  z-index: 100;
+}
+
+@media (min-width: 50rem) {
+  html {
+    padding-bottom:var(--height-dialog);
+    scroll-padding-bottom:var(--scroll-padding);
+  }
+
+  .fixed-position-banner {
+    margin-block-end:0;
+    position:fixed;
+    inset:auto 0 0 0;
+  }
+} 
+
 body:focus-within .govuk-skip-link:focus~.pts-checker-header {
   margin-top: 40px;
 }
