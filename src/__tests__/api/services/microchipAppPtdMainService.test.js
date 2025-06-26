@@ -1,7 +1,6 @@
 import microchipApi from "../../../api/services/microchipAppPtdMainService";
 import { MicrochipAppPtdMainModel } from "../../../api/models/microchipAppPtdMainModel";
 import httpService from "../../../api/services/httpService";
-import { valid } from "joi";
 
 jest.mock("../../../api/services/httpService");
 
