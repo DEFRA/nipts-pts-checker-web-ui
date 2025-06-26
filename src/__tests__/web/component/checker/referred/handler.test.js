@@ -46,7 +46,7 @@ describe("ReferredHandlers", () => {
         { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
       ];
 
-      spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
+      spsReferralMainService.getSpsReferrals.mockResolvedValue(mockSpsChecks);
       
       const mockRequest = {
         yar: {
@@ -114,7 +114,7 @@ describe("ReferredHandlers", () => {
         PTDNumberFormatted: ptdFormatted
       }));
 
-      spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
+      spsReferralMainService.getSpsReferrals.mockResolvedValue(mockSpsChecks);
 
       const mockRequest = {
         yar: {
@@ -163,7 +163,7 @@ describe("ReferredHandlers", () => {
         { SPSOutcome: allowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
         { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
       ];
-      spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
+      spsReferralMainService.getSpsReferrals.mockResolvedValue(mockSpsChecks);
 
       const mockRequest = {
         yar: {

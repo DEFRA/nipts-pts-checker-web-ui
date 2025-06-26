@@ -67,7 +67,7 @@ function formatDateTime(departureDate, departureTime) {
 
 async function getSpsChecks(routeName, departureDateTime, request) {
   return (
-    (await spsReferralMainService.GetSpsReferrals(
+    (await spsReferralMainService.getSpsReferrals(
       routeName,
       departureDateTime,
       Number(process.env.DASHBOARD_START_HOUR) * -1 || dashboardTimeBoundary,

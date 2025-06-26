@@ -13,7 +13,7 @@ if (!baseUrl) {
   throw new Error("BASE_API_URL is not set in environment variables.");
 }
 
-const GetSpsReferrals = async (route, date, timeWindowInHours, request) => {
+const getSpsReferrals = async (route, date, timeWindowInHours, request) => {
   const SailingDate = moment(date).toISOString();
   try {
     const response = await httpService.postAsync(
@@ -77,6 +77,6 @@ const GetCompleteCheckDetails = async (checkSummaryId, request) => {
 
 
 export default {
-  GetSpsReferrals,
+  getSpsReferrals,
   GetCompleteCheckDetails
 };
