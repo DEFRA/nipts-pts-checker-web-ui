@@ -39,6 +39,36 @@ describe("ReferredHandlers", () => {
       expect(h.redirect).toHaveBeenCalledWith("/checker/dashboard");
     });
 
+    it("should redirect to /checker/referred when there are no sps checks", async () => {
+      const mockSpsChecks = [];
+
+      spsReferralMainService.getSpsReferrals.mockResolvedValue(mockSpsChecks);
+
+      const mockRequest = {
+        yar: {
+          get: jest.fn().mockImplementation((key) => {
+            if (key === "routeName") {
+              return "RouteB";
+            }
+            if (key === "departureDate") {
+              return departureDate;
+            } 
+            if (key === "departureTime") {
+              return "12:00";
+            }
+            return null;
+          }),
+        },
+      };
+      const h = {
+        redirect: jest.fn(),
+      };
+
+      await ReferredHandlers.getReferredChecks(mockRequest, h);
+
+      expect(h.redirect).toHaveBeenCalledWith("/checker/referred");
+    });
+
     it("should return view with spsChecks and pagination when session data exists", async () => {
       const mockSpsChecks = [
         { SPSOutcome: checkNeeded, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
