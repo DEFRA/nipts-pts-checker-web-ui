@@ -23,25 +23,8 @@ const unexpectedErrorMessage = "Unexpected error occurred";
 global.appInsightsClient = {
   trackException: jest.fn()
  };
-
-
-describe("getMicrochipData", () => {
-  let request;
-
-  beforeEach(() => {
-    request = {
-      // Mock request object
-      headers: {
-        authorization: bearerToken,
-      },
-    };
-    jest.clearAllMocks();
-  });
-
-  it("should handle missing pet details gracefully Microchip", async () => {
-    const microchipNumber = null;
-    const apiResponse = {
-      data: {
+const apiResponseCommon = {
+    data: {
         pet: {},
         application: {
           applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
@@ -68,7 +51,24 @@ describe("getMicrochipData", () => {
         },
       },
       status: 200,
+}
+
+describe("getMicrochipData", () => {
+  let request;
+
+  beforeEach(() => {
+    request = {
+      // Mock request object
+      headers: {
+        authorization: bearerToken,
+      },
     };
+    jest.clearAllMocks();
+  });
+
+  it("should handle missing pet details gracefully Microchip", async () => {
+    const microchipNumber = null;
+    const apiResponse = apiResponseCommon
 
     httpService.postAsync.mockResolvedValue(apiResponse);
 
@@ -79,11 +79,11 @@ describe("getMicrochipData", () => {
       petBreed: null,
       documentState: "awaiting",
       ptdNumber: "SZWPFXEG",
-      issuedDate: issedDate, // Formatted date
+      issuedDate: issedDate,
       microchipNumber: null,
-      microchipDate: null, // Formatted date
+      microchipDate: null,
       petSex: null,
-      petDoB: null, // Formatted date
+      petDoB: null,
       petColour: null,
       petFeaturesDetail: null,
       applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
@@ -121,34 +121,19 @@ describe("getMicrochipData", () => {
 
   it("should return null for all values if item is empty Microchip", async () => {
     const microchipNumber = null;
-    const apiResponse = {
-      data: {
-        pet: { },
-        application: {
-          applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
-          referenceNumber: "SZWPFXEG",
-          dateOfApplication: "2024-02-09T11:31:29.7165377",
-          status: awaitingVerification,
-        },
-        travelDocument: {
-          travelDocumentId: null,
-          travelDocumentReferenceNumber: "GB826J40C050",
-          dateOfIssue: "2024-06-12T10:26:52.0391239",
-        },
-        petOwner: {
-          name: null,
-          telephone: null,
-          email: null,
-          address: {
-            addressLineOne: null,
-            addressLineTwo: null,
-            townOrCity: null,
-            county: null,
-            postCode: null
-          }
-        },
-      },
-      status : 200,
+    const apiResponse = apiResponseCommon;
+    apiResponse.data.travelDocument.travelDocumentId = null;
+    apiResponse.data.petOwner = {
+      name: null,
+      telephone: null,
+      email: null,
+      address: {
+        addressLineOne: null,
+        addressLineTwo: null,
+        townOrCity: null,
+        county: null,
+        postCode: null
+      }
     };
 
     httpService.postAsync.mockResolvedValue(apiResponse);
@@ -202,34 +187,21 @@ describe("getMicrochipData", () => {
 
   it("should return default null values when properties are undefined Microchip", async () => {
     const microchipNumber = null;
-    const apiResponse = {
-      data: {
-        pet: { petName : null },
-        application: {
-          applicationId: null,
-          referenceNumber: "SZWPFXEG",
-          dateOfApplication: "2024-02-09T11:31:29.7165377",
-          status: awaitingVerification,
-        },
-        travelDocument: {
-          travelDocumentId: null,
-          travelDocumentReferenceNumber: "GB826J40C050",
-          dateOfIssue: "2024-06-12T10:26:52.0391239",
-        },
-        petOwner: {
-          name: null,
-          telephone: null,
-            email:null,
-            address: {
-              addressLineOne: null,
-              addressLineTwo: null,
-              townOrCity: null,
-              county: null,
-              postCode: null
-            }
-        },
-      },
-      status: 200,
+    const apiResponse = apiResponseCommon;
+    apiResponse.data.application.applicationId = null;
+    apiResponse.data.pet.petName = null;
+    apiResponse.data.travelDocument.travelDocumentId = null;
+    apiResponse.data.petOwner = {
+      name: null,
+      telephone: null,
+      email: null,
+      address: {
+        addressLineOne: null,
+        addressLineTwo: null,
+        townOrCity: null,
+        county: null,
+        postCode: null
+      }
     };
 
     httpService.postAsync.mockResolvedValue(apiResponse);
@@ -373,11 +345,7 @@ describe("getMicrochipData", () => {
     expect(data).toEqual(expectedData);
   });
 
-  it("should fetch data and map it to MicrochipAppPtdMainModel with correct status mapping", async () => {
-    const microchipNumber = "123456789012345";
-    const apiResponse = {
-      data: {
-        pet: {
+  const validPetData = {
           petId: "715bb304-1ca8-46ba-552d-08dc28c44b63",
           petName: "fido",
           species: "Dog",
@@ -387,7 +355,13 @@ describe("getMicrochipData", () => {
           dateOfBirth: "2021-01-01T00:00:00",
           microchippedDate: "2021-02-01T00:00:00",
           significantFeatures: "None",
-        },
+        }
+
+  it("should fetch data and map it to MicrochipAppPtdMainModel with correct status mapping", async () => {
+    const microchipNumber = "123456789012345";
+    const apiResponse = {
+      data: {
+        pet: validPetData,
         application: {
           applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
           referenceNumber: "SZWPFXEG",
@@ -468,17 +442,7 @@ describe("getMicrochipData", () => {
     const microchipNumber = "123456789012345";
     const apiResponse = {
       data: {
-        pet: {
-          petId: "715bb304-1ca8-46ba-552d-08dc28c44b63",
-          petName: "fido",
-          species: "Dog",
-          breedName: "Bulldog",
-          colourName: "White, cream or sand",
-          sex: "Male",
-          dateOfBirth: "2021-01-01T00:00:00",
-          microchippedDate: "2021-02-01T00:00:00",
-          significantFeatures: "None",
-        },
+        pet: validPetData,
         application: {
           applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
           referenceNumber: "SZWPFXEG",
@@ -559,17 +523,7 @@ describe("getMicrochipData", () => {
     const microchipNumber = "123456789012345";
     const apiResponse = {
       data: {
-        pet: {
-          petId: "715bb304-1ca8-46ba-552d-08dc28c44b63",
-          petName: "fido",
-          species: "Dog",
-          breedName: "Bulldog",
-          colourName: "White, cream or sand",
-          sex: "Male",
-          dateOfBirth: "2021-01-01T00:00:00",
-          microchippedDate: "2021-02-01T00:00:00",
-          significantFeatures: "None",
-        },
+        pet: validPetData,
         application: {
           applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
           referenceNumber: "SZWPFXEG",
@@ -650,17 +604,7 @@ describe("getMicrochipData", () => {
     const microchipNumber = "123456789012345";
     const apiResponse = {
       data: {
-        pet: {
-          petId: "715bb304-1ca8-46ba-552d-08dc28c44b63",
-          petName: "fido",
-          species: "Dog",
-          breedName: "Bulldog",
-          colourName: "White, cream or sand",
-          sex: "Male",
-          dateOfBirth: "2021-01-01T00:00:00",
-          microchippedDate: "2021-02-01T00:00:00",
-          significantFeatures: "None",
-        },
+        pet: validPetData,
         application: {
           applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
           referenceNumber: "SZWPFXEG",
