@@ -73,6 +73,12 @@ const expectedDataPetOwnerAddress = {
   postCode: "EC1N 2PB"
 }
 
+const expectedDataIssuingAuthority = {
+  address: expectedDataIssuingAuthorityAddress,
+  name: agencyName,
+  signature: signatoryName,
+}
+
 describe("getMicrochipData", () => {
   let request;
 
@@ -113,11 +119,7 @@ describe("getMicrochipData", () => {
       petOwnerTelephone: "07894465438",
       petOwnerEmail: petOwnerEmail,
       petOwnerAddress: expectedDataPetOwnerAddress,
-      issuingAuthority:  {
-        address: expectedDataIssuingAuthorityAddress,
-        name: agencyName,
-        signature: signatoryName,
-      },
+      issuingAuthority: expectedDataIssuingAuthority,
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -172,11 +174,7 @@ describe("getMicrochipData", () => {
         county: null,
         postCode: null
       },
-      issuingAuthority:  {
-        address: expectedDataIssuingAuthorityAddress,
-        name: agencyName,
-        signature: signatoryName,
-      },
+      issuingAuthority:  expectedDataIssuingAuthority,
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -233,11 +231,7 @@ describe("getMicrochipData", () => {
         county: null,
         postCode: null
       },
-      issuingAuthority:  {
-        address: expectedDataIssuingAuthorityAddress,
-        name: agencyName,
-        signature: signatoryName,
-      },
+      issuingAuthority:  expectedDataIssuingAuthority,
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -300,11 +294,7 @@ describe("getMicrochipData", () => {
       petOwnerTelephone: "07894465438",
       petOwnerEmail: petOwnerEmail,
       petOwnerAddress: expectedDataPetOwnerAddress,
-      issuingAuthority:  {
-        address: expectedDataIssuingAuthorityAddress,
-        name: agencyName,
-        signature: signatoryName,
-      },
+      issuingAuthority:  expectedDataIssuingAuthority,
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -368,11 +358,7 @@ describe("getMicrochipData", () => {
       petOwnerTelephone: "07894465438",
       petOwnerEmail: petOwnerEmail,
       petOwnerAddress: expectedDataPetOwnerAddress,
-      issuingAuthority:  {
-        address: expectedDataIssuingAuthorityAddress,
-        name: agencyName,
-        signature: signatoryName,
-      },
+      issuingAuthority:  expectedDataIssuingAuthority,
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -435,11 +421,7 @@ describe("getMicrochipData", () => {
       petOwnerEmail: petOwnerEmail,
       issuedDate: null,
       petOwnerAddress: expectedDataPetOwnerAddress,
-      issuingAuthority:  {
-        address: expectedDataIssuingAuthorityAddress,
-        name: agencyName,
-        signature: signatoryName,
-      },
+      issuingAuthority:  expectedDataIssuingAuthority,
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -491,11 +473,7 @@ describe("getMicrochipData", () => {
       petOwnerEmail: petOwnerEmail,
       issuedDate: null,
       petOwnerAddress: expectedDataPetOwnerAddress,
-      issuingAuthority:  {
-        address: expectedDataIssuingAuthorityAddress,
-        name: agencyName,
-        signature: signatoryName,
-      },
+      issuingAuthority:  expectedDataIssuingAuthority,
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
