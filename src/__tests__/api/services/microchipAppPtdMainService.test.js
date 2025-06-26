@@ -1,6 +1,7 @@
 import microchipApi from "../../../api/services/microchipAppPtdMainService";
 import { MicrochipAppPtdMainModel } from "../../../api/models/microchipAppPtdMainModel";
 import httpService from "../../../api/services/httpService";
+import { valid } from "joi";
 
 jest.mock("../../../api/services/httpService");
 
@@ -23,6 +24,19 @@ const unexpectedErrorMessage = "Unexpected error occurred";
 global.appInsightsClient = {
   trackException: jest.fn()
  };
+  const validPetOwnerData =  {
+          name: petOwnerName,
+          telephone: "07894465438",
+          email: petOwnerEmail,
+          address: {
+            addressLineOne: addressLineOne,
+            addressLineTwo: addressLineTwo,
+            townOrCity: "LONDON",
+            county: "",
+            postCode: "EC1N 2PB"
+          }
+        }
+
 const apiResponseCommon = {
     data: {
         pet: {},
@@ -37,18 +51,7 @@ const apiResponseCommon = {
           travelDocumentReferenceNumber: "GB826J40C050",
           dateOfIssue: "2024-06-12T10:26:52.0391239",
         },
-        petOwner: {
-          name: petOwnerName,
-          telephone: "07894465438",
-          email: petOwnerEmail,
-          address: {
-            addressLineOne: addressLineOne,
-            addressLineTwo: addressLineTwo,
-            townOrCity: "LONDON",
-            county: "",
-            postCode: "EC1N 2PB"
-          }
-        },
+        petOwner: validPetOwnerData,
       },
       status: 200,
 }
@@ -280,18 +283,7 @@ describe("getMicrochipData", () => {
           travelDocumentReferenceNumber: "GB826J40C050",
           dateOfIssue: "2024-06-12T10:26:52.0391239",
         },
-        petOwner: {
-          name: petOwnerName,
-          telephone: "07894465438",
-          email: petOwnerEmail,
-          address: {
-            addressLineOne: addressLineOne,
-            addressLineTwo: addressLineTwo,
-            townOrCity: "LONDON",
-            county: "",
-            postCode: "EC1N 2PB"
-          }
-        },
+        petOwner: validPetOwnerData,
       },
       status : 200,
     };
@@ -373,18 +365,7 @@ describe("getMicrochipData", () => {
           travelDocumentReferenceNumber: "GB826J40C050",
           dateOfIssue: "2024-06-12T10:26:52.0391239",
         },
-        petOwner: {
-          name: petOwnerName,
-          telephone: "07894465438",
-          email: petOwnerEmail,
-          address: {
-            addressLineOne: addressLineOne,
-            addressLineTwo: addressLineTwo,
-            townOrCity: "LONDON",
-            county: "",
-            postCode: "EC1N 2PB"
-          }
-        },
+        petOwner: validPetOwnerData,
       },
       status : 200,
     };
@@ -535,18 +516,7 @@ describe("getMicrochipData", () => {
           travelDocumentReferenceNumber: "GB826J40C050",
           dateOfIssue: "2024-06-12T10:26:52.0391239",
         },
-        petOwner: {
-          name: petOwnerName,
-          telephone: "07894465438",
-          email: petOwnerEmail,
-          address: {
-            addressLineOne: addressLineOne,
-            addressLineTwo: addressLineTwo,
-            townOrCity: "LONDON",
-            county: "",
-            postCode: "EC1N 2PB"
-          }
-        },
+        petOwner: validPetOwnerData,
       },
       status: 200,
     };
@@ -616,18 +586,7 @@ describe("getMicrochipData", () => {
           travelDocumentReferenceNumber: "GB826J40C050",
           dateOfIssue: "2024-06-12T10:26:52.0391239",
         },
-        petOwner: {
-          name: petOwnerName,
-          telephone: "07894465438",
-          email: petOwnerEmail,
-          address: {
-            addressLineOne: addressLineOne,
-            addressLineTwo: addressLineTwo,
-            townOrCity: "LONDON",
-            county: "",
-            postCode: "EC1N 2PB"
-          }
-        },
+        petOwner: validPetOwnerData,
       },
       status: 200,
     };
