@@ -498,11 +498,7 @@ describe("getMicrochipData", () => {
       petOwnerEmail: petOwnerEmail,
       issuedDate: null,
       petOwnerAddress: expectedDataPetOwnerAddress,
-      issuingAuthority:  {
-        address: expectedDataIssuingAuthorityAddress,
-        name: agencyName,
-        signature: signatoryName,
-      },
+      issuingAuthority:  expectedDataIssuingAuthority,
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
