@@ -127,6 +127,14 @@ describe("getMicrochipData", () => {
     expect(data).toEqual(expectedData);
   });
 
+  const expectedDataPetOwnerAddressNulls = {
+    addressLineOne: null,
+    addressLineTwo: null,
+    townOrCity: null,
+    county: null,
+    postCode: null
+  }
+
   it("should return null for all values if item is empty Microchip", async () => {
     const microchipNumber = null;
     const apiResponse = apiResponseCommon;
@@ -135,13 +143,7 @@ describe("getMicrochipData", () => {
       name: null,
       telephone: null,
       email: null,
-      address: {
-        addressLineOne: null,
-        addressLineTwo: null,
-        townOrCity: null,
-        county: null,
-        postCode: null
-      }
+      address: expectedDataPetOwnerAddressNulls
     };
 
     httpService.postAsync.mockResolvedValue(apiResponse);
@@ -166,14 +168,7 @@ describe("getMicrochipData", () => {
       petOwnerName: null,
       petOwnerTelephone: null,
       petOwnerEmail: null,
-      petOwnerAddress: 
-      {
-        addressLineOne: null,
-        addressLineTwo: null,
-        townOrCity: null,
-        county: null,
-        postCode: null
-      },
+      petOwnerAddress: expectedDataPetOwnerAddressNulls,
       issuingAuthority:  expectedDataIssuingAuthority,
     });
 
@@ -192,13 +187,7 @@ describe("getMicrochipData", () => {
       name: null,
       telephone: null,
       email: null,
-      address: {
-        addressLineOne: null,
-        addressLineTwo: null,
-        townOrCity: null,
-        county: null,
-        postCode: null
-      }
+      address: expectedDataPetOwnerAddressNulls
     };
 
     httpService.postAsync.mockResolvedValue(apiResponse);
@@ -223,14 +212,7 @@ describe("getMicrochipData", () => {
       petOwnerName: null,
       petOwnerTelephone: null,
       petOwnerEmail: null,
-      petOwnerAddress: 
-      {
-        addressLineOne: null,
-        addressLineTwo: null,
-        townOrCity: null,
-        county: null,
-        postCode: null
-      },
+      petOwnerAddress: expectedDataPetOwnerAddressNulls,
       issuingAuthority:  expectedDataIssuingAuthority,
     });
 
