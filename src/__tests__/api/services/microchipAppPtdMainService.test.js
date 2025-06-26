@@ -68,7 +68,12 @@ const expectedDataIssuingAuthorityAddress = {
     townOrCity: "Carlisle",
 }
 
-
+const validApplicationData = {
+  applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
+  referenceNumber: "SZWPFXEG",
+  dateOfApplication: "2024-02-09T11:31:29.7165377",
+  status: awaitingVerification,
+}
 
 const expectedDataIssuingAuthority = {
   address: expectedDataIssuingAuthorityAddress,
@@ -234,12 +239,7 @@ describe("getMicrochipData", () => {
           microchippedDate: "2021-02-01T00:00:00",
           significantFeatures: "None",
         },
-        application: {
-          applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
-          referenceNumber: "SZWPFXEG",
-          dateOfApplication: "2024-02-09T11:31:29.7165377",
-          status: awaitingVerification,
-        },
+        application: validApplicationData,
         travelDocument: validTravelDocumentData,
         petOwner: validPetOwnerData,
       },
@@ -300,12 +300,7 @@ const validTravelDocumentData = {
     const apiResponse = {
       data: {
         pet: validPetData,
-        application: {
-          applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
-          referenceNumber: "SZWPFXEG",
-          dateOfApplication: "2024-02-09T11:31:29.7165377",
-          status: awaitingVerification,
-        },
+        application: validApplicationData,
         travelDocument: validTravelDocumentData,
         petOwner: validPetOwnerData,
       },
