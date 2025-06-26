@@ -240,11 +240,7 @@ describe("getMicrochipData", () => {
           dateOfApplication: "2024-02-09T11:31:29.7165377",
           status: awaitingVerification,
         },
-        travelDocument: {
-          travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
-          travelDocumentReferenceNumber: "GB826J40C050",
-          dateOfIssue: "2024-06-12T10:26:52.0391239",
-        },
+        travelDocument: validTravelDocumentData,
         petOwner: validPetOwnerData,
       },
       status : 200,
@@ -293,6 +289,12 @@ describe("getMicrochipData", () => {
           significantFeatures: "None",
         }
 
+const validTravelDocumentData = {
+  travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
+  travelDocumentReferenceNumber: "GB826J40C050",
+  dateOfIssue: "2024-06-12T10:26:52.0391239",
+}
+
   it("should fetch data and map it to MicrochipAppPtdMainModel with correct status mapping", async () => {
     const microchipNumber = "123456789012345";
     const apiResponse = {
@@ -304,11 +306,7 @@ describe("getMicrochipData", () => {
           dateOfApplication: "2024-02-09T11:31:29.7165377",
           status: awaitingVerification,
         },
-        travelDocument: {
-          travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
-          travelDocumentReferenceNumber: "GB826J40C050",
-          dateOfIssue: "2024-06-12T10:26:52.0391239",
-        },
+        travelDocument: validTravelDocumentData,
         petOwner: validPetOwnerData,
       },
       status : 200,
@@ -356,11 +354,7 @@ describe("getMicrochipData", () => {
           dateOfApplication: "2024-02-09T11:31:29.7165377",
           status: "approved",
         },
-        travelDocument: {
-          travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
-          travelDocumentReferenceNumber: "GB826J40C050",
-          dateOfIssue: "2024-06-12T10:26:52.0391239",
-        },
+        travelDocument: validTravelDocumentData,
         petOwner: {
           name: "Pet Owner Name change",
           telephone: "07894465438",
@@ -413,11 +407,7 @@ describe("getMicrochipData", () => {
           dateOfApplication: "2024-02-09T11:31:29.7165377",
           status: "revoked",
         },
-        travelDocument: {
-          travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
-          travelDocumentReferenceNumber: "GB826J40C050",
-          dateOfIssue: "2024-06-12T10:26:52.0391239",
-        },
+        travelDocument: validTravelDocumentData,
         petOwner: validPetOwnerData,
       },
       status: 200,
@@ -465,11 +455,7 @@ describe("getMicrochipData", () => {
           dateOfApplication: "2024-02-09T11:31:29.7165377",
           status: "rejected",
         },
-        travelDocument: {
-          travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
-          travelDocumentReferenceNumber: "GB826J40C050",
-          dateOfIssue: "2024-06-12T10:26:52.0391239",
-        },
+        travelDocument: validTravelDocumentData,
         petOwner: validPetOwnerData,
       },
       status: 200,
