@@ -270,6 +270,58 @@ describe("ReferredHandlers", () => {
       // Assert that the function returns the correct redirect response
       expect(result).toBe("redirected");
     });
+
+     it("should set identifier in request.yar when PTDNumber given in payload", async () => {
+      // Mock request object
+      const request = {
+        payload: {
+          PTDNumber: "123456",
+        },
+        yar: {
+          set: jest.fn(), // Mock the set method
+        },
+      };
+  
+      // Mock h object with a redirect method
+      const h = {
+        redirect: jest.fn().mockReturnValue("redirected"), // Mock redirect method to return a value
+      };
+  
+      await ReferredHandlers.postCheckReport(request, h);
+  
+      // Assert that request.yar.set was called with the correct arguments
+      expect(request.yar.set).toHaveBeenCalledWith(
+        "identifier",
+        "123456"
+      );
+    });
+
+    it("should set identifier in request.yar when ApplicationNumber given in payload", async () => {
+      // Mock request object
+      const request = {
+        payload: {
+          ApplicationNumber: "1234567890",
+        },
+        yar: {
+          set: jest.fn(), // Mock the set method
+        },
+      };
+  
+      // Mock h object with a redirect method
+      const h = {
+        redirect: jest.fn().mockReturnValue("redirected"), // Mock redirect method to return a value
+      };
+  
+      await ReferredHandlers.postCheckReport(request, h);
+  
+      // Assert that request.yar.set was called with the correct arguments
+      expect(request.yar.set).toHaveBeenCalledWith(
+        "identifier",
+        "1234567890"
+      );
+    });
+
+
   });
 
 });
