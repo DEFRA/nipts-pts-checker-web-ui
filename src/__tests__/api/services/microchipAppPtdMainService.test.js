@@ -24,18 +24,21 @@ const unexpectedErrorMessage = "Unexpected error occurred";
 global.appInsightsClient = {
   trackException: jest.fn()
  };
-  const validPetOwnerData =  {
-          name: petOwnerName,
-          telephone: "07894465438",
-          email: petOwnerEmail,
-          address: {
-            addressLineOne: addressLineOne,
-            addressLineTwo: addressLineTwo,
-            townOrCity: "LONDON",
-            county: "",
-            postCode: "EC1N 2PB"
-          }
-        }
+
+ const expectedDataPetOwnerAddress = {
+  addressLineOne: addressLineOne,
+  addressLineTwo: addressLineTwo,
+  townOrCity: "LONDON",
+  county: "",
+  postCode: "EC1N 2PB"
+}
+
+const validPetOwnerData =  {
+  name: petOwnerName,
+  telephone: "07894465438",
+  email: petOwnerEmail,
+  address: expectedDataPetOwnerAddress
+}
 
 const apiResponseCommon = {
     data: {
@@ -65,13 +68,7 @@ const expectedDataIssuingAuthorityAddress = {
     townOrCity: "Carlisle",
 }
 
-const expectedDataPetOwnerAddress = {
-  addressLineOne: addressLineOne,
-  addressLineTwo: addressLineTwo,
-  townOrCity: "LONDON",
-  county: "",
-  postCode: "EC1N 2PB"
-}
+
 
 const expectedDataIssuingAuthority = {
   address: expectedDataIssuingAuthorityAddress,
@@ -368,13 +365,7 @@ describe("getMicrochipData", () => {
           name: "Pet Owner Name change",
           telephone: "07894465438",
           email: petOwnerEmail,
-          address: {
-            addressLineOne: addressLineOne,
-            addressLineTwo: addressLineTwo,
-            townOrCity: "LONDON",
-            county: "",
-            postCode: "EC1N 2PB"
-          }
+          address: expectedDataPetOwnerAddress
         },
       },
       status: 200,
@@ -506,14 +497,7 @@ describe("getMicrochipData", () => {
       petOwnerTelephone: "07894465438",
       petOwnerEmail: petOwnerEmail,
       issuedDate: null,
-      petOwnerAddress: 
-      {
-        addressLineOne: addressLineOne,
-        addressLineTwo: addressLineTwo,
-        townOrCity: "LONDON",
-        county: "",
-        postCode: "EC1N 2PB"
-      },
+      petOwnerAddress: expectedDataPetOwnerAddress,
       issuingAuthority:  {
         address: expectedDataIssuingAuthorityAddress,
         name: agencyName,
