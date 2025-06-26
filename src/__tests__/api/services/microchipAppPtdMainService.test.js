@@ -56,6 +56,15 @@ const apiResponseCommon = {
       status: 200,
 }
 
+const expectedDataIssuingAuthorityAddress = {
+    addressLineOne: issuingAuthorityAddressLineOne,
+    addressLineThree: issuingAuthorityAddressLineThree,
+    addressLineTwo: issuingAuthorityAddressLineTwo,
+    county: "",
+    postCode: "CA3 8DX",
+    townOrCity: "Carlisle",
+}
+
 describe("getMicrochipData", () => {
   let request;
 
@@ -104,14 +113,7 @@ describe("getMicrochipData", () => {
         postCode: "EC1N 2PB"
       },
       issuingAuthority:  {
-        address: {
-                addressLineOne: issuingAuthorityAddressLineOne,
-                addressLineThree: issuingAuthorityAddressLineThree,
-                addressLineTwo: issuingAuthorityAddressLineTwo,
-                county: "",
-                postCode: "CA3 8DX",
-                townOrCity: "Carlisle",
-                },
+        address: expectedDataIssuingAuthorityAddress,
         name: agencyName,
         signature: signatoryName,
       },
@@ -170,14 +172,7 @@ describe("getMicrochipData", () => {
         postCode: null
       },
       issuingAuthority:  {
-        address: {
-                addressLineOne: issuingAuthorityAddressLineOne,
-                addressLineThree: issuingAuthorityAddressLineThree,
-                addressLineTwo: issuingAuthorityAddressLineTwo,
-                county: "",
-                postCode: "CA3 8DX",
-                townOrCity: "Carlisle",
-                },
+        address: expectedDataIssuingAuthorityAddress,
         name: agencyName,
         signature: signatoryName,
       },
@@ -238,14 +233,7 @@ describe("getMicrochipData", () => {
         postCode: null
       },
       issuingAuthority:  {
-        address: {
-                addressLineOne: issuingAuthorityAddressLineOne,
-                addressLineThree: issuingAuthorityAddressLineThree,
-                addressLineTwo: issuingAuthorityAddressLineTwo,
-                county: "",
-                postCode: "CA3 8DX",
-                townOrCity: "Carlisle",
-                },
+        address: expectedDataIssuingAuthorityAddress,
         name: agencyName,
         signature: signatoryName,
       },
@@ -319,14 +307,7 @@ describe("getMicrochipData", () => {
         postCode: "EC1N 2PB"
       },
       issuingAuthority:  {
-        address: {
-                addressLineOne: issuingAuthorityAddressLineOne,
-                addressLineThree: issuingAuthorityAddressLineThree,
-                addressLineTwo: issuingAuthorityAddressLineTwo,
-                county: "",
-                postCode: "CA3 8DX",
-                townOrCity: "Carlisle",
-                },
+        address: expectedDataIssuingAuthorityAddress,
         name: agencyName,
         signature: signatoryName,
       },
@@ -401,14 +382,7 @@ describe("getMicrochipData", () => {
         postCode: "EC1N 2PB"
       },
       issuingAuthority:  {
-        address: {
-                addressLineOne: issuingAuthorityAddressLineOne,
-                addressLineThree: issuingAuthorityAddressLineThree,
-                addressLineTwo: issuingAuthorityAddressLineTwo,
-                county: "",
-                postCode: "CA3 8DX",
-                townOrCity: "Carlisle",
-                },
+        address: expectedDataIssuingAuthorityAddress,
         name: agencyName,
         signature: signatoryName,
       },
@@ -482,14 +456,7 @@ describe("getMicrochipData", () => {
         postCode: "EC1N 2PB"
       },
       issuingAuthority:  {
-        address: {
-                addressLineOne: issuingAuthorityAddressLineOne,
-                addressLineThree: issuingAuthorityAddressLineThree,
-                addressLineTwo: issuingAuthorityAddressLineTwo,
-                county: "",
-                postCode: "CA3 8DX",
-                townOrCity: "Carlisle",
-                },
+        address: expectedDataIssuingAuthorityAddress,
         name: agencyName,
         signature: signatoryName,
       },
@@ -552,14 +519,7 @@ describe("getMicrochipData", () => {
         postCode: "EC1N 2PB"
       },
       issuingAuthority:  {
-        address: {
-                addressLineOne: issuingAuthorityAddressLineOne,
-                addressLineThree: issuingAuthorityAddressLineThree,
-                addressLineTwo: issuingAuthorityAddressLineTwo,
-                county: "",
-                postCode: "CA3 8DX",
-                townOrCity: "Carlisle",
-                },
+        address: expectedDataIssuingAuthorityAddress,
         name: agencyName,
         signature: signatoryName,
       },
@@ -622,14 +582,7 @@ describe("getMicrochipData", () => {
         postCode: "EC1N 2PB"
       },
       issuingAuthority:  {
-        address: {
-                addressLineOne: issuingAuthorityAddressLineOne,
-                addressLineThree: issuingAuthorityAddressLineThree,
-                addressLineTwo: issuingAuthorityAddressLineTwo,
-                county: "",
-                postCode: "CA3 8DX",
-                townOrCity: "Carlisle",
-                },
+        address: expectedDataIssuingAuthorityAddress,
         name: agencyName,
         signature: signatoryName,
       },
