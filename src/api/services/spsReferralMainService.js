@@ -54,7 +54,7 @@ const getSpsReferrals = async (route, date, timeWindowInHours, request) => {
 };
 
 
-const GetCompleteCheckDetails = async (checkSummaryId, request) => {
+const getCompleteCheckDetails = async (checkSummaryId, request) => {
   try {
     const response = await httpService.postAsync(
       `${baseUrl}/Checker/getCompleteCheckDetails`,
@@ -69,7 +69,7 @@ const GetCompleteCheckDetails = async (checkSummaryId, request) => {
     return response?.data || null;
   } catch (error) {
     global.appInsightsClient.trackException({ exception: error });
-    console.error("Error in GetCompleteCheckDetails:", error);
+    console.error("Error in getCompleteCheckDetails:", error);
     throw error;
   }
 };
@@ -78,5 +78,5 @@ const GetCompleteCheckDetails = async (checkSummaryId, request) => {
 
 export default {
   getSpsReferrals,
-  GetCompleteCheckDetails
+  getCompleteCheckDetails
 };

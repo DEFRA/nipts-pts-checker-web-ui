@@ -133,7 +133,7 @@ describe("getSpsReferrals", () => {
   });
 });
 
-describe("GetCompleteCheckDetails", () => {
+describe("getCompleteCheckDetails", () => {
   let request;
 
   beforeEach(() => {
@@ -163,7 +163,7 @@ describe("GetCompleteCheckDetails", () => {
 
             httpService.postAsync.mockResolvedValue(apiResponse);
 
-            const result = await spsService.GetCompleteCheckDetails(
+            const result = await spsService.getCompleteCheckDetails(
                 checkSummaryId,
                 request
             );
@@ -182,7 +182,7 @@ describe("GetCompleteCheckDetails", () => {
             httpService.postAsync.mockResolvedValue(apiError);
 
             await expect(
-                spsService.GetCompleteCheckDetails(checkSummaryId, request)
+                spsService.getCompleteCheckDetails(checkSummaryId, request)
             ).rejects.toThrow("Not Found");
 
             expect(httpService.postAsync).toHaveBeenCalledWith(
@@ -197,7 +197,7 @@ describe("GetCompleteCheckDetails", () => {
             const apiResponse = { data: null };
             httpService.postAsync.mockResolvedValue(apiResponse);
 
-            const result = await spsService.GetCompleteCheckDetails(
+            const result = await spsService.getCompleteCheckDetails(
                 checkSummaryId,
                 request
             );
@@ -215,7 +215,7 @@ describe("GetCompleteCheckDetails", () => {
             httpService.postAsync.mockRejectedValue(new Error(unexpectedError));
 
             await expect(
-                spsService.GetCompleteCheckDetails(checkSummaryId, request)
+                spsService.getCompleteCheckDetails(checkSummaryId, request)
             ).rejects.toThrow(unexpectedError);
 
             expect(httpService.postAsync).toHaveBeenCalledWith(
