@@ -65,6 +65,14 @@ const expectedDataIssuingAuthorityAddress = {
     townOrCity: "Carlisle",
 }
 
+const expectedDataPetOwnerAddress = {
+  addressLineOne: addressLineOne,
+  addressLineTwo: addressLineTwo,
+  townOrCity: "LONDON",
+  county: "",
+  postCode: "EC1N 2PB"
+}
+
 describe("getMicrochipData", () => {
   let request;
 
@@ -104,14 +112,7 @@ describe("getMicrochipData", () => {
       petOwnerName: petOwnerName,
       petOwnerTelephone: "07894465438",
       petOwnerEmail: petOwnerEmail,
-      petOwnerAddress: 
-      {
-        addressLineOne: addressLineOne,
-        addressLineTwo: addressLineTwo,
-        townOrCity: "LONDON",
-        county: "",
-        postCode: "EC1N 2PB"
-      },
+      petOwnerAddress: expectedDataPetOwnerAddress,
       issuingAuthority:  {
         address: expectedDataIssuingAuthorityAddress,
         name: agencyName,
@@ -298,14 +299,7 @@ describe("getMicrochipData", () => {
       petOwnerName: petOwnerName,
       petOwnerTelephone: "07894465438",
       petOwnerEmail: petOwnerEmail,
-      petOwnerAddress: 
-      {
-        addressLineOne: addressLineOne,
-        addressLineTwo: addressLineTwo,
-        townOrCity: "LONDON",
-        county: "",
-        postCode: "EC1N 2PB"
-      },
+      petOwnerAddress: expectedDataPetOwnerAddress,
       issuingAuthority:  {
         address: expectedDataIssuingAuthorityAddress,
         name: agencyName,
@@ -373,14 +367,7 @@ describe("getMicrochipData", () => {
       petOwnerName: petOwnerName,
       petOwnerTelephone: "07894465438",
       petOwnerEmail: petOwnerEmail,
-      petOwnerAddress: 
-      {
-        addressLineOne: addressLineOne,
-        addressLineTwo: addressLineTwo,
-        townOrCity: "LONDON",
-        county: "",
-        postCode: "EC1N 2PB"
-      },
+      petOwnerAddress: expectedDataPetOwnerAddress,
       issuingAuthority:  {
         address: expectedDataIssuingAuthorityAddress,
         name: agencyName,
@@ -447,14 +434,7 @@ describe("getMicrochipData", () => {
       petOwnerTelephone: "07894465438",
       petOwnerEmail: petOwnerEmail,
       issuedDate: null,
-      petOwnerAddress: 
-      {
-        addressLineOne: addressLineOne,
-        addressLineTwo: addressLineTwo,
-        townOrCity: "LONDON",
-        county: "",
-        postCode: "EC1N 2PB"
-      },
+      petOwnerAddress: expectedDataPetOwnerAddress,
       issuingAuthority:  {
         address: expectedDataIssuingAuthorityAddress,
         name: agencyName,
@@ -510,14 +490,7 @@ describe("getMicrochipData", () => {
       petOwnerTelephone: "07894465438",
       petOwnerEmail: petOwnerEmail,
       issuedDate: null,
-      petOwnerAddress: 
-      {
-        addressLineOne: addressLineOne,
-        addressLineTwo: addressLineTwo,
-        townOrCity: "LONDON",
-        county: "",
-        postCode: "EC1N 2PB"
-      },
+      petOwnerAddress: expectedDataPetOwnerAddress,
       issuingAuthority:  {
         address: expectedDataIssuingAuthorityAddress,
         name: agencyName,
