@@ -10,6 +10,7 @@ const referredView = "componentViews/checker/referred/referredView";
 const checkNeeded = "Check Needed";
 const notAllowed = "Not Allowed";
 const allowed = "Allowed";
+const invalidSpsOutcome = "not a valid spsOutcome";
 const ptdNum = "GB826223445";
 const ptdFormatted = "GB826 223 445";
 const numArrayElements = 25;
@@ -241,7 +242,7 @@ describe("ReferredHandlers", () => {
 
   it("should return view with one spsCheck that has no itemClass due to not having a valid spsOutcome status", async () => {
       const mockSpsChecks = [
-        { SPSOutcome: 'not a valid spsOutcome', PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: invalidSpsOutcome, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
       ];
 
       spsReferralMainService.getSpsReferrals.mockResolvedValue(mockSpsChecks);
@@ -265,7 +266,7 @@ describe("ReferredHandlers", () => {
             if (key === "spsChecks") {
               return {
                 spsChecks: [
-                  { SPSOutcome: 'not a valid spsOutcome', PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+                  { SPSOutcome: invalidSpsOutcome, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
                 ],
               };
             }            
@@ -292,7 +293,7 @@ describe("ReferredHandlers", () => {
           departureTime: "12:00",
         },
         spsChecks: [
-          { SPSOutcome: 'not a valid spsOutcome', PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+          { SPSOutcome: invalidSpsOutcome, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
         ],
         page: 1,
         totalPages: 1,
