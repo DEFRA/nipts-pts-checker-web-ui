@@ -239,6 +239,67 @@ describe("ReferredHandlers", () => {
     });
   });
 
+  it("should return view with one spsCheck that has no itemClass due to not having a valid spsOutcome status", async () => {
+      const mockSpsChecks = [
+        { SPSOutcome: 'not a valid spsOutcome', PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+      ];
+
+      spsReferralMainService.getSpsReferrals.mockResolvedValue(mockSpsChecks);
+      
+      const mockRequest = {
+        yar: {
+          get: jest.fn().mockImplementation((key) => {
+            if (key === "routeName") {
+              return "RouteA";
+            }
+            if (key === "departureDate") 
+            {
+              return departureDate
+            }
+            if (key === "departureTime") {
+              return "12:00";
+            }
+            if (key === "currentSailingSlot") {
+              return { slot: "morning" };
+            }
+            if (key === "spsChecks") {
+              return {
+                spsChecks: [
+                  { SPSOutcome: 'not a valid spsOutcome', PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+                ],
+              };
+            }            
+            return null;
+          }),
+        },
+        query: {
+          page: 1,
+        },
+      };
+
+      const h = {
+        view: jest.fn(),
+      };
+
+      await ReferredHandlers.getReferredChecks(mockRequest, h);
+
+      expect(h.view).toHaveBeenCalledWith(referredView, {
+        serviceName: `${headerData.checkerTitle}: ${headerData.checkerSubtitle}`,
+        currentSailingSlot: { slot: "morning" },
+        check: {
+          routeName: "RouteA",
+          departureDate: departureDate,
+          departureTime: "12:00",
+        },
+        spsChecks: [
+          { SPSOutcome: 'not a valid spsOutcome', PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        ],
+        page: 1,
+        totalPages: 1,
+        pages: [1],
+      });
+    });
+
   describe("postCheckReport", () => {
     it("should set CheckSummaryId in request.yar and redirect to /checker/checkreportdetails", async () => {
       // Mock request object
