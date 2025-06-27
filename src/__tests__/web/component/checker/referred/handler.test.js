@@ -238,6 +238,55 @@ describe("ReferredHandlers", () => {
         pages: [1],
       });
     });
+
+    it("should not format a PTD number that doesn't start with GB", async () => {
+      const notGBPTDNum = "NOTGB1234";
+
+      const mockSpsChecks = [
+        { SPSOutcome: checkNeeded, PTDNumber: notGBPTDNum},
+      ];
+      spsReferralMainService.getSpsReferrals.mockResolvedValue(mockSpsChecks);
+
+      const mockRequest = {
+        yar: {
+          get: jest.fn().mockImplementation((key) => {
+            if (key === "routeName") {
+                return "RouteC";
+            }
+            if (key === "departureDate") {
+              return departureDate;
+            }
+            if (key === "departureTime") {
+              return "12:00";
+            }
+            return null;
+          }),
+        },
+        query: {},
+      };
+
+      const h = {
+        view: jest.fn(),
+      };
+
+      await ReferredHandlers.getReferredChecks(mockRequest, h);
+
+      expect(h.view).toHaveBeenCalledWith(expect.any(String), {
+        serviceName: `${headerData.checkerTitle}: ${headerData.checkerSubtitle}`,
+        currentSailingSlot: {},
+        check: {
+          routeName: "RouteC",
+          departureDate: departureDate,
+          departureTime: "12:00",
+        },
+        spsChecks: [
+          { SPSOutcome: checkNeeded, classColour: "blue", PTDNumber: notGBPTDNum, },
+        ],
+        page: 1,
+        totalPages: 1,
+        pages: [1],
+      });
+    });
   });
 
   it("should return view with one spsCheck that has no itemClass due to not having a valid spsOutcome status", async () => {
