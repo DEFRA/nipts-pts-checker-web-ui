@@ -11,7 +11,7 @@ async function getCheckDetails(request, h) {
     const ref = request.yar.get("identifier");
     const checkSummaryId = request.yar.get("checkSummaryId");
 
-    const checkDetails = await spsReferralMainService.GetCompleteCheckDetails(
+    const checkDetails = await spsReferralMainService.getCompleteCheckDetails(
       checkSummaryId,
       request
     );

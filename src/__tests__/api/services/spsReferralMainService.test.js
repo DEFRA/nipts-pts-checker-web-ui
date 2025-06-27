@@ -9,7 +9,7 @@ const routeToValidate = "/Checker/getSpsCheckDetailsByRoute";
 const unexpectedError = "Unexpected error";
 const getCompleteCheckDetails = "/Checker/getCompleteCheckDetails";
 
-describe("GetSpsReferrals", () => {
+describe("getSpsReferrals", () => {
   const route = "TestRoute";
   const date = "2024-11-05";
   const timeWindowInHours = 2;
@@ -67,7 +67,7 @@ describe("GetSpsReferrals", () => {
         })
     );
 
-    const data = await spsService.GetSpsReferrals(
+    const data = await spsService.getSpsReferrals(
       route,
       date,
       timeWindowInHours,
@@ -86,7 +86,7 @@ describe("GetSpsReferrals", () => {
     const apiError = { error: "Not Found" };
     httpService.postAsync.mockResolvedValue(apiError);
 
-    const result = await spsService.GetSpsReferrals(
+    const result = await spsService.getSpsReferrals(
       route,
       date,
       timeWindowInHours,
@@ -106,7 +106,7 @@ describe("GetSpsReferrals", () => {
     httpService.postAsync.mockResolvedValue(apiResponse);
 
     await expect(
-      spsService.GetSpsReferrals(route, date, timeWindowInHours, request)
+      spsService.getSpsReferrals(route, date, timeWindowInHours, request)
     ).rejects.toThrow("Unexpected response structure");
 
     expect(httpService.postAsync).toHaveBeenCalledWith(
@@ -122,7 +122,7 @@ describe("GetSpsReferrals", () => {
     httpService.postAsync.mockRejectedValue(new Error(unexpectedError));
 
     await expect(
-      spsService.GetSpsReferrals(route, date, timeWindowInHours, request)
+      spsService.getSpsReferrals(route, date, timeWindowInHours, request)
     ).rejects.toThrow(unexpectedError);
 
     expect(httpService.postAsync).toHaveBeenCalledWith(
@@ -133,7 +133,7 @@ describe("GetSpsReferrals", () => {
   });
 });
 
-describe("GetCompleteCheckDetails", () => {
+describe("getCompleteCheckDetails", () => {
   let request;
 
   beforeEach(() => {
@@ -163,7 +163,7 @@ describe("GetCompleteCheckDetails", () => {
 
             httpService.postAsync.mockResolvedValue(apiResponse);
 
-            const result = await spsService.GetCompleteCheckDetails(
+            const result = await spsService.getCompleteCheckDetails(
                 checkSummaryId,
                 request
             );
@@ -182,7 +182,7 @@ describe("GetCompleteCheckDetails", () => {
             httpService.postAsync.mockResolvedValue(apiError);
 
             await expect(
-                spsService.GetCompleteCheckDetails(checkSummaryId, request)
+                spsService.getCompleteCheckDetails(checkSummaryId, request)
             ).rejects.toThrow("Not Found");
 
             expect(httpService.postAsync).toHaveBeenCalledWith(
@@ -197,7 +197,7 @@ describe("GetCompleteCheckDetails", () => {
             const apiResponse = { data: null };
             httpService.postAsync.mockResolvedValue(apiResponse);
 
-            const result = await spsService.GetCompleteCheckDetails(
+            const result = await spsService.getCompleteCheckDetails(
                 checkSummaryId,
                 request
             );
@@ -215,7 +215,7 @@ describe("GetCompleteCheckDetails", () => {
             httpService.postAsync.mockRejectedValue(new Error(unexpectedError));
 
             await expect(
-                spsService.GetCompleteCheckDetails(checkSummaryId, request)
+                spsService.getCompleteCheckDetails(checkSummaryId, request)
             ).rejects.toThrow(unexpectedError);
 
             expect(httpService.postAsync).toHaveBeenCalledWith(
