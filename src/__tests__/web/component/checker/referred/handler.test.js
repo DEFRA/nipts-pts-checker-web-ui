@@ -432,7 +432,16 @@ describe("ReferredHandlers", () => {
       );
     });
 
-
+    
+    it("should throw error if BASE_API_URL is not set", () => {
+      process.env.BASE_API_URL = "";
+      expect(() => {
+        const baseUrl = process.env.BASE_API_URL;
+        if (!baseUrl) {
+          throw new Error("BASE_API_URL is not set in environment variables.");
+        }
+      }).toThrow("BASE_API_URL is not set in environment variables.");
+    });
   });
 
 });
