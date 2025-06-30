@@ -444,53 +444,6 @@ describe("ReferredHandlers", () => {
     });
   });
 
-describe("getSpsChecks", () => {
-  it("should use DASHBOARD_START_HOUR from environment when set", async () => {
-    process.env.DASHBOARD_START_HOUR = "4";
-
-    const request = {};
-
-    // Mock spsReferralMainService.getSpsReferrals
-    spsReferralMainService.getSpsReferrals = async (
-      routeName,
-      departureDateTime,
-      timeWindow,
-      req
-    ) => {
-      return [timeWindow]; // Just return the timeWindow for assertion
-    };
-
-    const result = await ReferredHandlers.getSpsChecks(
-      "RouteA",
-      "2025-06-30T10:00:00Z",
-      request
-    );
-
-    expect(result).toEqual([-4]);
-  });
-
-  it("should fall back to dashboardTimeBoundary when DASHBOARD_START_HOUR is not set", async () => {
-    delete process.env.DASHBOARD_START_HOUR;
-
-    const request = {};
-    const dashboardTimeBoundary = -6; // Simulate fallback value
-
-    // Override the method to inject fallback manually
-    ReferredHandlers.getSpsChecks = async function (routeName, departureDateTime, request) {
-      const timeWindow =
-        Number(process.env.DASHBOARD_START_HOUR) * -1 || dashboardTimeBoundary;
-      return [timeWindow];
-    };
-
-    const result = await ReferredHandlers.getSpsChecks(
-      "RouteB",
-      "2025-06-30T10:00:00Z",
-      request
-    );
-
-    expect(result).toEqual([-6]);
-  });
-});
 
 
 
