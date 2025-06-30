@@ -159,10 +159,10 @@ describe("ReferredHandlers", () => {
 
     
     it("should cap page number to totalPages when page exceeds range", async () => {
-      const numArrayElements = 25;
-      const paginationMin = 20;
-      const paginationMax = 30;
-      const totalPages = 3;
+      let numArrayElements = 25;
+      let paginationMin = 20;
+      let paginationMax = 30;
+      let totalPages = 3;
 
       const mockSpsChecks = Array.from({ length: numArrayElements }, () => ({
         SPSOutcome: allowed,
@@ -171,13 +171,19 @@ describe("ReferredHandlers", () => {
       }))
 
       spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
-      
+
       const mockRequest = {
       yar: {
         get: jest.fn((key) => {
-          if (key === "routeName") return "RouteB";
-          if (key === "departureDate") return departureDate;
-          if (key === "departureTime") return "12:00";
+          if (key === "routeName") {
+            return "RouteB";  
+          } 
+          if (key === "departureDate") {
+            return departureDate;
+          }
+          if (key === "departureTime") {
+            return "12:00";
+          } 
           return null;
           }),
         },
