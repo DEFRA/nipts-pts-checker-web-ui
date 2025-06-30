@@ -170,24 +170,27 @@ describe("ReferredHandlers", () => {
         PTDNumberFormatted: ptdFormatted,
       }))
 
-      spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks)
+      spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
+      
       const mockRequest = {
       yar: {
-      get: jest.fn((key) => {
-      if (key === "routeName") return "RouteB";
-      if (key === "departureDate") return departureDate;
-      if (key === "departureTime") return "12:00";
-      return null;
-      }),
-      },
+        get: jest.fn((key) => {
+          if (key === "routeName") return "RouteB";
+          if (key === "departureDate") return departureDate;
+          if (key === "departureTime") return "12:00";
+          return null;
+          }),
+        },
       query: {
-      page: 10, // too high
-      },
+        page: 10, // too high
+        },
       }
+
       const h = {
-      view: jest.fn(),
-      }
-      await ReferredHandlers.getReferredChecks(mockRequest, h)
+        view: jest.fn(),
+        }
+      await ReferredHandlers.getReferredChecks(mockRequest, h);
+
       expect(h.view).toHaveBeenCalledWith(expect.any(String), {
       serviceName: `${headerData.checkerTitle}: ${headerData.checkerSubtitle}`,
       currentSailingSlot: {},
