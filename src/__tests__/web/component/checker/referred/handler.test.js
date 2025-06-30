@@ -157,7 +157,8 @@ describe("ReferredHandlers", () => {
       });
     });
 
-    it("should assign class colors correctly based on SPSOutcome", async () => {
+    it("should assign class colors correctly based on SPSOutcome & start hour is offset", async () => {
+      process.env.DASHBOARD_START_HOUR = "3";
       const mockSpsChecks = [
         { SPSOutcome: checkNeeded, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
         { SPSOutcome: allowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
