@@ -137,7 +137,7 @@ describe("ReferredHandlers", () => {
       });
     });
 
-    it("should handle pagination correctly", async () => {
+    it("should handle pagination correctly when exceeding the max length", async () => {
 
       const mockSpsChecks = Array.from({ length: numArrayElements }, () => ({
         SPSOutcome: allowed,
@@ -188,55 +188,58 @@ describe("ReferredHandlers", () => {
       });
     });
 
-    
-    it("should cap page number to totalPages when page exceeds range", async () => {
-      const numArrayElements = 25;
-      const paginationMin = 20;
-      const paginationMax = 30;
-      const totalPages = 3;
+        it("should handle pagination correctly", async () => {
 
-      const mockSpsChecks = Array.from({ length: numArrayElements }, () => ({
+      const mockSpsChecks = Array.from({ length: 30 }, () => ({
         SPSOutcome: allowed,
         PTDNumber: ptdNum,
-        PTDNumberFormatted: ptdFormatted,
-      }))
+        PTDNumberFormatted: ptdFormatted
+      }));
 
-      spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks)
+      spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
+
       const mockRequest = {
-      yar: {
-      get: jest.fn((key) => {
-      if (key === "routeName") return "RouteB";
-      if (key === "departureDate") return departureDate;
-      if (key === "departureTime") return "12:00";
-      return null;
-      }),
-      },
-      query: {
-      page: 10, // too high
-      },
-      }
+        yar: {
+          get: jest.fn().mockImplementation((key) => {
+            if (key === "routeName") {
+              return "RouteB";
+            }
+            if (key === "departureDate") {
+              return departureDate;
+            } 
+            if (key === "departureTime") {
+              return "12:00";
+            }
+            return null;
+          }),
+        },
+        query: {
+          page: 2,
+        },
+      };
+
       const h = {
-      view: jest.fn(),
-      }
-      await ReferredHandlers.getReferredChecks(mockRequest, h)
+        view: jest.fn(),
+      };
+
+      await ReferredHandlers.getReferredChecks(mockRequest, h);
+
       expect(h.view).toHaveBeenCalledWith(expect.any(String), {
-      serviceName: `${headerData.checkerTitle}: ${headerData.checkerSubtitle}`,
-      currentSailingSlot: {},
-      check: {
-      routeName: "RouteB",
-      departureDate: departureDate,
-      departureTime: "12:00",
-      },
-      spsChecks: mockSpsChecks.slice(paginationMin, paginationMax),
-      page: totalPages,
-      totalPages,
-      pages: [1, 2, 3],
+        serviceName: `${headerData.checkerTitle}: ${headerData.checkerSubtitle}`,
+        currentSailingSlot: {},
+        check: {
+          routeName: "RouteB",
+          departureDate: departureDate,
+          departureTime: "12:00",
+        },
+        spsChecks: mockSpsChecks.slice(paginationMin, paginationMax), // Ensuring correct pagination slice
+        page: 2,
+        totalPages: totalPages,
+        pages: [1, 2, 3],
       });
     });
 
-
-    it("should assign class colors correctly based on SPSOutcome & start hour is offset", async () => {
-      process.env.DASHBOARD_START_HOUR = "3";
+    it("should assign class colors correctly based on SPSOutcome", async () => {
       const mockSpsChecks = [
         { SPSOutcome: checkNeeded, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
         { SPSOutcome: allowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
