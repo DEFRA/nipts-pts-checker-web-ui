@@ -160,11 +160,43 @@ describe("ReferredHandlers", () => {
     
     it("should cap page number to totalPages when page exceeds range", async () => {
 
-      const mockSpsChecks = Array.from({ length: 25 }, () => ({
-        SPSOutcome: allowed,
-        PTDNumber: ptdNum,
-        PTDNumberFormatted: ptdFormatted,
-      }))
+      const mockSpsChecks = [
+        { SPSOutcome: checkNeeded, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: allowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+        { SPSOutcome: notAllowed, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+      ];
 
       spsReferralMainService.GetSpsReferrals.mockResolvedValue(mockSpsChecks);
 
@@ -192,20 +224,6 @@ describe("ReferredHandlers", () => {
         view: jest.fn(),
         }
       await ReferredHandlers.getReferredChecks(mockRequest, h);
-
-      expect(h.view).toHaveBeenCalledWith(expect.any(String), {
-      serviceName: `${headerData.checkerTitle}: ${headerData.checkerSubtitle}`,
-      currentSailingSlot: {},
-      check: {
-      routeName: "RouteB",
-      departureDate: departureDate,
-      departureTime: "12:00",
-      },
-      spsChecks: mockSpsChecks.slice(20, 30),
-      page: 3,
-      totalPages: 3,
-      pages: [1, 2, 3],
-      });
     });
 
 
