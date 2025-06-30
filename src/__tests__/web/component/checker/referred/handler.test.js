@@ -444,4 +444,59 @@ describe("ReferredHandlers", () => {
     });
   });
 
+  describe("getSpsChecks", () => {
+  it("should return mapped referrals from getSpsReferrals", async () => {
+    // Mock request object
+    const request = {
+      headers: {
+        authorization: "Bearer token",
+      },
+    };
+
+    // Set environment variable
+    process.env.DASHBOARD_START_HOUR = "2";
+
+    // Mock spsReferralMainService.getSpsReferrals
+    spsReferralMainService.getSpsReferrals = async (
+      routeName,
+      departureDateTime,
+      timeWindow,
+      req
+    ) => {
+      return [
+        {
+          PTDNumber: "12345",
+        },
+      ];
+    };
+
+    const result = await ReferredHandlers.getSpsChecks(
+      "Dover-Calais",
+      "2025-06-30T10:00:00Z",
+      request
+    );
+
+    // Assert that the result is the expected array
+    expect(result).toEqual([{ PTDNumber: "12345" }]);
+  });
+
+  it("should return empty array if getSpsReferrals returns null", async () => {
+    // Mock request object
+    const request = {};
+
+    // Mock spsReferralMainService.getSpsReferrals to return null
+    spsReferralMainService.getSpsReferrals = async () => null;
+
+    const result = await ReferredHandlers.getSpsChecks(
+      "AnyRoute",
+      "2025-06-30T10:00:00Z",
+      request
+    );
+
+    // Assert that the result is an empty array
+    expect(result).toEqual([]);
+  });
+});
+
+
 });
