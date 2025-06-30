@@ -159,12 +159,8 @@ describe("ReferredHandlers", () => {
 
     
     it("should cap page number to totalPages when page exceeds range", async () => {
-      let numArrayElements = 25;
-      let paginationMin = 20;
-      let paginationMax = 30;
-      let totalPages = 3;
 
-      const mockSpsChecks = Array.from({ length: numArrayElements }, () => ({
+      const mockSpsChecks = Array.from({ length: 25 }, () => ({
         SPSOutcome: allowed,
         PTDNumber: ptdNum,
         PTDNumberFormatted: ptdFormatted,
@@ -205,9 +201,9 @@ describe("ReferredHandlers", () => {
       departureDate: departureDate,
       departureTime: "12:00",
       },
-      spsChecks: mockSpsChecks.slice(paginationMin, paginationMax),
-      page: totalPages,
-      totalPages,
+      spsChecks: mockSpsChecks.slice(20, 30),
+      page: 3,
+      totalPages: 3,
       pages: [1, 2, 3],
       });
     });
