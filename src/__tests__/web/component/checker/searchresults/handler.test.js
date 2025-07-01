@@ -19,6 +19,7 @@ import apiService from "../../../../../api/services/apiService.js";
 import { CheckOutcomeConstants } from "../../../../../constants/checkOutcomeConstant.js";
 import DashboardMainModel from "../../../../../constants/dashBoardConstant.js";
 import errorMessages from "../../../../../web/component/checker/searchresults/errorMessages.js";
+import headerData from "../../../../../web/helper/constants.js";
 
 const VIEW_PATH = "componentViews/checker/searchresults/searchResultsView";
 const PTD_LENGTH = 11;
@@ -76,6 +77,25 @@ describe("SearchResults_ViewTests", () => {
     });
   });
 
+    test("returns view with microchipNumber and data from session - getScanResultsHandler", async () => {
+    const mockMicrochipNumber = "123456789012345";
+    const mockData = { some: "data" };
+    request.yar.get.mockImplementation((key) => {
+      return (
+        { microchipNumber: mockMicrochipNumber, data: mockData }[key] || null
+      );
+    });
+    const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
+    await SearchResultsHandlers.getScanResultsHandler(request, h);
+    expect(h.view).toHaveBeenCalledWith(VIEW_PATH, {
+      microchipNumber: mockMicrochipNumber,
+      pageTitle,
+      data: mockData,
+      checklist: {},
+    });
+    expect(headerData.section).toBe("scan");
+  });
+
   test("formats ptdNumber correctly when present", async () => {
     const mockData = { ptdNumber: "12345678901" };
     request.yar.get.mockImplementation((key) => {
@@ -93,6 +113,25 @@ describe("SearchResults_ViewTests", () => {
     );
   });
 
+  test("formats ptdNumber correctly when present - getScanResultsHandler", async () => {
+    const mockData = { ptdNumber: "12345678901" };
+    request.yar.get.mockImplementation((key) => {
+      return (
+        { microchipNumber: "123456789012345", data: mockData }[key] || null
+      );
+    });
+    await SearchResultsHandlers.getScanResultsHandler(request, h);
+    const expectedFormat = formatPtdNumber("12345678901");
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        data: expect.objectContaining({ ptdFormatted: expectedFormat }),
+      })
+    );
+
+    expect(headerData.section).toBe("scan");
+  });
+
   test("formats ptdNumber correctly when short", async () => {
     const mockData = { ptdNumber: "123" };
     request.yar.get.mockImplementation((key) => {
@@ -108,6 +147,24 @@ describe("SearchResults_ViewTests", () => {
         data: expect.objectContaining({ ptdFormatted: expectedFormat }),
       })
     );
+  });
+
+  test("formats ptdNumber correctly when short - getSearchResultsHandler", async () => {
+    const mockData = { ptdNumber: "123" };
+    request.yar.get.mockImplementation((key) => {
+      return (
+        { microchipNumber: "123456789012345", data: mockData }[key] || null
+      );
+    });
+    await SearchResultsHandlers.getSearchResultsHandler(request, h);
+    const expectedFormat = formatPtdNumber("123");
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        data: expect.objectContaining({ ptdFormatted: expectedFormat }),
+      })
+    );
+    expect(headerData.section).toBe("scan");
   });
 });
 
@@ -132,6 +189,24 @@ describe("SearchResults_EmptyHandling", () => {
     );
   });
 
+  test("handles empty ptdNumber - getScanResultsHandler", async () => {
+    const mockData = { ptdNumber: "" };
+    request.yar.get.mockImplementation((key) => {
+      return (
+        { microchipNumber: "123456789012345", data: mockData }[key] || null
+      );
+    });
+    await SearchResultsHandlers.getScanResultsHandler(request, h);
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        data: expect.objectContaining({ ptdFormatted: "" }),
+      })
+    );
+
+    expect(headerData.section).toBe("scan");
+  });
+
   test("sets ptdFormatted to empty string when data object has no ptdNumber", async () => {
     const mockData = {};
     request.yar.get.mockImplementation((key) => {
@@ -146,6 +221,23 @@ describe("SearchResults_EmptyHandling", () => {
         data: expect.objectContaining({ ptdFormatted: "" }),
       })
     );
+  });
+
+  test("sets ptdFormatted to empty string when data object has no ptdNumber - getScanResultsHandler", async () => {
+    const mockData = {};
+    request.yar.get.mockImplementation((key) => {
+      return (
+        { microchipNumber: "123456789012345", data: mockData }[key] || null
+      );
+    });
+    await SearchResultsHandlers.getScanResultsHandler(request, h);
+    expect(h.view).toHaveBeenCalledWith(
+      VIEW_PATH,
+      expect.objectContaining({
+        data: expect.objectContaining({ ptdFormatted: "" }),
+      })
+    );
+    expect(headerData.section).toBe("scan");
   });
 
   test("returns view with nonComplianceToSearchResults navigation", async () => {
@@ -171,6 +263,32 @@ describe("SearchResults_EmptyHandling", () => {
     expect(request.yar.clear).toHaveBeenCalledWith(
       "nonComplianceToSearchResults"
     );
+  });
+
+  test("returns view with nonComplianceToSearchResults navigation - getScanResultsHandler", async () => {
+    const mockMicrochipNumber = "123456789012345";
+    const mockData = { some: "data" };
+    const nonComplianceToSearchResults = true;
+    request.yar.get.mockImplementation((key) => {
+      return (
+        {
+          microchipNumber: mockMicrochipNumber,
+          data: mockData,
+          nonComplianceToSearchResults,
+        }[key] || null
+      );
+    });
+    await SearchResultsHandlers.getScanResultsHandler(request, h);
+    expect(h.view).toHaveBeenCalledWith(VIEW_PATH, {
+      microchipNumber: mockMicrochipNumber,
+      pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
+      data: mockData,
+      checklist: CheckOutcomeConstants.Fail,
+    });
+    expect(request.yar.clear).toHaveBeenCalledWith(
+      "nonComplianceToSearchResults"
+    );
+    expect(headerData.section).toBe("scan");
   });
 });
 
