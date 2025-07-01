@@ -13,7 +13,7 @@ if (!baseUrl) {
   throw new Error("BASE_API_URL is not set in environment variables.");
 }
 
-const GetSpsReferrals = async (route, date, timeWindowInHours, request) => {
+const getSpsReferrals = async (route, date, timeWindowInHours, request) => {
   const SailingDate = moment(date).toISOString();
   try {
     const response = await httpService.postAsync(
@@ -54,7 +54,7 @@ const GetSpsReferrals = async (route, date, timeWindowInHours, request) => {
 };
 
 
-const GetCompleteCheckDetails = async (checkSummaryId, request) => {
+const getCompleteCheckDetails = async (checkSummaryId, request) => {
   try {
     const response = await httpService.postAsync(
       `${baseUrl}/Checker/getCompleteCheckDetails`,
@@ -69,7 +69,7 @@ const GetCompleteCheckDetails = async (checkSummaryId, request) => {
     return response?.data || null;
   } catch (error) {
     global.appInsightsClient.trackException({ exception: error });
-    console.error("Error in GetCompleteCheckDetails:", error);
+    console.error("Error in getCompleteCheckDetails:", error);
     throw error;
   }
 };
@@ -77,6 +77,6 @@ const GetCompleteCheckDetails = async (checkSummaryId, request) => {
 
 
 export default {
-  GetSpsReferrals,
-  GetCompleteCheckDetails
+  getSpsReferrals,
+  getCompleteCheckDetails
 };

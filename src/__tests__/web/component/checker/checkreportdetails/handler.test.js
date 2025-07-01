@@ -41,7 +41,7 @@ describe("CheckReportHandlers", () => {
         },
       };
 
-      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(null);
+      spsReferralMainService.getCompleteCheckDetails.mockResolvedValue(null);
 
       const h = {
         response: jest.fn().mockReturnThis(),
@@ -80,7 +80,7 @@ describe("CheckReportHandlers", () => {
         scheduledDepartureTime: "14:00:00",
       };
 
-      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+      spsReferralMainService.getCompleteCheckDetails.mockResolvedValue(
         mockCheckDetails
       );
 
@@ -133,7 +133,7 @@ describe("CheckReportHandlers", () => {
         scheduledDepartureTime: "14:00:00",
       };
 
-      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+      spsReferralMainService.getCompleteCheckDetails.mockResolvedValue(
         mockCheckDetails
       );
 
@@ -180,7 +180,7 @@ describe("CheckReportHandlers", () => {
         route: "Route A",
       };
 
-      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+      spsReferralMainService.getCompleteCheckDetails.mockResolvedValue(
         mockCheckDetails
       );
 
@@ -209,7 +209,7 @@ describe("CheckReportHandlers", () => {
       });
     });
 
-    it("should return 500 when there is an error in GetCompleteCheckDetails", async () => {
+    it("should return 500 when there is an error in getCompleteCheckDetails", async () => {
       const mockRequest = {
         yar: {
           get: jest
@@ -219,7 +219,7 @@ describe("CheckReportHandlers", () => {
         },
       };
 
-      spsReferralMainService.GetCompleteCheckDetails.mockRejectedValue(
+      spsReferralMainService.getCompleteCheckDetails.mockRejectedValue(
         new Error(testError)
       );
 
@@ -417,7 +417,7 @@ describe("CheckReportHandlers", () => {
       const mockCheckDetails = {
         detailsComments: ["Some valid comment", "Another comment"],
       };
-      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+      spsReferralMainService.getCompleteCheckDetails.mockResolvedValue(
         mockCheckDetails
       );
       await CheckReportHandlers.getCheckDetails(mockRequest, h);
@@ -431,7 +431,7 @@ describe("CheckReportHandlers", () => {
       const mockCheckDetails = {
         detailsComments: [],
       };
-      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+      spsReferralMainService.getCompleteCheckDetails.mockResolvedValue(
         mockCheckDetails
       );
       await CheckReportHandlers.getCheckDetails(mockRequest, h);
@@ -464,7 +464,7 @@ describe("CheckReportHandlers", () => {
       const mockCheckDetails = {
         detailsComments: ["   ", ""],
       };
-      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+      spsReferralMainService.getCompleteCheckDetails.mockResolvedValue(
         mockCheckDetails
       );
       await CheckReportHandlers.getCheckDetails(mockRequest, h);
@@ -480,7 +480,7 @@ describe("CheckReportHandlers", () => {
         detailsComments: null,
       };
 
-      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+      spsReferralMainService.getCompleteCheckDetails.mockResolvedValue(
         mockCheckDetails
       );
 

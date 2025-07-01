@@ -24,6 +24,61 @@ global.appInsightsClient = {
   trackException: jest.fn()
  };
 
+ const expectedDataPetOwnerAddress = {
+  addressLineOne: addressLineOne,
+  addressLineTwo: addressLineTwo,
+  townOrCity: "LONDON",
+  county: "",
+  postCode: "EC1N 2PB"
+}
+
+const validPetOwnerData =  {
+  name: petOwnerName,
+  telephone: "07894465438",
+  email: petOwnerEmail,
+  address: expectedDataPetOwnerAddress
+}
+
+const apiResponseCommon = {
+    data: {
+        pet: {},
+        application: {
+          applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
+          referenceNumber: "SZWPFXEG",
+          dateOfApplication: "2024-02-09T11:31:29.7165377",
+          status: awaitingVerification,
+        },
+        travelDocument: {
+          travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
+          travelDocumentReferenceNumber: "GB826J40C050",
+          dateOfIssue: "2024-06-12T10:26:52.0391239",
+        },
+        petOwner: validPetOwnerData,
+      },
+      status: 200,
+}
+
+const expectedDataIssuingAuthorityAddress = {
+    addressLineOne: issuingAuthorityAddressLineOne,
+    addressLineThree: issuingAuthorityAddressLineThree,
+    addressLineTwo: issuingAuthorityAddressLineTwo,
+    county: "",
+    postCode: "CA3 8DX",
+    townOrCity: "Carlisle",
+}
+
+const validApplicationData = {
+  applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
+  referenceNumber: "SZWPFXEG",
+  dateOfApplication: "2024-02-09T11:31:29.7165377",
+  status: awaitingVerification,
+}
+
+const expectedDataIssuingAuthority = {
+  address: expectedDataIssuingAuthorityAddress,
+  name: agencyName,
+  signature: signatoryName,
+}
 
 describe("getMicrochipData", () => {
   let request;
@@ -40,35 +95,7 @@ describe("getMicrochipData", () => {
 
   it("should handle missing pet details gracefully Microchip", async () => {
     const microchipNumber = null;
-    const apiResponse = {
-      data: {
-        pet: {},
-        application: {
-          applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
-          referenceNumber: "SZWPFXEG",
-          dateOfApplication: "2024-02-09T11:31:29.7165377",
-          status: awaitingVerification,
-        },
-        travelDocument: {
-          travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
-          travelDocumentReferenceNumber: "GB826J40C050",
-          dateOfIssue: "2024-06-12T10:26:52.0391239",
-        },
-        petOwner: {
-          name: petOwnerName,
-          telephone: "07894465438",
-          email: petOwnerEmail,
-          address: {
-            addressLineOne: addressLineOne,
-            addressLineTwo: addressLineTwo,
-            townOrCity: "LONDON",
-            county: "",
-            postCode: "EC1N 2PB"
-          }
-        },
-      },
-      status: 200,
-    };
+    const apiResponse = apiResponseCommon
 
     httpService.postAsync.mockResolvedValue(apiResponse);
 
@@ -79,11 +106,11 @@ describe("getMicrochipData", () => {
       petBreed: null,
       documentState: "awaiting",
       ptdNumber: "SZWPFXEG",
-      issuedDate: issedDate, // Formatted date
+      issuedDate: issedDate,
       microchipNumber: null,
-      microchipDate: null, // Formatted date
+      microchipDate: null,
       petSex: null,
-      petDoB: null, // Formatted date
+      petDoB: null,
       petColour: null,
       petFeaturesDetail: null,
       applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
@@ -92,26 +119,8 @@ describe("getMicrochipData", () => {
       petOwnerName: petOwnerName,
       petOwnerTelephone: "07894465438",
       petOwnerEmail: petOwnerEmail,
-      petOwnerAddress: 
-      {
-        addressLineOne: addressLineOne,
-        addressLineTwo: addressLineTwo,
-        townOrCity: "LONDON",
-        county: "",
-        postCode: "EC1N 2PB"
-      },
-      issuingAuthority:  {
-        address: {
-                addressLineOne: issuingAuthorityAddressLineOne,
-                addressLineThree: issuingAuthorityAddressLineThree,
-                addressLineTwo: issuingAuthorityAddressLineTwo,
-                county: "",
-                postCode: "CA3 8DX",
-                townOrCity: "Carlisle",
-                },
-        name: agencyName,
-        signature: signatoryName,
-      },
+      petOwnerAddress: expectedDataPetOwnerAddress,
+      issuingAuthority: expectedDataIssuingAuthority,
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -119,36 +128,23 @@ describe("getMicrochipData", () => {
     expect(data).toEqual(expectedData);
   });
 
+  const expectedDataPetOwnerAddressNulls = {
+    addressLineOne: null,
+    addressLineTwo: null,
+    townOrCity: null,
+    county: null,
+    postCode: null
+  }
+
   it("should return null for all values if item is empty Microchip", async () => {
     const microchipNumber = null;
-    const apiResponse = {
-      data: {
-        pet: { },
-        application: {
-          applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
-          referenceNumber: "SZWPFXEG",
-          dateOfApplication: "2024-02-09T11:31:29.7165377",
-          status: awaitingVerification,
-        },
-        travelDocument: {
-          travelDocumentId: null,
-          travelDocumentReferenceNumber: "GB826J40C050",
-          dateOfIssue: "2024-06-12T10:26:52.0391239",
-        },
-        petOwner: {
-          name: null,
-          telephone: null,
-          email: null,
-          address: {
-            addressLineOne: null,
-            addressLineTwo: null,
-            townOrCity: null,
-            county: null,
-            postCode: null
-          }
-        },
-      },
-      status : 200,
+    const apiResponse = apiResponseCommon;
+    apiResponse.data.travelDocument.travelDocumentId = null;
+    apiResponse.data.petOwner = {
+      name: null,
+      telephone: null,
+      email: null,
+      address: expectedDataPetOwnerAddressNulls
     };
 
     httpService.postAsync.mockResolvedValue(apiResponse);
@@ -173,26 +169,8 @@ describe("getMicrochipData", () => {
       petOwnerName: null,
       petOwnerTelephone: null,
       petOwnerEmail: null,
-      petOwnerAddress: 
-      {
-        addressLineOne: null,
-        addressLineTwo: null,
-        townOrCity: null,
-        county: null,
-        postCode: null
-      },
-      issuingAuthority:  {
-        address: {
-                addressLineOne: issuingAuthorityAddressLineOne,
-                addressLineThree: issuingAuthorityAddressLineThree,
-                addressLineTwo: issuingAuthorityAddressLineTwo,
-                county: "",
-                postCode: "CA3 8DX",
-                townOrCity: "Carlisle",
-                },
-        name: agencyName,
-        signature: signatoryName,
-      },
+      petOwnerAddress: expectedDataPetOwnerAddressNulls,
+      issuingAuthority:  expectedDataIssuingAuthority,
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -202,34 +180,15 @@ describe("getMicrochipData", () => {
 
   it("should return default null values when properties are undefined Microchip", async () => {
     const microchipNumber = null;
-    const apiResponse = {
-      data: {
-        pet: { petName : null },
-        application: {
-          applicationId: null,
-          referenceNumber: "SZWPFXEG",
-          dateOfApplication: "2024-02-09T11:31:29.7165377",
-          status: awaitingVerification,
-        },
-        travelDocument: {
-          travelDocumentId: null,
-          travelDocumentReferenceNumber: "GB826J40C050",
-          dateOfIssue: "2024-06-12T10:26:52.0391239",
-        },
-        petOwner: {
-          name: null,
-          telephone: null,
-            email:null,
-            address: {
-              addressLineOne: null,
-              addressLineTwo: null,
-              townOrCity: null,
-              county: null,
-              postCode: null
-            }
-        },
-      },
-      status: 200,
+    const apiResponse = apiResponseCommon;
+    apiResponse.data.application.applicationId = null;
+    apiResponse.data.pet.petName = null;
+    apiResponse.data.travelDocument.travelDocumentId = null;
+    apiResponse.data.petOwner = {
+      name: null,
+      telephone: null,
+      email: null,
+      address: expectedDataPetOwnerAddressNulls
     };
 
     httpService.postAsync.mockResolvedValue(apiResponse);
@@ -254,26 +213,8 @@ describe("getMicrochipData", () => {
       petOwnerName: null,
       petOwnerTelephone: null,
       petOwnerEmail: null,
-      petOwnerAddress: 
-      {
-        addressLineOne: null,
-        addressLineTwo: null,
-        townOrCity: null,
-        county: null,
-        postCode: null
-      },
-      issuingAuthority:  {
-        address: {
-                addressLineOne: issuingAuthorityAddressLineOne,
-                addressLineThree: issuingAuthorityAddressLineThree,
-                addressLineTwo: issuingAuthorityAddressLineTwo,
-                county: "",
-                postCode: "CA3 8DX",
-                townOrCity: "Carlisle",
-                },
-        name: agencyName,
-        signature: signatoryName,
-      },
+      petOwnerAddress: expectedDataPetOwnerAddressNulls,
+      issuingAuthority:  expectedDataIssuingAuthority,
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -297,29 +238,9 @@ describe("getMicrochipData", () => {
           microchippedDate: "2021-02-01T00:00:00",
           significantFeatures: "None",
         },
-        application: {
-          applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
-          referenceNumber: "SZWPFXEG",
-          dateOfApplication: "2024-02-09T11:31:29.7165377",
-          status: awaitingVerification,
-        },
-        travelDocument: {
-          travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
-          travelDocumentReferenceNumber: "GB826J40C050",
-          dateOfIssue: "2024-06-12T10:26:52.0391239",
-        },
-        petOwner: {
-          name: petOwnerName,
-          telephone: "07894465438",
-          email: petOwnerEmail,
-          address: {
-            addressLineOne: addressLineOne,
-            addressLineTwo: addressLineTwo,
-            townOrCity: "LONDON",
-            county: "",
-            postCode: "EC1N 2PB"
-          }
-        },
+        application: validApplicationData,
+        travelDocument: validTravelDocumentData,
+        petOwner: validPetOwnerData,
       },
       status : 200,
     };
@@ -346,26 +267,8 @@ describe("getMicrochipData", () => {
       petOwnerName: petOwnerName,
       petOwnerTelephone: "07894465438",
       petOwnerEmail: petOwnerEmail,
-      petOwnerAddress: 
-      {
-        addressLineOne: addressLineOne,
-        addressLineTwo: addressLineTwo,
-        townOrCity: "LONDON",
-        county: "",
-        postCode: "EC1N 2PB"
-      },
-      issuingAuthority:  {
-        address: {
-                addressLineOne: issuingAuthorityAddressLineOne,
-                addressLineThree: issuingAuthorityAddressLineThree,
-                addressLineTwo: issuingAuthorityAddressLineTwo,
-                county: "",
-                postCode: "CA3 8DX",
-                townOrCity: "Carlisle",
-                },
-        name: agencyName,
-        signature: signatoryName,
-      },
+      petOwnerAddress: expectedDataPetOwnerAddress,
+      issuingAuthority:  expectedDataIssuingAuthority,
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -373,11 +276,7 @@ describe("getMicrochipData", () => {
     expect(data).toEqual(expectedData);
   });
 
-  it("should fetch data and map it to MicrochipAppPtdMainModel with correct status mapping", async () => {
-    const microchipNumber = "123456789012345";
-    const apiResponse = {
-      data: {
-        pet: {
+  const validPetData = {
           petId: "715bb304-1ca8-46ba-552d-08dc28c44b63",
           petName: "fido",
           species: "Dog",
@@ -387,30 +286,22 @@ describe("getMicrochipData", () => {
           dateOfBirth: "2021-01-01T00:00:00",
           microchippedDate: "2021-02-01T00:00:00",
           significantFeatures: "None",
-        },
-        application: {
-          applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
-          referenceNumber: "SZWPFXEG",
-          dateOfApplication: "2024-02-09T11:31:29.7165377",
-          status: awaitingVerification,
-        },
-        travelDocument: {
-          travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
-          travelDocumentReferenceNumber: "GB826J40C050",
-          dateOfIssue: "2024-06-12T10:26:52.0391239",
-        },
-        petOwner: {
-          name: petOwnerName,
-          telephone: "07894465438",
-          email: petOwnerEmail,
-          address: {
-            addressLineOne: addressLineOne,
-            addressLineTwo: addressLineTwo,
-            townOrCity: "LONDON",
-            county: "",
-            postCode: "EC1N 2PB"
-          }
-        },
+        }
+
+const validTravelDocumentData = {
+  travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
+  travelDocumentReferenceNumber: "GB826J40C050",
+  dateOfIssue: "2024-06-12T10:26:52.0391239",
+}
+
+  it("should fetch data and map it to MicrochipAppPtdMainModel with correct status mapping", async () => {
+    const microchipNumber = "123456789012345";
+    const apiResponse = {
+      data: {
+        pet: validPetData,
+        application: validApplicationData,
+        travelDocument: validTravelDocumentData,
+        petOwner: validPetOwnerData,
       },
       status : 200,
     };
@@ -437,26 +328,8 @@ describe("getMicrochipData", () => {
       petOwnerName: petOwnerName,
       petOwnerTelephone: "07894465438",
       petOwnerEmail: petOwnerEmail,
-      petOwnerAddress: 
-      {
-        addressLineOne: addressLineOne,
-        addressLineTwo: addressLineTwo,
-        townOrCity: "LONDON",
-        county: "",
-        postCode: "EC1N 2PB"
-      },
-      issuingAuthority:  {
-        address: {
-                addressLineOne: issuingAuthorityAddressLineOne,
-                addressLineThree: issuingAuthorityAddressLineThree,
-                addressLineTwo: issuingAuthorityAddressLineTwo,
-                county: "",
-                postCode: "CA3 8DX",
-                townOrCity: "Carlisle",
-                },
-        name: agencyName,
-        signature: signatoryName,
-      },
+      petOwnerAddress: expectedDataPetOwnerAddress,
+      issuingAuthority:  expectedDataIssuingAuthority,
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -468,39 +341,19 @@ describe("getMicrochipData", () => {
     const microchipNumber = "123456789012345";
     const apiResponse = {
       data: {
-        pet: {
-          petId: "715bb304-1ca8-46ba-552d-08dc28c44b63",
-          petName: "fido",
-          species: "Dog",
-          breedName: "Bulldog",
-          colourName: "White, cream or sand",
-          sex: "Male",
-          dateOfBirth: "2021-01-01T00:00:00",
-          microchippedDate: "2021-02-01T00:00:00",
-          significantFeatures: "None",
-        },
+        pet: validPetData,
         application: {
           applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
           referenceNumber: "SZWPFXEG",
           dateOfApplication: "2024-02-09T11:31:29.7165377",
           status: "approved",
         },
-        travelDocument: {
-          travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
-          travelDocumentReferenceNumber: "GB826J40C050",
-          dateOfIssue: "2024-06-12T10:26:52.0391239",
-        },
+        travelDocument: validTravelDocumentData,
         petOwner: {
           name: "Pet Owner Name change",
           telephone: "07894465438",
           email: petOwnerEmail,
-          address: {
-            addressLineOne: addressLineOne,
-            addressLineTwo: addressLineTwo,
-            townOrCity: "LONDON",
-            county: "",
-            postCode: "EC1N 2PB"
-          }
+          address: expectedDataPetOwnerAddress
         },
       },
       status: 200,
@@ -528,26 +381,8 @@ describe("getMicrochipData", () => {
       petOwnerTelephone: "07894465438",
       petOwnerEmail: petOwnerEmail,
       issuedDate: null,
-      petOwnerAddress: 
-      {
-        addressLineOne: addressLineOne,
-        addressLineTwo: addressLineTwo,
-        townOrCity: "LONDON",
-        county: "",
-        postCode: "EC1N 2PB"
-      },
-      issuingAuthority:  {
-        address: {
-                addressLineOne: issuingAuthorityAddressLineOne,
-                addressLineThree: issuingAuthorityAddressLineThree,
-                addressLineTwo: issuingAuthorityAddressLineTwo,
-                county: "",
-                postCode: "CA3 8DX",
-                townOrCity: "Carlisle",
-                },
-        name: agencyName,
-        signature: signatoryName,
-      },
+      petOwnerAddress: expectedDataPetOwnerAddress,
+      issuingAuthority:  expectedDataIssuingAuthority,
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -559,40 +394,15 @@ describe("getMicrochipData", () => {
     const microchipNumber = "123456789012345";
     const apiResponse = {
       data: {
-        pet: {
-          petId: "715bb304-1ca8-46ba-552d-08dc28c44b63",
-          petName: "fido",
-          species: "Dog",
-          breedName: "Bulldog",
-          colourName: "White, cream or sand",
-          sex: "Male",
-          dateOfBirth: "2021-01-01T00:00:00",
-          microchippedDate: "2021-02-01T00:00:00",
-          significantFeatures: "None",
-        },
+        pet: validPetData,
         application: {
           applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
           referenceNumber: "SZWPFXEG",
           dateOfApplication: "2024-02-09T11:31:29.7165377",
           status: "revoked",
         },
-        travelDocument: {
-          travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
-          travelDocumentReferenceNumber: "GB826J40C050",
-          dateOfIssue: "2024-06-12T10:26:52.0391239",
-        },
-        petOwner: {
-          name: petOwnerName,
-          telephone: "07894465438",
-          email: petOwnerEmail,
-          address: {
-            addressLineOne: addressLineOne,
-            addressLineTwo: addressLineTwo,
-            townOrCity: "LONDON",
-            county: "",
-            postCode: "EC1N 2PB"
-          }
-        },
+        travelDocument: validTravelDocumentData,
+        petOwner: validPetOwnerData,
       },
       status: 200,
     };
@@ -619,26 +429,8 @@ describe("getMicrochipData", () => {
       petOwnerTelephone: "07894465438",
       petOwnerEmail: petOwnerEmail,
       issuedDate: null,
-      petOwnerAddress: 
-      {
-        addressLineOne: addressLineOne,
-        addressLineTwo: addressLineTwo,
-        townOrCity: "LONDON",
-        county: "",
-        postCode: "EC1N 2PB"
-      },
-      issuingAuthority:  {
-        address: {
-                addressLineOne: issuingAuthorityAddressLineOne,
-                addressLineThree: issuingAuthorityAddressLineThree,
-                addressLineTwo: issuingAuthorityAddressLineTwo,
-                county: "",
-                postCode: "CA3 8DX",
-                townOrCity: "Carlisle",
-                },
-        name: agencyName,
-        signature: signatoryName,
-      },
+      petOwnerAddress: expectedDataPetOwnerAddress,
+      issuingAuthority:  expectedDataIssuingAuthority,
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -650,40 +442,15 @@ describe("getMicrochipData", () => {
     const microchipNumber = "123456789012345";
     const apiResponse = {
       data: {
-        pet: {
-          petId: "715bb304-1ca8-46ba-552d-08dc28c44b63",
-          petName: "fido",
-          species: "Dog",
-          breedName: "Bulldog",
-          colourName: "White, cream or sand",
-          sex: "Male",
-          dateOfBirth: "2021-01-01T00:00:00",
-          microchippedDate: "2021-02-01T00:00:00",
-          significantFeatures: "None",
-        },
+        pet: validPetData,
         application: {
           applicationId: "ae3d5e79-8821-47ae-5556-08dc295ccb5b",
           referenceNumber: "SZWPFXEG",
           dateOfApplication: "2024-02-09T11:31:29.7165377",
           status: "rejected",
         },
-        travelDocument: {
-          travelDocumentId: "e385b94e-5d75-4015-611a-08dc295ccb0b",
-          travelDocumentReferenceNumber: "GB826J40C050",
-          dateOfIssue: "2024-06-12T10:26:52.0391239",
-        },
-        petOwner: {
-          name: petOwnerName,
-          telephone: "07894465438",
-          email: petOwnerEmail,
-          address: {
-            addressLineOne: addressLineOne,
-            addressLineTwo: addressLineTwo,
-            townOrCity: "LONDON",
-            county: "",
-            postCode: "EC1N 2PB"
-          }
-        },
+        travelDocument: validTravelDocumentData,
+        petOwner: validPetOwnerData,
       },
       status: 200,
     };
@@ -710,26 +477,8 @@ describe("getMicrochipData", () => {
       petOwnerTelephone: "07894465438",
       petOwnerEmail: petOwnerEmail,
       issuedDate: null,
-      petOwnerAddress: 
-      {
-        addressLineOne: addressLineOne,
-        addressLineTwo: addressLineTwo,
-        townOrCity: "LONDON",
-        county: "",
-        postCode: "EC1N 2PB"
-      },
-      issuingAuthority:  {
-        address: {
-                addressLineOne: issuingAuthorityAddressLineOne,
-                addressLineThree: issuingAuthorityAddressLineThree,
-                addressLineTwo: issuingAuthorityAddressLineTwo,
-                county: "",
-                postCode: "CA3 8DX",
-                townOrCity: "Carlisle",
-                },
-        name: agencyName,
-        signature: signatoryName,
-      },
+      petOwnerAddress: expectedDataPetOwnerAddress,
+      issuingAuthority:  expectedDataIssuingAuthority,
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
