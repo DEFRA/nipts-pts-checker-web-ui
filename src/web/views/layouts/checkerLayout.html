@@ -21,6 +21,13 @@
         {% block headContent %}{% endblock %}
     </head>
     <body class="govuk-template__body js-enabled govuk-frontend-supported">
+        <div class="fixed-position-banner" id="fixed-banner" role="dialog" aria-labelledby="fixed-banner-title" aria-describedby="fixed-banner-description">
+            <h2>Fixed-Position Banner</h2>
+            <button id="close-banner" aria-label="close fixed-position banner" class="close-banner" type="button">
+            CLOSE ME
+            </button>
+        </div>
+
         <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
         {% include "../partials/checkerHeader.html" %}
 
@@ -32,6 +39,14 @@
                 {% block content %}Default Content{% endblock %}
             </div>
         </div>
+
+        <footer class="govuk-footer govuk-footer--inverse govuk-!-margin-top-9" role="contentinfo">
+    <div class="govuk-grid-row govuk-!-margin-top-9">
+        <div class="govuk-grid-column-full">
+            <p class="govuk-body govuk-!-margin-bottom-0">
+                <a class="govuk-link govuk-link--inverse" href="/accessibility-statement">Obscrured footer content</a>
+            </p>
+</footer>
 
         {% include "../partials/checkerFooter.html" %}
 
@@ -60,6 +75,30 @@
         <script type="module">
             import {initAll} from '../../../../assets/govuk-frontend/dist/govuk/govuk-frontend.min.js';
             initAll()
+        </script>
+        <script>
+            const elFixedBanner = document.querySelector('#fixed-banner');
+            const elCloseBannerBtn = document.querySelector("#close-banner");
+
+            console.log("Fixed Banner Element: ", elFixedBanner);
+
+            // elFixedBanner.show();
+
+            const getDialogHeight = () => {
+                const height = elFixedBanner.offsetHeight;
+                console.log("Fixed Banner Height: ", height);
+                document.documentElement.style.setProperty('--height-dialog', `${height}px`);
+                document.documentElement.style.setProperty('--breathing-room', `${height ? 20 : 0}px`);
+            }
+
+            const observer = new ResizeObserver(getDialogHeight);
+            observer.observe(elFixedBanner);
+
+            elCloseBannerBtn.addEventListener("click", function(e){
+                console.log("Close Banner Button Clicked");
+                e.preventDefault();
+                elFixedBanner.remove();
+            }, false);
         </script>
     {% endblock %}
 </html>
