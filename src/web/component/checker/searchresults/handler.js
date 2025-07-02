@@ -1,4 +1,5 @@
 "use strict";
+import headerData from "../../../../web/helper/constants.js";
 import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
 import apiService from "../../../../api/services/apiService.js";
 import errorMessages from "./errorMessages.js";
@@ -25,21 +26,12 @@ const formatPtdNumber = (ptdNumber) => {
 };
 
 const getSearchResultsHandler = async (request, h) => {
-  const microchipNumber = request.yar.get("microchipNumber");
-  const data = request.yar.get("data");
+  return searchHandler(request, h);
+};
 
-  data.ptdFormatted = data?.ptdNumber ? formatPtdNumber(data.ptdNumber) : "";
-
-  const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
-  let checklist = {};
-  const nonComplianceToSearchResults = request.yar.get(
-    "nonComplianceToSearchResults"
-  );
-  if (nonComplianceToSearchResults) {
-    checklist = CheckOutcomeConstants.Fail;
-    request.yar.clear("nonComplianceToSearchResults");
-  }
-  return h.view(VIEW_PATH, { microchipNumber, data, pageTitle, checklist });
+const getScanResultsHandler = async (request, h) => {
+  headerData.section = "scan";
+  return searchHandler(request, h);
 };
 
 const handleValidationError = (request, h, validationResult) => {
@@ -157,7 +149,29 @@ const saveAndContinueHandler = async (request, h) => {
   }
 };
 
+const searchHandler = (request, h) => {
+  const microchipNumber = request.yar.get("microchipNumber");
+  const data = request.yar.get("data");
+
+  data.ptdFormatted = data?.ptdNumber ? formatPtdNumber(data.ptdNumber) : "";
+
+  const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
+  let checklist = {};
+  const nonComplianceToSearchResults = request.yar.get(
+    "nonComplianceToSearchResults"
+  );
+  if (nonComplianceToSearchResults) {
+    checklist = CheckOutcomeConstants.Fail;
+    request.yar.clear("nonComplianceToSearchResults");
+  }
+  return h.view(VIEW_PATH, { microchipNumber, data, pageTitle, checklist });
+};
+
 export const SearchResultsHandlers = {
   getSearchResultsHandler,
+  getScanResultsHandler,
   saveAndContinueHandler,
 };
+
+
+

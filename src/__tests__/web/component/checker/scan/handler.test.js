@@ -15,7 +15,7 @@ jest.mock("../../../../../constants/dashBoardConstant.js", () => ({
   },
 }));
 
-const SEARCH_RESULTS_PATH = "/checker/search-results";
+const SEARCH_RESULTS_PATH = "/checker/scan-results";
 const SCAN_VIEW_PATH = "componentViews/checker/scan/scanView";
 const NOT_FOUND_VIEW_PATH = "componentViews/checker/scan/scanNotFoundView";
 const ALLOW_CAMERA_PERMISSIONS = "componentViews/checker/scan/allowCameraPermissions";

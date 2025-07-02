@@ -11,6 +11,13 @@ const Routes = [
       handler: SearchResultsHandlers.getSearchResultsHandler,
     },
   },
+   {
+    method: HttpMethod.GET,
+    path: "/checker/scan-results",
+    options: {
+      handler: SearchResultsHandlers.getScanResultsHandler,
+    },
+  },
   {
     method: HttpMethod.POST,
     path: "/checker/search-results",

@@ -4,7 +4,7 @@ import apiService from "../../../../api/services/apiService.js";
 import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
 
 const VIEW_PATH = "componentViews/checker/scan/scanView";
-const SEARCH_RESULT_VIEW_PATH = "/checker/search-results";
+const SEARCH_RESULT_VIEW_PATH = "/checker/scan-results";
 const NOT_FOUND_VIEW_PATH = "componentViews/checker/scan/scanNotFoundView";
 const ALLOW_CAMERA_PERMISSIONS = "componentViews/checker/scan/allowCameraPermissions";
 
