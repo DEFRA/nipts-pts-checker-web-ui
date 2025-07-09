@@ -209,7 +209,7 @@ describe("CheckReportHandlers", () => {
       });
     });
 
-    it("should return 500 when there is an error in getCompleteCheckDetails", async () => {
+    it("should thorw 500 when there is an error in getCompleteCheckDetails", async () => {
       const mockRequest = {
         yar: {
           get: jest
@@ -228,15 +228,8 @@ describe("CheckReportHandlers", () => {
         code: jest.fn(),
       };
 
-      await CheckReportHandlers.getCheckDetails(mockRequest, h);
-
-      expect(h.response).toHaveBeenCalledWith({
-        error: internalServerError,
-        details: testError,
-      });
+      await expect(CheckReportHandlers.getCheckDetails(mockRequest, h)).rejects.toThrow(testError);
       
-      expect(h.code).toHaveBeenCalledWith(errorCode500);
-
       expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
   });
@@ -386,13 +379,10 @@ describe("CheckReportHandlers", () => {
         code: jest.fn(),
       };
 
-      await CheckReportHandlers.conductSpsCheck(mockRequest, h);
+      await expect(CheckReportHandlers.conductSpsCheck(mockRequest, h)).rejects.toThrow(errorMessage);
+      
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
 
-      expect(h.response).toHaveBeenCalledWith({
-        error: "Internal Server Error",
-        details: errorMessage,
-      });
-      expect(h.code).toHaveBeenCalledWith(errorCode500);
     });
   });
 
