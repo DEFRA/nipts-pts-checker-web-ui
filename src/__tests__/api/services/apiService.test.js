@@ -1685,20 +1685,21 @@ describe("apiService", () => {
       const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
       const mockError = new Error("Test error");
       httpService.postAsync.mockResolvedValue(mockError);
+      const expectedError = {error: `function saveCheckerUser, Unexpected response structure, checkerId response: undefined, Input data: {\"applicationId\":\"app1\",\"checkOutcome\":\"pass\"}`}
 
       const result = await apiService.saveCheckerUser(checkOutcome);
 
-      expect(result).toEqual({ error: unexpectedResponseStructureText });
+      expect(result.error).toEqual(expectedError.error)
     });
 
     it("should return unexpected response structure gracefully - saveCheckerUser", async () => {
       const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
       httpService.postAsync.mockResolvedValue({ data: null });
-      const expectedError = { error: unexpectedResponseStructureText };
+      const expectedError = { error: `function saveCheckerUser, Unexpected response structure, checkerId response: null, Input data: {\"applicationId\":\"app1\",\"checkOutcome\":\"pass\"}` };
 
       const result = await apiService.saveCheckerUser(checkOutcome);
 
-      expect(result).toEqual(expectedError);
+      expect(result.error).toEqual(expectedError.error);
     });
 
     it("should handle applicationNotFoundErrorText and return 'not_found'", async () => {

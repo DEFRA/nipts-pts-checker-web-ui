@@ -315,8 +315,8 @@ const reportNonCompliance = async (checkOutcome, request) => {
 };
 
 const saveCheckerUser = async (checker, request) => {
+  const data = checker;
   try {
-    const data = checker;
     const url = buildApiUrl("Checker/CheckerUser");
     const response = await httpService.postAsync(url, data, request);
 
@@ -343,8 +343,9 @@ const saveCheckerUser = async (checker, request) => {
 };
 
 const getOrganisation = async (organisationId, request) => {
+  const data =   { organisationId: organisationId };
+
   try {
-    const data =   { organisationId: organisationId };
     const url = buildApiUrl("Checker/getOrganisation");
     const response = await httpService.postAsync(url, data, request);
 
