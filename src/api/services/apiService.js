@@ -323,7 +323,7 @@ const saveCheckerUser = async (checker, request) => {
     const checkerId = response.data;
     if (!checkerId || typeof checkerId !== "object") {
       // put input params, maybe indicate that we are in the try block of saveCheckerUser
-      throw new Error('function saveCheckerUser, ' + unexpectedResponseErrorText + `, checkerId response: ${checkerId}` + `, Input data: ${JSON.stringify(data)}`);
+      throw new Error(`function saveCheckerUser, ${unexpectedResponseErrorText}, checkerId response: ${checkerId}, Input data: ${JSON.stringify(data)}`);
     }
 
     return checkerId;
@@ -356,7 +356,7 @@ const getOrganisation = async (organisationId, request) => {
 
     const organisationResposne = response.data;
     if (!organisationResposne || typeof organisationResposne !== "object") {
-      throw new Error('function getOrganisation, ' + unexpectedResponseErrorText + `, organisation response: ${organisationResposne}` + `, Input data: ${JSON.stringify(data)}`);
+      throw new Error(`function getOrganisation, ${unexpectedResponseErrorText}, organisation response: ${organisationResposne}, Input data: ${JSON.stringify(data)}`);
     }
 
     // Map each item to OrganisationMainModel
