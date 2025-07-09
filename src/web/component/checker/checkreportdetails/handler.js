@@ -81,9 +81,7 @@ async function getCheckDetails(request, h) {
   } catch (error) {
     global.appInsightsClient.trackException({ exception: error });
     console.error("Error in getCheckDetails:", error);
-    return h
-      .response({ error: "Internal Server Error", details: error.message })
-      .code(HttpStatusConstants.INTERNAL_SERVER_ERROR);
+    throw error;
   }
 }
 
@@ -128,9 +126,7 @@ async function conductSpsCheck(request, h) {
   } catch (error) {
     global.appInsightsClient.trackException({ exception: error });
     console.error("Error in conductSpsCheck:", error);
-    return h
-      .response({ error: "Internal Server Error", details: error.message })
-      .code(HttpStatusConstants.INTERNAL_SERVER_ERROR);
+    throw error;
   }
 }
 

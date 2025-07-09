@@ -6,6 +6,7 @@ import Home from "../web/component/checker/home/index.js";
 import CurrentSailing from "../web/component/checker/currentsailing/index.js";
 import Dashboard from "../web/component/checker/dashboard/index.js";
 import DocumentSearch from "../web/component/checker/documentsearch/index.js";
+import Error from "../web/component/checker/error/index.js";
 import SearchResults from "../web/component/checker/searchresults/index.js";
 import NonCompliance from "../web/component/checker/noncompliance/index.js";
 import Referred from "../web/component/checker/referred/index.js";
@@ -80,6 +81,9 @@ const pluginList = [
   },
   {
     plugin: DocumentSearch,
+  },
+  {
+    plugin: Error,
   },
   {
     plugin: SearchResults,
