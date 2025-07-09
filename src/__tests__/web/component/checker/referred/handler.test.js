@@ -299,33 +299,30 @@ describe("ReferredHandlers", () => {
       const mockRequest = {
         yar: {
           get: jest.fn().mockImplementation((key) => {
-            if (key === "routeName") {
-              return "RouteA";
-            }
-            if (key === "departureDate") 
-            {
-              return departureDate
-            }
-            if (key === "departureTime") {
-              return "12:00";
-            }
-            if (key === "currentSailingSlot") {
-              return { slot: "morning" };
-            }
-            if (key === "spsChecks") {
-              return {
+            const values = {
+              routeName: "RouteA",
+              departureDate: departureDate,
+              departureTime: "12:00",
+              currentSailingSlot: { slot: "morning" },
+              spsChecks: {
                 spsChecks: [
-                  { SPSOutcome: invalidSpsOutcome, PTDNumber: ptdNum, PTDNumberFormatted: ptdFormatted },
+                  {
+                    SPSOutcome: invalidSpsOutcome,
+                    PTDNumber: ptdNum,
+                    PTDNumberFormatted: ptdFormatted,
+                  },
                 ],
-              };
-            }            
-            return null;
+              },
+            };
+
+            return values.hasOwnProperty(key) ? values[key] : null;
           }),
         },
         query: {
           page: 1,
         },
       };
+
 
       const h = {
         view: jest.fn(),
