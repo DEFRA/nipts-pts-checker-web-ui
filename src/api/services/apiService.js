@@ -315,20 +315,23 @@ const reportNonCompliance = async (checkOutcome, request) => {
 };
 
 const saveCheckerUser = async (checker, request) => {
+  const data = checker;
   try {
-    const data = checker;
     const url = buildApiUrl("Checker/CheckerUser");
     const response = await httpService.postAsync(url, data, request);
 
     const checkerId = response.data;
     if (!checkerId || typeof checkerId !== "object") {
-      throw new Error(unexpectedResponseErrorText);
+      // put input params, maybe indicate that we are in the try block of saveCheckerUser
+      throw new Error(`function saveCheckerUser, ${unexpectedResponseErrorText}, checkerId response: ${checkerId}, Input data: ${JSON.stringify(data)}`);
     }
 
     return checkerId;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
-    console.error(errorText, error.message);
+    global.appInsightsClient.trackException({ exception: error, inputData: data, function: 'saveCheckerUser' });
+    console.error(errorText, error.message, data);
+
+    // log input params,  indicate that we are in the catch block of saveCheckerUser
 
     // Check for specific error message and return a structured error
     if (error?.message) {
@@ -340,8 +343,9 @@ const saveCheckerUser = async (checker, request) => {
 };
 
 const getOrganisation = async (organisationId, request) => {
+  const data =   { organisationId: organisationId };
+
   try {
-    const data =   { organisationId: organisationId };
     const url = buildApiUrl("Checker/getOrganisation");
     const response = await httpService.postAsync(url, data, request);
 
@@ -352,7 +356,7 @@ const getOrganisation = async (organisationId, request) => {
 
     const organisationResposne = response.data;
     if (!organisationResposne || typeof organisationResposne !== "object") {
-      throw new Error(unexpectedResponseErrorText);
+      throw new Error(`function getOrganisation, ${unexpectedResponseErrorText}, organisation response: ${organisationResposne}, Input data: ${JSON.stringify(data)}`);
     }
 
     // Map each item to OrganisationMainModel
@@ -368,8 +372,8 @@ const getOrganisation = async (organisationId, request) => {
 
     return organisation;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
-    console.error(errorText, error.message);
+    global.appInsightsClient.trackException({ exception: error, inputData: data, function: 'getOrganisation' });
+    console.error(errorText, error.message, data);
 
     throw error;
   }
