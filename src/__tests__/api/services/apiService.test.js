@@ -94,12 +94,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false
         }
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
       moment.mockImplementation((_date) => ({
         format: () => multiUseDate,
@@ -135,6 +139,7 @@ describe("apiService", () => {
         petOwnerName: petOwnerName,
         petOwnerEmail: petOwnerEmail,
         petOwnerTelephone: "07894465438",
+        isUserSuspended: false,
         petOwnerAddress: 
         {
           addressLineOne: addressLineOne,
@@ -197,12 +202,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
       moment.mockImplementation((_date) => ({
         format: () => multiUseDate,
@@ -232,6 +241,7 @@ describe("apiService", () => {
         petColour: "Brown",
         petFeaturesDetail: "None",
         applicationId: "app123",
+        isUserSuspended: false,
         travelDocumentId: "td123",
         dateOfIssue: dateOfIssue,
         petOwnerName: petOwnerName,
@@ -299,12 +309,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false,
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
       moment.mockImplementation((_date) => ({
         format: () => multiUseDate,
@@ -333,6 +347,7 @@ describe("apiService", () => {
         petColour: "Brown",
         petFeaturesDetail: "None",
         applicationId: "app123",
+        isUserSuspended: false,
         travelDocumentId: "td123",
         dateOfIssue: dateOfIssue,
         petOwnerName: petOwnerName,
@@ -400,12 +415,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
       moment.mockImplementation((_date) => ({
         format: () => multiUseDate,
@@ -439,6 +458,7 @@ describe("apiService", () => {
         petOwnerName: petOwnerName,
         petOwnerTelephone: "07894465438",
         petOwnerEmail: petOwnerEmail,
+        isUserSuspended: false,
 		    petOwnerAddress: 
         {
           addressLineOne: addressLineOne,
@@ -610,13 +630,19 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
+
+      
 
       const mockMomentFormat = () => multiUseDate;
       moment.mockImplementation(() => ({ format: mockMomentFormat }));     
@@ -629,6 +655,7 @@ describe("apiService", () => {
         documentState: "approved",
         ptdNumber: "GB826TD123",
         issuedDate: multiUseDate,
+        isUserSuspended: false,
         microchipNumber: null,
         microchipDate: null,
         petSex: null,
@@ -720,12 +747,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: true
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: true
       });
 
 
@@ -752,6 +783,7 @@ describe("apiService", () => {
         petOwnerTelephone: "07894465438",
         petOwnerEmail: petOwnerEmail,
         issuedDate: null,
+        isUserSuspended: true,
         petOwnerAddress: 
             {
               addressLineOne: addressLineOne,
@@ -814,12 +846,16 @@ describe("apiService", () => {
               postCode: null
             }
           },
+          isUserSuspended: false
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
 
       const mockMomentFormat = () => multiUseDate;
@@ -841,6 +877,7 @@ describe("apiService", () => {
         petFeaturesDetail: null,
         applicationId: "app123",
         travelDocumentId: null,
+        isUserSuspended: false,
         dateOfIssue: dateOfIssue,
         petOwnerName: null,
         petOwnerTelephone: null,
@@ -907,12 +944,16 @@ describe("apiService", () => {
               postCode: null
             }
           },
+          isUserSuspended: false
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
       
       const mockMomentFormat = () => multiUseDate;
@@ -931,6 +972,7 @@ describe("apiService", () => {
         petSex: null,
         petDoB: null,
         petColour: null,
+        isUserSuspended: false,
         petFeaturesDetail: null,
         applicationId: null,
         travelDocumentId: null,
@@ -1012,12 +1054,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
 
       const mockMomentFormat = () => multiUseDate;
@@ -1031,6 +1077,7 @@ describe("apiService", () => {
         documentState: "approved",
         ptdNumber: "GB826TD123",
         issuedDate: multiUseDate,
+        isUserSuspended: false,
         microchipNumber: "123456789",
         microchipDate: multiUseDate,
         petSex: "Male",
@@ -1116,12 +1163,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
 
       const mockMomentFormat = () => multiUseDate;
@@ -1144,6 +1195,7 @@ describe("apiService", () => {
         applicationId: "app123",
         travelDocumentId: "td123",
         dateOfIssue: dateOfIssue,
+        isUserSuspended: false,
         petOwnerName: petOwnerName,
         petOwnerTelephone: "07894465438",
         petOwnerEmail: petOwnerEmail,
@@ -1220,12 +1272,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
 
       const mockMomentFormat = () => multiUseDate;
@@ -1261,6 +1317,7 @@ describe("apiService", () => {
         petOwnerTelephone: "07894465438",
         petOwnerEmail: petOwnerEmail,
         issuedDate: null,
+        isUserSuspended: false,
         petOwnerAddress: 
             {
               addressLineOne: addressLineOne,
@@ -1323,12 +1380,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
 
       const mockMomentFormat = () => multiUseDate;
@@ -1363,6 +1424,7 @@ describe("apiService", () => {
         petOwnerTelephone: "07894465438",
         petOwnerEmail: petOwnerEmail,
         issuedDate: null,
+        isUserSuspended: false,
         petOwnerAddress: 
             {
               addressLineOne: addressLineOne,
@@ -1425,12 +1487,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false
         }
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
     
       const mockMomentFormat = () => multiUseDate;
@@ -1454,6 +1520,7 @@ describe("apiService", () => {
         documentState: "",
         microchipNumber: "123456789",
         microchipDate: multiUseDate,
+        isUserSuspended: undefined,
         petSex: "Male",
         petDoB: multiUseDate,
         petColour: "Brown",
@@ -1465,6 +1532,7 @@ describe("apiService", () => {
         petOwnerTelephone: "07894465438",
         petOwnerEmail: petOwnerEmail,
         issuedDate: null,
+        isUserSuspended: false,
         petOwnerAddress: 
             {
               addressLineOne: addressLineOne,

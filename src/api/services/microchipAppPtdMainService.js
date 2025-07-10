@@ -73,7 +73,14 @@ const getMicrochipData = async (microchipNumber, request) => {
     const dateOfBirthRaw = getValueAttributeOrUndefined(item.pet, 'dateOfBirth');
     const formattedDateOfBirth = formatDate(dateOfBirthRaw);
 
-    return getMicrochipAppPtdMainModel(item, documentState, ptdNumber, formattedIssuedDate, microchipNumber, formattedMicrochippedDate, formattedDateOfBirth);
+    const suspendedResponse = await httpService.postAsync(
+      `${baseUrl}/Checker/GetIsUserSuspendedStatusByEmail`,
+      item.petOwner.email,
+      request
+    );
+    const isUserSuspended = suspendedResponse?.data;
+
+    return getMicrochipAppPtdMainModel(item, documentState, ptdNumber, formattedIssuedDate, microchipNumber, formattedMicrochippedDate, formattedDateOfBirth, isUserSuspended);
 
 
   } catch (error) {
@@ -116,7 +123,7 @@ export default {
   checkMicrochipNumberExistWithPtd,
 };
 
-function getMicrochipAppPtdMainModel(item, documentState, ptdNumber, formattedIssuedDate, microchipNumber, formattedMicrochippedDate, formattedDateOfBirth) {
+function getMicrochipAppPtdMainModel(item, documentState, ptdNumber, formattedIssuedDate, microchipNumber, formattedMicrochippedDate, formattedDateOfBirth, isUserSuspended) {
   const getValue = (obj, key, fallback = null) => obj?.[key] ?? fallback;
 
   const pet = item.pet || {};
@@ -146,5 +153,6 @@ function getMicrochipAppPtdMainModel(item, documentState, ptdNumber, formattedIs
     petOwnerTelephone: getValue(petOwner, "telephone"),
     petOwnerAddress: getValue(petOwner, "address"),
     issuingAuthority: issuingAuthorityModelData,
+    isUserSuspended: isUserSuspended
   });
 }

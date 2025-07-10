@@ -64,6 +64,16 @@
             </h1>
             {% endif %}
 
+            {% if data['documentState'] === "suspended" or data['isUserSuspended'] %}
+            <div class="govuk-warning-text">
+                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                <strong class="govuk-warning-text__text">
+                    <span class="govuk-visually-hidden">Warning</span>
+                    This person cannot travel under the Northern Ireland Pet Travel Scheme – you should read them the suspended failure script.
+                </strong>
+            </div>
+            {% endif %}
+
             {% if data['documentState'] !== "awaiting" and data['documentState'] !== "rejected" %}
             <div id="document-issued-card" class="govuk-summary-card">
                 <div class="govuk-summary-card__title-wrapper">
@@ -292,7 +302,7 @@
         </div>
     </div>
 
-
+    {% if data['documentState'] !== 'suspended' %}
     <form id="searchResultForm" action="/checker/search-results" method="POST">
         <div id="searchradio-group" class="govuk-form-group">
             <fieldset class="govuk-fieldset">
@@ -317,9 +327,7 @@
                         no risks identified
                     </li>
                 </ul>
-                {% if data['documentState'] !== 'rejected' and data['documentState'] !== 'revoked' and data['documentState'] !== 'awaiting' %}
-                
-                    
+                {% if data['documentState'] === 'approved' %}                
                     <div id="radio-check-error" class="govuk-form-group {% if error %}govuk-form-group--error{% endif %}">
                         {% if error %}
                         <p id="passOrFailOption" class="govuk-error-message">
@@ -373,9 +381,7 @@
                             </div>
                         </div>
                             
-                    </div>
-
-                
+                    </div>   
                 {% endif %}
             </fieldset>
         </div>
@@ -393,6 +399,7 @@
         </div>
     </form>
     <div style="height: 2rem;"></div>
+    {% endif %}
 
 </div>
 <script>
