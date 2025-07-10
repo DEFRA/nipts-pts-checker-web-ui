@@ -24,6 +24,7 @@ class MicrochipAppPtdMainModel {
     this.petOwnerAddress = data.petOwnerAddress;
 
     this.issuingAuthority = data.issuingAuthority;
+    this.isUserSuspended = data.isUserSuspended;
   }
 }
 

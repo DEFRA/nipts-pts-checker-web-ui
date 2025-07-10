@@ -30,7 +30,7 @@ const getSubscriptionKey = async (envValue, secretKey) => {
 
 /*========== errorResponseWithErrorLogging(e): Logs error and returns ServerErrorResponse ==========*/
 const errorResponseWithErrorLogging = (error) => {
-  console.log("handleError: error.toJSON()", error.toJSON());
+  console.log("handleError:", error);
 
   let errorMessage;
 

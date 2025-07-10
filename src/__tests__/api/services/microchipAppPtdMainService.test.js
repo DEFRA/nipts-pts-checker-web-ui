@@ -54,6 +54,7 @@ const apiResponseCommon = {
           dateOfIssue: "2024-06-12T10:26:52.0391239",
         },
         petOwner: validPetOwnerData,
+        isUserSuspended: false
       },
       status: 200,
 }
@@ -97,7 +98,12 @@ describe("getMicrochipData", () => {
     const microchipNumber = null;
     const apiResponse = apiResponseCommon
 
-    httpService.postAsync.mockResolvedValue(apiResponse);
+    httpService.postAsync
+    .mockResolvedValueOnce(apiResponse)
+    .mockResolvedValueOnce({
+          status: 200,
+          data: false
+      });
 
     const expectedData = new MicrochipAppPtdMainModel({
       petId: null,
@@ -121,6 +127,7 @@ describe("getMicrochipData", () => {
       petOwnerEmail: petOwnerEmail,
       petOwnerAddress: expectedDataPetOwnerAddress,
       issuingAuthority: expectedDataIssuingAuthority,
+      isUserSuspended: false
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -147,7 +154,12 @@ describe("getMicrochipData", () => {
       address: expectedDataPetOwnerAddressNulls
     };
 
-    httpService.postAsync.mockResolvedValue(apiResponse);
+    httpService.postAsync
+    .mockResolvedValueOnce(apiResponse)
+    .mockResolvedValueOnce({
+          status: 200,
+          data: false
+      });
 
     const expectedData = new MicrochipAppPtdMainModel({
       petId: null,
@@ -171,6 +183,7 @@ describe("getMicrochipData", () => {
       petOwnerEmail: null,
       petOwnerAddress: expectedDataPetOwnerAddressNulls,
       issuingAuthority:  expectedDataIssuingAuthority,
+      isUserSuspended: false
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -191,7 +204,12 @@ describe("getMicrochipData", () => {
       address: expectedDataPetOwnerAddressNulls
     };
 
-    httpService.postAsync.mockResolvedValue(apiResponse);
+     httpService.postAsync
+      .mockResolvedValueOnce(apiResponse)
+      .mockResolvedValueOnce({
+          status: 200,
+          data: false
+      });
 
     const expectedData = new MicrochipAppPtdMainModel({
       petId: null,
@@ -215,6 +233,7 @@ describe("getMicrochipData", () => {
       petOwnerEmail: null,
       petOwnerAddress: expectedDataPetOwnerAddressNulls,
       issuingAuthority:  expectedDataIssuingAuthority,
+      isUserSuspended: false
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -245,7 +264,12 @@ describe("getMicrochipData", () => {
       status : 200,
     };
 
-    httpService.postAsync.mockResolvedValue(apiResponse);
+     httpService.postAsync
+      .mockResolvedValueOnce(apiResponse)
+      .mockResolvedValueOnce({
+          status: 200,
+          data: false
+      });
 
     const expectedData = new MicrochipAppPtdMainModel({
       petId: "715bb304-1ca8-46ba-552d-08dc28c44b63",
@@ -269,6 +293,7 @@ describe("getMicrochipData", () => {
       petOwnerEmail: petOwnerEmail,
       petOwnerAddress: expectedDataPetOwnerAddress,
       issuingAuthority:  expectedDataIssuingAuthority,
+      isUserSuspended: false
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -306,7 +331,12 @@ const validTravelDocumentData = {
       status : 200,
     };
 
-    httpService.postAsync.mockResolvedValue(apiResponse);
+     httpService.postAsync
+      .mockResolvedValueOnce(apiResponse)
+      .mockResolvedValueOnce({
+          status: 200,
+          data: false
+      });
 
     const expectedData = new MicrochipAppPtdMainModel({
       petId: "715bb304-1ca8-46ba-552d-08dc28c44b63",
@@ -330,6 +360,7 @@ const validTravelDocumentData = {
       petOwnerEmail: petOwnerEmail,
       petOwnerAddress: expectedDataPetOwnerAddress,
       issuingAuthority:  expectedDataIssuingAuthority,
+      isUserSuspended: false
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -359,7 +390,12 @@ const validTravelDocumentData = {
       status: 200,
     };
 
-    httpService.postAsync.mockResolvedValue(apiResponse);
+     httpService.postAsync
+      .mockResolvedValueOnce(apiResponse)
+      .mockResolvedValueOnce({
+          status: 200,
+          data: false
+      });
 
     const expectedData = new MicrochipAppPtdMainModel({
       petId: "715bb304-1ca8-46ba-552d-08dc28c44b63",
@@ -383,6 +419,7 @@ const validTravelDocumentData = {
       issuedDate: null,
       petOwnerAddress: expectedDataPetOwnerAddress,
       issuingAuthority:  expectedDataIssuingAuthority,
+      isUserSuspended: false
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -407,7 +444,12 @@ const validTravelDocumentData = {
       status: 200,
     };
 
-    httpService.postAsync.mockResolvedValue(apiResponse);
+     httpService.postAsync
+      .mockResolvedValueOnce(apiResponse)
+      .mockResolvedValueOnce({
+          status: 200,
+          data: false
+      });
 
     const expectedData = new MicrochipAppPtdMainModel({
       petId: "715bb304-1ca8-46ba-552d-08dc28c44b63",
@@ -431,6 +473,7 @@ const validTravelDocumentData = {
       issuedDate: null,
       petOwnerAddress: expectedDataPetOwnerAddress,
       issuingAuthority:  expectedDataIssuingAuthority,
+      isUserSuspended: false
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
@@ -455,7 +498,12 @@ const validTravelDocumentData = {
       status: 200,
     };
 
-    httpService.postAsync.mockResolvedValue(apiResponse);
+     httpService.postAsync
+      .mockResolvedValueOnce(apiResponse)
+      .mockResolvedValueOnce({
+          status: 200,
+          data: false
+      });
 
     const expectedData = new MicrochipAppPtdMainModel({
       petId: "715bb304-1ca8-46ba-552d-08dc28c44b63",
@@ -479,6 +527,7 @@ const validTravelDocumentData = {
       issuedDate: null,
       petOwnerAddress: expectedDataPetOwnerAddress,
       issuingAuthority:  expectedDataIssuingAuthority,
+      isUserSuspended: false
     });
 
     const data = await microchipApi.getMicrochipData(microchipNumber, request);
