@@ -1520,7 +1520,6 @@ describe("apiService", () => {
         documentState: "",
         microchipNumber: "123456789",
         microchipDate: multiUseDate,
-        isUserSuspended: undefined,
         petSex: "Male",
         petDoB: multiUseDate,
         petColour: "Brown",
