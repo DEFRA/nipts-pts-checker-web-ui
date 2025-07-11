@@ -64,7 +64,8 @@
             </h1>
             {% endif %}
 
-            {% if data['documentState'] === "suspended" or data['isUserSuspended'] %}
+            
+            {% if data['documentState'] == "suspended" or data['isUserSuspended'] == true %}
             <div class="govuk-warning-text">
                 <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
                 <strong class="govuk-warning-text__text">
@@ -302,7 +303,8 @@
         </div>
     </div>
 
-    {% if data['documentState'] !== 'suspended' and data['isUserSuspended'] === 'false' %}
+
+{% if data['documentState'] != "suspended" and data['isUserSuspended'] == false %}
     <form id="searchResultForm" action="/checker/search-results" method="POST">
         <div id="searchradio-group" class="govuk-form-group">
             <fieldset class="govuk-fieldset">
