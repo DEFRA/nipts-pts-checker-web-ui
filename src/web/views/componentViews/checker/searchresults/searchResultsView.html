@@ -302,7 +302,7 @@
         </div>
     </div>
 
-    {% if data['documentState'] !== 'suspended' and !data['isUserSuspended'] %}
+    {% if data['documentState'] !== 'suspended' and data['isUserSuspended'] === 'false' %}
     <form id="searchResultForm" action="/checker/search-results" method="POST">
         <div id="searchradio-group" class="govuk-form-group">
             <fieldset class="govuk-fieldset">
