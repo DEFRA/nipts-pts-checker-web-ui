@@ -58,13 +58,13 @@
             </h1>
             {% endif %}
 
-            {% if data['documentState'] === "awaiting" or data['documentState'] === "rejected" %}
+            {% if data['documentState'] === "awaiting" or (data['documentState'] === "rejected" or data['documentState'] === "suspended") %}
             <h1 id="documents" class="govuk-heading-l govuk-!-margin-bottom-6">
                 Your application summary
             </h1>
             {% endif %}
 
-            {% if data['documentState'] == "suspended" or data['isUserSuspended'] == true %}
+            {% if data['documentState'] === "suspended" or data['isUserSuspended'] === true %}
             <div class="govuk-warning-text">
                 <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
                 <strong class="govuk-warning-text__text">
@@ -74,7 +74,7 @@
             </div>
             {% endif %}
 
-            {% if data['documentState'] !== "awaiting" and data['documentState'] !== "rejected" %}
+            {% if data['documentState'] === "suspended" or data['documentState'] === "awaiting" and data['documentState'] !== "rejected" %}
             <div id="document-issued-card" class="govuk-summary-card">
                 <div class="govuk-summary-card__title-wrapper">
                     <h2 class="govuk-summary-card__title">Issued</h2>
@@ -303,7 +303,7 @@
     </div>
 
 
-{% if data['documentState'] != "suspended" and data['isUserSuspended'] == false %}
+{% if data['documentState'] !== "suspended" and data['isUserSuspended'] !== true %}
     <form id="searchResultForm" action="/checker/search-results" method="POST">
         <div id="searchradio-group" class="govuk-form-group">
             <fieldset class="govuk-fieldset">
