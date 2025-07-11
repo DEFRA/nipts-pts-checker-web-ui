@@ -58,7 +58,7 @@
             </h1>
             {% endif %}
 
-            {% if data['documentState'] === "awaiting" or data['documentState'] === "rejected" %}
+            {% if data['documentState'] === "awaiting" or data['documentState'] === "rejected" or data['documentState'] === "suspended" %}
             <h1 id="documents" class="govuk-heading-l govuk-!-margin-bottom-6">
                 Your application summary
             </h1>
@@ -103,7 +103,7 @@
             </div>
             {% endif %}
 
-            {% if data['documentState'] === "awaiting" or data['documentState'] === "rejected" %}
+            {% if data['documentState'] === "awaiting" or data['documentState'] === "rejected" or data['documentState'] === "suspended" %}
             <div id="document-issued-card" class="govuk-summary-card">
                 <div class="govuk-summary-card__title-wrapper">
                     <h2 class="govuk-summary-card__title">Reference number</h2>
