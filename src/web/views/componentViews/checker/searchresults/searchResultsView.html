@@ -52,7 +52,7 @@
 
             {% include "includes/status.html" %}
 
-            {% if (data['documentState'] !== "awaiting" and data['documentState'] !== "rejected") or data['documentState'] === "suspended" %}
+            {% if (data['documentState'] !== "awaiting" and data['documentState'] !== "rejected")  %}
             <h1 id="documents" class="govuk-heading-l govuk-!-margin-bottom-6">
                 Lifelong pet travel document and declaration
             </h1>
@@ -74,7 +74,7 @@
             </div>
             {% endif %}
 
-            {% if data['documentState'] === "suspended" or data['documentState'] === "awaiting" and data['documentState'] !== "rejected" %}
+            {% if data['documentState'] !== "awaiting" and data['documentState'] !== "rejected" %}
             <div id="document-issued-card" class="govuk-summary-card">
                 <div class="govuk-summary-card__title-wrapper">
                     <h2 class="govuk-summary-card__title">Issued</h2>
