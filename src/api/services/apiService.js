@@ -127,7 +127,7 @@ function getDocumentAndDateData(item) {
   const documentState = statusMapping[applicationStatus] || applicationStatus;
 
   const ptdNumber =
-    documentState === "approved" || documentState === "revoked"
+    documentState === "approved" || documentState === "revoked" || documentState === "suspended"
       ? item?.travelDocument?.travelDocumentReferenceNumber
       : item?.application?.referenceNumber;
 
