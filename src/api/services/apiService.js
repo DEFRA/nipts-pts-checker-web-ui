@@ -63,7 +63,7 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
     validateItem(item);
 
     const suspendedUrl = buildApiUrl("Checker/GetIsUserSuspendedStatusByEmail");
-    const isUserSuspendedRequest = await httpService.postAsync(suspendedUrl, item.petOwner.Email, request);
+    const isUserSuspendedRequest = await httpService.postAsync(suspendedUrl, item.petOwner.email, request);
 
     const { documentState, ptdNumber, issuedDateRaw, microchippedDateRaw, dateOfBirthRaw } = getDocumentAndDateData(item);
 
@@ -142,6 +142,9 @@ function getDocumentAndDateData(item) {
       break;
     case "rejected":
       issuedDateRaw = item.application?.dateRejected;
+      break;
+    case "suspended":
+      issuedDateRaw = item.application?.dateSuspended;
       break;
     default:
       issuedDateRaw = item.application?.dateOfApplication;
