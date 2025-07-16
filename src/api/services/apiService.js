@@ -143,9 +143,6 @@ function getDocumentAndDateData(item) {
     case "rejected":
       issuedDateRaw = item.application?.dateRejected;
       break;
-    case "suspended":
-      issuedDateRaw = item.application?.dateSuspended;
-      break;
     default:
       issuedDateRaw = item.application?.dateOfApplication;
       break;
