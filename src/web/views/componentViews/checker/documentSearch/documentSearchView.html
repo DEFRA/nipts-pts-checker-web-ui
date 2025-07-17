@@ -68,6 +68,7 @@
                       {{error}}
                     </p>
                     {% endif %}
+                    <label class="govuk-label" id="ptdNumberSearch-label" for="ptdNumberSearch">PTD number, not including the GB826 prefix</label>
                     <div class="govuk-input__wrapper">
                       <div class="govuk-input__prefix" aria-hidden="true">
                         {{documentSearchMainModelData.ptdSearchText}}
@@ -78,8 +79,7 @@
                         name="ptdNumberSearch" 
                         type="text" 
                         spellcheck="false" 
-                        value="{{ptdNumberSearch}}" 
-                        aria-label="Enter PTD number">
+                        value="{{ptdNumberSearch}}">
                     </div>
                   </div>
                 </div>
@@ -115,14 +115,14 @@
                       {{error}}
                     </p>
                     {% endif %}
+                    <label class="govuk-label" id="applicationNumberSearch-label" for="applicationNumberSearch">Application Number</label>
                     <input 
                       class="govuk-input {% if error and activeTab == 'application' %}govuk-input--error{% endif %} govuk-input--width-10" 
                       id="applicationNumberSearch" 
                       name="applicationNumberSearch" 
                       type="text" 
                       spellcheck="false" 
-                      value="{{applicationNumberSearch}}" 
-                      aria-label="Enter application number">
+                      value="{{applicationNumberSearch}}">
                   </div>
                 </div>
               
@@ -157,14 +157,14 @@
                       {{error}}
                     </p>
                     {% endif %}
+                    <label class="govuk-label" id="microchipNumber-search-label" for="microchipNumber">Microchip Number</label>
                     <input 
                       class="govuk-input {% if error and activeTab == 'microchip' %}govuk-input--error{% endif %} govuk-input--width-20" 
                       id="microchipNumber" 
                       name="microchipNumber" 
                       type="text" 
                       spellcheck="false" 
-                      value="{{microchipNumber}}" 
-                      aria-label="Enter microchip number">
+                      value="{{microchipNumber}}">
                   </div>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 
 export function getPtdNumberByDocState(documentState, item) {
-  return (documentState === "approved" || documentState === "revoked")
+  return (documentState === "approved" || documentState === "revoked" || documentState === "suspended")
   ? item?.travelDocument?.travelDocumentReferenceNumber
   : item?.application?.referenceNumber;
 }

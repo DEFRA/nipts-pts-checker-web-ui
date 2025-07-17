@@ -62,6 +62,9 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
     const item = response.data;
     validateItem(item);
 
+    const suspendedUrl = buildApiUrl("Checker/GetIsUserSuspendedStatusByEmail");
+    const isUserSuspendedRequest = await httpService.postAsync(suspendedUrl, item.petOwner.email, request);
+
     const { documentState, ptdNumber, issuedDateRaw, microchippedDateRaw, dateOfBirthRaw } = getDocumentAndDateData(item);
 
     const formattedIssuedDate = formatDate(issuedDateRaw);
@@ -90,6 +93,7 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
       petOwnerTelephone: item.petOwner?.telephone,
       petOwnerAddress: item.petOwner?.address || null,
       issuingAuthority: issuingAuthorityModelData,
+      isUserSuspended: isUserSuspendedRequest.data
     });
 
     return transformedItem;
@@ -123,7 +127,7 @@ function getDocumentAndDateData(item) {
   const documentState = statusMapping[applicationStatus] || applicationStatus;
 
   const ptdNumber =
-    documentState === "approved" || documentState === "revoked"
+    documentState === "approved" || documentState === "revoked" || documentState === "suspended"
       ? item?.travelDocument?.travelDocumentReferenceNumber
       : item?.application?.referenceNumber;
 
@@ -169,7 +173,7 @@ function handleError(error) {
   return { error: unexpectedErrorText };
 }
 
-function getMicrochipAppPtdMainModel({pet, application, travelDocument, petOwner, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth}) {
+function getMicrochipAppPtdMainModel({pet, application, travelDocument, petOwner, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth, isUserSuspended}) {
   const getSafeValue = (obj, key, fallback = null) => obj?.[key] ?? fallback;
 
   
@@ -197,6 +201,7 @@ function getMicrochipAppPtdMainModel({pet, application, travelDocument, petOwner
     petOwnerTelephone: getSafeValue(petOwner, "telephone"),
     petOwnerAddress: getSafeValue(petOwner, "address"),
     issuingAuthority: issuingAuthorityModelData,
+    isUserSuspended: isUserSuspended
   });
 }
 
@@ -238,11 +243,10 @@ const getApplicationByApplicationNumber = async (
     const response = await httpService.postAsync(url, data, request);
 
     if (response.status === HttpStatusCode.NotFound && response?.error) {
-         return handleNotFoundError(response.error, applicationNotFoundErrorText, petNotFoundErrorText);
+      return handleNotFoundError(response.error, applicationNotFoundErrorText, petNotFoundErrorText);
     }
 
-    if (!response || response.status !== HttpStatusCode.Ok || response.data === undefined) 
-    {
+    if (!response || response.status !== HttpStatusCode.Ok || response.data === undefined) {
       throw new Error(`API Error: ${response?.status}`);
     }
 
@@ -252,34 +256,45 @@ const getApplicationByApplicationNumber = async (
       throw new Error(unexpectedResponseErrorText);
     }
 
-    const {pet = {}, application = {}, travelDocument = {}, petOwner = {}} = item
+    const { pet = {}, application = {}, travelDocument = {}, petOwner = {} } = item;
 
-    // Ensure the item structure is as expected
-    const errorObj = errorIfAttributeMissing(item)
-
+    const errorObj = errorIfAttributeMissing(item);
     if (errorObj.error) {
-      return errorObj
+      return errorObj;
     }
 
-    // Convert application status to lowercase and trim for consistent comparison
     const applicationStatus = item.application.status.toLowerCase().trim();
     const documentState = statusMapping[applicationStatus] || applicationStatus;
 
-    const ptdNumber = getPtdNumberByDocState(documentState, item)
-
-    const issuedDateRaw = getIssueDateByDocState(documentState, item)
+    const ptdNumber = getPtdNumberByDocState(documentState, item);
+    const issuedDateRaw = getIssueDateByDocState(documentState, item);
 
     const { formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth } = getFormattedDates(issuedDateRaw, item);
-    
 
-    return getMicrochipAppPtdMainModel({pet, application, travelDocument, petOwner, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth});
-     
+    const suspendedUrl = buildApiUrl("Checker/GetIsUserSuspendedStatusByEmail");
+    const suspendedRequest = await httpService.postAsync(suspendedUrl, petOwner.email, request);
+    const isUserSuspended = suspendedRequest.data;
+
+    return getMicrochipAppPtdMainModel({
+      pet,
+      application,
+      travelDocument,
+      petOwner,
+      documentState,
+      ptdNumber,
+      formattedIssuedDate,
+      formattedMicrochippedDate,
+      formattedDateOfBirth,
+      isUserSuspended,
+    });
+
   } catch (error) {
     global.appInsightsClient.trackException({ exception: error });
     console.error(errorText, error.message);
-     throw error;
+    throw error;
   }
 };
+
 
 const recordOutCome = async (checkOutcome, request, urlSuffix) => {
   try {
@@ -315,20 +330,23 @@ const reportNonCompliance = async (checkOutcome, request) => {
 };
 
 const saveCheckerUser = async (checker, request) => {
+  const data = checker;
   try {
-    const data = checker;
     const url = buildApiUrl("Checker/CheckerUser");
     const response = await httpService.postAsync(url, data, request);
 
     const checkerId = response.data;
     if (!checkerId || typeof checkerId !== "object") {
-      throw new Error(unexpectedResponseErrorText);
+      // put input params, maybe indicate that we are in the try block of saveCheckerUser
+      throw new Error(`function saveCheckerUser, ${unexpectedResponseErrorText}, checkerId response: ${checkerId}, Input data: ${JSON.stringify(data)}`);
     }
 
     return checkerId;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
-    console.error(errorText, error.message);
+    global.appInsightsClient.trackException({ exception: error, inputData: data, function: 'saveCheckerUser' });
+    console.error(errorText, error.message, data);
+
+    // log input params,  indicate that we are in the catch block of saveCheckerUser
 
     // Check for specific error message and return a structured error
     if (error?.message) {
@@ -340,8 +358,9 @@ const saveCheckerUser = async (checker, request) => {
 };
 
 const getOrganisation = async (organisationId, request) => {
+  const data =   { organisationId: organisationId };
+
   try {
-    const data =   { organisationId: organisationId };
     const url = buildApiUrl("Checker/getOrganisation");
     const response = await httpService.postAsync(url, data, request);
 
@@ -352,7 +371,7 @@ const getOrganisation = async (organisationId, request) => {
 
     const organisationResposne = response.data;
     if (!organisationResposne || typeof organisationResposne !== "object") {
-      throw new Error(unexpectedResponseErrorText);
+      throw new Error(`function getOrganisation, ${unexpectedResponseErrorText}, organisation response: ${organisationResposne}, Input data: ${JSON.stringify(data)}`);
     }
 
     // Map each item to OrganisationMainModel
@@ -368,8 +387,8 @@ const getOrganisation = async (organisationId, request) => {
 
     return organisation;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
-    console.error(errorText, error.message);
+    global.appInsightsClient.trackException({ exception: error, inputData: data, function: 'getOrganisation' });
+    console.error(errorText, error.message, data);
 
     throw error;
   }

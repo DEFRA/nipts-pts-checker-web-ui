@@ -56,7 +56,7 @@
         {% for check in checks %}
         <div class="govuk-summary-card">
             <div class="govuk-summary-card__title-wrapper">
-                <h2 class="govuk-summary-card__title">
+                <h2 id="cardtitle-{{ loop.index }}" class="govuk-summary-card__title">
 
                     <p class="govuk-body  govuk-!-margin-bottom-1">
                         <b>Route:</b>
@@ -96,8 +96,9 @@
                                 <input type="hidden" name="departureTime" value="{{ check.departureTime }}">
                                 {% if check.failCount > 0 %}
                                     <button type="submit" class="govuk-button--link referred-button"
-                                        data-identifier="referred-{{ loop.index }}">
-                                        View<span class="govuk-visually-hidden"> reported</span>
+                                        data-identifier="referred-{{ loop.index }}"
+                                        id="view-button-{{ loop.index }}" aria-labelledby="cardtitle-{{ loop.index }}">
+                                        View<span class="govuk-visually-hidden"> reported - Route: {{check.routeName}} Departure: {{ check.departureDate }} {{ check.departureTime }}</span>
                                     </button>
                                 {% endif %}
                             </form>

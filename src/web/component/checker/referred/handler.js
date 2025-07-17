@@ -67,7 +67,7 @@ function formatDateTime(departureDate, departureTime) {
 
 async function getSpsChecks(routeName, departureDateTime, request) {
   return (
-    (await spsReferralMainService.GetSpsReferrals(
+    (await spsReferralMainService.getSpsReferrals(
       routeName,
       departureDateTime,
       Number(process.env.DASHBOARD_START_HOUR) * -1 || dashboardTimeBoundary,
@@ -107,11 +107,9 @@ function formatPTDNumber(PTDNumber) {
   const PTD_PREFIX_LENGTH = 5;
   const PTD_MID_LENGTH = 8;
 
-  return PTDNumber
-    ? `${PTDNumber.padStart(PTD_LENGTH, "0").slice(0, PTD_PREFIX_LENGTH)} ` +
+  return `${PTDNumber.padStart(PTD_LENGTH, "0").slice(0, PTD_PREFIX_LENGTH)} ` +
       `${PTDNumber.padStart(PTD_LENGTH, "0").slice(PTD_PREFIX_LENGTH, PTD_MID_LENGTH)} ` +
-      `${PTDNumber.padStart(PTD_LENGTH, "0").slice(PTD_MID_LENGTH)}`
-    : "";
+      `${PTDNumber.padStart(PTD_LENGTH, "0").slice(PTD_MID_LENGTH)}`;
 }
 
 function paginateSpsChecks(page, spsChecks) {
