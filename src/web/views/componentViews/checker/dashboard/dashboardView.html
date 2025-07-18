@@ -96,9 +96,9 @@
                                 <input type="hidden" name="departureTime" value="{{ check.departureTime }}">
                                 {% if check.failCount > 0 %}
                                     <button type="submit" class="govuk-button--link referred-button" role="link"
-                                        data-identifier="referred-{{ loop.index }}"
-                                        id="view-button-{{ loop.index }}" aria-labelledby="cardtitle-{{ loop.index }}">
-                                        View<span class="govuk-visually-hidden">View reported - Route: {{check.routeName}} Departure: {{ check.departureDate }} {{ check.departureTime }}</span>
+                                        data-identifier="referred-{{ loop.index }}" id="view-button-{{ loop.index }}"
+                                        aria-label="View reported - Route: {{check.routeName}} Departure: {{ check.departureDate }} {{ check.departureTime }}">
+                                        View
                                     </button>
                                 {% endif %}
                             </form>
