@@ -3,14 +3,11 @@
 import appSettingsService from "../../../../api/services/appSettingsService.js";
 import { validateNonCompliance } from "./validate.js";
 import { CheckOutcomeConstants } from "../../../../constants/checkOutcomeConstant.js";
-import errorMessages from "./errorMessages.js";
 import apiService from "../../../../api/services/apiService.js";
 import { CurrentSailingRouteOptions } from "../../../../constants/currentSailingConstant.js";
 
 
 const VIEW_PATH = "componentViews/checker/noncompliance/noncomplianceView";
-
-const genericErrorMessage = "The information wasn't recorded, please try to submit again. If you close the application, the information will be lost. You can printscreen or save the information and submit it later.";
 
 const statusMapping = {
   approved: "Approved",

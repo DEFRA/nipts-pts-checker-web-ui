@@ -45,7 +45,6 @@ const ZERO_MS_END = 999;
 const MIN_MONTH = 1;
 const MAX_MONTH = 12;
 const MIN_DAY = 1;
-const FEBRUARY = 2;
 const LEAP_YEAR_DIVISOR_4 = 4;
 const LEAP_YEAR_DIVISOR_100 = 100;
 const LEAP_YEAR_DIVISOR_400 = 400;
