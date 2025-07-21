@@ -47,7 +47,7 @@
               
               <div class="govuk-section-break--l">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                  <h2 class="govuk-fieldset__heading">
+                  <h2 class="govuk-heading-l">
                     Reasons
                   </h2>
                 </legend>
@@ -58,7 +58,7 @@
 
               {% if data['documentState'] !== "approved" %} 
               <div class="govuk-section-break--l">
-                <span class="govuk-heading-s">Pet Travel Document</span>
+                <h3 class="govuk-heading-m">Pet Travel Document</h3>
                 <div class="govuk-checkboxes__item">
                   <p class="govuk-body govuk-!-margin-bottom-0 pts-checker-check">
                     PTD {{ documentStatus | lower }}
@@ -83,8 +83,6 @@
                 <!-- Include Other Issues Section -->
                 {% include "componentViews/checker/noncompliance/otherIssuesSection.html" %}
               </div>
-
-              {% include "componentViews/checker/noncompliance/petOwnerSection.html" %}
 
               {% include "componentViews/checker/noncompliance/passengerDetails.html" %}
               
