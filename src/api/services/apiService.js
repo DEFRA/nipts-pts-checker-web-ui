@@ -160,19 +160,6 @@ function getPetBreed(item) {
     : item.pet?.breedName;
 }
 
-function handleError(error) {
-  if (error?.message) {
-    const errorMapping = {
-      [applicationNotFoundErrorText]: applicationNotFoundErrorText,
-      [petNotFoundErrorText]: petNotFoundErrorText,
-    };
-  
-    return { error: errorMapping[error.message] || error.message };
-  }
-  
-  return { error: unexpectedErrorText };
-}
-
 function getMicrochipAppPtdMainModel({pet, application, travelDocument, petOwner, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth, isUserSuspended}) {
   const getSafeValue = (obj, key, fallback = null) => obj?.[key] ?? fallback;
 
