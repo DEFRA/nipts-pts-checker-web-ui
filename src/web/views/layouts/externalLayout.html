@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" class="govuk-template">
+
+    <head>
+        <title>
+            {% block pageTitle %}
+                {{checkerMainModelData[0].serviceName}} – GOV.UK
+            {% endblock %}
+        </title>
+
+        {% block stylesheets %}
+            <link href="/assets/css/hmrc-design-system.min.css" rel="stylesheet" type="text/css" media="all"/>
+            <link href="/assets/css/application.css" rel="stylesheet" type="text/css" media="all"/>
+            <link href="/assets/css/checker.css" rel="stylesheet" type="text/css" media="all"/>
+            <link href="/assets/javascripts/autocomplete/accessible-autocomplete.min.css" rel="stylesheet" type="text/css"
+            media="all"/>
+        {% endblock %}
+
+        <script type="module" src="/assets/govuk-frontend/dist/govuk/govuk-frontend.min.js"></script>
+        <script type="module" src="/assets/hmrc-frontend/hmrc-design-system.js"></script>
+        {% block headContent %}{% endblock %}
+    </head>
+    <body class="govuk-template__body js-enabled govuk-frontend-supported">
+        <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
+        {% include "../partials/noIconsHeader.html" %}
+
+        {% set mainClasses = "pts-checker govuk-!-margin-bottom-9 govuk-!-padding-top-4" %}
+        <div class="govuk-width-container">
+            {% block beforeContent %}{% endblock %}
+
+            <div class="pts-checker govuk-!-margin-bottom-9 govuk-!-padding-top-4" id="main-content">
+                {% block content %}Default Content{% endblock %}
+            </div>
+        </div>
+
+
+        {% block bodyContent %}{% endblock %}
+        {% block bodyEnd %}{% endblock %}
+    </body>
+    {% block scripts %}
+        <script type="module">
+            import {initAll} from '../../../../assets/govuk-frontend/dist/govuk/govuk-frontend.min.js';
+            initAll()
+        </script>
+    {% endblock %}
+</html>
