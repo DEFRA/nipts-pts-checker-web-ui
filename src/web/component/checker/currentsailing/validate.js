@@ -276,15 +276,18 @@ const validateDateRange = (
     dayStart.setHours(0, 0, 0, 0);
 
     const dayEnd = new Date(sailingDate);
-    dayEnd.setHours(23, 59, 59, 999);
+    dayEnd.setHours(
+      ZERO_HOUR_END,
+      ZERO_MINUTES_END,
+      ZERO_SECONDS_END,
+      ZERO_MS_END
+    );
 
     if (dayEnd >= lowerBound && dayStart <= upperBound) {
       return { isValid: true, error: null };
     }
-  } else {
-    if (sailingDate >= lowerBound && sailingDate <= upperBound) {
-      return { isValid: true, error: null };
-    }
+  } else if (sailingDate >= lowerBound && sailingDate <= upperBound) {
+    return { isValid: true, error: null };
   }
 
   return {
