@@ -288,12 +288,12 @@ const validateDateRange = (
     }
   } else if (sailingDate >= lowerBound && sailingDate <= upperBound) {
     return { isValid: true, error: null };
+  } else {
+    return {
+      isValid: false,
+      error: CurrentSailingMainModelErrors.timeOutOfBoundsError,
+    };
   }
-
-  return {
-    isValid: false,
-    error: CurrentSailingMainModelErrors.timeOutOfBoundsError,
-  };
 };
 
 export {
