@@ -241,7 +241,12 @@ const validateDateRange = (
   sailingHour = ZERO_HOUR_START,
   sailingMinutes = ZERO_MINUTES_START
 ) => {
-  const now = new Date();
+  const utcNow = new Date();
+  const ukTimeString = utcNow.toLocaleString("sv-SE", {
+    timeZone: "Europe/London",
+  });
+  const now = new Date(ukTimeString);
+
   const [day, month, year] = dateString.split(DATE_PARTS_SEPARATOR).map(Number);
   const sailingDate = new Date(year, month - MONTH_INDEX_OFFSET, day);
 
