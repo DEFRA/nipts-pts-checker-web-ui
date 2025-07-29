@@ -8,7 +8,7 @@ const errors = {
   flightNumberFormatError: "Enter the flight number using up to 8 letters and numbers (for example, RK 103)",
   departureDateRequiredError: "Enter the scheduled departure date, for example 27 3 2024",
   departureDateFormatError: "Enter the date in the correct format, for example 27 3 2024",
-  timeError: "Enter the scheduled departure time, for example 15:30",
+  timeError: "Enter the scheduled departure time in the correct 24-hour clock format, for example 06:04 or 18:00",
   timeOutOfBoundsError: "The flight or ferry must have departed in the past 48 hours or departs within the next 24 hours",
   labelError: "Error:",
   genericError: "Validation errors occurred",
