@@ -44,8 +44,9 @@ const MONTHS_WITH_30_DAYS = [
 );
 
 const DATE_FORMAT_REGEX = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
-const TWO_DIGIT_REGEX = /^\d{2}$/;
 const FLIGHT_NUMBER_REGEX = /^(?=.{1,8}$)[A-Za-z0-9]+( [A-Za-z0-9]+)*$/;
+const TIME_24_HOUR_FORMAT = /^(?:[01]\d|2[0-3])$/;
+const TIME_59_MINUTE_FORMAT = /^[0-5]\d$/;
 const PAST_HOURS_LIMIT = 48;
 const FUTURE_HOURS_LIMIT = 24;
 const ZERO_HOUR_START = 0;
@@ -136,7 +137,7 @@ const flightSchema = Joi.string()
   });
 
 const sailingHourSchema = Joi.string()
-  .pattern(TWO_DIGIT_REGEX)
+  .pattern(TIME_24_HOUR_FORMAT)
   .required()
   .label(SCHEMA_LABELS.SAILING_HOUR)
   .messages({
@@ -146,7 +147,7 @@ const sailingHourSchema = Joi.string()
   });
 
 const sailingMinutesSchema = Joi.string()
-  .pattern(TWO_DIGIT_REGEX)
+  .pattern(TIME_59_MINUTE_FORMAT)
   .required()
   .label(SCHEMA_LABELS.SAILING_MINUTES)
   .messages({
