@@ -159,6 +159,7 @@ const validateDepartureDateRangeActualHourResult = validateDateRange(
       });
     }
     isValid = false;
+    shouldSkipFurtherChecks = true;
   }
 
   if (
