@@ -163,7 +163,6 @@ const validateDepartureDateRangeActualHourResult = validateDateRange(
   }
 
   if (
-    !shouldSkipFurtherChecks &&
     !validateDepartureDateRangeZeroHourResult.isValid
   ) {
     const errorSummaryMessage = validateDepartureDateRangeZeroHourResult.error;
