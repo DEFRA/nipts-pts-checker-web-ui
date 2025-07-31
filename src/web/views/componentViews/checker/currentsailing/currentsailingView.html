@@ -27,14 +27,14 @@
       {% include "./includes/sailing/departureDateView.html" %}
 
     <div class="{% if errorSailingHour or errorSailingMinutes or errorDateRangeTime %}govuk-form-group--error{% endif %}">
-      <fieldset style="margin: 0; margin-bottom: 30px; padding: 0; border: none;" id="time-group" role="group"
-        aria-describedby="sailingHourHint"
-        class="govuk-fieldset">
-      
-        <legend style="margin: 0;" class="govuk-fieldset__legend govuk-fieldset__legend--s">
-          <h2 class="govuk-fieldset__heading">{{ currentSailingMainModelData.sailingTimeSubHeading }}</h2>
+      <fieldset style="margin: 0; margin-bottom: 30px; padding: 0; border: none;" id="time-group" role="group" aria-describedby="sailingHourHint" class="govuk-fieldset">
+ 
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+          <h2 class="govuk-fieldset__heading" aria-describedby="sailingHourHint">
+            Scheduled departure time
+          </h2>
         </legend>
-
+        
         <div id="sailingHourHint" class="govuk-hint">
           {{ currentSailingMainModelData.sailingHintText1 }}
         </div>
@@ -43,7 +43,7 @@
           {% if errorSailingHour or errorSailingMinutes %}
             <p class="govuk-error-message">
               <span class="govuk-visually-hidden">
-                {{ currentSailingMainModelData.currentSailingMainModelErrors.labelError }}
+              {{ currentSailingMainModelData.currentSailingMainModelErrors.labelError }}
               </span>
               {{ currentSailingMainModelData.currentSailingMainModelErrors.timeError }}
             </p>
