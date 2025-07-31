@@ -84,7 +84,8 @@ const isExemptRoute = (path) => {
     "/password",
     "/timeout-warning",
     "/health",
-    "/accessibility-statement"
+    "/accessibility-statement",
+    "/signout"
   ];
 
   return path.includes(SIGNIN_OIDC_PATH) || exemptPaths.includes(path);
