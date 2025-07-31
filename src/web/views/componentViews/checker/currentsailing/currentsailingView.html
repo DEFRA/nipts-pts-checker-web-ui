@@ -34,26 +34,27 @@
         <legend style="margin: 0;" class="govuk-fieldset__legend govuk-fieldset__legend--s">
           <h2 class="govuk-fieldset__heading">{{ currentSailingMainModelData.sailingTimeSubHeading }}</h2>
         </legend>
+
+        <div id="sailingHourHint" class="govuk-hint">
+          {{ currentSailingMainModelData.sailingHintText1 }}
+        </div>
       
         <div id="time-error">
           {% if errorSailingHour or errorSailingMinutes %}
-          <p class="govuk-error-message">
-            <span
-              class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError}}</span>
-            {{currentSailingMainModelData.currentSailingMainModelErrors.timeError}}
-          </p>
-          {% endif %}
-          {% if errorDateRangeTime %}
-          <p class="govuk-error-message">
-            <span
-              class="govuk-visually-hidden">{{currentSailingMainModelData.currentSailingMainModelErrors.labelError}}</span>
-            {{errorDateRangeTime}}
-          </p>
-          {% endif %}
-        </div>
-      
-        <div id="sailingHourHint" class="govuk-hint">
-          {{ currentSailingMainModelData.sailingHintText1 }}
+            <p class="govuk-error-message">
+              <span class="govuk-visually-hidden">
+                {{ currentSailingMainModelData.currentSailingMainModelErrors.labelError }}
+              </span>
+              {{ currentSailingMainModelData.currentSailingMainModelErrors.timeError }}
+            </p>
+          {% elif errorDateRangeTime %}
+            <p class="govuk-error-message">
+              <span class="govuk-visually-hidden">
+                {{ currentSailingMainModelData.currentSailingMainModelErrors.labelError }}
+              </span>
+              {{ errorDateRangeTime }}
+            </p>
+          {% endif %}    
         </div>
       
         <div class="govuk-date-input__item" style="margin-right: 10px;">
