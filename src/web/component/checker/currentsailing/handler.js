@@ -140,10 +140,18 @@ const validateDepartureDateRangeActualHourResult = validateDateRange(
     validateDepartureDateRangeZeroHourResult.error = null;
   }
 
-  if (
-    !validateSailingHourResult.isValid ||
-    !validateSailingMinutesResult.isValid
-  ) {
+    if (!validateDepartureDateRangeZeroHourResult.isValid) {
+    const errorSummaryMessage = validateDepartureDateRangeZeroHourResult.error;
+    errorSummary.push({
+      fieldId: "departureDateDay",
+      message: errorSummaryMessage,
+    });
+    isValid = false;
+    validateDepartureDateRangeActualHourResult.error = null;
+    shouldSkipFurtherChecks = true;
+  }
+
+  if (!validateSailingHourResult.isValid || !validateSailingMinutesResult.isValid) {
     let errorSummaryMessage;
     if (!validateSailingHourResult.isValid) {
       errorSummaryMessage = validateSailingHourResult.error;
@@ -162,23 +170,7 @@ const validateDepartureDateRangeActualHourResult = validateDateRange(
     shouldSkipFurtherChecks = true;
   }
 
-  if (
-    !validateDepartureDateRangeZeroHourResult.isValid
-  ) {
-    const errorSummaryMessage = validateDepartureDateRangeZeroHourResult.error;
-    errorSummary.push({
-      fieldId: "departureDateDay",
-      message: errorSummaryMessage,
-    });
-    isValid = false;
-    validateDepartureDateRangeActualHourResult.error = null;
-    shouldSkipFurtherChecks = true;
-  }
-
-  if (
-    !shouldSkipFurtherChecks &&
-    !validateDepartureDateRangeActualHourResult.isValid
-  ) {
+  if (!shouldSkipFurtherChecks && !validateDepartureDateRangeActualHourResult.isValid) {
     const errorSummaryMessage =
       validateDepartureDateRangeActualHourResult.error;
     errorSummary.push({ fieldId: "sailingHour", message: errorSummaryMessage });
