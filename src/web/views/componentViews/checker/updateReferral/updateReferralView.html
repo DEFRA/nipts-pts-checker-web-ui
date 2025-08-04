@@ -63,7 +63,7 @@
                   PTD number
                 </dt>
                 <dd class="govuk-summary-list__value">
-                  GB826 123 456
+                  {{ applicationData.PTDNumberFormatted }}
                 </dd>
               </div>
               <div class="govuk-summary-list__row">
@@ -71,7 +71,7 @@
                   Date
                 </dt>
                 <dd class="govuk-summary-list__value">
-                  30/09/2023
+                  {{ applicationData.issuedDate }}
                 </dd>
               </div>
               <div class="govuk-summary-list__row">
@@ -80,7 +80,7 @@
                 </dt>
                 <dd class="govuk-summary-list__value">
                   <strong class="govuk-tag govuk-tag--green">
-                      Approved
+                     {{ applicationData.documentState }}
                   </strong>
                 </dd>
               </div>
@@ -89,7 +89,7 @@
                   Microchip number
                 </dt>
                 <dd class="govuk-summary-list__value">
-                      0123456789234560
+                      {{ applicationData.microchipNumber }}
                 </dd>
               </div>
               <div class="govuk-summary-list__row">
@@ -97,7 +97,7 @@
                   Species
                 </dt>
                 <dd class="govuk-summary-list__value">
-                      Dog
+                 {{ applicationData.petSpecies }}
                 </dd>
               </div>
           </dl>
@@ -131,7 +131,7 @@
 
     <br>
 
-    <form method="POST" action="/checker/update-referral" class="referred-form">
+    <form method="POST" action="/checker/update-referral-submit" class="referred-form">
         <input type="hidden" name="pageState" value="pass">
         {% if check.failCount > 0 %}
             <button type="submit" class="govuk-button" data-module="govuk-button" data-govuk-button-init="">
