@@ -44,7 +44,6 @@
 <div class="govuk-width-container">
         
     <main class="govuk-main-wrapper pts-checker govuk-!-margin-bottom-9 govuk-!-padding-top-4" id="main-content">
-        <form action="/checker-hybrid/v14/dashboard/?pageState=pass">
             <div class="govuk-grid-column-three-quarters">
 
     <h1 class="govuk-heading-xl">Update referral outcome</h1>
@@ -79,8 +78,8 @@
                   Status
                 </dt>
                 <dd class="govuk-summary-list__value">
-                  <strong class="govuk-tag govuk-tag--green">
-                     {{ applicationData.documentState }}
+                  <strong class="{{applicationData.documentStatusColourMapping}}">
+                     {{ applicationData.Status }}
                   </strong>
                 </dd>
               </div>
@@ -105,39 +104,39 @@
         </div>
     </details>
 
-    <div class="govuk-radios" data-module="govuk-radios" data-govuk-radios-init="">
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="noTravel" name="travelUnderFramework" type="radio" value="yes" checked="" data-aria-controls="conditional-contact">
-          <label class="govuk-label govuk-radios__label" for="noTravel">
-            Allowed to travel under Windsor Framework using PTD or SUPTD issued 
-          </label>
-        </div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="noTravel" name="travelUnderFramework" type="radio" value="no" checked="" data-aria-controls="conditional-contact-2">
-          <label class="govuk-label govuk-radios__label" for="noTravel">
-            Not allowed to travel under Windsor Framework 
-          </label>
-        </div>
-    </div>
-
-    <br>
-
-    <div class="govuk-form-group">
-        <label class="govuk-label" for="more-detail">
-            <strong>Details of outcome</strong>
+    
+  <form action="/checker/update-referral-submit" method="POST">
+    <div class="govuk-radios" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="travelYes" name="travelUnderFramework" type="radio" value="yes" data-aria-controls="conditional-contact">
+        <label class="govuk-label govuk-radios__label" for="travelYes">
+          Allowed to travel under Windsor Framework using PTD or SUPTD issued 
         </label>
-        <textarea class="govuk-textarea" id="more-detail" name="detailsOfOutcome" rows="5"></textarea>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="travelNo" name="travelUnderFramework" type="radio" value="no" data-aria-controls="conditional-contact-2">
+        <label class="govuk-label govuk-radios__label" for="travelNo">
+          Not allowed to travel under Windsor Framework 
+        </label>
+      </div>
     </div>
 
-    <br>
 
-    <form method="POST" action="/checker/update-referral-submit" class="referred-form">
-        <input type="hidden" name="pageState" value="pass">
-        {% if check.failCount > 0 %}
-            <button type="submit" class="govuk-button" data-module="govuk-button" data-govuk-button-init="">
-                Save 
-            </button>
-        {% endif %}
+        <br>
+
+        <div class="govuk-form-group">
+            <label class="govuk-label" for="more-detail">
+                <strong>Details of outcome</strong>
+            </label>
+            <textarea class="govuk-textarea" id="more-detail" name="detailsOfOutcome" rows="5"></textarea>
+        </div>
+      
+        <br>
+      
+            <input type="hidden" name="pageState" value="pass">
+                <button type="submit" class="govuk-button" data-module="govuk-button" data-govuk-button-init="">
+                    Save 
+                </button>
     </form>
       
 
@@ -149,7 +148,6 @@
   <br><br>
 
             </div>
-        </form>
     </main>
 </div>
 

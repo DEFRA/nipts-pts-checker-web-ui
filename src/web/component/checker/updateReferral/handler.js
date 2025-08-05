@@ -3,6 +3,20 @@ import apiService from "../../../../api/services/apiService.js";
 
 const VIEW_PATH = "componentViews/checker/updateReferral/updateReferralView";
 
+const statusColourMapping = {
+  approved: "govuk-tag govuk-tag--green",
+  awaiting: "govuk-tag govuk-tag--blue",
+  revoked: "govuk-tag govuk-tag--red",
+  rejected: "govuk-tag govuk-tag--red",
+};
+
+const statusMapping = {
+  approved: "Approved",
+  awaiting: "Pending",
+  revoked: "Cancelled",
+  rejected: "	Unsuccessful",
+};
+
 
 const getUpdateReferralForm = async (request, h) => {
 
@@ -19,6 +33,11 @@ const getUpdateReferralForm = async (request, h) => {
       applicationData.PTDNumberFormatted = formatPTDNumber(reference);
     }
 
+  applicationData.documentStatusColourMapping =
+    statusColourMapping[applicationData.documentState];
+
+    applicationData.Status = statusMapping[applicationData.documentState];
+
   return h.view(VIEW_PATH, { applicationData });
 };
 
@@ -33,15 +52,12 @@ function formatPTDNumber(PTDNumber) {
 }
 
 const postUpdateReferralForm = async (request, h) => {
-  /*const { CheckSummaryId, PTDNumber, ApplicationNumber } = request.payload;
 
-  const identifier = PTDNumber || ApplicationNumber;
-  if (identifier) {
-    request.yar.set("identifier", identifier);
-  }
+   const {
+        travelUnderFramework,
+        detailsOfOutcome
+  } = request.payload;
 
-  request.yar.set("checkSummaryId", CheckSummaryId);
-*/
   return h.redirect("/checker/dashboard");
 };
 
