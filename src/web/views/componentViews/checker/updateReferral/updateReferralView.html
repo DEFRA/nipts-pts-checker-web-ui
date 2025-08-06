@@ -48,6 +48,12 @@
 
     <h1 class="govuk-heading-xl">Update referral outcome</h1>
 
+    <div id="errorSummary">
+      {% if formSubmitted and errorSummary %}
+      {% include "./errors/displayErrorSummary.html" %}
+      {% endif %}
+    </div>
+
     <details class="govuk-details">
         <summary class="govuk-details__summary">
           <span class="govuk-details__summary-text">
@@ -106,7 +112,7 @@
 
     
   <form action="/checker/update-referral-submit" method="POST">
-    <div class="govuk-radios" data-module="govuk-radios">
+    <div class="govuk-radios" data-module="govuk-radios" name="outcomeRadio" id="outcomeRadio">
       <div class="govuk-radios__item">
         <input class="govuk-radios__input" id="travelYes" name="travelUnderFramework" type="radio" value="yes" data-aria-controls="conditional-contact">
         <label class="govuk-label govuk-radios__label" for="travelYes">
@@ -128,7 +134,7 @@
             <label class="govuk-label" for="more-detail">
                 <strong>Details of outcome</strong>
             </label>
-            <textarea class="govuk-textarea" id="more-detail" name="detailsOfOutcome" rows="5"></textarea>
+            <textarea class="govuk-textarea" id="detailsOfOutcome" name="detailsOfOutcome" rows="5"></textarea>
         </div>
       
         <br>

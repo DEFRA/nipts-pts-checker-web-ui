@@ -1,5 +1,9 @@
 "use strict";
 import apiService from "../../../../api/services/apiService.js";
+import {
+  validateOutcomeRadio,
+  validateOutcomeReason
+} from "./validate.js";
 
 const VIEW_PATH = "componentViews/checker/updateReferral/updateReferralView";
 
@@ -53,16 +57,46 @@ function formatPTDNumber(PTDNumber) {
 
 const postUpdateReferralForm = async (request, h) => {
 
-   const {
+  const {
         travelUnderFramework,
         detailsOfOutcome
   } = request.payload;
 
+  const errorSummary = [];
+  let errorSummaryMessage;
+  let isValid = true;
+
+  const validationResultRadio = validateOutcomeRadio(travelUnderFramework);
+  const validationResultText = validateOutcomeReason(detailsOfOutcome);
+
+  if (!validationResultRadio.isValid) {
+      errorSummaryMessage = validationResultRadio.error;
+      isValid = false;
+      errorSummary.push({
+        fieldId: "outcomeRadio",
+        message: errorSummaryMessage,
+      });
+  }
+
+  if (!validationResultText.isValid) {
+      errorSummaryMessage = validationResultText.error;
+      isValid = false;
+      errorSummary.push({
+        fieldId: "detailsOfOutcome",
+        message: errorSummaryMessage,
+      });
+  }
+
+    if (!isValid) {
+    return h.view(VIEW_PATH, {
+      validationResultText: validationResultText.error,
+      validationResultRadio: validationResultRadio.error,
+      errorSummary,
+    });
+  }
+
   return h.redirect("/checker/dashboard");
 };
-
-
-
 
 export const UpdateReferralHandler = {
   getUpdateReferralForm,
