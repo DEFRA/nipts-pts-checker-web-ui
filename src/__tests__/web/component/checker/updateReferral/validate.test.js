@@ -4,7 +4,8 @@ import {
 } from "../../../../../web/component/checker/updateReferral/validate.js";
 
 import { UpdateReferralErrors } from "../../../../../constants/updateReferralOutcomeConstant.js";
-
+const textLimit = 500;
+const overTextLimit = 501;
 
 
 describe("validateOutcomeRadio", () => {
@@ -53,14 +54,14 @@ describe("validateOutcomeReason", () => {
   });
 
   it("should return error for reason exceeding 500 characters", () => {
-    const longText = "a".repeat(501);
+    const longText = "a".repeat(overTextLimit);
     const result = validateOutcomeReason(longText);
     expect(result.isValid).toBe(false);
     expect(result.error).toBe(UpdateReferralErrors.outcomeTextLengthError);
   });
 
   it("should return valid for reason exactly 500 characters", () => {
-    const exactText = "a".repeat(500);
+    const exactText = "a".repeat(textLimit);
     const result = validateOutcomeReason(exactText);
     expect(result.isValid).toBe(true);
     expect(result.error).toBeNull();
