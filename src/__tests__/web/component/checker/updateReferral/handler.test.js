@@ -1,6 +1,5 @@
-import spsReferralMainService from "../../../../../api/services/spsReferralMainService.js";
-
 "use strict";
+import spsReferralMainService from "../../../../../api/services/spsReferralMainService.js";
 
 const greenTag = "govuk-tag govuk-tag--green";
 
