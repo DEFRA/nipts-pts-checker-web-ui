@@ -49,8 +49,8 @@
     <h1 class="govuk-heading-xl">Update referral outcome</h1>
 
     <div id="errorSummary">
-      {% if formSubmitted and errorSummary %}
-      {% include "./errors/displayErrorSummary.html" %}
+      {% if errorSummary.length %}
+        {% include "./errors/displayErrorSummary.html" %}
       {% endif %}
     </div>
 
@@ -85,7 +85,7 @@
                 </dt>
                 <dd class="govuk-summary-list__value">
                   <strong class="{{applicationData.documentStatusColourMapping}}">
-                     {{ applicationData.Status }}
+                     {{ applicationData.status }}
                   </strong>
                 </dd>
               </div>
@@ -111,35 +111,69 @@
     </details>
 
     
-  <form action="/checker/update-referral-submit" method="POST">
-    <div class="govuk-radios" data-module="govuk-radios" name="outcomeRadio" id="outcomeRadio">
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="travelYes" name="travelUnderFramework" type="radio" value="yes" data-aria-controls="conditional-contact">
-        <label class="govuk-label govuk-radios__label" for="travelYes">
-          Allowed to travel under Windsor Framework using PTD or SUPTD issued 
-        </label>
-      </div>
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="travelNo" name="travelUnderFramework" type="radio" value="no" data-aria-controls="conditional-contact-2">
-        <label class="govuk-label govuk-radios__label" for="travelNo">
-          Not allowed to travel under Windsor Framework 
-        </label>
-      </div>
+
+<form action="/checker/update-referral-submit" method="POST">
+  <div class="govuk-radios {% if validationResultRadioError %}govuk-form-group--error{% endif %}" data-module="govuk-radios" name="outcomeRadio" id="outcomeRadio" >
+    
+    <div class="govuk-radios__item">
+      <input
+        class="govuk-radios__input"
+        id="travelYes"
+        name="travelUnderFramework"
+        type="radio"
+        value="yes"
+        {% if applicationData.travelUnderFramework == "yes" %}checked{% endif %}
+        data-aria-controls="conditional-contact"
+      >
+      <label class="govuk-label govuk-radios__label" for="travelYes">
+        Allowed to travel under Windsor Framework using PTD or SUPTD issued 
+      </label>
     </div>
 
+    <div class="govuk-radios__item">
+      <input
+        class="govuk-radios__input"
+        id="travelNo"
+        name="travelUnderFramework"
+        type="radio"
+        value="no"
+        {% if applicationData.travelUnderFramework == "no" %}checked{% endif %}
+        data-aria-controls="conditional-contact-2"
+      >
+      <label class="govuk-label govuk-radios__label" for="travelNo">
+        Not allowed to travel under Windsor Framework 
+      </label>
+    </div>
 
-        <br>
+  </div>
 
-        <div class="govuk-form-group">
+
+    <br>
+
+        <div class="govuk-form-group {% if validationResultTextError %}govuk-form-group--error{% endif %}">
             <label class="govuk-label" for="more-detail">
                 <strong>Details of outcome</strong>
             </label>
-            <textarea class="govuk-textarea" id="detailsOfOutcome" name="detailsOfOutcome" rows="5"></textarea>
+
+          <textarea
+            class="govuk-textarea"
+            id="detailsOfOutcome"
+            name="detailsOfOutcome"
+            rows="5"
+          >{{ applicationData.detailsOfOutcome }}</textarea>
+
         </div>
       
         <br>
       
-            <input type="hidden" name="pageState" value="pass">
+            
+                <input type="hidden" name="PTDNumberFormatted" value="{{ applicationData.PTDNumberFormatted }}">
+                <input type="hidden" name="issuedDate" value="{{ applicationData.issuedDate }}">
+                <input type="hidden" name="status" value="{{ applicationData.status }}">
+                <input type="hidden" name="microchipNumber" value="{{ applicationData.microchipNumber }}">
+                <input type="hidden" name="petSpecies" value="{{ applicationData.petSpecies }}">
+                <input type="hidden" name="documentStatusColourMapping" value="{{ applicationData.documentStatusColourMapping }}">
+
                 <button type="submit" class="govuk-button" data-module="govuk-button" data-govuk-button-init="">
                     Save 
                 </button>

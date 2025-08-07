@@ -40,7 +40,7 @@ const getUpdateReferralForm = async (request, h) => {
   applicationData.documentStatusColourMapping =
     statusColourMapping[applicationData.documentState];
 
-    applicationData.Status = statusMapping[applicationData.documentState];
+  applicationData.status = statusMapping[applicationData.documentState];
 
   return h.view(VIEW_PATH, { applicationData });
 };
@@ -59,12 +59,20 @@ const postUpdateReferralForm = async (request, h) => {
 
   const {
         travelUnderFramework,
-        detailsOfOutcome
-  } = request.payload;
+        detailsOfOutcome,
+        PTDNumberFormatted,
+        issuedDate,
+        status, 
+        microchipNumber,
+        petSpecies,
+        documentStatusColourMapping
+      } = request.payload;
 
   const errorSummary = [];
   let errorSummaryMessage;
   let isValid = true;
+  const applicationData = {PTDNumberFormatted, issuedDate, status, microchipNumber, petSpecies, documentStatusColourMapping, travelUnderFramework, detailsOfOutcome};
+  
 
   const validationResultRadio = validateOutcomeRadio(travelUnderFramework);
   const validationResultText = validateOutcomeReason(detailsOfOutcome);
@@ -89,12 +97,15 @@ const postUpdateReferralForm = async (request, h) => {
 
     if (!isValid) {
     return h.view(VIEW_PATH, {
-      validationResultText: validationResultText.error,
-      validationResultRadio: validationResultRadio.error,
+      applicationData,
+      validationResultTextError: validationResultText.error,
+      validationResultRadioError: validationResultRadio.error,
+      formSubmitted: true,
       errorSummary,
     });
   }
 
+  request.yar.set("successConfirmation", true);
   return h.redirect("/checker/dashboard");
 };
 
