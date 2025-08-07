@@ -12,6 +12,8 @@ const ERROR_TYPES = {
   MAX_LENGTH: "string.max"
 };
 
+const MAX_CHAR_LENGTH = 500;
+
 const outcomeRadioSchema = Joi.string()
   .required()
   .label(SCHEMA_LABELS.OUTCOME)
@@ -21,7 +23,7 @@ const outcomeRadioSchema = Joi.string()
 });
 
 const outcomeReasonSchema = Joi.string()
-  .max(500)
+  .max(MAX_CHAR_LENGTH)
   .required()
   .messages({
     [ERROR_TYPES.ANY_REQUIRED]: UpdateReferralErrors.outcomeTextError,
