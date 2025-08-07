@@ -1,5 +1,6 @@
 "use strict";
 import apiService from "../../../../api/services/apiService.js";
+import spsReferralMainService from "../../../../api/services/spsReferralMainService.js";
 import {
   validateOutcomeRadio,
   validateOutcomeReason
@@ -25,7 +26,8 @@ const statusMapping = {
 const getUpdateReferralForm = async (request, h) => {
 
  const {
-        reference
+        reference,
+        checkSummaryId
   } = request.payload;
 
   const applicationData = await apiService.getApplicationByPTDNumber(
@@ -41,6 +43,8 @@ const getUpdateReferralForm = async (request, h) => {
     statusColourMapping[applicationData.documentState];
 
   applicationData.status = statusMapping[applicationData.documentState];
+
+  applicationData.checkSummaryId = checkSummaryId;
 
   return h.view(VIEW_PATH, { applicationData });
 };
@@ -65,7 +69,8 @@ const postUpdateReferralForm = async (request, h) => {
         status, 
         microchipNumber,
         petSpecies,
-        documentStatusColourMapping
+        documentStatusColourMapping,
+        checkSummaryId
       } = request.payload;
 
   const errorSummary = [];
@@ -104,11 +109,17 @@ const postUpdateReferralForm = async (request, h) => {
       errorSummary,
     });
   }
+  
+  const checkDetails = await spsReferralMainService.updateCheckOutcomeSps(
+        checkSummaryId,
+        travelUnderFramework, 
+        detailsOfOutcome,
+        request
+  );
 
   request.yar.set("successConfirmation", true);
   return h.redirect("/checker/dashboard");
 };
-
 export const UpdateReferralHandler = {
   getUpdateReferralForm,
   postUpdateReferralForm,

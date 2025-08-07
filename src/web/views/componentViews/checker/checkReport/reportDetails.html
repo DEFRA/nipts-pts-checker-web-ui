@@ -128,6 +128,7 @@
 
 <form action="/checker/update-referral" method="POST">
   <input type="hidden" name="reference" value="{{ checkDetails.reference }}">
+  <input type="hidden" name="checkSummaryId" value="{{ checkDetails.checkSummaryId }}">
   <button type="submit" class="govuk-button" data-module="govuk-button" data-govuk-button-init="">
     Update referral outcome
   </button>
