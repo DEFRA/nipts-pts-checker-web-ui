@@ -27,7 +27,7 @@ describe("getSpsReferrals", () => {
     // Mock request object with headers
     request = {
       headers: {
-        authorization: "Bearer mockToken",
+        authorization: mockToken,
       },
     };
     jest.clearAllMocks();
@@ -120,7 +120,7 @@ describe("getSpsReferrals", () => {
     expect(global.appInsightsClient.trackException).toHaveBeenCalled();
   });
 
-  it("should handle unexpected errors gracefully", async () => {
+  it("should handle unexpected errors gracefully as expected", async () => {
     httpService.postAsync.mockRejectedValue(new Error(unexpectedError));
 
     await expect(
@@ -141,7 +141,7 @@ describe("getCompleteCheckDetails", () => {
   beforeEach(() => {
     request = {
       headers: {
-        authorization: "Bearer mockToken",
+        authorization: mockToken,
       },
     };
     jest.clearAllMocks();
@@ -243,7 +243,7 @@ describe("updateCheckOutcomeSps", () => {
   beforeEach(() => {
     request = {
       headers: {
-        authorization: "Bearer mockToken",
+        authorization: mockToken,
       },
     };
     jest.clearAllMocks();
@@ -307,7 +307,7 @@ describe("updateCheckOutcomeSps", () => {
     );
   });
 
-  it("should handle unexpected errors gracefully", async () => {
+  it("should handle unexpected errors gracefully as needed", async () => {
     httpService.postAsync.mockRejectedValue(new Error(unexpectedError));
 
     await expect(
