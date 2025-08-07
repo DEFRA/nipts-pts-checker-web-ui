@@ -1,4 +1,5 @@
 import { UpdateReferralErrors } from "../../constants/updateReferralOutcomeConstant.js";
+const errorKeyLength = 3;
 
 describe("UpdateReferralErrors", () => {
   it("should contain the correct error messages", () => {
@@ -14,6 +15,6 @@ describe("UpdateReferralErrors", () => {
   });
 
   it("should have exactly three error keys", () => {
-    expect(Object.keys(UpdateReferralErrors)).toHaveLength(3);
+    expect(Object.keys(UpdateReferralErrors)).toHaveLength(errorKeyLength);
   });
 });
