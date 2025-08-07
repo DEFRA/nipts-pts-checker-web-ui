@@ -110,7 +110,7 @@ const postUpdateReferralForm = async (request, h) => {
     });
   }
   
-  const checkDetails = await spsReferralMainService.updateCheckOutcomeSps(
+ await spsReferralMainService.updateCheckOutcomeSps(
         checkSummaryId,
         travelUnderFramework, 
         detailsOfOutcome,

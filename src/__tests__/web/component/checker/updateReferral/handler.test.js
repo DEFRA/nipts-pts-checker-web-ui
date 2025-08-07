@@ -1,3 +1,5 @@
+import spsReferralMainService from "../../../../../api/services/spsReferralMainService.js";
+
 "use strict";
 
 const greenTag = "govuk-tag govuk-tag--green";
@@ -123,29 +125,39 @@ describe("UpdateReferralHandler", () => {
       expect(result.viewRendered).toBe(true);
     });
 
-    test("should redirect to dashboard if validation passes", async () => {
-      request.payload = {
-        travelUnderFramework: "yes",
-        detailsOfOutcome: "Valid reason",
-        PTDNumberFormatted: "GB123 4567 8901",
-        issuedDate: "2025-08-07",
-        status: "Approved",
-        microchipNumber: "123456789012345",
-        petSpecies: "Dog",
-        documentStatusColourMapping: greenTag,
-      };
+test("should redirect to dashboard if validation passes", async () => {
+  const validGuid = "680AB6E6-E76B-4D6F-1360-08DC1CB5CC22";
 
-      validateOutcomeRadio.mockReturnValue({ isValid: true, error: null });
-      validateOutcomeReason.mockReturnValue({ isValid: true, error: null });
+  request.payload = {
+    travelUnderFramework: "yes",
+    detailsOfOutcome: "Valid reason",
+    PTDNumberFormatted: "GB123 4567 8901",
+    issuedDate: "2025-08-07",
+    status: "Approved",
+    microchipNumber: "123456789012345",
+    petSpecies: "Dog",
+    documentStatusColourMapping: greenTag,
+    checkSummaryId: validGuid
+  };
 
-      const result = await UpdateReferralHandler.postUpdateReferralForm(
-        request,
-        h
-      );
+  validateOutcomeRadio.mockReturnValue({ isValid: true, error: null });
+  validateOutcomeReason.mockReturnValue({ isValid: true, error: null });
 
-      expect(request.yar.set).toHaveBeenCalledWith("successConfirmation", true);
-      expect(h.redirect).toHaveBeenCalledWith("/checker/dashboard");
-      expect(result.redirected).toBe(true);
-    });
+  spsReferralMainService.updateCheckOutcomeSps = jest.fn().mockResolvedValue();
+
+  const result = await UpdateReferralHandler.postUpdateReferralForm(request, h);
+
+  expect(spsReferralMainService.updateCheckOutcomeSps).toHaveBeenCalledWith(
+    validGuid,
+    "yes",
+    "Valid reason",
+    request
+  );
+
+  expect(request.yar.set).toHaveBeenCalledWith("successConfirmation", true);
+  expect(h.redirect).toHaveBeenCalledWith("/checker/dashboard");
+  expect(result.redirected).toBe(true);
+});
+
   });
 });
