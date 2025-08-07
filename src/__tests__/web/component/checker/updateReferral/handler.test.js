@@ -1,5 +1,7 @@
 "use strict";
 
+const greenTag = "govuk-tag govuk-tag--green";
+
 jest.mock("../../../../../api/services/apiService.js", () => ({
   __esModule: true,
   default: {
@@ -67,7 +69,7 @@ describe("UpdateReferralHandler", () => {
       expect.objectContaining({
         applicationData: expect.objectContaining({
           PTDNumberFormatted: expect.stringMatching(/^GB123\s456\s78901$/),
-          documentStatusColourMapping: "govuk-tag govuk-tag--green",
+          documentStatusColourMapping: greenTag,
           status: "Approved",
         }),
       })
@@ -87,7 +89,7 @@ describe("UpdateReferralHandler", () => {
         status: "Approved",
         microchipNumber: "123456789012345",
         petSpecies: "Dog",
-        documentStatusColourMapping: "govuk-tag govuk-tag--green",
+        documentStatusColourMapping: greenTag,
       };
 
       validateOutcomeRadio.mockReturnValue({
@@ -130,7 +132,7 @@ describe("UpdateReferralHandler", () => {
         status: "Approved",
         microchipNumber: "123456789012345",
         petSpecies: "Dog",
-        documentStatusColourMapping: "govuk-tag govuk-tag--green",
+        documentStatusColourMapping: greenTag,
       };
 
       validateOutcomeRadio.mockReturnValue({ isValid: true, error: null });
