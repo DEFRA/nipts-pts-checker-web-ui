@@ -8,6 +8,8 @@ jest.mock("../../../api/services/httpService");
 const routeToValidate = "/Checker/getSpsCheckDetailsByRoute";
 const unexpectedError = "Unexpected error";
 const getCompleteCheckDetails = "/Checker/getCompleteCheckDetails";
+const updateCheckOutcomeUrl = "/Checker/updateCheckOutcomeSps";
+
 
 describe("getSpsReferrals", () => {
   const route = "TestRoute";
@@ -226,4 +228,107 @@ describe("getCompleteCheckDetails", () => {
         });
     
 });
+
+
+describe("updateCheckOutcomeSps", () => {
+  const checkSummaryId = "12345";
+  const checkOutcome = "Approved";
+  const checkOutcomeDetails = "Valid reason";
+  let request;
+
+  global.appInsightsClient = {
+    trackException: jest.fn(),
+  };
+
+  beforeEach(() => {
+    request = {
+      headers: {
+        authorization: "Bearer mockToken",
+      },
+    };
+    jest.clearAllMocks();
+  });
+
+  it("should return data if API call is successful", async () => {
+    const apiResponse = { data: { success: true } };
+    httpService.postAsync.mockResolvedValue(apiResponse);
+
+    const result = await spsService.updateCheckOutcomeSps(
+      checkSummaryId,
+      checkOutcome,
+      checkOutcomeDetails,
+      request
+    );
+
+    expect(result).toEqual(apiResponse.data);
+    expect(httpService.postAsync).toHaveBeenCalledWith(
+      expect.stringContaining(updateCheckOutcomeUrl),
+      { checkSummaryId, checkOutcome, checkOutcomeDetails },
+      request
+    );
+  });
+
+  it("should throw an error if API returns an error", async () => {
+    const apiError = { error: "Not Found" };
+    httpService.postAsync.mockResolvedValue(apiError);
+
+    await expect(
+      spsService.updateCheckOutcomeSps(
+        checkSummaryId,
+        checkOutcome,
+        checkOutcomeDetails,
+        request
+      )
+    ).rejects.toThrow("Not Found");
+
+    expect(httpService.postAsync).toHaveBeenCalledWith(
+      expect.stringContaining(updateCheckOutcomeUrl),
+      { checkSummaryId, checkOutcome, checkOutcomeDetails },
+      request
+    );
+  });
+
+  it("should return null if API response data is null", async () => {
+    const apiResponse = { data: null };
+    httpService.postAsync.mockResolvedValue(apiResponse);
+
+    const result = await spsService.updateCheckOutcomeSps(
+      checkSummaryId,
+      checkOutcome,
+      checkOutcomeDetails,
+      request
+    );
+
+    expect(result).toBeNull();
+    expect(httpService.postAsync).toHaveBeenCalledWith(
+      expect.stringContaining(updateCheckOutcomeUrl),
+      { checkSummaryId, checkOutcome, checkOutcomeDetails },
+      request
+    );
+  });
+
+  it("should handle unexpected errors gracefully", async () => {
+    httpService.postAsync.mockRejectedValue(new Error(unexpectedError));
+
+    await expect(
+      spsService.updateCheckOutcomeSps(
+        checkSummaryId,
+        checkOutcome,
+        checkOutcomeDetails,
+        request
+      )
+    ).rejects.toThrow(unexpectedError);
+
+    expect(global.appInsightsClient.trackException).toHaveBeenCalledWith({
+      exception: expect.any(Error),
+    });
+
+    expect(httpService.postAsync).toHaveBeenCalledWith(
+      expect.stringContaining(updateCheckOutcomeUrl),
+      { checkSummaryId, checkOutcome, checkOutcomeDetails },
+      request
+    );
+  });
+});
+
 
