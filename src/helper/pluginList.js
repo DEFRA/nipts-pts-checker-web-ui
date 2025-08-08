@@ -22,6 +22,7 @@ import MagicPasswordPlugin from "../plugins/magic-password.js";
 import CurrentSailingSlotPlugin from "../plugins/currentsailingslot.js";
 import Scan from "../web/component/checker/scan/index.js";
 import Accessibility from "../web/component/checker/accessibility/index.js";
+import UpdateReferral from "../web/component/checker/updateReferral/index.js";
 
 import HealthCheck from "../web/component/checker/health/index.js";
 import config from "../config/index.js";
@@ -126,6 +127,9 @@ const pluginList = [
   },
   {
     plugin: Scan,
+  },
+    {
+    plugin: UpdateReferral,
   },
 ];
 

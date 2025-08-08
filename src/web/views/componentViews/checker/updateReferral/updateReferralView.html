@@ -1,0 +1,223 @@
+{% extends "./layouts/checkerLayout.html" %}
+
+{% block headContent %}
+<style>
+    .govuk-button--link {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        color: #1d70b8;
+        text-decoration: underline;
+        font: inherit;
+        cursor: pointer;
+    }
+
+    .govuk-button--link:hover,
+    .govuk-button--link:focus {
+        text-decoration: none;
+    }
+
+    /* Style for visited links */
+    .govuk-button--link.visited {
+        color: #4c2c92;
+        /* GOV.UK visited link color */
+    }
+
+    .govuk-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    }
+    
+</style>
+{% endblock %}
+
+{% block beforeContent %}
+{{ super() }}
+<a href="javascript: history.back();" class="govuk-back-link govuk-!-margin-top-9">Back</a>
+{% endblock %}
+
+{% block pageTitle %} Referred to SPS - {{serviceName}} – GOV.UK {% endblock %}
+
+{% block content %}
+
+<div class="govuk-width-container">
+        
+    <main class="govuk-main-wrapper pts-checker govuk-!-margin-bottom-9 govuk-!-padding-top-4" id="main-content">
+            <div class="govuk-grid-column-three-quarters">
+
+    <h1 class="govuk-heading-xl">Update referral outcome</h1>
+
+    <div id="errorSummary">
+      {% if errorSummary.length %}
+        {% include "./errors/displayErrorSummary.html" %}
+      {% endif %}
+    </div>
+
+    <details class="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            Pet Travel Document details
+          </span>
+        </summary>
+        <div class="govuk-details__text">
+
+          <dl class="govuk-summary-list">
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  PTD number
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{ applicationData.PTDNumberFormatted }}
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Date
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{ applicationData.issuedDate }}
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Status
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  <strong class="{{applicationData.documentStatusColourMapping}}">
+                     {{ applicationData.status }}
+                  </strong>
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Microchip number
+                </dt>
+                <dd class="govuk-summary-list__value">
+                      {{ applicationData.microchipNumber }}
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Species
+                </dt>
+                <dd class="govuk-summary-list__value">
+                 {{ applicationData.petSpecies }}
+                </dd>
+              </div>
+          </dl>
+
+        </div>
+    </details>
+
+    
+
+<form action="/checker/update-referral-submit" method="POST">
+  <div class="govuk-radios {% if validationResultRadioError %}govuk-form-group--error{% endif %}" data-module="govuk-radios" name="outcomeRadio" id="outcomeRadio" >
+    
+    <div class="govuk-radios__item">
+      <input
+        class="govuk-radios__input"
+        id="travelYes"
+        name="travelUnderFramework"
+        type="radio"
+        value="yes"
+        {% if applicationData.travelUnderFramework == "yes" %}checked{% endif %}
+        data-aria-controls="conditional-contact"
+      >
+      <label class="govuk-label govuk-radios__label" for="travelYes">
+        Allowed to travel under Windsor Framework using PTD or SUPTD issued 
+      </label>
+    </div>
+
+    <div class="govuk-radios__item">
+      <input
+        class="govuk-radios__input"
+        id="travelNo"
+        name="travelUnderFramework"
+        type="radio"
+        value="no"
+        {% if applicationData.travelUnderFramework == "no" %}checked{% endif %}
+        data-aria-controls="conditional-contact-2"
+      >
+      <label class="govuk-label govuk-radios__label" for="travelNo">
+        Not allowed to travel under Windsor Framework 
+      </label>
+    </div>
+
+  </div>
+
+
+    <br>
+
+        <div class="govuk-form-group {% if validationResultTextError %}govuk-form-group--error{% endif %}">
+            <label class="govuk-label" for="more-detail">
+                <strong>Details of outcome</strong>
+            </label>
+
+          <textarea
+            class="govuk-textarea"
+            id="detailsOfOutcome"
+            name="detailsOfOutcome"
+            rows="5"
+          >{{ applicationData.detailsOfOutcome }}</textarea>
+
+        </div>
+      
+        <br>
+      
+            
+                <input type="hidden" name="PTDNumberFormatted" value="{{ applicationData.PTDNumberFormatted }}">
+                <input type="hidden" name="issuedDate" value="{{ applicationData.issuedDate }}">
+                <input type="hidden" name="status" value="{{ applicationData.status }}">
+                <input type="hidden" name="microchipNumber" value="{{ applicationData.microchipNumber }}">
+                <input type="hidden" name="petSpecies" value="{{ applicationData.petSpecies }}">
+                <input type="hidden" name="documentStatusColourMapping" value="{{ applicationData.documentStatusColourMapping }}">
+                <input type="hidden" name="checkSummaryId" value="{{ applicationData.checkSummaryId }}">
+                <button type="submit" class="govuk-button" data-module="govuk-button" data-govuk-button-init="">
+                    Save 
+                </button>
+    </form>
+      
+
+<!-- Spacing for bottom menu -->
+  <br><br>
+  <br><br>
+  <br><br>
+  <br><br>
+  <br><br>
+
+            </div>
+    </main>
+</div>
+
+<script>
+    if(window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+  }
+</script>
+
+{% endblock %}
+
+{% block bodyContent %}
+<script>
+    // JavaScript to handle the visited state of 'View' links
+    document.addEventListener('DOMContentLoaded', function () {
+        const referredButtons = document.querySelectorAll('.referred-button');
+
+        referredButtons.forEach(function (button) {
+            const identifier = button.getAttribute('data-identifier');
+
+            // Check if this link was clicked before
+            if (localStorage.getItem(identifier)) {
+                button.classList.add('visited');
+            }
+
+            button.addEventListener('click', function () {
+                // Mark this link as visited
+                localStorage.setItem(identifier, 'true');
+            });
+        });
+    });
+</script>
+{% endblock %}

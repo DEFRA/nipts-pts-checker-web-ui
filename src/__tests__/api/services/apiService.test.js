@@ -36,6 +36,7 @@ const baseUrl =
   const unexpectedResponseStructureText = "Unexpected response structure";
   const unexpectedErrorText = "Unexpected error occurred";
   const notFoundText = "not_found";
+  const mockToken = "Bearer mockToken";
 
 
 global.appInsightsClient = {
@@ -51,7 +52,7 @@ describe("apiService", () => {
     request = {
       // Mock request object
       headers: {
-        authorization: "Bearer mockToken",
+        authorization: mockToken,
       },
     };
   });

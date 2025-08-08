@@ -102,6 +102,7 @@ describe("CheckReportHandlers", () => {
         route: "Route A",
         scheduledDepartureDate: "15/12/2024",
         scheduledDepartureTime: "14:00",
+        checkSummaryId: validGuid
       };
 
       expect(h.view).toHaveBeenCalledWith(reportDetailsView, {
@@ -155,6 +156,7 @@ describe("CheckReportHandlers", () => {
         route: "Route A",
         scheduledDepartureDate: "15/12/2024",
         scheduledDepartureTime: "14:00",
+        checkSummaryId: validGuid
       };
 
       expect(h.view).toHaveBeenCalledWith(reportDetailsView, {
@@ -202,6 +204,7 @@ describe("CheckReportHandlers", () => {
         route: "Route A",
         scheduledDepartureDate: dateNotAvailable,
         scheduledDepartureTime: dateNotAvailable,
+        checkSummaryId: validGuid
       };
 
       expect(h.view).toHaveBeenCalledWith(reportDetailsView, {

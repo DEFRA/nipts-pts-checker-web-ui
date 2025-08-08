@@ -126,9 +126,11 @@
   </div>
 </dl>
 
-<form action="/checker/conduct-sps-check" method="POST">
+<form action="/checker/update-referral" method="POST">
+  <input type="hidden" name="reference" value="{{ checkDetails.reference }}">
+  <input type="hidden" name="checkSummaryId" value="{{ checkDetails.checkSummaryId }}">
   <button type="submit" class="govuk-button" data-module="govuk-button" data-govuk-button-init="">
-    Conduct an SPS check
+    Update referral outcome
   </button>
 </form>
 

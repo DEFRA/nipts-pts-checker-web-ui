@@ -21,7 +21,6 @@ const statusColourMapping = {
   awaiting: "govuk-tag govuk-tag--blue",
   revoked: "govuk-tag govuk-tag--red",
   rejected: "govuk-tag govuk-tag--red",
-
 };
 
 const fieldIdSortOrdering = [ // add more fields if needed

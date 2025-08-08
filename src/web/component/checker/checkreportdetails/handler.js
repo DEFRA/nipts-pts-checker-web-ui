@@ -73,6 +73,7 @@ async function getCheckDetails(request, h) {
             "HH:mm"
           )
         : dateNotavailableText,
+      checkSummaryId: checkSummaryId
     };
 
     return h.view(VIEW_PATH, {
