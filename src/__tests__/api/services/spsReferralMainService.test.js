@@ -9,7 +9,7 @@ const routeToValidate = "/Checker/getSpsCheckDetailsByRoute";
 const unexpectedError = "Unexpected error";
 const getCompleteCheckDetails = "/Checker/getCompleteCheckDetails";
 const updateCheckOutcomeUrl = "/Checker/updateCheckOutcomeSps";
-
+const mockToken = "mockToken";
 
 describe("getSpsReferrals", () => {
   const route = "TestRoute";
