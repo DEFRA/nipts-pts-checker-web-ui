@@ -68,124 +68,129 @@ function formatPTDNumber(PTDNumber) {
 }
 
 const postUpdateReferralForm = async (request, h) => {
-
   try {
+        const payload = request.payload; 
+        const {
+              travelUnderFramework,
+              detailsOfOutcome,
+              PTDNumberFormatted,
+              issuedDate,
+              status, 
+              microchipNumber,
+              petSpecies,
+              documentStatusColourMapping,
+            } = payload;
 
- const payload = request.payload;
- 
-  const {
-        travelUnderFramework,
-        detailsOfOutcome,
-        PTDNumberFormatted,
-        issuedDate,
-        status, 
-        microchipNumber,
-        petSpecies,
-        documentStatusColourMapping,
-      } = payload;
+        const validation = validateUpdateReferralForm(PTDNumberFormatted, issuedDate, status, microchipNumber, petSpecies, documentStatusColourMapping, travelUnderFramework, detailsOfOutcome);
+        if (!validation.isValid) {
+          return h.view(VIEW_PATH, {
+            applicationData: validation.applicationData,
+            validationResultTextError: validation.validationResultTextError,
+            validationResultRadioError: validation.validationResultRadioError,
+            formSubmitted: true,
+            errorSummary: validation.errorSummary,
+          });
+        }
 
-  const errorSummary = [];
-  let errorSummaryMessage;
-  let isValid = true;
-  const applicationData = {PTDNumberFormatted, issuedDate, status, microchipNumber, petSpecies, documentStatusColourMapping, travelUnderFramework, detailsOfOutcome};
-  
+        payload.isGBCheck = request.yar.get("isGBCheck");
+        payload.spsOutcome = travelUnderFramework === "yes" ? "true" : "false";
+        payload.spsOutcomeDetails = payload.detailsOfOutcome;
+        payload.passengerType =  request.yar.get("passengerTypeId");    
+        const data = request.yar.get("data");    
+        data.ptdFormatted = getPtdFormatted(data);
+        data.isGBCheck = request.yar.get("isGBCheck");
 
-   const validationResultRadio = validateOutcomeRadio(travelUnderFramework);
-   const validationResultText = validateOutcomeReason(detailsOfOutcome);
+        if (request.yar.get("IsFailSelected")) {
+            await saveReportNonCompliance(payload, data);
+        }
 
-  if (!validationResultRadio.isValid) {
-      errorSummaryMessage = validationResultRadio.error;
-      isValid = false;
-      errorSummary.push({
-        fieldId: "outcomeRadio",
-        message: errorSummaryMessage,
-      });
-  }
-
-  if (!validationResultText.isValid) {
-      errorSummaryMessage = validationResultText.error;
-      isValid = false;
-      errorSummary.push({
-        fieldId: "detailsOfOutcome",
-        message: errorSummaryMessage,
-      });
-  }
-
-    if (!isValid) {
-    return h.view(VIEW_PATH, {
-      applicationData,
-      validationResultTextError: validationResultText.error,
-      validationResultRadioError: validationResultRadio.error,
-      formSubmitted: true,
-      errorSummary,
-    });
-  }
-
-   
-    payload.isGBCheck = request.yar.get("isGBCheck");
-    payload.spsOutcome = travelUnderFramework === "yes" ? "true" : "false";
-    payload.spsOutcomeDetails = payload.detailsOfOutcome;
-    payload.passengerType =  request.yar.get("passengerTypeId");
+        request.yar.clear("IsFailSelected");
     
-    const data = request.yar.get("data");
-    
-    data.ptdFormatted = getPtdFormatted(data);
-    data.isGBCheck = request.yar.get("isGBCheck");
+        // Clear individual keys
+        request.yar.clear("routeId");
+        request.yar.clear("routeName");
+        request.yar.clear("departureDate");
+        request.yar.clear("departureTime");
+        request.yar.clear("checkSummaryId");
+        request.yar.clear("passengerTypeId")
 
-    if (request.yar.get("IsFailSelected")) {
-        await saveReportNonCompliance(payload, data);
-    }
+        // Redirect to the dashboard
+        request.yar.set("successConfirmation", true);
 
-    request.yar.clear("IsFailSelected");
-    
-    // Clear individual keys
-    request.yar.clear("routeId");
-    request.yar.clear("routeName");
-    request.yar.clear("departureDate");
-    request.yar.clear("departureTime");
-    request.yar.clear("checkSummaryId");
-    request.yar.clear("passengerTypeId")
-
-    // Redirect to the dashboard
-    request.yar.set("successConfirmation", true);
-
-    return h.redirect("/checker/dashboard");
-  } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
-    console.error("Unexpected Error:", error);
-    throw error;
-  }
+        return h.redirect("/checker/dashboard");
+      } catch (error) {
+        global.appInsightsClient.trackException({ exception: error });
+        console.error("Unexpected Error:", error);
+        throw error;
+      }
 
   async function saveReportNonCompliance(payload, data) {
-      try{    
-      const isGBCheck = request.yar.get("isGBCheck");
-      const { dateTimeString, routeId, routeOptionId, flightNumber } = getJourneyDetails(isGBCheck);
-  
-      // Call the helper function to create the checkOutcome object
-      const checkOutcome = createCheckOutcome(
-        data,
-        payload,
-        isGBCheck,
-        dateTimeString,
-        routeId,
-        routeOptionId,
-        flightNumber
-      );
-  
-      const responseData = await apiService.reportNonCompliance(
-        checkOutcome,
-        request
-      );
-  
-      return responseData;
-    } catch (error) {
-      global.appInsightsClient.trackException({ exception: error });
-      console.error("Error fetching data:", error.message);
-  
-      throw error;
-     }
+        try{    
+        const isGBCheck = request.yar.get("isGBCheck");
+        const { dateTimeString, routeId, routeOptionId, flightNumber } = getJourneyDetails(isGBCheck);
+    
+        // Call the helper function to create the checkOutcome object
+        const checkOutcome = createCheckOutcome(
+          data,
+          payload,
+          isGBCheck,
+          dateTimeString,
+          routeId,
+          routeOptionId,
+          flightNumber
+        );
+    
+        const responseData = await apiService.reportNonCompliance(
+          checkOutcome,
+          request
+        );
+    
+        return responseData;
+      } catch (error) {
+        global.appInsightsClient.trackException({ exception: error });
+        console.error("Error fetching data:", error.message);
+    
+        throw error;
+      }
     }
   
+    function validateUpdateReferralForm(PTDNumberFormatted, issuedDate, status, microchipNumber, petSpecies, documentStatusColourMapping, travelUnderFramework, detailsOfOutcome) {  
+      const errorSummary = [];
+      let errorSummaryMessage;
+      let isValid = true;
+      const applicationData = {PTDNumberFormatted, issuedDate, status, microchipNumber, petSpecies, documentStatusColourMapping, travelUnderFramework, detailsOfOutcome};
+      
+    
+      const validationResultRadio = validateOutcomeRadio(travelUnderFramework);
+      const validationResultText = validateOutcomeReason(detailsOfOutcome);
+    
+      if (!validationResultRadio.isValid) {
+          errorSummaryMessage = validationResultRadio.error;
+          isValid = false;
+          errorSummary.push({
+            fieldId: "outcomeRadio",
+            message: errorSummaryMessage,
+          });
+      }
+    
+      if (!validationResultText.isValid) {
+          errorSummaryMessage = validationResultText.error;
+          isValid = false;
+          errorSummary.push({
+            fieldId: "detailsOfOutcome",
+            message: errorSummaryMessage,
+          });
+      }
+           
+      return {
+          isValid,
+          errorSummary,
+          applicationData,
+          validationResultRadioError: validationResultRadio.error,
+          validationResultTextError: validationResultText.error,
+        };
+    }
+
     function toBooleanOrNull(value, defaultValue) {
       return value === "true" ? true : defaultValue;
     }
