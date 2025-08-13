@@ -1,11 +1,8 @@
 "use strict";
+import { validateUpdateReferralForm } from "./validate.js";
 import apiService from "../../../../api/services/apiService.js";
 import { CheckOutcomeConstants } from "../../../../constants/checkOutcomeConstant.js";
 import { CurrentSailingRouteOptions } from "../../../../constants/currentSailingConstant.js";
-import {
-  validateOutcomeRadio,
-  validateOutcomeReason
-} from "./validate.js";
 
 const VIEW_PATH = "componentViews/checker/updateReferral/updateReferralView";
 
@@ -70,18 +67,7 @@ function formatPTDNumber(PTDNumber) {
 const postUpdateReferralForm = async (request, h) => {
   try {
         const payload = request.payload; 
-        const {
-              travelUnderFramework,
-              detailsOfOutcome,
-              PTDNumberFormatted,
-              issuedDate,
-              status, 
-              microchipNumber,
-              petSpecies,
-              documentStatusColourMapping,
-            } = payload;
-
-        const validation = validateUpdateReferralForm(PTDNumberFormatted, issuedDate, status, microchipNumber, petSpecies, documentStatusColourMapping, travelUnderFramework, detailsOfOutcome);
+        const validation = validateUpdateReferralForm(payload);
         if (!validation.isValid) {
           return h.view(VIEW_PATH, {
             applicationData: validation.applicationData,
@@ -93,7 +79,7 @@ const postUpdateReferralForm = async (request, h) => {
         }
 
         payload.isGBCheck = request.yar.get("isGBCheck");
-        payload.spsOutcome = travelUnderFramework === "yes" ? "true" : "false";
+        payload.spsOutcome = payload.travelUnderFramework === "yes" ? "true" : "false";
         payload.spsOutcomeDetails = payload.detailsOfOutcome;
         payload.passengerType =  request.yar.get("passengerTypeId");    
         const data = request.yar.get("data");    
@@ -153,43 +139,7 @@ const postUpdateReferralForm = async (request, h) => {
         throw error;
       }
     }
-  
-    function validateUpdateReferralForm(PTDNumberFormatted, issuedDate, status, microchipNumber, petSpecies, documentStatusColourMapping, travelUnderFramework, detailsOfOutcome) {  
-      const errorSummary = [];
-      let errorSummaryMessage;
-      let isValid = true;
-      const applicationData = {PTDNumberFormatted, issuedDate, status, microchipNumber, petSpecies, documentStatusColourMapping, travelUnderFramework, detailsOfOutcome};
-      
-    
-      const validationResultRadio = validateOutcomeRadio(travelUnderFramework);
-      const validationResultText = validateOutcomeReason(detailsOfOutcome);
-    
-      if (!validationResultRadio.isValid) {
-          errorSummaryMessage = validationResultRadio.error;
-          isValid = false;
-          errorSummary.push({
-            fieldId: "outcomeRadio",
-            message: errorSummaryMessage,
-          });
-      }
-    
-      if (!validationResultText.isValid) {
-          errorSummaryMessage = validationResultText.error;
-          isValid = false;
-          errorSummary.push({
-            fieldId: "detailsOfOutcome",
-            message: errorSummaryMessage,
-          });
-      }
-           
-      return {
-          isValid,
-          errorSummary,
-          applicationData,
-          validationResultRadioError: validationResultRadio.error,
-          validationResultTextError: validationResultText.error,
-        };
-    }
+
 
     function toBooleanOrNull(value, defaultValue) {
       return value === "true" ? true : defaultValue;

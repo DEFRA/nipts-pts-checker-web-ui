@@ -2,8 +2,7 @@
 import { UpdateReferralHandler } from "../../../../../web/component/checker/updateReferral/handler.js";
 import apiService from "../../../../../api/services/apiService.js";
 import {
-  validateOutcomeRadio,
-  validateOutcomeReason,
+  validateUpdateReferralForm
 } from "../../../../../web/component/checker/updateReferral/validate.js";
 
 const greenTag = "govuk-tag govuk-tag--green";
@@ -14,8 +13,7 @@ jest.mock(
   "../../../../../web/component/checker/updateReferral/validate.js",
   () => ({
     __esModule: true,
-    validateOutcomeRadio: jest.fn(),
-    validateOutcomeReason: jest.fn(),
+    validateUpdateReferralForm: jest.fn(),
   })
 );
 
@@ -109,15 +107,16 @@ const VIEW_PATH =
         documentStatusColourMapping: greenTag,
       };
 
-      validateOutcomeRadio.mockReturnValue({
+      const validationResult = {
         isValid: false,
-        error: "Select if the person is allowed or not allowed to travel",
-      });
-
-      validateOutcomeReason.mockReturnValue({
-        isValid: false,
-        error: "Enter the reason you selected that outcome",
-      });
+        errorSummary: [
+                 {"fieldId": "outcomeRadio", "message": "Select if the person is allowed or not allowed to travel"},
+                 {"fieldId": "detailsOfOutcome", "message": "Enter the reason you selected that outcome"}
+                ],
+        validationResultTextError: "Enter the reason you selected that outcome",
+        validationResultRadioError: "Select if the person is allowed or not allowed to travel",                
+      };
+      validateUpdateReferralForm.mockReturnValue(validationResult);
 
       const result = await UpdateReferralHandler.postUpdateReferralForm(
         request,
@@ -127,14 +126,11 @@ const VIEW_PATH =
       expect(h.view).toHaveBeenCalledWith(
         VIEW_PATH,
         expect.objectContaining({
-          applicationData: expect.any(Object),
+          applicationData: validationResult.applicationData, //expect.any(Object)
           validationResultTextError: "Enter the reason you selected that outcome",
           validationResultRadioError: "Select if the person is allowed or not allowed to travel",
           formSubmitted: true,
-          errorSummary: expect.arrayContaining([
-            expect.objectContaining({ fieldId: "outcomeRadio" }),
-            expect.objectContaining({ fieldId: "detailsOfOutcome" }),
-          ]),
+          errorSummary: [{"fieldId": "outcomeRadio", "message": "Select if the person is allowed or not allowed to travel"}, {"fieldId": "detailsOfOutcome", "message": "Enter the reason you selected that outcome"}]
         })
       );
       expect(result.viewRendered).toBe(true);
@@ -181,8 +177,7 @@ const VIEW_PATH =
       });
 
 
-      validateOutcomeRadio.mockReturnValue({ isValid: true, error: null });
-      validateOutcomeReason.mockReturnValue({ isValid: true, error: null });
+       validateUpdateReferralForm.mockReturnValue({ isValid: true, error: null });
 
       apiService.reportNonCompliance.mockResolvedValue({});
 

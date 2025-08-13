@@ -50,9 +50,58 @@ const validateOutcomeReason = (outcomeReason) => {
   return { isValid: false, error: error.details[0].message };
 };
 
+const validateUpdateReferralForm = (payload) => {  
+      const {
+              travelUnderFramework,
+              detailsOfOutcome,
+              PTDNumberFormatted,
+              issuedDate,
+              status, 
+              microchipNumber,
+              petSpecies,
+              documentStatusColourMapping,
+            } = payload;
+
+      const errorSummary = [];
+      let errorSummaryMessage;
+      let isValid = true;
+      const applicationData = {PTDNumberFormatted, issuedDate, status, microchipNumber, petSpecies, documentStatusColourMapping, travelUnderFramework, detailsOfOutcome};
+      
+    
+      const validationResultRadio = validateOutcomeRadio(travelUnderFramework);
+      const validationResultText = validateOutcomeReason(detailsOfOutcome);
+    
+      if (!validationResultRadio.isValid) {
+          errorSummaryMessage = validationResultRadio.error;
+          isValid = false;
+          errorSummary.push({
+            fieldId: "outcomeRadio",
+            message: errorSummaryMessage,
+          });
+      }
+    
+      if (!validationResultText.isValid) {
+          errorSummaryMessage = validationResultText.error;
+          isValid = false;
+          errorSummary.push({
+            fieldId: "detailsOfOutcome",
+            message: errorSummaryMessage,
+          });
+      }
+           
+      return {
+          isValid,
+          errorSummary,
+          applicationData,
+          validationResultRadioError: validationResultRadio.error,
+          validationResultTextError: validationResultText.error,
+        };
+  };
+
 
 
 export {
-  validateOutcomeRadio,
-  validateOutcomeReason
+    validateOutcomeRadio,
+    validateOutcomeReason,
+    validateUpdateReferralForm
 };
