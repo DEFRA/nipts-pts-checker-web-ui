@@ -1,4 +1,15 @@
     import { CurrentSailingRouteOptions } from "../../constants/currentSailingConstant.js";
+    import { CheckOutcomeConstants } from "../../constants/checkOutcomeConstant.js";
+    
+    function toBooleanOrNull(value, defaultValue) {
+      return value === "true" ? true : defaultValue;
+    }
+
+    function getPayloadValue(payload, key) {
+      const value = payload?.[key];
+      return value === '' ? null : value ?? null;
+    }
+
     function getDefaultCurrentSailing(request) {
       return request.yar.get("currentSailingSlot") || {};
     }
@@ -52,4 +63,46 @@
       return { dateTimeString, routeId, routeOptionId, flightNumber };
     };
 
-    export { getJourneyDetails }
+
+    const createCheckOutcome = (request, context) => {
+          const {
+                data,
+                payload,
+                isGBCheck,
+                dateTimeString,
+                routeId,
+                routeOptionId,
+                flightNumber
+            } = context;
+
+          const checkerId = request.yar.get("checkerId");
+          const gbcheckSummaryId = request.yar.get("checkSummaryId");
+      
+          return {
+            applicationId: data.applicationId,
+            checkOutcome: CheckOutcomeConstants.Fail,
+            checkerId: checkerId ?? null,
+            routeId: routeId,
+            sailingTime: dateTimeString,
+            sailingOption: routeOptionId,
+            flightNumber: flightNumber,
+            isGBCheck: isGBCheck,
+            mcNotMatch: toBooleanOrNull(payload?.mcNotMatch, null),
+            mcNotMatchActual: getPayloadValue(payload, "mcNotMatchActual"),
+            mcNotFound: toBooleanOrNull(payload?.mcNotFound, null),
+            vcNotMatchPTD: toBooleanOrNull(payload?.vcNotMatchPTD),
+            oiFailPotentialCommercial: toBooleanOrNull(payload?.oiFailPotentialCommercial, null),
+            oiFailAuthTravellerNoConfirmation: toBooleanOrNull(payload?.oiFailAuthTravellerNoConfirmation, null),
+            oiFailOther: toBooleanOrNull(payload?.oiFailOther, null),
+            passengerTypeId: getPayloadValue(payload, "passengerType"),
+            relevantComments: getPayloadValue(payload, "relevantComments"),
+            gbRefersToDAERAOrSPS: toBooleanOrNull(payload?.gbRefersToDAERAOrSPS, null),
+            gbAdviseNoTravel: toBooleanOrNull(payload?.gbAdviseNoTravel, null),
+            gbPassengerSaysNoTravel: toBooleanOrNull(payload?.gbPassengerSaysNoTravel, null),
+            spsOutcome: toBooleanOrNull(payload?.spsOutcome, isGBCheck? null: false),
+            spsOutcomeDetails: getPayloadValue(payload, "spsOutcomeDetails"),
+            gBCheckId: gbcheckSummaryId ?? null,
+          };
+        };
+
+    export { getJourneyDetails, createCheckOutcome }

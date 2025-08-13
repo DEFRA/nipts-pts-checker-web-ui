@@ -1,10 +1,7 @@
 "use strict";
 import { validateUpdateReferralForm } from "./validate.js";
 import apiService from "../../../../api/services/apiService.js";
-import { CheckOutcomeConstants } from "../../../../constants/checkOutcomeConstant.js";
-import { getJourneyDetails } from "../../../helper/nonComplinaceHelper.js";
-
-
+import { getJourneyDetails, createCheckOutcome } from "../../../helper/nonComplinaceHelper.js";
 
 const VIEW_PATH = "componentViews/checker/updateReferral/updateReferralView";
 
@@ -106,9 +103,8 @@ const postUpdateReferralForm = async (request, h) => {
         try{    
         const isGBCheck = request.yar.get("isGBCheck");
         const { dateTimeString, routeId, routeOptionId, flightNumber } = getJourneyDetails(request, isGBCheck);
-    
-        // Call the helper function to create the checkOutcome object
-        const checkOutcome = createCheckOutcome(
+
+        const context = {
           data,
           payload,
           isGBCheck,
@@ -116,6 +112,12 @@ const postUpdateReferralForm = async (request, h) => {
           routeId,
           routeOptionId,
           flightNumber
+        };
+    
+        // Call the helper function to create the checkOutcome object
+        const checkOutcome = createCheckOutcome(
+          request, 
+          context          
         );
     
         const responseData = await apiService.reportNonCompliance(
@@ -130,56 +132,6 @@ const postUpdateReferralForm = async (request, h) => {
     
         throw error;
       }
-    }
-
-    function toBooleanOrNull(value, defaultValue) {
-      return value === "true" ? true : defaultValue;
-    }
-  
-    // Helper function to safely get a payload property or null
-    function getPayloadValue(payload, key) {
-      const value = payload?.[key];
-      return value === '' ? null : value ?? null;
-    }
-  
-    // Refactor checkOutcome construction
-    function createCheckOutcome(
-      data,
-      payload,
-      isGBCheck,
-      dateTimeString,
-      routeId,
-      routeOptionId,
-      flightNumber
-    ) {
-      const checkerId = request.yar.get("checkerId");
-      const gbcheckSummaryId = request.yar.get("checkSummaryId");
-  
-      return {
-        applicationId: data.applicationId,
-        checkOutcome: CheckOutcomeConstants.Fail,
-        checkerId: checkerId ?? null,
-        routeId: routeId,
-        sailingTime: dateTimeString,
-        sailingOption: routeOptionId,
-        flightNumber: flightNumber,
-        isGBCheck: isGBCheck,
-        mcNotMatch: toBooleanOrNull(payload?.mcNotMatch, null),
-        mcNotMatchActual: getPayloadValue(payload, "mcNotMatchActual"),
-        mcNotFound: toBooleanOrNull(payload?.mcNotFound, null),
-        vcNotMatchPTD: toBooleanOrNull(payload?.vcNotMatchPTD),
-        oiFailPotentialCommercial: toBooleanOrNull(payload?.oiFailPotentialCommercial, null),
-        oiFailAuthTravellerNoConfirmation: toBooleanOrNull(payload?.oiFailAuthTravellerNoConfirmation, null),
-        oiFailOther: toBooleanOrNull(payload?.oiFailOther, null),
-        passengerTypeId: getPayloadValue(payload, "passengerType"),
-        relevantComments: getPayloadValue(payload, "relevantComments"),
-        gbRefersToDAERAOrSPS: toBooleanOrNull(payload?.gbRefersToDAERAOrSPS, null),
-        gbAdviseNoTravel: toBooleanOrNull(payload?.gbAdviseNoTravel, null),
-        gbPassengerSaysNoTravel: toBooleanOrNull(payload?.gbPassengerSaysNoTravel, null),
-        spsOutcome: toBooleanOrNull(payload?.spsOutcome, isGBCheck? null: false),
-        spsOutcomeDetails: getPayloadValue(payload, "spsOutcomeDetails"),
-        gBCheckId: gbcheckSummaryId ?? null,
-      };
     }
 };
 
