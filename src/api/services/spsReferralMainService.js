@@ -42,6 +42,7 @@ const getSpsReferrals = async (route, date, timeWindowInHours, request) => {
         TravelBy: item.travelBy,
         SPSOutcome: item.spsOutcome,
         CheckSummaryId: item.checkSummaryId,
+        PassengerTypeId: item.passengerTypeId,
       });
     });
 
