@@ -2,9 +2,8 @@
 
 import appSettingsService from "../../../../api/services/appSettingsService.js";
 import { validateNonCompliance } from "./validate.js";
-import { CheckOutcomeConstants } from "../../../../constants/checkOutcomeConstant.js";
 import apiService from "../../../../api/services/apiService.js";
-import { CurrentSailingRouteOptions } from "../../../../constants/currentSailingConstant.js";
+import { getJourneyDetails, createCheckOutcome } from "../../../helper/nonComplinaceHelper.js";
 
 
 const VIEW_PATH = "componentViews/checker/noncompliance/noncomplianceView";
@@ -152,18 +151,20 @@ const postNonComplianceHandler = async (request, h) => {
   async function saveReportNonCompliance(payload, data) {
     try{    
     const isGBCheck = request.yar.get("isGBCheck");
-    const { dateTimeString, routeId, routeOptionId, flightNumber } = getJourneyDetails(isGBCheck);
+    const { dateTimeString, routeId, routeOptionId, flightNumber } = getJourneyDetails(request, isGBCheck);
+
+    const context = {
+          data,
+          payload,
+          isGBCheck,
+          dateTimeString,
+          routeId,
+          routeOptionId,
+          flightNumber
+        };
 
     // Call the helper function to create the checkOutcome object
-    const checkOutcome = createCheckOutcome(
-      data,
-      payload,
-      isGBCheck,
-      dateTimeString,
-      routeId,
-      routeOptionId,
-      flightNumber
-    );
+    const checkOutcome = createCheckOutcome(request, context);
 
     const responseData = await apiService.reportNonCompliance(
       checkOutcome,
@@ -177,109 +178,6 @@ const postNonComplianceHandler = async (request, h) => {
 
     throw error;
    }
-  }
-
-  function toBooleanOrNull(value, defaultValue) {
-    return value === "true" ? true : defaultValue;
-  }
-
-  // Helper function to safely get a payload property or null
-  function getPayloadValue(payload, key) {
-    const value = payload?.[key];
-    return value === '' ? null : value ?? null;
-  }
-
-  // Refactor checkOutcome construction
-  function createCheckOutcome(
-    data,
-    payload,
-    isGBCheck,
-    dateTimeString,
-    routeId,
-    routeOptionId,
-    flightNumber
-  ) {
-    const checkerId = request.yar.get("checkerId");
-    const gbcheckSummaryId = request.yar.get("checkSummaryId");
-
-    return {
-      applicationId: data.applicationId,
-      checkOutcome: CheckOutcomeConstants.Fail,
-      checkerId: checkerId ?? null,
-      routeId: routeId,
-      sailingTime: dateTimeString,
-      sailingOption: routeOptionId,
-      flightNumber: flightNumber,
-      isGBCheck: isGBCheck,
-      mcNotMatch: toBooleanOrNull(payload?.mcNotMatch, null),
-      mcNotMatchActual: getPayloadValue(payload, "mcNotMatchActual"),
-      mcNotFound: toBooleanOrNull(payload?.mcNotFound, null),
-      vcNotMatchPTD: toBooleanOrNull(payload?.vcNotMatchPTD),
-      oiFailPotentialCommercial: toBooleanOrNull(payload?.oiFailPotentialCommercial, null),
-      oiFailAuthTravellerNoConfirmation: toBooleanOrNull(payload?.oiFailAuthTravellerNoConfirmation, null),
-      oiFailOther: toBooleanOrNull(payload?.oiFailOther, null),
-      passengerTypeId: getPayloadValue(payload, "passengerType"),
-      relevantComments: getPayloadValue(payload, "relevantComments"),
-      gbRefersToDAERAOrSPS: toBooleanOrNull(payload?.gbRefersToDAERAOrSPS, null),
-      gbAdviseNoTravel: toBooleanOrNull(payload?.gbAdviseNoTravel, null),
-      gbPassengerSaysNoTravel: toBooleanOrNull(payload?.gbPassengerSaysNoTravel, null),
-      spsOutcome: toBooleanOrNull(payload?.spsOutcome, isGBCheck? null: false),
-      spsOutcomeDetails: getPayloadValue(payload, "spsOutcomeDetails"),
-      gBCheckId: gbcheckSummaryId ?? null,
-    };
-  }
-
-  function getDefaultCurrentSailing() {
-    return request.yar.get("currentSailingSlot") || {};
-  }
-
-  function getJourneyDetails(isGBCheck) {
-    //Pass Journey Details from Session Stored in Header "currentSailingSlot"
-    const currentSailingSlot = getDefaultCurrentSailing();
-    let currentDate = currentSailingSlot.departureDate
-      .split("/")
-      .reverse()
-      .join("-");
-    
-    let sailingHour = currentSailingSlot.sailingHour;
-    let sailingMinutes = currentSailingSlot.sailingMinutes;
-    let dateTimeString = `${currentDate}T${sailingHour}:${sailingMinutes}:00Z`;
-  
-    let routeId = currentSailingSlot?.selectedRoute?.id ?? null;
-    const routeOptionId = currentSailingSlot.selectedRouteOption.id;
-    const flightNumber = currentSailingSlot?.routeFlight ?? null;    
-    if(routeOptionId === CurrentSailingRouteOptions[1].id)
-    {
-      request.yar.clear("checkSummaryId");
-    }
-
-    //When Approval is of Type NI and RouteOption selected is of Type Ferry
-    //If Journey details are available by cliciking view link and selecting the GB referral on UI(this sets in session)
-    //If available from view link and GB referral on UI session pass session values, 
-    //else use the default currentsailings session[this covers search or scan route]
-    if(!isGBCheck && routeOptionId === CurrentSailingRouteOptions[0].id)
-    {
-       const referredRouteId = request.yar.get("routeId");
-       const referredCheckCurrentDate = request.yar.get("departureDate");
-       const referreDepartureTime = request.yar.get("departureTime");
-       const referredCheckSummaryId = request.yar.get("checkSummaryId");
-
-       if(referredRouteId && referredCheckCurrentDate && referreDepartureTime && referredCheckSummaryId)
-       {  
-          routeId = referredRouteId;       
-          currentDate = referredCheckCurrentDate
-              .split("/")
-              .reverse()
-              .join("-");
-          
-          sailingHour = referreDepartureTime.split(":")[0];
-          sailingMinutes = referreDepartureTime.split(":")[1];
-       }
-
-       dateTimeString = `${currentDate}T${sailingHour}:${sailingMinutes}:00Z`;
-    }
-
-    return { dateTimeString, routeId, routeOptionId, flightNumber };
   }
 };
 
