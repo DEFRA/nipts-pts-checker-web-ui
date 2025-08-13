@@ -45,7 +45,8 @@ const VIEW_PATH =
     it("should format PTD number and return view with application data", async () => {
      // Set up the mock to return a real PTD number
       request.yar.get.mockImplementation((key) => {
-        if (key === "identifier") return "GB12345678901";
+        if (key === "identifier") 
+          { return "GB12345678901"; }
         return undefined;
       });
 
@@ -74,7 +75,7 @@ const VIEW_PATH =
         })
       );
 
-      //expect(result.viewRendered).toBe(true);
+      expect(result.viewRendered).toBe(true);
     });
   });
 

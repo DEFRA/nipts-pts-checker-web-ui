@@ -123,7 +123,7 @@ const postUpdateReferralForm = async (request, h) => {
 
    
     payload.isGBCheck = request.yar.get("isGBCheck");
-    payload.spsOutcome = travelUnderFramework == 'yes' ? "true" : "false";
+    payload.spsOutcome = travelUnderFramework === "yes" ? "true" : "false";
     payload.spsOutcomeDetails = payload.detailsOfOutcome;
     payload.passengerType =  request.yar.get("passengerTypeId");
     
