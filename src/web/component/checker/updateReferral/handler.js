@@ -20,17 +20,6 @@ const statusMapping = {
   rejected: "	Unsuccessful",
 };
 
-const getPtdFormatted = (data) => {
-  const PTD_LENGTH = 11; 
-  const PTD_PREFIX_LENGTH = 5;
-  const PTD_MID_LENGTH = 8;
-
-  return data?.ptdNumber 
-    ? `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(0, PTD_PREFIX_LENGTH)} ` +
-      `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(PTD_PREFIX_LENGTH, PTD_MID_LENGTH)} ` +
-      `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(PTD_MID_LENGTH)}`
-    : "";
-};
 
 const getUpdateReferralForm = async (request, h) => {
 const reference = request.yar.get("identifier");
@@ -82,11 +71,12 @@ const postUpdateReferralForm = async (request, h) => {
         payload.spsOutcome = payload.travelUnderFramework === "yes" ? "true" : "false";
         payload.spsOutcomeDetails = payload.detailsOfOutcome;
         payload.passengerType =  request.yar.get("passengerTypeId");    
-        const data = request.yar.get("data");    
-        data.ptdFormatted = getPtdFormatted(data);
-        data.isGBCheck = request.yar.get("isGBCheck");
+       
 
         if (request.yar.get("IsFailSelected")) {
+            const data = request.yar.get("data");    
+            data.ptdFormatted = formatPTDNumber(data.ptdNumber);
+            data.isGBCheck = request.yar.get("isGBCheck");
             await saveReportNonCompliance(payload, data);
         }
 
@@ -139,7 +129,6 @@ const postUpdateReferralForm = async (request, h) => {
         throw error;
       }
     }
-
 
     function toBooleanOrNull(value, defaultValue) {
       return value === "true" ? true : defaultValue;
