@@ -2,7 +2,9 @@
 import { validateUpdateReferralForm } from "./validate.js";
 import apiService from "../../../../api/services/apiService.js";
 import { CheckOutcomeConstants } from "../../../../constants/checkOutcomeConstant.js";
-import { CurrentSailingRouteOptions } from "../../../../constants/currentSailingConstant.js";
+import { getJourneyDetails } from "../../../helper/nonComplinaceHelper.js";
+
+
 
 const VIEW_PATH = "componentViews/checker/updateReferral/updateReferralView";
 
@@ -103,7 +105,7 @@ const postUpdateReferralForm = async (request, h) => {
   async function saveReportNonCompliance(payload, data) {
         try{    
         const isGBCheck = request.yar.get("isGBCheck");
-        const { dateTimeString, routeId, routeOptionId, flightNumber } = getJourneyDetails(isGBCheck);
+        const { dateTimeString, routeId, routeOptionId, flightNumber } = getJourneyDetails(request, isGBCheck);
     
         // Call the helper function to create the checkOutcome object
         const checkOutcome = createCheckOutcome(
@@ -178,59 +180,6 @@ const postUpdateReferralForm = async (request, h) => {
         spsOutcomeDetails: getPayloadValue(payload, "spsOutcomeDetails"),
         gBCheckId: gbcheckSummaryId ?? null,
       };
-    }
-  
-    function getDefaultCurrentSailing() {
-      return request.yar.get("currentSailingSlot") || {};
-    }
-  
-    function getJourneyDetails(isGBCheck) {
-      //Pass Journey Details from Session Stored in Header "currentSailingSlot"
-      const currentSailingSlot = getDefaultCurrentSailing();
-      let currentDate = currentSailingSlot.departureDate
-        .split("/")
-        .reverse()
-        .join("-");
-      
-      let sailingHour = currentSailingSlot.sailingHour;
-      let sailingMinutes = currentSailingSlot.sailingMinutes;
-      let dateTimeString = `${currentDate}T${sailingHour}:${sailingMinutes}:00Z`;
-    
-      let routeId = currentSailingSlot?.selectedRoute?.id ?? null;
-      const routeOptionId = currentSailingSlot.selectedRouteOption.id;
-      const flightNumber = currentSailingSlot?.routeFlight ?? null;    
-      if(routeOptionId === CurrentSailingRouteOptions[1].id)
-      {
-        request.yar.clear("checkSummaryId");
-      }
-  
-      //When Approval is of Type NI and RouteOption selected is of Type Ferry
-      //If Journey details are available by cliciking view link and selecting the GB referral on UI(this sets in session)
-      //If available from view link and GB referral on UI session pass session values, 
-      //else use the default currentsailings session[this covers search or scan route]
-      if(!isGBCheck && routeOptionId === CurrentSailingRouteOptions[0].id)
-      {
-         const referredRouteId = request.yar.get("routeId");
-         const referredCheckCurrentDate = request.yar.get("departureDate");
-         const referreDepartureTime = request.yar.get("departureTime");
-         const referredCheckSummaryId = request.yar.get("checkSummaryId");
-  
-         if(referredRouteId && referredCheckCurrentDate && referreDepartureTime && referredCheckSummaryId)
-         {  
-            routeId = referredRouteId;       
-            currentDate = referredCheckCurrentDate
-                .split("/")
-                .reverse()
-                .join("-");
-            
-            sailingHour = referreDepartureTime.split(":")[0];
-            sailingMinutes = referreDepartureTime.split(":")[1];
-         }
-  
-         dateTimeString = `${currentDate}T${sailingHour}:${sailingMinutes}:00Z`;
-      }
-  
-      return { dateTimeString, routeId, routeOptionId, flightNumber };
     }
 };
 
