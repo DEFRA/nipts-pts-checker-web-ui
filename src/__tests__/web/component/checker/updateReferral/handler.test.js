@@ -22,7 +22,8 @@ const sailingTimeSPS = "2024-10-13T17:30:00Z";
 const VIEW_PATH =
   "componentViews/checker/updateReferral/updateReferralView";
 
-
+  const personAllowedToTravel = "Select if the person is allowed or not allowed to travel";
+  const enterTheReason = "Enter the reason you selected that outcome";
 
   describe("getUpdateReferralForm", () => {
     let request, h;
@@ -110,11 +111,11 @@ const VIEW_PATH =
       const validationResult = {
         isValid: false,
         errorSummary: [
-                 {"fieldId": "outcomeRadio", "message": "Select if the person is allowed or not allowed to travel"},
-                 {"fieldId": "detailsOfOutcome", "message": "Enter the reason you selected that outcome"}
+                 {"fieldId": "outcomeRadio", "message": personAllowedToTravel},
+                 {"fieldId": "detailsOfOutcome", "message": enterTheReason}
                 ],
-        validationResultTextError: "Enter the reason you selected that outcome",
-        validationResultRadioError: "Select if the person is allowed or not allowed to travel",                
+        validationResultTextError: enterTheReason,
+        validationResultRadioError: personAllowedToTravel,                
       };
       validateUpdateReferralForm.mockReturnValue(validationResult);
 
@@ -127,10 +128,10 @@ const VIEW_PATH =
         VIEW_PATH,
         expect.objectContaining({
           applicationData: validationResult.applicationData, //expect.any(Object)
-          validationResultTextError: "Enter the reason you selected that outcome",
-          validationResultRadioError: "Select if the person is allowed or not allowed to travel",
+          validationResultTextError: enterTheReason,
+          validationResultRadioError: personAllowedToTravel,
           formSubmitted: true,
-          errorSummary: [{"fieldId": "outcomeRadio", "message": "Select if the person is allowed or not allowed to travel"}, {"fieldId": "detailsOfOutcome", "message": "Enter the reason you selected that outcome"}]
+          errorSummary: [{"fieldId": "outcomeRadio", "message": personAllowedToTravel}, {"fieldId": "detailsOfOutcome", "message": enterTheReason}]
         })
       );
       expect(result.viewRendered).toBe(true);
