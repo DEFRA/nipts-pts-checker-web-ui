@@ -1,10 +1,7 @@
 "use strict";
+import { validateUpdateReferralForm } from "./validate.js";
 import apiService from "../../../../api/services/apiService.js";
-import spsReferralMainService from "../../../../api/services/spsReferralMainService.js";
-import {
-  validateOutcomeRadio,
-  validateOutcomeReason
-} from "./validate.js";
+import { getJourneyDetails, createCheckOutcome, updateNonComplianceYarSessions, formatPTDNumber } from "../../../helper/nonComplinaceHelper.js";
 
 const VIEW_PATH = "componentViews/checker/updateReferral/updateReferralView";
 
@@ -24,11 +21,7 @@ const statusMapping = {
 
 
 const getUpdateReferralForm = async (request, h) => {
-
- const {
-        reference,
-        checkSummaryId
-  } = request.payload;
+const reference = request.yar.get("identifier");
 
   const applicationData = await apiService.getApplicationByPTDNumber(
       reference,
@@ -44,82 +37,88 @@ const getUpdateReferralForm = async (request, h) => {
 
   applicationData.status = statusMapping[applicationData.documentState];
 
-  applicationData.checkSummaryId = checkSummaryId;
-
+  request.yar.set("data", applicationData);
+  request.yar.set("IsFailSelected", true);
   return h.view(VIEW_PATH, { applicationData });
 };
 
-function formatPTDNumber(PTDNumber) {
-  const PTD_LENGTH = 11;
-  const PTD_PREFIX_LENGTH = 5;
-  const PTD_MID_LENGTH = 8;
 
-  return `${PTDNumber.padStart(PTD_LENGTH, "0").slice(0, PTD_PREFIX_LENGTH)} ` +
-      `${PTDNumber.padStart(PTD_LENGTH, "0").slice(PTD_PREFIX_LENGTH, PTD_MID_LENGTH)} ` +
-      `${PTDNumber.padStart(PTD_LENGTH, "0").slice(PTD_MID_LENGTH)}`;
-}
 
 const postUpdateReferralForm = async (request, h) => {
+  try {
+        const payload = request.payload; 
+        const validation = validateUpdateReferralForm(payload);
+        if (!validation.isValid) {
+          return h.view(VIEW_PATH, {
+            applicationData: validation.applicationData,
+            validationResultTextError: validation.validationResultTextError,
+            validationResultRadioError: validation.validationResultRadioError,
+            formSubmitted: true,
+            errorSummary: validation.errorSummary,
+          });
+        }
 
-  const {
-        travelUnderFramework,
-        detailsOfOutcome,
-        PTDNumberFormatted,
-        issuedDate,
-        status, 
-        microchipNumber,
-        petSpecies,
-        documentStatusColourMapping,
-        checkSummaryId
-      } = request.payload;
+        payload.isGBCheck = request.yar.get("isGBCheck");
+        payload.spsOutcome = payload.travelUnderFramework === "yes" ? "true" : "false";
+        payload.spsOutcomeDetails = payload.detailsOfOutcome;
+        payload.passengerType =  request.yar.get("passengerTypeId");    
+       
 
-  const errorSummary = [];
-  let errorSummaryMessage;
-  let isValid = true;
-  const applicationData = {PTDNumberFormatted, issuedDate, status, microchipNumber, petSpecies, documentStatusColourMapping, travelUnderFramework, detailsOfOutcome};
-  
+        if (request.yar.get("IsFailSelected")) {
+            const data = request.yar.get("data");    
+            data.ptdFormatted = formatPTDNumber(data.ptdNumber);
+            data.isGBCheck = request.yar.get("isGBCheck");
+            await saveReportNonCompliance(payload, data);
+        }
 
-  const validationResultRadio = validateOutcomeRadio(travelUnderFramework);
-  const validationResultText = validateOutcomeReason(detailsOfOutcome);
+        updateNonComplianceYarSessions(request);
+        request.yar.clear("passengerTypeId");
 
-  if (!validationResultRadio.isValid) {
-      errorSummaryMessage = validationResultRadio.error;
-      isValid = false;
-      errorSummary.push({
-        fieldId: "outcomeRadio",
-        message: errorSummaryMessage,
-      });
-  }
+        return h.redirect("/checker/dashboard");
+      } catch (error) {
+        global.appInsightsClient.trackException({ exception: error });
+        console.error("Unexpected Error:", error);
+        throw error;
+      }
 
-  if (!validationResultText.isValid) {
-      errorSummaryMessage = validationResultText.error;
-      isValid = false;
-      errorSummary.push({
-        fieldId: "detailsOfOutcome",
-        message: errorSummaryMessage,
-      });
-  }
+  async function saveReportNonCompliance(payload, data) {
+        try{    
+        const isGBCheck = request.yar.get("isGBCheck");
+        const { dateTimeString, routeId, routeOptionId, flightNumber } = getJourneyDetails(request, isGBCheck);
 
-    if (!isValid) {
-    return h.view(VIEW_PATH, {
-      applicationData,
-      validationResultTextError: validationResultText.error,
-      validationResultRadioError: validationResultRadio.error,
-      formSubmitted: true,
-      errorSummary,
-    });
-  }
-  
- await spsReferralMainService.updateCheckOutcomeSps(
-        checkSummaryId,
-        travelUnderFramework, 
-        detailsOfOutcome,
-        request
-  );
-
-  request.yar.set("successConfirmation", true);
-  return h.redirect("/checker/dashboard");
+        const context = {
+          data,
+          payload,
+          isGBCheck,
+          dateTimeString,
+          routeId,
+          routeOptionId,
+          flightNumber
+        };
+    
+        // Call the helper function to create the checkOutcome object
+        const checkOutcome = createCheckOutcome(
+          request, 
+          context          
+        );
+    
+        const responseData = await apiService.reportNonCompliance(
+          checkOutcome,
+          request
+        );
+    
+        return responseData;
+      } catch (error) {
+        global.appInsightsClient.trackException({ exception: error });
+        console.error("Error fetching data:", error.message);
+    
+        throw error;
+      }
+    }
 };
+
+
+
 export const UpdateReferralHandler = {
   getUpdateReferralForm,
   postUpdateReferralForm,

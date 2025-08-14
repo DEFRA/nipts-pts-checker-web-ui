@@ -130,7 +130,7 @@ function paginateSpsChecks(page, spsChecks) {
 
 
 const postCheckReport = async (request, h) => {
-  const { CheckSummaryId, PTDNumber, ApplicationNumber } = request.payload;
+  const { CheckSummaryId, PTDNumber, ApplicationNumber, PassengerTypeId } = request.payload;
 
   const identifier = PTDNumber || ApplicationNumber;
   if (identifier) {
@@ -138,6 +138,7 @@ const postCheckReport = async (request, h) => {
   }
 
   request.yar.set("checkSummaryId", CheckSummaryId);
+  request.yar.set("passengerTypeId", PassengerTypeId);
 
   return h.redirect("/checker/checkreportdetails");
 };
