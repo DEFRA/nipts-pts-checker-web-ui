@@ -79,7 +79,9 @@ const VIEW_PATH =
   });
 
   describe("postUpdateReferralForm", () => {
-
+     const ptdNumberFormatted = "GB123 4567 8901";
+     const issuedDate = "2025-08-07";
+     const departureDate = "2025-08-10";
      let request, h;
       beforeEach(() => {
         request = {
@@ -100,8 +102,8 @@ const VIEW_PATH =
       request.payload = {
         travelUnderFramework: "",
         detailsOfOutcome: "",
-        PTDNumberFormatted: "GB123 4567 8901",
-        issuedDate: "2025-08-07",
+        PTDNumberFormatted: ptdNumberFormatted,
+        issuedDate: issuedDate,
         status: "Approved",
         microchipNumber: "123456789012345",
         petSpecies: "Dog",
@@ -141,8 +143,8 @@ const VIEW_PATH =
       request.payload = {
         travelUnderFramework: "yes",
         detailsOfOutcome: "Valid reason",
-        PTDNumberFormatted: "GB123 4567 8901",
-        issuedDate: "2025-08-07",
+        PTDNumberFormatted: ptdNumberFormatted,
+        issuedDate: issuedDate,
         status: "Approved",
         microchipNumber: "123456789012345",
         petSpecies: "Dog",
@@ -159,7 +161,7 @@ const VIEW_PATH =
           },
           IsFailSelected: true,
           currentSailingSlot: {
-            departureDate: "2025-08-10",
+            departureDate: departureDate,
             sailingHour: "10",
             sailingMinutes: "30",
             selectedRoute: { id: 1 },
@@ -168,7 +170,7 @@ const VIEW_PATH =
           isGBCheck: true,
           routeId: 2,
           routeName: "sps check Route",
-          departureDate: "2025-08-10",
+          departureDate: departureDate,
           departureTime: "10:30",
           checkSummaryId: "1234567",
           checkerId: "123",
@@ -193,8 +195,8 @@ const VIEW_PATH =
       request.payload = {
         travelUnderFramework: "no",
         detailsOfOutcome: "Valid reason",
-        PTDNumberFormatted: "GB123 4567 8901",
-        issuedDate: "2025-08-07",
+        PTDNumberFormatted: ptdNumberFormatted,
+        issuedDate: issuedDate,
         status: "Approved",
         microchipNumber: "123456789012345",
         petSpecies: "Dog",
@@ -211,7 +213,7 @@ const VIEW_PATH =
           },
           IsFailSelected: true,
           currentSailingSlot: {
-            departureDate: "2025-08-10",
+            departureDate: departureDate,
             sailingHour: "10",
             sailingMinutes: "30",
             selectedRoute: { id: 1 },
@@ -220,7 +222,7 @@ const VIEW_PATH =
           isGBCheck: true,
           routeId: 2,
           routeName: "sps check Route",
-          departureDate: "2025-08-10",
+          departureDate: departureDate,
           departureTime: "10:30",
           checkSummaryId: "1234567",
           checkerId: "123",
