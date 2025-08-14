@@ -44,20 +44,19 @@ global.appInsightsClient = {
  };
  
 
-describe("apiService", () => {
-  let request;
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-    request = {
-      // Mock request object
-      headers: {
-        authorization: mockToken,
-      },
-    };
-  });
 
   describe("getApplicationByPTDNumber", () => {
+    let request;
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+      request = {
+        // Mock request object
+        headers: {
+          authorization: mockToken,
+        },
+      };
+    });
     it("should return transformed data when PTD number is valid", async () => {
       const mockResponse = {
         data: {
@@ -713,7 +712,17 @@ describe("apiService", () => {
 
   });
 
-   describe("getApplicationByApplicationNumber", () => {
+  describe("getApplicationByApplicationNumber", () => {
+    let request;
+    beforeEach(() => {
+      jest.clearAllMocks();
+      request = {
+        // Mock request object
+        headers: {
+          authorization: mockToken,
+        },
+      };
+    });
 
     it("should handle missing pet details gracefully", async () => {
       const mockResponse = {
@@ -1775,7 +1784,18 @@ describe("apiService", () => {
     });
   });
 
-   describe("recordCheckOutCome", () => {
+  describe("recordCheckOutCome", () => {
+    let request;
+    beforeEach(() => {
+      jest.clearAllMocks();
+      request = {
+        // Mock request object
+        headers: {
+          authorization: mockToken,
+        },
+      };
+    });
+
     it("should return the check summary id on success", async () => {
       const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
       const mockResponse = {
@@ -1842,6 +1862,17 @@ describe("apiService", () => {
  });
 
    describe("saveCheckerUser", () => {
+    let request;
+    beforeEach(() => {
+      jest.clearAllMocks();
+      request = {
+        // Mock request object
+        headers: {
+          authorization: mockToken,
+        },
+      };
+    });
+
     it("should return the summary id on success", async () => {
       const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
       const mockResponse = {
@@ -1908,6 +1939,16 @@ describe("apiService", () => {
  });
 
    describe("getOrganisation", () => {
+    let request;
+    beforeEach(() => {
+      jest.clearAllMocks();
+      request = {
+        // Mock request object
+        headers: {
+          authorization: mockToken,
+        },
+      };
+    });
 
     it("should fetch data and map it to OrganisationMainModel", async () => {
       const requestData =   { organisationId: organisationId };
@@ -2005,6 +2046,17 @@ describe("apiService", () => {
    });
 
   describe("reportNonCompliance", () => {
+    let request;
+    beforeEach(() => {
+      jest.clearAllMocks();
+      request = {
+        // Mock request object
+        headers: {
+          authorization: mockToken,
+        },
+      };
+    });
+
     it("should handle non-compliance reporting and return checkSummaryId", async () => {
       const mockCheckOutcome = { compliance: false, details: additionalDetails };
       const mockResponse = {
@@ -2102,6 +2154,6 @@ describe("apiService", () => {
     
   });
 
-});
+
 
 
