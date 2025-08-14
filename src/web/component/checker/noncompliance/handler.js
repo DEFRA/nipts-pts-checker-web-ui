@@ -3,7 +3,7 @@
 import appSettingsService from "../../../../api/services/appSettingsService.js";
 import { validateNonCompliance } from "./validate.js";
 import apiService from "../../../../api/services/apiService.js";
-import { getJourneyDetails, createCheckOutcome, updateNonComplianceYarSessions } from "../../../helper/nonComplinaceHelper.js";
+import { getJourneyDetails, createCheckOutcome, updateNonComplianceYarSessions, formatPTDNumber } from "../../../helper/nonComplinaceHelper.js";
 
 
 const VIEW_PATH = "componentViews/checker/noncompliance/noncomplianceView";
@@ -32,15 +32,7 @@ const fieldIdSortOrdering = [ // add more fields if needed
 ]
 
 const getPtdFormatted = (data) => {
-  const PTD_LENGTH = 11; 
-  const PTD_PREFIX_LENGTH = 5;
-  const PTD_MID_LENGTH = 8;
-
-  return data?.ptdNumber 
-    ? `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(0, PTD_PREFIX_LENGTH)} ` +
-      `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(PTD_PREFIX_LENGTH, PTD_MID_LENGTH)} ` +
-      `${data.ptdNumber.padStart(PTD_LENGTH, '0').slice(PTD_MID_LENGTH)}`
-    : "";
+  return data?.ptdNumber ? formatPTDNumber(data.ptdNumber) : "";
 };
 
 const getNonComplianceHandler = async (request, h) => {
