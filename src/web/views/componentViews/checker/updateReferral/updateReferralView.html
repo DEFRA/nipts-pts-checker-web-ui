@@ -114,7 +114,13 @@
 
 <form action="/checker/update-referral-submit" method="POST">
   <div class="govuk-radios {% if validationResultRadioError %}govuk-form-group--error{% endif %}" data-module="govuk-radios" name="outcomeRadio" id="outcomeRadio" >
-    
+    <div>
+      {% if validationResultRadioError %}
+        <p id="errorRadioUnchecked-msg" class="govuk-error-message">
+          {{ validationResultRadioError }}
+        </p>
+      {% endif %}
+    </div>
     <div class="govuk-radios__item">
       <input
         class="govuk-radios__input"
@@ -123,8 +129,7 @@
         type="radio"
         value="yes"
         {% if applicationData.travelUnderFramework == "yes" %}checked{% endif %}
-        data-aria-controls="conditional-contact"
-      >
+        data-aria-controls="conditional-contact">
       <label class="govuk-label govuk-radios__label" for="travelYes">
         Allowed to travel under Windsor Framework using PTD or SUPTD issued 
       </label>
@@ -138,8 +143,7 @@
         type="radio"
         value="no"
         {% if applicationData.travelUnderFramework == "no" %}checked{% endif %}
-        data-aria-controls="conditional-contact-2"
-      >
+        data-aria-controls="conditional-contact-2">
       <label class="govuk-label govuk-radios__label" for="travelNo">
         Not allowed to travel under Windsor Framework 
       </label>
@@ -151,10 +155,16 @@
     <br>
 
         <div class="govuk-form-group {% if validationResultTextError %}govuk-form-group--error{% endif %}">
-            <label class="govuk-label" for="more-detail">
-                <strong>Details of outcome</strong>
-            </label>
-
+          <label class="govuk-label" for="detailsOfOutcome">
+              <strong>Details of outcome</strong>
+          </label>
+          <div>
+            {% if validationResultTextError %}
+              <p id="errorResultText-msg" class="govuk-error-message">
+                {{ validationResultTextError }}
+              </p>
+            {% endif %}
+          </div>
           <textarea
             class="govuk-textarea"
             id="detailsOfOutcome"
