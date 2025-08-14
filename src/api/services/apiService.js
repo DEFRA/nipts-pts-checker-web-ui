@@ -56,7 +56,7 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request, options 
     }
     else
     {
-      url = url + '?ptdNumber=' + data.ptdNumber;
+      url = `${url}?ptdNumber=${data.ptdNumber}`;
       response = await httpService.getAsync(url, request);
     }
 
