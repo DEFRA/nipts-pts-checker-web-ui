@@ -137,7 +137,7 @@ const VIEW_PATH =
       expect(result.viewRendered).toBe(true);
     });
 
-    it("should redirect to dashboard if validation passes", async () => {
+    it("should redirect to dashboard if validation passes with travelUnderFramework - yes", async () => {
       request.payload = {
         travelUnderFramework: "yes",
         detailsOfOutcome: "Valid reason",
@@ -189,5 +189,56 @@ const VIEW_PATH =
       expect(result.redirected).toBe(true);
     });
 
+    it("should redirect to dashboard if validation passes with travelUnderFramework - no", async () => {
+      request.payload = {
+        travelUnderFramework: "no",
+        detailsOfOutcome: "Valid reason",
+        PTDNumberFormatted: "GB123 4567 8901",
+        issuedDate: "2025-08-07",
+        status: "Approved",
+        microchipNumber: "123456789012345",
+        petSpecies: "Dog",
+        documentStatusColourMapping: greenTag,
+        isGBCheck: false,
+      };
+
+      request.yar.get.mockImplementation((key) => {
+        const mockData = {
+          data: {
+            applicationId: "testApplicationId",
+            documentState: "approved",
+            ptdNumber: "GB12345678901",
+          },
+          IsFailSelected: true,
+          currentSailingSlot: {
+            departureDate: "2025-08-10",
+            sailingHour: "10",
+            sailingMinutes: "30",
+            selectedRoute: { id: 1 },
+            selectedRouteOption: { id: "1" },
+          },
+          isGBCheck: true,
+          routeId: 2,
+          routeName: "sps check Route",
+          departureDate: "2025-08-10",
+          departureTime: "10:30",
+          checkSummaryId: "1234567",
+          checkerId: "123",
+          passengerTypeId: 1,
+        };
+        return mockData[key] || null;
+      });
+
+
+       validateUpdateReferralForm.mockReturnValue({ isValid: true, error: null });
+
+      apiService.reportNonCompliance.mockResolvedValue({});
+
+      const result = await UpdateReferralHandler.postUpdateReferralForm(request, h);
+
+      expect(request.yar.set).toHaveBeenCalledWith("successConfirmation", true);
+      expect(h.redirect).toHaveBeenCalledWith("/checker/dashboard");
+      expect(result.redirected).toBe(true);
+    });
   });
 
