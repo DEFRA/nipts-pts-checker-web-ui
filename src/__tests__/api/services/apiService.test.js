@@ -166,6 +166,116 @@ describe("apiService", () => {
       expect(result).toEqual(expectedInstance);
     });
 
+    it("should return transformed data when PTD number is valid and dopostCall - false", async () => {
+      const mockResponse = {
+        data: {
+          pet: {
+            petId: "1",
+            petName: "Buddy",
+            species: "Dog",
+            breedName: "Beagle",
+            microchipNumber: "123456789",
+            microchippedDate: "2022-01-01",
+            dateOfBirth: "2020-01-01",
+            sex: "Male",
+            colourName: "Brown",
+            significantFeatures: "None",
+          },
+          application: {
+            status: "authorised",
+            applicationId: "app123",
+            dateAuthorised: "2023-01-01",
+          },
+          travelDocument: {
+            travelDocumentReferenceNumber: "GB826TD123",
+            travelDocumentId: "td123",
+            dateOfIssue: dateOfIssue
+          },
+          petOwner: {
+            name: petOwnerName,
+            telephone: "07894465438",
+            email: petOwnerEmail,
+            address: {
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
+              townOrCity: "LONDON",
+              county: "",
+              postCode: "EC1N 2PB"
+            }
+          },
+          isUserSuspended: false
+        }
+      };
+
+      httpService.getAsync.mockResolvedValueOnce({
+        status: 200,
+        data: mockResponse.data,
+      });
+
+      httpService.postAsync.mockResolvedValueOnce({
+          status: 200,
+          data: false
+      });
+      moment.mockImplementation((_date) => ({
+        format: () => multiUseDate,
+      }));
+
+      const result = await apiService.getApplicationByPTDNumber(
+        "123456",
+        request,
+        { dopostCall: false }
+      );
+      expect(httpService.getAsync).toHaveBeenCalledWith(
+        `${baseUrl}/Checker/checkPTDNumber?ptdNumber=123456`,
+        request
+      );
+
+      const expectedInstance = new MicrochipAppPtdMainModel({
+        petId: "1",
+        petName: "Buddy",
+        petSpecies: "Dog",
+        petBreed: "Beagle",
+        documentState: "approved",
+        ptdNumber: "GB826TD123",
+        issuedDate: multiUseDate,
+        microchipNumber: "123456789",
+        microchipDate: multiUseDate,
+        petSex: "Male",
+        petDoB: multiUseDate,
+        petColour: "Brown",
+        petFeaturesDetail: "None",
+        applicationId: "app123",
+        travelDocumentId: "td123",
+        dateOfIssue: dateOfIssue,
+        petOwnerName: petOwnerName,
+        petOwnerEmail: petOwnerEmail,
+        petOwnerTelephone: "07894465438",
+        isUserSuspended: false,
+        petOwnerAddress: 
+        {
+          addressLineOne: addressLineOne,
+          addressLineTwo: addressLineTwo,
+          townOrCity: "LONDON",
+          county: "",
+          postCode: "EC1N 2PB"
+        },
+        issuingAuthority:  {
+          address: {
+                  addressLineOne: issuingAuthorityAddressLineOne,
+                  addressLineThree: issuingAuthorityAddressLineThree,
+                  addressLineTwo: issuingAuthorityAddressLineTwo,
+                  county: "",
+                  postCode: "CA3 8DX",
+                  townOrCity: "Carlisle",
+                  },
+          name: agencyName,
+          signature: signatoryName,
+        },
+      });
+
+      expect(result).toEqual(expectedInstance);
+    });
+
     it("should return transformed data when PTD number is valid & revoked", async () => {
       const mockResponse = {
         data: {
