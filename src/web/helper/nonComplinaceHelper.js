@@ -1,6 +1,16 @@
     import { CurrentSailingRouteOptions } from "../../constants/currentSailingConstant.js";
     import { CheckOutcomeConstants } from "../../constants/checkOutcomeConstant.js";
     
+    function formatPTDNumber(PTDNumber) {
+        const PTD_LENGTH = 11;
+        const PTD_PREFIX_LENGTH = 5;
+        const PTD_MID_LENGTH = 8;
+
+        return `${PTDNumber.padStart(PTD_LENGTH, "0").slice(0, PTD_PREFIX_LENGTH)} ` +
+            `${PTDNumber.padStart(PTD_LENGTH, "0").slice(PTD_PREFIX_LENGTH, PTD_MID_LENGTH)} ` +
+            `${PTDNumber.padStart(PTD_LENGTH, "0").slice(PTD_MID_LENGTH)}`;
+    }
+
     function toBooleanOrNull(value, defaultValue) {
       return value === "true" ? true : defaultValue;
     }
@@ -119,4 +129,4 @@
         request.yar.set("successConfirmation", true);
     };
 
-    export { getJourneyDetails, createCheckOutcome, updateNonComplianceYarSessions }
+    export { getJourneyDetails, createCheckOutcome, updateNonComplianceYarSessions, formatPTDNumber }

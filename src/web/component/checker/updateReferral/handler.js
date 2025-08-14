@@ -1,7 +1,7 @@
 "use strict";
 import { validateUpdateReferralForm } from "./validate.js";
 import apiService from "../../../../api/services/apiService.js";
-import { getJourneyDetails, createCheckOutcome, updateNonComplianceYarSessions } from "../../../helper/nonComplinaceHelper.js";
+import { getJourneyDetails, createCheckOutcome, updateNonComplianceYarSessions, formatPTDNumber } from "../../../helper/nonComplinaceHelper.js";
 
 const VIEW_PATH = "componentViews/checker/updateReferral/updateReferralView";
 
@@ -42,15 +42,7 @@ const reference = request.yar.get("identifier");
   return h.view(VIEW_PATH, { applicationData });
 };
 
-function formatPTDNumber(PTDNumber) {
-  const PTD_LENGTH = 11;
-  const PTD_PREFIX_LENGTH = 5;
-  const PTD_MID_LENGTH = 8;
 
-  return `${PTDNumber.padStart(PTD_LENGTH, "0").slice(0, PTD_PREFIX_LENGTH)} ` +
-      `${PTDNumber.padStart(PTD_LENGTH, "0").slice(PTD_PREFIX_LENGTH, PTD_MID_LENGTH)} ` +
-      `${PTDNumber.padStart(PTD_LENGTH, "0").slice(PTD_MID_LENGTH)}`;
-}
 
 const postUpdateReferralForm = async (request, h) => {
   try {
