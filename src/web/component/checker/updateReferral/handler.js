@@ -1,7 +1,7 @@
 "use strict";
 import { validateUpdateReferralForm } from "./validate.js";
 import apiService from "../../../../api/services/apiService.js";
-import { getJourneyDetails, createCheckOutcome } from "../../../helper/nonComplinaceHelper.js";
+import { getJourneyDetails, createCheckOutcome, updateNonComplianceYarSessions } from "../../../helper/nonComplinaceHelper.js";
 
 const VIEW_PATH = "componentViews/checker/updateReferral/updateReferralView";
 
@@ -79,18 +79,8 @@ const postUpdateReferralForm = async (request, h) => {
             await saveReportNonCompliance(payload, data);
         }
 
-        request.yar.clear("IsFailSelected");
-    
-        // Clear individual keys
-        request.yar.clear("routeId");
-        request.yar.clear("routeName");
-        request.yar.clear("departureDate");
-        request.yar.clear("departureTime");
-        request.yar.clear("checkSummaryId");
-        request.yar.clear("passengerTypeId")
-
-        // Redirect to the dashboard
-        request.yar.set("successConfirmation", true);
+        updateNonComplianceYarSessions(request);
+        request.yar.clear("passengerTypeId");
 
         return h.redirect("/checker/dashboard");
       } catch (error) {

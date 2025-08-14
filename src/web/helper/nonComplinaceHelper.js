@@ -102,7 +102,21 @@
             spsOutcome: toBooleanOrNull(payload?.spsOutcome, isGBCheck? null: false),
             spsOutcomeDetails: getPayloadValue(payload, "spsOutcomeDetails"),
             gBCheckId: gbcheckSummaryId ?? null,
-          };
         };
+    };
 
-    export { getJourneyDetails, createCheckOutcome }
+    const updateNonComplianceYarSessions = (request) => {
+         request.yar.clear("IsFailSelected");
+    
+        // Clear individual keys
+        request.yar.clear("routeId");
+        request.yar.clear("routeName");
+        request.yar.clear("departureDate");
+        request.yar.clear("departureTime");
+        request.yar.clear("checkSummaryId");
+
+        // Redirect to the dashboard
+        request.yar.set("successConfirmation", true);
+    };
+
+    export { getJourneyDetails, createCheckOutcome, updateNonComplianceYarSessions }
