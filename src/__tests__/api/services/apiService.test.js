@@ -1785,16 +1785,9 @@ global.appInsightsClient = {
   });
 
   describe("recordCheckOutCome", () => {
-    let request;
 
     beforeEach(() => {
       jest.clearAllMocks();
-      request = {
-        // Mock request object
-        headers: {
-          authorization: mockToken,
-        },
-      };
     });
 
     it("should return the check summary id on success", async () => {
