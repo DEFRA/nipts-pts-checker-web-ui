@@ -72,7 +72,12 @@ describe("validateOutcomeReason", () => {
 
 
 describe("validateUpdateReferralForm", () => {
-
+ const ptdFormattedNumber = "GB123 4567 8901";
+ const issuedDate = "2025-08-07";
+ const status = "Approved";
+ const microchipNumber = "123456789012345";
+ const petSpecies = "Dog";
+ const documentStatusColourMapping = "govuk-tag govuk-tag--green"
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -82,12 +87,12 @@ describe("validateUpdateReferralForm", () => {
     const validPayload = {
             travelUnderFramework: "yes",
             detailsOfOutcome: "Valid reason",
-            PTDNumberFormatted: "GB123 4567 8901",
-            issuedDate: "2025-08-07",
-            status: "Approved",
-            microchipNumber: "123456789012345",
-            petSpecies: "Dog",
-            documentStatusColourMapping: "govuk-tag govuk-tag--green",
+            PTDNumberFormatted: ptdFormattedNumber,
+            issuedDate: issuedDate,
+            status: status,
+            microchipNumber: microchipNumber,
+            petSpecies: petSpecies,
+            documentStatusColourMapping: documentStatusColourMapping,
   };
 
     const result = validateUpdateReferralForm(validPayload);
@@ -99,14 +104,14 @@ describe("validateUpdateReferralForm", () => {
 
   it("should return isValid false when radio validation fails", () => {
     const validPayload = {
-              travelUnderFramework: undefined,
+              travelUnderFramework: "",
               detailsOfOutcome: "Valid reason",
-              PTDNumberFormatted: "GB123 4567 8901",
-              issuedDate: "2025-08-07",
-              status: "Approved",
-              microchipNumber: "123456789012345",
-              petSpecies: "Dog",
-              documentStatusColourMapping: "govuk-tag govuk-tag--green",
+              PTDNumberFormatted: ptdFormattedNumber,
+              issuedDate: issuedDate,
+              status: status,
+              microchipNumber: microchipNumber,
+              petSpecies: petSpecies,
+              documentStatusColourMapping: documentStatusColourMapping,
     };
 
     const result = validateUpdateReferralForm(validPayload);
@@ -121,13 +126,13 @@ describe("validateUpdateReferralForm", () => {
   it("should return isValid false when text validation fails", () => {
     const validPayload = {
               travelUnderFramework: "yes",
-              detailsOfOutcome: undefined,
-              PTDNumberFormatted: "GB123 4567 8901",
-              issuedDate: "2025-08-07",
-              status: "Approved",
-              microchipNumber: "123456789012345",
-              petSpecies: "Dog",
-              documentStatusColourMapping: "govuk-tag govuk-tag--green",
+              detailsOfOutcome: "",
+              PTDNumberFormatted: ptdFormattedNumber,
+              issuedDate: issuedDate,
+              status: status,
+              microchipNumber: microchipNumber,
+              petSpecies: petSpecies,
+              documentStatusColourMapping: documentStatusColourMapping,
     };
 
     const result = validateUpdateReferralForm(validPayload);
@@ -141,14 +146,14 @@ describe("validateUpdateReferralForm", () => {
 
   it("should return both errors when both validations fail", () => {
         const validPayload = {
-              travelUnderFramework: undefined,
-              detailsOfOutcome: undefined,
-              PTDNumberFormatted: "GB123 4567 8901",
-              issuedDate: "2025-08-07",
-              status: "Approved",
-              microchipNumber: "123456789012345",
-              petSpecies: "Dog",
-              documentStatusColourMapping: "govuk-tag govuk-tag--green",
+              travelUnderFramework: "",
+              detailsOfOutcome: "",
+              PTDNumberFormatted: ptdFormattedNumber,
+              issuedDate: issuedDate,
+              status: status,
+              microchipNumber: microchipNumber,
+              petSpecies: petSpecies,
+              documentStatusColourMapping: documentStatusColourMapping,
     };
 
     const result = validateUpdateReferralForm(validPayload);
