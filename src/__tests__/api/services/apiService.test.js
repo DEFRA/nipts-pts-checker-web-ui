@@ -1786,6 +1786,7 @@ global.appInsightsClient = {
 
   describe("recordCheckOutCome", () => {
     let request;
+
     beforeEach(() => {
       jest.clearAllMocks();
       request = {
