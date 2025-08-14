@@ -1,6 +1,7 @@
 import {
   validateOutcomeRadio,
-  validateOutcomeReason
+  validateOutcomeReason,
+  validateUpdateReferralForm
 } from "../../../../../web/component/checker/updateReferral/validate.js";
 
 import { UpdateReferralErrors } from "../../../../../constants/updateReferralOutcomeConstant.js";
@@ -67,3 +68,96 @@ describe("validateOutcomeReason", () => {
     expect(result.error).toBeNull();
   });
 });
+
+
+
+describe("validateUpdateReferralForm", () => {
+
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should return isValid true when validation passes", () => {
+    const validPayload = {
+            travelUnderFramework: "yes",
+            detailsOfOutcome: "Valid reason",
+            PTDNumberFormatted: "GB123 4567 8901",
+            issuedDate: "2025-08-07",
+            status: "Approved",
+            microchipNumber: "123456789012345",
+            petSpecies: "Dog",
+            documentStatusColourMapping: "govuk-tag govuk-tag--green",
+  };
+
+    const result = validateUpdateReferralForm(validPayload);
+
+    expect(result.isValid).toBe(true);
+    expect(result.errorSummary).toHaveLength(0);
+    expect(result.applicationData).toEqual(expect.objectContaining(validPayload));
+  });
+
+  it("should return isValid false when radio validation fails", () => {
+    const validPayload = {
+              travelUnderFramework: undefined,
+              detailsOfOutcome: "Valid reason",
+              PTDNumberFormatted: "GB123 4567 8901",
+              issuedDate: "2025-08-07",
+              status: "Approved",
+              microchipNumber: "123456789012345",
+              petSpecies: "Dog",
+              documentStatusColourMapping: "govuk-tag govuk-tag--green",
+    };
+
+    const result = validateUpdateReferralForm(validPayload);
+
+    expect(result.isValid).toBe(false);
+    expect(result.errorSummary).toEqual([
+      { fieldId: "outcomeRadio", message: UpdateReferralErrors.outcomeOptionError },
+    ]);
+    expect(result.validationResultRadioError).toBe(UpdateReferralErrors.outcomeOptionError);
+  });
+
+  it("should return isValid false when text validation fails", () => {
+    const validPayload = {
+              travelUnderFramework: "yes",
+              detailsOfOutcome: undefined,
+              PTDNumberFormatted: "GB123 4567 8901",
+              issuedDate: "2025-08-07",
+              status: "Approved",
+              microchipNumber: "123456789012345",
+              petSpecies: "Dog",
+              documentStatusColourMapping: "govuk-tag govuk-tag--green",
+    };
+
+    const result = validateUpdateReferralForm(validPayload);
+
+    expect(result.isValid).toBe(false);
+    expect(result.errorSummary).toEqual([
+      { fieldId: "detailsOfOutcome", message: UpdateReferralErrors.outcomeTextError },
+    ]);
+    expect(result.validationResultTextError).toBe(UpdateReferralErrors.outcomeTextError);
+  });
+
+  it("should return both errors when both validations fail", () => {
+        const validPayload = {
+              travelUnderFramework: undefined,
+              detailsOfOutcome: undefined,
+              PTDNumberFormatted: "GB123 4567 8901",
+              issuedDate: "2025-08-07",
+              status: "Approved",
+              microchipNumber: "123456789012345",
+              petSpecies: "Dog",
+              documentStatusColourMapping: "govuk-tag govuk-tag--green",
+    };
+
+    const result = validateUpdateReferralForm(validPayload);
+
+    expect(result.isValid).toBe(false);
+    expect(result.errorSummary).toEqual([
+      { fieldId: "outcomeRadio", message: UpdateReferralErrors.outcomeOptionError },
+      { fieldId: "detailsOfOutcome", message: UpdateReferralErrors.outcomeTextError },
+    ]);
+  });
+});
+
