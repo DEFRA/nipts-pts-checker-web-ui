@@ -25,7 +25,8 @@ const reference = request.yar.get("identifier");
 
   const applicationData = await apiService.getApplicationByPTDNumber(
       reference,
-      request
+      request,
+      { dopostCall: false }
   );
 
   if (reference.startsWith("GB")) {
@@ -39,7 +40,12 @@ const reference = request.yar.get("identifier");
 
   request.yar.set("data", applicationData);
   request.yar.set("IsFailSelected", true);
-  return h.view(VIEW_PATH, { applicationData });
+  return h.view(VIEW_PATH, { 
+    applicationData,     
+    errors: {},
+    errorSummary: [],
+    formSubmitted: false, 
+    payload: {},});
 };
 
 

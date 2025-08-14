@@ -43,11 +43,22 @@ const formatDate = (dateRaw) => {
   return date ? moment(date).format("DD/MM/YYYY") : undefined;
 };
 
-const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
+
+const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request, options = {} ) => {
   try {
+    const { dopostCall = true } = options;
     const data = { ptdNumber: ptdNumberFromPayLoad };
-    const url = buildApiUrl("Checker/checkPTDNumber");
-    const response = await httpService.postAsync(url, data, request);
+    let url = buildApiUrl("Checker/checkPTDNumber");
+    let response = {};
+    if(dopostCall)
+    {
+       response = await httpService.postAsync(url, data, request);
+    }
+    else
+    {
+      url = url + '?ptdNumber=' + data.ptdNumber;
+      response = await httpService.getAsync(url, request);
+    }
 
     if (response.status === HttpStatusCode.NotFound && response?.error) 
     {

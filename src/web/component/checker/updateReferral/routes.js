@@ -5,7 +5,7 @@ import HttpMethod from "../../../../constants/httpMethod.js";
 
 const Routes = [
   {
-    method: HttpMethod.POST,
+    method: HttpMethod.GET,
     path: "/checker/update-referral",
     options: {
       handler: UpdateReferralHandler.getUpdateReferralForm,
@@ -13,7 +13,7 @@ const Routes = [
   },
   {
     method: HttpMethod.POST,
-    path: "/checker/update-referral-submit",
+    path: "/checker/update-referral",
     options: {
       handler: UpdateReferralHandler.postUpdateReferralForm,
     },
