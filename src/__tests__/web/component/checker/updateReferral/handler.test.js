@@ -55,12 +55,14 @@ const VIEW_PATH =
 
       const result = await UpdateReferralHandler.getUpdateReferralForm(
         request,
-        h
+        h,
+        { dopostCall: false }
       );
 
       expect(apiService.getApplicationByPTDNumber).toHaveBeenCalledWith(
         "GB12345678901",
-        request
+        request,
+        { dopostCall: false }
       );
 
       expect(h.view).toHaveBeenCalledWith(

@@ -7,16 +7,16 @@ import HttpMethod from "../../../../../constants/httpMethod.js";
 describe("UpdateReferral Routes", () => {
   it("should have a POST route for /checker/update-referral", () => {
     const route = Routes.find(
-      (r) => r.method === HttpMethod.POST && r.path === "/checker/update-referral"
+      (r) => r.method === HttpMethod.GET && r.path === "/checker/update-referral"
     );
 
     expect(route).toBeDefined();
     expect(route.options.handler).toBe(UpdateReferralHandler.getUpdateReferralForm);
   });
 
-  it("should have a POST route for /checker/update-referral-submit", () => {
+  it("should have a POST route for /checker/update-referral", () => {
     const route = Routes.find(
-      (r) => r.method === HttpMethod.POST && r.path === "/checker/update-referral-submit"
+      (r) => r.method === HttpMethod.POST && r.path === "/checker/update-referral"
     );
 
     expect(route).toBeDefined();

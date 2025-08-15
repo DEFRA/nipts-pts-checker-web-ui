@@ -112,7 +112,7 @@
 
     
 
-<form action="/checker/update-referral-submit" method="POST">
+<form action="/checker/update-referral" method="POST">
   <div class="govuk-radios {% if validationResultRadioError %}govuk-form-group--error{% endif %}" data-module="govuk-radios" name="outcomeRadio" id="outcomeRadio" >
     <div>
       {% if validationResultRadioError %}
@@ -202,32 +202,9 @@
 </div>
 
 <script>
-    if(window.history.replaceState) {
+  if(window.history.replaceState) {
     window.history.replaceState(null, null, window.location.href);
   }
 </script>
 
-{% endblock %}
-
-{% block bodyContent %}
-<script>
-    // JavaScript to handle the visited state of 'View' links
-    document.addEventListener('DOMContentLoaded', function () {
-        const referredButtons = document.querySelectorAll('.referred-button');
-
-        referredButtons.forEach(function (button) {
-            const identifier = button.getAttribute('data-identifier');
-
-            // Check if this link was clicked before
-            if (localStorage.getItem(identifier)) {
-                button.classList.add('visited');
-            }
-
-            button.addEventListener('click', function () {
-                // Mark this link as visited
-                localStorage.setItem(identifier, 'true');
-            });
-        });
-    });
-</script>
 {% endblock %}
