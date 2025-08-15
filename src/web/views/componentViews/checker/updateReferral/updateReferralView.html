@@ -113,7 +113,7 @@
     
 
 <form action="/checker/update-referral" method="POST">
-  <div class="govuk-radios {% if validationResultRadioError %}govuk-form-group--error{% endif %}" data-module="govuk-radios" name="outcomeRadio" id="outcomeRadio" >
+  <div class="govuk-radios {% if validationResultRadioError %}govuk-form-group--error{% endif %}" data-module="govuk-radios" name="outcomeRadioFormGroup" id="outcomeRadioFormGroup" >
     <div>
       {% if validationResultRadioError %}
         <p id="errorRadioUnchecked-msg" class="govuk-error-message">
@@ -124,13 +124,13 @@
     <div class="govuk-radios__item">
       <input
         class="govuk-radios__input"
-        id="travelYes"
+        id="outcomeRadio"
         name="travelUnderFramework"
         type="radio"
         value="yes"
         {% if applicationData.travelUnderFramework == "yes" %}checked{% endif %}
         data-aria-controls="conditional-contact">
-      <label class="govuk-label govuk-radios__label" for="travelYes">
+      <label class="govuk-label govuk-radios__label" for="outcomeRadio">
         Allowed to travel under Windsor Framework using PTD or SUPTD issued 
       </label>
     </div>
