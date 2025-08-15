@@ -42,6 +42,7 @@ const getSpsReferrals = async (route, date, timeWindowInHours, request) => {
         TravelBy: item.travelBy,
         SPSOutcome: item.spsOutcome,
         CheckSummaryId: item.checkSummaryId,
+        PassengerTypeId: item.passengerTypeId,
       });
     });
 
@@ -74,9 +75,33 @@ const getCompleteCheckDetails = async (checkSummaryId, request) => {
   }
 };
 
+const updateCheckOutcomeSps = async (checkSummaryId, checkOutcome, checkOutcomeDetails, request) => {
+  try {
+    const response = await httpService.postAsync(
+      `${baseUrl}/Checker/updateCheckOutcomeSps`,
+      { checkSummaryId: checkSummaryId,
+        checkOutcome: checkOutcome,
+        checkOutcomeDetails: checkOutcomeDetails
+      },
+      request
+    );
+
+    if (response?.error) {
+      throw new Error(response.error);
+    }
+
+    return response?.data || null;
+  } catch (error) {
+    global.appInsightsClient.trackException({ exception: error });
+    console.error("Error in getCompleteCheckDetails:", error);
+    throw error;
+  }
+};
+
 
 
 export default {
   getSpsReferrals,
-  getCompleteCheckDetails
+  getCompleteCheckDetails,
+  updateCheckOutcomeSps
 };

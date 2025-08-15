@@ -3,6 +3,18 @@
 {% block pageTitle %} Find a document - {{documentSearchMainModelData.pageTitle}} – GOV.UK {% endblock %}
 
 {% block content %}
+<style>
+  .govuk-radios__conditional {
+    margin-top: 15px;
+    padding-left: 18px;
+    border-left: 4px solid #b1b4b6;
+  }
+
+  .govuk-radios__conditional--hidden {
+    display: none !important;
+  }
+</style>
+
 {% if successConfirmation %}
 <div id="successBanner" class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-margin-top-6">
   {% include "./success/successBanner.html" %}
@@ -29,146 +41,104 @@
               </legend>
               <div>
                 {% if errorRadioUnchecked %}
-                  <p id="errorRadioUnchecked-msg" class="govuk-error-message">
-                    {{ error }}
-                  </p>
+                <p id="errorRadioUnchecked-msg" class="govuk-error-message">
+                  {{ error }}
+                </p>
                 {% endif %}
               </div>
-              <div class="govuk-radios" data-module="govuk-radios" role="radiogroup" aria-labelledby="search-options-heading">
-                <h2 id="search-options-heading" class="govuk-radios__label govuk-visually-hidden">Search options</h2>
-                   
-                <!-- PTD search option -->
-                <div class="govuk-radios__item" role="radio" 
-                     aria-checked="{% if activeTab == 'ptd' %}true{% else %}false{% endif %}" 
-                     tabindex="{% if activeTab == 'ptd' %}0{% else %}-1{% endif %}" 
-                     aria-posinset="1" aria-setsize="3">
-                  <input 
-                    class="govuk-radios__input" 
-                    id="documentSearch-1" 
-                    name="documentSearch" 
-                    type="radio" 
-                    value="ptd" 
-                    aria-labelledby="documentSearch-1-label" 
-                    {% if activeTab == 'ptd' %}checked{% endif %}>
-                  <label 
-                    id="documentSearch-1-label" 
-                    class="govuk-label govuk-radios__label" 
-                    for="documentSearch-1">
+              <div class="govuk-radios" data-module="govuk-radios">
+
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="documentSearch-1" name="documentSearch" type="radio"
+                    value="ptd" aria-labelledby="documentSearch-1-label"
+                    aria-expanded="{% if activeTab == 'ptd' %}true{% else %}false{% endif %}" {% if activeTab=='ptd'
+                    %}checked{% endif %}>
+                  <label id="documentSearch-1-label" class="govuk-label govuk-radios__label" for="documentSearch-1">
                     Search by PTD number
                   </label>
                 </div>
-                <div 
-                  class="govuk-radios__conditional {% if activeTab == 'ptd' %}{% else %}govuk-radios__conditional--hidden{% endif %}" 
+                <div
+                  class="govuk-radios__conditional {% if activeTab == 'ptd' %}{% else %}govuk-radios__conditional--hidden{% endif %}"
                   id="conditional-documentSearch-1">
-                  <!-- PTD Input -->
-                  <div id="ptd-form-group" class="govuk-form-group {% if error and activeTab == 'ptd' %}govuk-form-group--error{% endif %}">
+                  <div id="ptd-form-group"
+                    class="govuk-form-group {% if error and activeTab == 'ptd' %}govuk-form-group--error{% endif %}">
+                    <label class="govuk-label" for="ptdNumberSearch">PTD number, not including the GB826 prefix</label>
                     {% if error and activeTab == "ptd" %}
                     <p id="ptd-error" class="govuk-error-message">
                       <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span>
                       {{error}}
                     </p>
                     {% endif %}
-                    <label class="govuk-label" id="ptdNumberSearch-label" for="ptdNumberSearch">PTD number, not including the GB826 prefix</label>
                     <div class="govuk-input__wrapper">
                       <div class="govuk-input__prefix" aria-hidden="true">
                         {{documentSearchMainModelData.ptdSearchText}}
                       </div>
-                      <input 
-                        class="govuk-input {% if error and activeTab == 'ptd' %}govuk-input--error{% endif %} govuk-input--width-10" 
-                        id="ptdNumberSearch" 
-                        name="ptdNumberSearch" 
-                        type="text" 
-                        spellcheck="false" 
+                      <input
+                        class="govuk-input {% if error and activeTab == 'ptd' %}govuk-input--error{% endif %} govuk-input--width-10"
+                        id="ptdNumberSearch" name="ptdNumberSearch" type="text" spellcheck="false"
                         value="{{ptdNumberSearch}}">
                     </div>
                   </div>
                 </div>
-              
-                <!-- Application search option -->
-                <div class="govuk-radios__item" role="radio" 
-                     aria-checked="{% if activeTab == 'application' %}true{% else %}false{% endif %}" 
-                     tabindex="{% if activeTab == 'application' %}0{% else %}-1{% endif %}" 
-                     aria-posinset="2" aria-setsize="3">
-                  <input 
-                    class="govuk-radios__input" 
-                    id="documentSearch-2" 
-                    name="documentSearch" 
-                    type="radio" 
-                    value="application" 
-                    aria-labelledby="documentSearch-2-label" 
-                    {% if activeTab == 'application' %}checked{% endif %}>
-                  <label 
-                    id="documentSearch-2-label" 
-                    class="govuk-label govuk-radios__label" 
-                    for="documentSearch-2">
+
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="documentSearch-2" name="documentSearch" type="radio"
+                    value="application" aria-labelledby="documentSearch-2-label"
+                    aria-expanded="{% if activeTab == 'application' %}true{% else %}false{% endif %}" {% if
+                    activeTab=='application' %}checked{% endif %}>
+                  <label id="documentSearch-2-label" class="govuk-label govuk-radios__label" for="documentSearch-2">
                     Search by application number
                   </label>
                 </div>
-                <div 
-                  class="govuk-radios__conditional {% if activeTab == 'application' %}{% else %}govuk-radios__conditional--hidden{% endif %}" 
+                <div
+                  class="govuk-radios__conditional {% if activeTab == 'application' %}{% else %}govuk-radios__conditional--hidden{% endif %}"
                   id="conditional-documentSearch-2">
-                  <!-- Application Input -->
-                  <div id="application-form-group" class="govuk-form-group {% if error and activeTab == 'application' %}govuk-form-group--error{% endif %}">
+                  <div id="application-form-group"
+                    class="govuk-form-group {% if error and activeTab == 'application' %}govuk-form-group--error{% endif %}">
+                    <label class="govuk-label" for="applicationNumberSearch">Application number</label>
+
                     {% if error and activeTab == "application" %}
                     <p id="application-error" class="govuk-error-message">
                       <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span>
                       {{error}}
                     </p>
                     {% endif %}
-                    <label class="govuk-label" id="applicationNumberSearch-label" for="applicationNumberSearch">Application Number</label>
-                    <input 
-                      class="govuk-input {% if error and activeTab == 'application' %}govuk-input--error{% endif %} govuk-input--width-10" 
-                      id="applicationNumberSearch" 
-                      name="applicationNumberSearch" 
-                      type="text" 
-                      spellcheck="false" 
+                    <input
+                      class="govuk-input {% if error and activeTab == 'application' %}govuk-input--error{% endif %} govuk-input--width-10"
+                      id="applicationNumberSearch" name="applicationNumberSearch" type="text" spellcheck="false"
                       value="{{applicationNumberSearch}}">
                   </div>
                 </div>
-              
-                <!-- Microchip search option -->
-                <div class="govuk-radios__item" role="radio" 
-                     aria-checked="{% if activeTab == 'microchip' %}true{% else %}false{% endif %}" 
-                     tabindex="{% if activeTab == 'microchip' %}0{% else %}-1{% endif %}" 
-                     aria-posinset="3" aria-setsize="3">
-                  <input 
-                    class="govuk-radios__input" 
-                    id="documentSearch-3" 
-                    name="documentSearch" 
-                    type="radio" 
-                    value="microchip" 
-                    aria-labelledby="documentSearch-3-label" 
-                    {% if activeTab == 'microchip' %}checked{% endif %}>
-                  <label 
-                    id="documentSearch-3-label" 
-                    class="govuk-label govuk-radios__label" 
-                    for="documentSearch-3">
+
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="documentSearch-3" name="documentSearch" type="radio"
+                    value="microchip" aria-labelledby="documentSearch-3-label"
+                    aria-expanded="{% if activeTab == 'microchip' %}true{% else %}false{% endif %}" {% if
+                    activeTab=='microchip' %}checked{% endif %}>
+                  <label id="documentSearch-3-label" class="govuk-label govuk-radios__label" for="documentSearch-3">
                     Search by microchip number
                   </label>
                 </div>
-                <div 
-                  class="govuk-radios__conditional {% if activeTab == 'microchip' %}{% else %}govuk-radios__conditional--hidden{% endif %}" 
+                <div
+                  class="govuk-radios__conditional {% if activeTab == 'microchip' %}{% else %}govuk-radios__conditional--hidden{% endif %}"
                   id="conditional-documentSearch-3">
-                  <!-- Microchip Input -->
-                  <div id="microchip-form-group" class="govuk-form-group {% if error and activeTab == 'microchip' %}govuk-form-group--error{% endif %}">                 
+                  <div id="microchip-form-group"
+                    class="govuk-form-group {% if error and activeTab == 'microchip' %}govuk-form-group--error{% endif %}">
+                    <label class="govuk-label" for="microchipNumber">Microchip number</label>
                     {% if error and activeTab == "microchip" %}
                     <p id="microchip-error" class="govuk-error-message">
                       <span class="govuk-visually-hidden">{{documentSearchMainModelData.errorLabel}}</span>
                       {{error}}
                     </p>
                     {% endif %}
-                    <label class="govuk-label" id="microchipNumber-search-label" for="microchipNumber">Microchip Number</label>
-                    <input 
-                      class="govuk-input {% if error and activeTab == 'microchip' %}govuk-input--error{% endif %} govuk-input--width-20" 
-                      id="microchipNumber" 
-                      name="microchipNumber" 
-                      type="text" 
-                      spellcheck="false" 
+                    <input
+                      class="govuk-input {% if error and activeTab == 'microchip' %}govuk-input--error{% endif %} govuk-input--width-20"
+                      id="microchipNumber" name="microchipNumber" type="text" spellcheck="false"
                       value="{{microchipNumber}}">
                   </div>
                 </div>
               </div>
-              
+
             </fieldset>
           </div>
         </div>
@@ -209,48 +179,63 @@
 
     const errorSummary = document.getElementById('errorSummary');
     if (errorSummary) {
-        errorSummary.style.display = 'none';
+      errorSummary.style.display = 'none';
     }
-    
+
   }
 
   function toggleConditionals(visibleId) {
     const allConditionals = [conditionalDocumentSearch1Id, conditionalDocumentSearch2Id, conditionalDocumentSearch3Id];
     allConditionals.forEach(id => {
       const element = document.getElementById(id);
-      element.className = id === visibleId
-        ? 'govuk-radios__conditional'
-        : 'govuk-radios__conditional govuk-radios__conditional--hidden';
+      if (id === visibleId) {
+        element.className = 'govuk-radios__conditional';
+      } else {
+        element.className = 'govuk-radios__conditional govuk-radios__conditional--hidden';
+      }
     });
   }
 
-  // Event listeners for radio buttons
-  document.getElementById('documentSearch-1').addEventListener('click', () => {
+  function updateAriaExpanded(selectedRadio) {
+    document.getElementById('documentSearch-1').setAttribute('aria-expanded', 'false');
+    document.getElementById('documentSearch-2').setAttribute('aria-expanded', 'false');
+    document.getElementById('documentSearch-3').setAttribute('aria-expanded', 'false');
+
+    selectedRadio.setAttribute('aria-expanded', 'true');
+  }
+
+  document.getElementById('documentSearch-1').addEventListener('click', function () {
     toggleConditionals(conditionalDocumentSearch1Id);
+    updateAriaExpanded(this);
   });
 
-  document.getElementById('documentSearch-2').addEventListener('click', () => {
+  document.getElementById('documentSearch-2').addEventListener('click', function () {
     toggleConditionals(conditionalDocumentSearch2Id);
+    updateAriaExpanded(this);
   });
 
-  document.getElementById('documentSearch-3').addEventListener('click', () => {
+  document.getElementById('documentSearch-3').addEventListener('click', function () {
     toggleConditionals(conditionalDocumentSearch3Id);
+    updateAriaExpanded(this);
   });
 
-  // Clear all fields and reset radio buttons
   function clearSearchFields(_event) {
-    _event.preventDefault(); // Prevent default link behavior
+    _event.preventDefault();
 
     document.getElementById('documentSearch-1').checked = false;
     document.getElementById('documentSearch-2').checked = false;
     document.getElementById('documentSearch-3').checked = false;
+
+    document.getElementById('documentSearch-1').setAttribute('aria-expanded', 'false');
+    document.getElementById('documentSearch-2').setAttribute('aria-expanded', 'false');
+    document.getElementById('documentSearch-3').setAttribute('aria-expanded', 'false');
+
     resetField('ptdNumberSearch', 'ptd-form-group', 'ptd-error');
     resetField('applicationNumberSearch', 'application-form-group', 'application-error');
     resetField('microchipNumber', 'microchip-form-group', 'microchip-error');
 
     clearEmptyError()
 
-    // and collapse fields too
     const allConditionals = [conditionalDocumentSearch1Id, conditionalDocumentSearch2Id, conditionalDocumentSearch3Id];
 
     allConditionals.forEach(id => {
@@ -269,50 +254,57 @@
 
   document.getElementById('clearSearchButton').addEventListener('click', clearSearchFields);
 
-  // On form submission, clear irrelevant fields
   document.getElementById('documentSearchForm').addEventListener('submit', function (_event) {
-    const selectedOption = document.querySelector('input[name="documentSearch"]:checked').value;
-    const inputFields = {
-      ptd: document.getElementById('ptdNumberSearch'),
-      application: document.getElementById('applicationNumberSearch'),
-      microchip: document.getElementById('microchipNumber')
-    };
+    const selectedOption = document.querySelector('input[name="documentSearch"]:checked');
+    if (selectedOption) {
+      const inputFields = {
+        ptd: document.getElementById('ptdNumberSearch'),
+        application: document.getElementById('applicationNumberSearch'),
+        microchip: document.getElementById('microchipNumber')
+      };
 
-    // Clear values of non-relevant input fields
-    for (const key in inputFields) {
-      if (key !== selectedOption) {
-        inputFields[key].value = '';
+      for (const key in inputFields) {
+        if (key !== selectedOption.value) {
+          inputFields[key].value = '';
+        }
       }
     }
   });
 
-  // On page load, ensure correct conditional content is displayed
   document.addEventListener('DOMContentLoaded', function (e) {
     setTimeout(() => {
-      const selectedOptionId = getSelectedOptionId();
-      toggleConditionals('conditional-documentSearch-' + selectedOptionId);
+      const selectedRadio = document.querySelector('input[name="documentSearch"]:checked');
+      if (selectedRadio) {
+        const selectedOptionId = getSelectedOptionId();
+        if (selectedOptionId) {
+          toggleConditionals('conditional-documentSearch-' + selectedOptionId);
+          updateAriaExpanded(selectedRadio);
+        }
+      }
     }, 10);
   });
 
   function getSelectedOptionId() {
     const documentSearchField = document.querySelector('input[name="documentSearch"]:checked');
 
+    if (!documentSearchField) return undefined;
+
     const selectedOption = documentSearchField.value;
 
     switch (selectedOption) {
       case 'ptd':
-          return '1';
+        return '1';
       case 'application':
-          return '2';
+        return '2';
       case 'microchip':
-          return '3';
+        return '3';
       default:
-          return undefined;
+        return undefined;
     }
 
   }
-  
-  if(window.history.replaceState) {
+
+  if (window.history.replaceState) {
     window.history.replaceState(null, null, window.location.href);
   }
 </script>

@@ -1,7 +1,7 @@
 <div class="govuk-form-group">
     <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-            <h3 class="govuk-fieldset__heading">
+            <h3 class="govuk-heading-m">
                 Visual check
             </h3>
         </legend>
@@ -9,71 +9,64 @@
         <details class="govuk-details">
             <summary class="govuk-details__summary">
                 <span class="govuk-details__summary-text">
-                    Pet details from PTD
+                    Pet details
                 </span>
             </summary>
             <div class="govuk-details__text">
-                <div id="document-pet-card" class="govuk-summary-card">
-                    <div class="govuk-summary-card__title-wrapper">
-                        <h2 class="govuk-summary-card__title">Pet details from PTD or Application</h2>
+                <dl class="govuk-summary-list">                            
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Species
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            {{ data['petSpecies'] if data['petSpecies'] else "" }}
+                        </dd>
                     </div>
-                    <div class="govuk-summary-card__content">
-                        <dl class="govuk-summary-list">                            
-                            <div class="govuk-summary-list__row">
-                                <dt class="govuk-summary-list__key">
-                                    Species
-                                </dt>
-                                <dd class="govuk-summary-list__value">
-                                    {{ data['petSpecies'] if data['petSpecies'] else "" }}
-                                </dd>
-                            </div>
 
-                            {% if data['petSpecies'] != 'Ferret' %}
-                            <div class="govuk-summary-list__row">
-                                <dt class="govuk-summary-list__key">
-                                    Breed
-                                </dt>
-                                <dd class="govuk-summary-list__value">
-                                    {{ data['petBreed'] if data['petBreed'] else ""}}
-                                </dd>
-                            </div>
-                            {% endif %}
-
-                            <div class="govuk-summary-list__row">
-                                <dt class="govuk-summary-list__key">
-                                    Sex
-                                </dt>
-                                <dd class="govuk-summary-list__value">
-                                    {{ data['petSex'] if data['petSex'] else ""}}
-                                </dd>
-                            </div>
-                            <div class="govuk-summary-list__row">
-                                <dt class="govuk-summary-list__key">
-                                    Date of birth
-                                </dt>
-                                <dd class="govuk-summary-list__value">
-                                    {{ data['petDoB'] if data['petDoB'] else ""}}
-                                </dd>
-                            </div>
-                            <div class="govuk-summary-list__row">
-                                <dt class="govuk-summary-list__key">
-                                    Colour
-                                </dt>
-                                <dd class="govuk-summary-list__value">
-                                    {{ data['petColour'] if data['petColour'] else ""}}
-                                </dd>
-                            </div>
-                            <div class="govuk-summary-list__row">
-                                <dt class="govuk-summary-list__key">
-                                    Significant features
-                                </dt>
-                                <dd class="govuk-summary-list__value">
-                                    {{ data['petFeaturesDetail'] if data['petFeaturesDetail'] else "No"}}
-                                </dd>
-                            </div>
-                        </dl>
+                    {% if data['petSpecies'] != 'Ferret' %}
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Breed
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            {{ data['petBreed'] if data['petBreed'] else ""}}
+                        </dd>
                     </div>
-                </div>
+                    {% endif %}
+
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Sex
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            {{ data['petSex'] if data['petSex'] else ""}}
+                        </dd>
+                    </div>
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Date of birth
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            {{ data['petDoB'] if data['petDoB'] else ""}}
+                        </dd>
+                    </div>
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Colour
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            {{ data['petColour'] if data['petColour'] else ""}}
+                        </dd>
+                    </div>
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Significant features
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            {{ data['petFeaturesDetail'] if data['petFeaturesDetail'] else "No"}}
+                        </dd>
+                    </div>
+                </dl>
             </div>
         </details>
 

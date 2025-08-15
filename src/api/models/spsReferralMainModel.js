@@ -8,6 +8,7 @@ class SpsReferralMainModel {
     this.SPSOutcome = data.SPSOutcome;
     this.classColour = data.classColour;
     this.CheckSummaryId = data.CheckSummaryId;
+    this.PassengerTypeId = data.PassengerTypeId;
   }
 }
 

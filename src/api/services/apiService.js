@@ -43,11 +43,22 @@ const formatDate = (dateRaw) => {
   return date ? moment(date).format("DD/MM/YYYY") : undefined;
 };
 
-const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
+
+const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request, options = {} ) => {
   try {
+    const { dopostCall = true } = options;
     const data = { ptdNumber: ptdNumberFromPayLoad };
-    const url = buildApiUrl("Checker/checkPTDNumber");
-    const response = await httpService.postAsync(url, data, request);
+    let url = buildApiUrl("Checker/checkPTDNumber");
+    let response = {};
+    if(dopostCall)
+    {
+       response = await httpService.postAsync(url, data, request);
+    }
+    else
+    {
+      url = `${url}?ptdNumber=${data.ptdNumber}`;
+      response = await httpService.getAsync(url, request);
+    }
 
     if (response.status === HttpStatusCode.NotFound && response?.error) 
     {
@@ -67,34 +78,7 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
 
     const { documentState, ptdNumber, issuedDateRaw, microchippedDateRaw, dateOfBirthRaw } = getDocumentAndDateData(item);
 
-    const formattedIssuedDate = formatDate(issuedDateRaw);
-    const formattedMicrochippedDate = formatDate(microchippedDateRaw);
-    const formattedDateOfBirth = formatDate(dateOfBirthRaw);
-
-    const transformedItem = new MicrochipAppPtdMainModel({
-      petId: item.pet?.petId,
-      petName: item.pet?.petName,
-      petSpecies: item.pet?.species,
-      petBreed: getPetBreed(item),
-      documentState,
-      ptdNumber,
-      issuedDate: formattedIssuedDate || undefined,
-      microchipNumber: item.pet?.microchipNumber,
-      microchipDate: formattedMicrochippedDate || undefined,
-      petSex: item.pet?.sex,
-      petDoB: formattedDateOfBirth || undefined,
-      petColour: item.pet?.colourName,
-      petFeaturesDetail: item.pet?.significantFeatures,
-      applicationId: item.application?.applicationId,
-      travelDocumentId: item.travelDocument?.travelDocumentId,
-      dateOfIssue: item.travelDocument?.dateOfIssue,
-      petOwnerName: item.petOwner?.name,
-      petOwnerEmail: item.petOwner?.email,
-      petOwnerTelephone: item.petOwner?.telephone,
-      petOwnerAddress: item.petOwner?.address || null,
-      issuingAuthority: issuingAuthorityModelData,
-      isUserSuspended: isUserSuspendedRequest.data
-    });
+    const transformedItem = fetchModelData(issuedDateRaw, microchippedDateRaw, dateOfBirthRaw, item, documentState, ptdNumber, isUserSuspendedRequest);
 
     return transformedItem;
   } catch (error) {
@@ -103,6 +87,38 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
     throw error;
   }
 };
+
+function fetchModelData(issuedDateRaw, microchippedDateRaw, dateOfBirthRaw, item, documentState, ptdNumber, isUserSuspendedRequest) {
+  const formattedIssuedDate = formatDate(issuedDateRaw);
+  const formattedMicrochippedDate = formatDate(microchippedDateRaw);
+  const formattedDateOfBirth = formatDate(dateOfBirthRaw);
+
+  const transformedItem = new MicrochipAppPtdMainModel({
+    petId: item.pet?.petId,
+    petName: item.pet?.petName,
+    petSpecies: item.pet?.species,
+    petBreed: getPetBreed(item),
+    documentState,
+    ptdNumber,
+    issuedDate: formattedIssuedDate || undefined,
+    microchipNumber: item.pet?.microchipNumber,
+    microchipDate: formattedMicrochippedDate || undefined,
+    petSex: item.pet?.sex,
+    petDoB: formattedDateOfBirth || undefined,
+    petColour: item.pet?.colourName,
+    petFeaturesDetail: item.pet?.significantFeatures,
+    applicationId: item.application?.applicationId,
+    travelDocumentId: item.travelDocument?.travelDocumentId,
+    dateOfIssue: item.travelDocument?.dateOfIssue,
+    petOwnerName: item.petOwner?.name,
+    petOwnerEmail: item.petOwner?.email,
+    petOwnerTelephone: item.petOwner?.telephone,
+    petOwnerAddress: item.petOwner?.address || null,
+    issuingAuthority: issuingAuthorityModelData,
+    isUserSuspended: isUserSuspendedRequest.data
+  });
+  return transformedItem;
+}
 
 function validateItem(item) {
   if (!item || typeof item !== "object") {
@@ -158,19 +174,6 @@ function getPetBreed(item) {
   return item.pet?.breedName === "Mixed breed or unknown" && item.pet?.breedAdditionalInfo 
     ? item.pet?.breedAdditionalInfo 
     : item.pet?.breedName;
-}
-
-function handleError(error) {
-  if (error?.message) {
-    const errorMapping = {
-      [applicationNotFoundErrorText]: applicationNotFoundErrorText,
-      [petNotFoundErrorText]: petNotFoundErrorText,
-    };
-  
-    return { error: errorMapping[error.message] || error.message };
-  }
-  
-  return { error: unexpectedErrorText };
 }
 
 function getMicrochipAppPtdMainModel({pet, application, travelDocument, petOwner, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth, isUserSuspended}) {
