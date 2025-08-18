@@ -1,6 +1,7 @@
 <h2 class="govuk-heading-l govuk-!-static-margin-top-9">Passenger details</h2>
 {% include "componentViews/checker/noncompliance/petOwnerSection.html" %}
 <div id="passengerFormGroup" name="passengerFormGroup" class="govuk-form-group {% if errors['passengerType'] %}govuk-form-group--error{% endif %}">
+   {% if payload['isFlight'] !== true %}
   <fieldset class="govuk-fieldset">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
       <h3 class="govuk-fieldset__heading">Type of passenger</h3>
@@ -35,19 +36,9 @@
                {% if payload['passengerType'] == '2' %}checked{% endif %}>
         <label class="govuk-label govuk-radios__label" for="vehiclePassenger">Vehicle on ferry</label>
       </div>
-
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input" 
-               id="airlinePassenger" 
-               name="passengerType" 
-               type="radio" 
-               value="3"
-               aria-label="Airline" 
-               {% if payload['passengerType'] == '3' %}checked{% endif %}>
-        <label class="govuk-label govuk-radios__label" for="airlinePassenger">Airline</label>
-      </div>
     </div>
   </fieldset>
+  {% endif %}
 </div>
 
 <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
