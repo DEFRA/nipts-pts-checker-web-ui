@@ -45,10 +45,15 @@ describe("getNonComplianceHandler", () => {
   });
 
   it("should render the view with the correct data", async () => {
-    const mockData = { some: "data", documentState: "awaiting", isGBCheck: true };
+    const mockData = { some: "data", documentState: "awaiting", isGBCheck: true};
     const mockAppSettings = { setting1: "value1" };
+    const mockRouteDetails = { isFlight: true };
 
-    request.yar.get.mockReturnValueOnce(mockData);
+    request.yar.get = jest.fn()
+      .mockImplementationOnce(() => mockData) 
+      .mockImplementationOnce(() => mockRouteDetails)
+      .mockImplementationOnce(() => mockData.isGBCheck);
+
     appSettingsService.getAppSettings.mockReturnValue(mockAppSettings);
 
     const statusMapping = {
@@ -83,7 +88,7 @@ describe("getNonComplianceHandler", () => {
         errors: {},
         errorSummary: [],
         formSubmitted: false,
-        payload: {},
+        payload: {isFlight: true},
       }
     );
   });
@@ -447,16 +452,17 @@ describe("postNonComplianceHandler", () => {
       relevantComments: "Some relevant comments",
       isGBCheck: true,
     };
-  
+
     request.payload = payload;
-  
+
     request.yar.get.mockImplementation((key) => {
       const mockData = {
         data: { documentState: "awaiting", applicationId: "testApplicationId" },
+        currentSailingSlot: { isFlight: true },
       };
       return mockData[key] || null;
     });
-  
+
     const mockAppSettings = { setting1: "value1" };
     appSettingsService.getAppSettings.mockResolvedValue(mockAppSettings);
     console.error = jest.fn();
@@ -476,10 +482,10 @@ describe("postNonComplianceHandler", () => {
     };
     const documentStatus = statusMapping[applicationStatus] || applicationStatus;
     const documentStatusColourMapping = statusColourMapping[applicationStatus] || applicationStatus;
-  
+
     await NonComplianceHandlers.postNonComplianceHandler(request, h).catch((error) => {
       expect(console.error).toHaveBeenCalledWith("Unexpected Error:", error);
-  
+
       expect(h.view).toHaveBeenCalledWith(
         VIEW_PATH,
         expect.objectContaining({
