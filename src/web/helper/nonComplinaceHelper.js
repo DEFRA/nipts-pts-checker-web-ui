@@ -109,7 +109,7 @@
             gbRefersToDAERAOrSPS: toBooleanOrNull(payload?.gbRefersToDAERAOrSPS, null),
             gbAdviseNoTravel: toBooleanOrNull(payload?.gbAdviseNoTravel, null),
             gbPassengerSaysNoTravel: toBooleanOrNull(payload?.gbPassengerSaysNoTravel, null),
-            spsOutcome: toBooleanOrNull(payload?.spsOutcome, isGBCheck? null: false),
+            spsOutcome: isGBCheck ? null : false, // Set to false for SPS checks
             spsOutcomeDetails: getPayloadValue(payload, "spsOutcomeDetails"),
             gBCheckId: gbcheckSummaryId ?? null,
         };
