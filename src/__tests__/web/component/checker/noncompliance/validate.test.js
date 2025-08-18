@@ -36,7 +36,6 @@ describe("NonCompliance Validation isGbCheck is True", () => {
       relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: true,
-      spsOutcome: "true",
     };
 
     const expectedErrorrs = [
@@ -47,10 +46,6 @@ describe("NonCompliance Validation isGbCheck is True", () => {
       {
         "message": errorMessages.gbOutcome.required,
         "path": ["isGBCheck"]
-      },
-      {
-        "message": errorMessages.spsOutcome.incorrectSelection,
-        "path": ["spsOutcome"]
       },
       {
         "message": errorMessages.missingReason.empty,
@@ -294,10 +289,6 @@ describe("NonCompliance Validation isGbCheck is False", () => {
           "path": ["passengerType"],
         },
         {
-          "message": errorMessages.spsOutcome.required,
-          "path": ["spsOutcome"]
-        },
-        {
           "message": errorMessages.missingReason.empty,
           "path": ["missingReason"]
         },
@@ -327,10 +318,6 @@ describe("NonCompliance Validation isGbCheck is False", () => {
         "path": ["isGBCheck"]
       },
       {
-        "message": errorMessages.spsOutcome.required,
-        "path": ["spsOutcome"]
-      },
-      {
         "message": errorMessages.missingReason.empty,
         "path": ["missingReason"]
       },
@@ -355,34 +342,7 @@ test("should validate required fields when noncompliance reason selected on UI",
         "message": errorMessages.passengerType.empty,
         "path": ["passengerType"],
       },
-      {
-        "message": errorMessages.spsOutcome.required,
-        "path": ["spsOutcome"]
-      },
    ]
-
-    const result = validateNonCompliance(payload);
-    expect(result.isValid).toBe(false);
-    expect(result.errors).toEqual(expectedErrorrs);
-  });
-
-
-  test("should validate required fields when noncompliance reason and passenger type selected on UI", () => {
-    const payload = {
-      mcNotMatchActual: "",
-      relevantComments: "",
-      spsOutcomeDetails: "",
-      isGBCheck: false,
-      vcNotMatchPTD: "true",
-      passengerType: "2"
-    };
-
-    const expectedErrorrs = [
-      {
-        "message": errorMessages.spsOutcome.required,
-        "path": ["spsOutcome"]
-      },
-  ]
 
     const result = validateNonCompliance(payload);
     expect(result.isValid).toBe(false);
@@ -397,7 +357,6 @@ test("should validate required fields when noncompliance reason selected on UI",
       isGBCheck: false,
       vcNotMatchPTD: "true",
       passengerType: "2",
-      spsOutcome: "true"
     };
 
     const expectedErrorrs = []
@@ -426,10 +385,6 @@ test("should validate required fields when noncompliance reason selected on UI",
         "message": errorMessages.passengerType.empty,
         "path": ["passengerType"],
       },
-      {
-        "message": errorMessages.spsOutcome.required,
-        "path": ["spsOutcome"]
-      },
    ]
 
     const result = validateNonCompliance(payload);
@@ -455,10 +410,6 @@ test("should validate required fields when noncompliance reason selected on UI",
       {
         "message": errorMessages.passengerType.empty,
         "path": ["passengerType"],
-      },
-      {
-        "message": errorMessages.spsOutcome.required,
-        "path": ["spsOutcome"]
       },
    ]
 
@@ -487,10 +438,6 @@ test("should validate required fields when noncompliance reason selected on UI",
         "message": errorMessages.passengerType.empty,
         "path": ["passengerType"],
       },
-      {
-        "message": errorMessages.spsOutcome.required,
-        "path": ["spsOutcome"]
-      },
    ]
 
     const result = validateNonCompliance(payload);
@@ -517,10 +464,6 @@ test("should validate required fields when noncompliance reason selected on UI",
         "message": errorMessages.passengerType.empty,
         "path": ["passengerType"],
       },
-      {
-        "message": errorMessages.spsOutcome.required,
-        "path": ["spsOutcome"]
-      },
    ]
 
     const result = validateNonCompliance(payload);
@@ -542,10 +485,6 @@ test("should validate required fields when noncompliance reason selected on UI",
       {
         "message": errorMessages.passengerType.empty,
         "path": ["passengerType"],
-      },
-      {
-        "message": errorMessages.spsOutcome.required,
-        "path": ["spsOutcome"]
       },
    ]
 
@@ -573,10 +512,6 @@ test("should validate required fields when noncompliance reason selected on UI",
         "message": errorMessages.passengerType.empty,
         "path": ["passengerType"],
       },
-      {
-        "message": errorMessages.spsOutcome.required,
-        "path": ["spsOutcome"]
-      },
     ];
   
     const result = validateNonCompliance(payload);
@@ -602,10 +537,6 @@ test("should validate required fields when noncompliance reason selected on UI",
       {
         "message": errorMessages.passengerType.empty,
         "path": ["passengerType"],
-      },
-      {
-        "message": errorMessages.spsOutcome.required,
-        "path": ["spsOutcome"]
       },
     ];
   
@@ -633,10 +564,6 @@ test("should validate required fields when noncompliance reason selected on UI",
         "message": errorMessages.passengerType.empty,
         "path": ["passengerType"],
       },
-      {
-        "message": errorMessages.spsOutcome.required,
-        "path": ["spsOutcome"]
-      },
     ];
   
     const result = validateNonCompliance(payload);
@@ -662,10 +589,6 @@ test("should validate required fields when noncompliance reason selected on UI",
       {
         "message": errorMessages.passengerType.empty,
         "path": ["passengerType"],
-      },
-      {
-        "message": errorMessages.spsOutcome.required,
-        "path": ["spsOutcome"]
       },
     ];
   

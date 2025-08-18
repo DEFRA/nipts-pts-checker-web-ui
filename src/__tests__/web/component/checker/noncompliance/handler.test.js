@@ -427,7 +427,7 @@ describe("postNonComplianceHandler", () => {
         routeId: 2,
         gBCheckId:  "1234567",
         checkerId: "123",
-        spsOutcome: true,
+        spsOutcome: false,
         spsOutcomeDetails: "Sps Outcome details",
         sailingOption: '1',
         sailingTime: sailingTimeSPS,          
