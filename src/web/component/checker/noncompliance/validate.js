@@ -51,15 +51,6 @@ const nonComplianceSchema = Joi.object({
     "string.empty": errorMessages.passengerType.empty,
     "any.required": errorMessages.passengerType.empty,
   }),
-  spsOutcome: Joi.when("isGBCheck", {
-    is: true,
-    then: Joi.any().custom((_value, helpers) => {
-      return helpers.message(errorMessages.spsOutcome.incorrectSelection);
-    }),
-    otherwise: Joi.any().required().messages({
-      "any.required": errorMessages.spsOutcome.required,
-    }),
-  }),
   gbRefersToDAERAOrSPS: Joi.boolean().optional(),
   gbAdviseNoTravel: Joi.boolean().optional(),
   gbPassengerSaysNoTravel: Joi.boolean().optional(),
