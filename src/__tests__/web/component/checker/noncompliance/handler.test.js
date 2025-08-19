@@ -205,6 +205,7 @@ describe("postNonComplianceHandler", () => {
       "isGBCheck": true,
       "mcNotFound": true,
       "oiFailAuthTravellerNoConfirmation": true,
+      "oiRefusedToSignDeclaration": true,
       "passengerTypeId": 1,
       "gbRefersToDAERAOrSPS": true,
       "gbAdviseNoTravel": true,

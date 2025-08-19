@@ -17,6 +17,15 @@
                     Authorised person but no confirmation
                 </label>
             </div>
+
+            <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="oiRefusedToSignDeclaration" name="oiRefusedToSignDeclaration" type="checkbox"
+                aria-label="Refused to sign declaration"
+                    value="true" {% if payload['oiRefusedToSignDeclaration']=="true" %}checked{% endif %}/>
+                <label class="govuk-label govuk-checkboxes__label" for="oiRefusedToSignDeclaration">
+                    Refused to sign declaration
+                </label>
+            </div>
         </div>
     </fieldset>
 </div>

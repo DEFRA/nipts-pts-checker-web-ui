@@ -98,6 +98,7 @@
             flightNumber: flightNumber,
             isGBCheck: isGBCheck,
             mcNotFound: toBooleanOrNull(payload?.mcNotFound, null),
+            oiRefusedToSignDeclaration: toBooleanOrNull(payload?.oiRefusedToSignDeclaration, null),
             oiFailAuthTravellerNoConfirmation: toBooleanOrNull(payload?.oiFailAuthTravellerNoConfirmation, null),
             passengerTypeId: getPayloadValue(payload, "passengerType"),
             gbRefersToDAERAOrSPS: toBooleanOrNull(payload?.gbRefersToDAERAOrSPS, null),

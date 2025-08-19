@@ -41,6 +41,7 @@ const nonComplianceSchema = Joi.object({
   .or(
     "mcNotFound",
     "oiFailAuthTravellerNoConfirmation",
+    "oiRefusedToSignDeclaration",
   )
   .messages({
     "object.missing": errorMessages.missingReason.empty,
