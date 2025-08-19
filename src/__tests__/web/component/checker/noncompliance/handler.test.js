@@ -5,7 +5,6 @@ import errorMessages from "../../../../../web/component/checker/noncompliance/er
 import { validateNonCompliance } from '../../../../../web/component/checker/noncompliance/validate.js'; // Mock this
 
 const VIEW_PATH = "componentViews/checker/noncompliance/noncomplianceView";
-const relevantComments = "Relevant Comments";
 const viewresponse = 'view response';
 
 //jest.mock("../../../../../api/services/appSettingsService.js");
@@ -152,7 +151,6 @@ describe("postNonComplianceHandler", () => {
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "invalid_microchip",
-      relevantComments: relevantComments,
       passengerTypeId: 1,
       isGBCheck: true,
     };
@@ -215,7 +213,6 @@ describe("postNonComplianceHandler", () => {
       "oiFailAuthTravellerNoConfirmation": true,
       "oiFailOther": true,
       "passengerTypeId": 1,
-      "relevantComments": relevantComments,
       "gbRefersToDAERAOrSPS": true,
       "gbAdviseNoTravel": true,
       "gbPassengerSaysNoTravel": true,
@@ -271,7 +268,6 @@ describe("postNonComplianceHandler", () => {
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "123456789123456",
-      relevantComments: relevantComments,
     };
     validateNonCompliance.mockReturnValue({
       isValid: true,
@@ -312,7 +308,6 @@ describe("postNonComplianceHandler", () => {
         applicationId: "testApplicationId",
         checkOutcome: "Fail",
         mcNotMatchActual: "123456789123456",
-        relevantComments: relevantComments,
       }),
       request
     );
@@ -322,7 +317,6 @@ describe("postNonComplianceHandler", () => {
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "123456789123456",
-      relevantComments: relevantComments,
     };
     validateNonCompliance.mockReturnValue({
       isValid: true,
@@ -363,7 +357,6 @@ describe("postNonComplianceHandler", () => {
         applicationId: "testApplicationId",
         checkOutcome: "Fail",
         mcNotMatchActual: "123456789123456",
-        relevantComments: relevantComments,
       }),
       request
     );
@@ -375,7 +368,6 @@ describe("postNonComplianceHandler", () => {
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "123456789123456",
-      relevantComments: relevantComments,
       spsOutcome: 'true',
       spsOutcomeDetails: "Sps Outcome details",
     };
@@ -423,7 +415,6 @@ describe("postNonComplianceHandler", () => {
         applicationId: "testApplicationId",
         checkOutcome: "Fail",
         mcNotMatchActual: "123456789123456",
-        relevantComments: relevantComments,
         routeId: 2,
         gBCheckId:  "1234567",
         checkerId: "123",
@@ -449,7 +440,6 @@ describe("postNonComplianceHandler", () => {
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "123456789123456",
-      relevantComments: "Some relevant comments",
       isGBCheck: true,
     };
 

@@ -105,7 +105,6 @@
             oiFailAuthTravellerNoConfirmation: toBooleanOrNull(payload?.oiFailAuthTravellerNoConfirmation, null),
             oiFailOther: toBooleanOrNull(payload?.oiFailOther, null),
             passengerTypeId: getPayloadValue(payload, "passengerType"),
-            relevantComments: getPayloadValue(payload, "relevantComments"),
             gbRefersToDAERAOrSPS: toBooleanOrNull(payload?.gbRefersToDAERAOrSPS, null),
             gbAdviseNoTravel: toBooleanOrNull(payload?.gbAdviseNoTravel, null),
             gbPassengerSaysNoTravel: toBooleanOrNull(payload?.gbPassengerSaysNoTravel, null),

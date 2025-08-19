@@ -5,7 +5,6 @@ describe("NonCompliance Validation isGbCheck is True", () => {
   test("should validate required fields when nothing is selected on UI", () => {
       const payload = {
         mcNotMatchActual: "",
-        relevantComments: "",
         spsOutcomeDetails: "",
         isGBCheck: true,
       };
@@ -33,7 +32,6 @@ describe("NonCompliance Validation isGbCheck is True", () => {
   test("should validate required fields when only option slecetd on UI spsOutcome", () => {
     const payload = {
       mcNotMatchActual: "",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: true,
     };
@@ -61,7 +59,6 @@ describe("NonCompliance Validation isGbCheck is True", () => {
   test("should validate required fields when noncompliance reason selected on UI", () => {
     const payload = {
       mcNotMatchActual: "",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: true,
       vcNotMatchPTD: "true",
@@ -87,7 +84,6 @@ describe("NonCompliance Validation isGbCheck is True", () => {
   test("should validate required fields when noncompliance reason and passenger type selected on UI", () => {
     const payload = {
       mcNotMatchActual: "",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: true,
       vcNotMatchPTD: "true",
@@ -109,7 +105,6 @@ describe("NonCompliance Validation isGbCheck is True", () => {
   test("should validate required fields when all required fileds are selected on UI", () => {
     const payload = {
       mcNotMatchActual: "",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: true,
       vcNotMatchPTD: "true",
@@ -128,7 +123,6 @@ describe("NonCompliance Validation isGbCheck is True", () => {
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: true,
       vcNotMatchPTD: "true",
@@ -158,7 +152,6 @@ describe("NonCompliance Validation isGbCheck is True", () => {
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "12345678901234A",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: true,
       vcNotMatchPTD: "true",
@@ -189,7 +182,6 @@ describe("NonCompliance Validation isGbCheck is True", () => {
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "12345678901234!",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: true,
       vcNotMatchPTD: "true",
@@ -220,7 +212,6 @@ describe("NonCompliance Validation isGbCheck is True", () => {
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "12345678901234",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: true,
       vcNotMatchPTD: "true",
@@ -250,7 +241,6 @@ describe("NonCompliance Validation isGbCheck is True", () => {
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "123456789012345",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: true,
       vcNotMatchPTD: "true",
@@ -278,7 +268,6 @@ describe("NonCompliance Validation isGbCheck is False", () => {
   test("should validate required fields when nothing is selected on UI", () => {
       const payload = {
         mcNotMatchActual: "",
-        relevantComments: "",
         spsOutcomeDetails: "",
         isGBCheck: false,
       };
@@ -302,7 +291,6 @@ describe("NonCompliance Validation isGbCheck is False", () => {
   test("should validate required fields when only option slecetd on UI gbOutcome", () => {
     const payload = {
       mcNotMatchActual: "",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: false,
       gbRefersToDAERAOrSPS: "true",
@@ -331,7 +319,6 @@ describe("NonCompliance Validation isGbCheck is False", () => {
 test("should validate required fields when noncompliance reason selected on UI", () => {
     const payload = {
       mcNotMatchActual: "",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: false,
       vcNotMatchPTD: "true",
@@ -352,7 +339,6 @@ test("should validate required fields when noncompliance reason selected on UI",
   test("should validate required fields when all required fileds are selected on UI", () => {
     const payload = {
       mcNotMatchActual: "",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: false,
       vcNotMatchPTD: "true",
@@ -370,7 +356,6 @@ test("should validate required fields when noncompliance reason selected on UI",
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: false,
       vcNotMatchPTD: "true",
@@ -396,7 +381,6 @@ test("should validate required fields when noncompliance reason selected on UI",
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "12345678901234A",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: false,
       vcNotMatchPTD: "true",
@@ -423,7 +407,6 @@ test("should validate required fields when noncompliance reason selected on UI",
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "12345678901234!",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: false,
       vcNotMatchPTD: "true",
@@ -449,7 +432,6 @@ test("should validate required fields when noncompliance reason selected on UI",
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "12345678901234",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: false,
       vcNotMatchPTD: "true",
@@ -475,7 +457,6 @@ test("should validate required fields when noncompliance reason selected on UI",
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "123456789012345",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: false,
       vcNotMatchPTD: "true",
@@ -497,7 +478,6 @@ test("should validate required fields when noncompliance reason selected on UI",
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: false,
       vcNotMatchPTD: "true"
@@ -523,7 +503,6 @@ test("should validate required fields when noncompliance reason selected on UI",
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "1234 5678 9012 345",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: false,
       vcNotMatchPTD: "true",
@@ -549,7 +528,6 @@ test("should validate required fields when noncompliance reason selected on UI",
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "12345ABC789012345",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: false,
       vcNotMatchPTD: "true",
@@ -575,7 +553,6 @@ test("should validate required fields when noncompliance reason selected on UI",
     const payload = {
       mcNotMatch: "true",
       mcNotMatchActual: "12345",
-      relevantComments: "",
       spsOutcomeDetails: "",
       isGBCheck: false,
       vcNotMatchPTD: "true",

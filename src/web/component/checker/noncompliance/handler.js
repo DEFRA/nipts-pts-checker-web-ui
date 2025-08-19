@@ -25,7 +25,6 @@ const statusColourMapping = {
 const fieldIdSortOrdering = [ // add more fields if needed
   'missingReason',
   'passengerType',
-  'relevantComments',
   'spsOutcome',
   'isGBCheck',
   'spsOutcomeDetails',

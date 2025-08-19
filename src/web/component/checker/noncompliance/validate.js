@@ -54,9 +54,6 @@ const nonComplianceSchema = Joi.object({
   gbRefersToDAERAOrSPS: Joi.boolean().optional(),
   gbAdviseNoTravel: Joi.boolean().optional(),
   gbPassengerSaysNoTravel: Joi.boolean().optional(),
-  relevantComments: Joi.string().max(MAX_TEXTAREA_LENGTH).allow(null, "").optional().messages({
-    "string.max": errorMessages.relevantComments.length,
-  }),
   spsOutcomeDetails: Joi.string().max(MAX_TEXTAREA_LENGTH).allow(null, "").optional().messages({
     "string.max": errorMessages.spsOutcomeDetails.length,
   }),
