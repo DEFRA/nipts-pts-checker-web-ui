@@ -34,9 +34,11 @@ const getScanResultsHandler = async (request, h) => {
   return searchHandler(request, h);
 };
 
+
 const handleValidationError = (request, h, validationResult) => {
   const microchipNumber = request.yar.get("microchipNumber");
   const data = request.yar.get("data");
+  const isGBCheck = request.yar.get("isGBCheck");
   const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
 
   data.ptdFormatted = data?.ptdNumber ? formatPtdNumber(data.ptdNumber) : "";
@@ -48,6 +50,7 @@ const handleValidationError = (request, h, validationResult) => {
     data,
     pageTitle,
     formSubmitted: true,
+    isGBCheck
   });
 };
 
@@ -101,7 +104,9 @@ const saveAndContinueHandler = async (request, h) => {
   try {
     let { checklist } = request.payload;
     const data = request.yar.get("data");
+    const isGBCheck = request.yar.get("isGBCheck");
 
+  
     if (
       data.documentState === "rejected" ||
       data.documentState === "revoked" ||
@@ -115,29 +120,23 @@ const saveAndContinueHandler = async (request, h) => {
       return handleValidationError(request, h, validationResult);
     }
 
-    if (checklist === CheckOutcomeConstants.Pass) {
-      const checkOutcome = prepareCheckOutcome(request, data, checklist);
-      const responseData = await apiService.recordCheckOutCome(
-        checkOutcome,
-        request
-      );
+    
+    switch (checklist) {
+      case CheckOutcomeConstants.Pass:
+        return await handlePassOutcome(request, h, data, checklist);
 
-      if (responseData?.error) {
-        return handleApiError(request, h, checklist);
-      }
+      case CheckOutcomeConstants.IssueSUPTD:
+        return await handleIssueSUPTDOutcome(request, h);
 
-      request.yar.clear("IsFailSelected");
-      request.yar.clear("routeId");
-      request.yar.clear("routeName");
-      request.yar.clear("departureDate");
-      request.yar.clear("departureTime");
-      request.yar.clear("checkSummaryId");
-      request.yar.set("successConfirmation", true);
-      return h.redirect("/checker/dashboard");
+      case CheckOutcomeConstants.ReferToSPS:
+        return await handleReferToSPSOutcome(request, h);
+
+      case CheckOutcomeConstants.Fail:
+        return await handleFailOutcome(request, h);
+
+      default:
+        throw new Error(`Unknown checklist outcome: ${checklist}`);
     }
-
-    request.yar.set("IsFailSelected", true);
-    return h.redirect("/checker/non-compliance");
   } catch (error) {
     global.appInsightsClient.trackException({ exception: error });
     return h.view(VIEW_PATH, {
@@ -149,14 +148,59 @@ const saveAndContinueHandler = async (request, h) => {
   }
 };
 
+
+const handlePassOutcome = async (request, h, data, checklist) => {
+  const checkOutcome = prepareCheckOutcome(request, data, checklist);
+  const responseData = await apiService.recordCheckOutCome(
+    checkOutcome,
+    request
+  );
+
+  if (responseData?.error) {
+    return handleApiError(request, h, checklist);
+  }
+
+  clearSessionAndRedirect(request);
+  return h.redirect("/checker/dashboard");
+};
+
+const handleIssueSUPTDOutcome = async (request, h) => {
+  
+  clearSessionAndRedirect(request);
+  request.yar.set("successConfirmation", true);
+  return h.redirect("/checker/dashboard");
+};
+
+const handleReferToSPSOutcome = async (request, h) => {
+ 
+  request.yar.set("IsFailSelected", true);
+  return h.redirect("/checker/non-compliance");
+};
+
+const handleFailOutcome = async (request, h) => {
+  request.yar.set("IsFailSelected", true);
+  return h.redirect("/checker/non-compliance");
+};
+
+const clearSessionAndRedirect = (request) => {
+  request.yar.clear("IsFailSelected");
+  request.yar.clear("routeId");
+  request.yar.clear("routeName");
+  request.yar.clear("departureDate");
+  request.yar.clear("departureTime");
+  request.yar.clear("checkSummaryId");
+};
+
 const searchHandler = (request, h) => {
   const microchipNumber = request.yar.get("microchipNumber");
   const data = request.yar.get("data");
+  const isGBCheck = request.yar.get("isGBCheck"); 
 
   data.ptdFormatted = data?.ptdNumber ? formatPtdNumber(data.ptdNumber) : "";
 
   const pageTitle = DashboardMainModel.dashboardMainModelData.pageTitle;
   let checklist = {};
+
   const nonComplianceToSearchResults = request.yar.get(
     "nonComplianceToSearchResults"
   );
@@ -164,7 +208,14 @@ const searchHandler = (request, h) => {
     checklist = CheckOutcomeConstants.Fail;
     request.yar.clear("nonComplianceToSearchResults");
   }
-  return h.view(VIEW_PATH, { microchipNumber, data, pageTitle, checklist });
+
+  return h.view(VIEW_PATH, {
+    microchipNumber,
+    data,
+    pageTitle,
+    checklist,
+    isGBCheck, 
+  });
 };
 
 export const SearchResultsHandlers = {
