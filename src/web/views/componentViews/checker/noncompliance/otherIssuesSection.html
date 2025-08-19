@@ -8,14 +8,6 @@
         </legend>
 
         <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-            <div class="govuk-checkboxes__item">
-                <input class="govuk-checkboxes__input" id="oiFailPotentialCommercial" name="oiFailPotentialCommercial" type="checkbox"
-                aria-label="Potential commercial movement"
-                    value="true" {% if payload['oiFailPotentialCommercial']=="true" %}checked{% endif %}/>
-                <label class="govuk-label govuk-checkboxes__label" for="oiFailPotentialCommercial">
-                    Potential commercial movement
-                </label>
-            </div>
 
             <div class="govuk-checkboxes__item">
                 <input class="govuk-checkboxes__input" id="oiFailAuthTravellerNoConfirmation" name="oiFailAuthTravellerNoConfirmation" type="checkbox"
@@ -24,18 +16,6 @@
                 <label class="govuk-label govuk-checkboxes__label" for="oiFailAuthTravellerNoConfirmation">
                     Authorised person but no confirmation
                 </label>
-            </div>
-
-            <div class="govuk-checkboxes__item">
-                <input class="govuk-checkboxes__input" id="oiFailOther" name="oiFailOther" type="checkbox"
-                aria-label="Other reason"
-                    value="true" {% if payload['oiFailOther']=="true" %}checked{% endif %}/>
-                <label class="govuk-label govuk-checkboxes__label" for="oiFailOther">
-                    Other reason
-                </label>
-                <div id="somethingRadio-item-hint" class="govuk-hint govuk-radios__hint">
-                    Enter the reason in the 'Any relevant comments' section, this could be about the PTD and any risks identified.
-                </div>
             </div>
         </div>
     </fieldset>
