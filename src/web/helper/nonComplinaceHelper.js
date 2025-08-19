@@ -97,8 +97,6 @@
             sailingOption: routeOptionId,
             flightNumber: flightNumber,
             isGBCheck: isGBCheck,
-            mcNotMatch: toBooleanOrNull(payload?.mcNotMatch, null),
-            mcNotMatchActual: getPayloadValue(payload, "mcNotMatchActual"),
             mcNotFound: toBooleanOrNull(payload?.mcNotFound, null),
             oiFailPotentialCommercial: toBooleanOrNull(payload?.oiFailPotentialCommercial, null),
             oiFailAuthTravellerNoConfirmation: toBooleanOrNull(payload?.oiFailAuthTravellerNoConfirmation, null),

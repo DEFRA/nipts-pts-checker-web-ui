@@ -36,35 +36,6 @@
         </details>
 
         <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-            <div class="govuk-checkboxes__item">
-                <input class="govuk-checkboxes__input" id="missingReason" name="mcNotMatch"
-                    type="checkbox" value="true" data-aria-controls="conditional-mcNotMatchActual" 
-                    aria-label="Microchip number does not match the PTD" {% if
-                        payload['mcNotMatch']=="true" %}checked{% endif %}>
-                <label class="govuk-label govuk-checkboxes__label" for="missingReason">
-                    Microchip number does not match the PTD
-                </label>
-            </div>
-
-            <div class="govuk-checkboxes__conditional{% if payload['mcNotMatch'] != " true" %}
-                govuk-checkboxes__conditional--hidden{% endif %}" id="conditional-mcNotMatchActual">
-                <div id="mcNotMatchActual-form-group"
-                    class="govuk-form-group {% if errors['mcNotMatchActual'] %}govuk-form-group--error{% endif %}">
-                    <label class="govuk-label" for="mcNotMatchActual">
-                        Microchip number found in scan
-                    </label>
-                    {% if errors['mcNotMatchActual'] %}
-                    <p id="mcNotMatchActual-error" class="govuk-error-message">
-                        <span class="govuk-visually-hidden">Error:</span> {{ errors['mcNotMatchActual'] }}
-                    </p>
-                    {% endif %}
-                    <input
-                        class="govuk-input govuk-input--width-20 {% if errors['mcNotMatchActual'] %}govuk-input--error{% endif %}"
-                        id="mcNotMatchActual" name="mcNotMatchActual" type="text" spellcheck="false" {% if
-                        errors['mcNotMatchActual'] %} aria-describedby="mcNotMatchActual-error" {% endif %}
-                        value="{{ payload['mcNotMatchActual']|default('') }}">
-                </div>
-            </div>
 
             <div class="govuk-checkboxes__item">
                 <input class="govuk-checkboxes__input" id="mcNotFound" name="mcNotFound" type="checkbox" value="true"
