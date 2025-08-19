@@ -31,6 +31,18 @@
 {% set issuingAuthorityAddressPostCode = data.issuingAuthority.address.postCode %}
 {% set issuingAuthorityAddressSignature = data.issuingAuthority.signature %}
 
+
+{% if data.documentState === 'awaiting' %}
+    {% set documentStatus = 'Pending' %}
+{% elif data.documentState === 'rejected' %}
+    {% set documentStatus = 'Unsuccessful' %}
+{% elif data.documentState === 'revoked' %}
+    {% set documentStatus = 'Cancelled' %}
+{% else %}
+    {% set documentStatus = 'unknown' %}
+{% endif %}
+
+
 {% block content %}
 <div class="govuk-grid-row govuk-!-margin-bottom-9 govuk-!-margin-top-4">    
     <div class="govuk-grid-column-full govuk-!-margin-top-0"> 
@@ -62,6 +74,17 @@
             <h2 id="documents" class="govuk-heading-l govuk-!-margin-bottom-6">
                 Your application summary
             </h2>
+            {% endif %}
+
+            {% if (data['documentState'] !== "suspended" and data['isUserSuspended'] !== true) and 
+            (data['documentState'] === "awaiting" or data['documentState'] === "rejected" or data['documentState'] === "revoked") %}
+                 <div class="govuk-warning-text">
+                    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                    <strong class="govuk-warning-text__text">
+                        <span class="govuk-visually-hidden">Warning</span>
+                        Because the PTD is ‘{{documentStatus}}’, you should check whether you can issue a SUPTD
+                    </strong>
+                </div>
             {% endif %}
 
             {% if data['documentState'] === "suspended" or data['isUserSuspended'] === true %}
