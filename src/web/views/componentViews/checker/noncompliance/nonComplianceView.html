@@ -56,16 +56,6 @@
                 </div>
               </div>
 
-              {% if data['documentState'] !== "approved" %} 
-              <div class="govuk-section-break--l">
-                <h3 class="govuk-heading-m">Pet Travel Document</h3>
-                <div class="govuk-checkboxes__item">
-                  <p class="govuk-body govuk-!-margin-bottom-0 pts-checker-check">
-                    PTD {{ documentStatus | lower }}
-                  </p>
-                </div>
-              </div>
-              {% endif %}
               <div class="govuk-form-group {% if errors['missingReason'] %}govuk-form-group--error{% endif %}">
                 <!-- Display error message inline if the non compliance reason is not selected -->
                 {% if errors['missingReason'] %}
