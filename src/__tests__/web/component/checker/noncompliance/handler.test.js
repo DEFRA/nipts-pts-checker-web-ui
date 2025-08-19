@@ -208,7 +208,6 @@ describe("postNonComplianceHandler", () => {
       "mcNotFound": true,
       "mcNotMatch": null,
       "mcNotMatchActual": "123456789123456",
-      "vcNotMatchPTD": true,
       "oiFailPotentialCommercial": true,
       "oiFailAuthTravellerNoConfirmation": true,
       "oiFailOther": true,

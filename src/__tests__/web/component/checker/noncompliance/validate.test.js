@@ -60,8 +60,8 @@ describe("NonCompliance Validation isGbCheck is True", () => {
     const payload = {
       mcNotMatchActual: "",
       spsOutcomeDetails: "",
+      mcNotFound: "true",
       isGBCheck: true,
-      vcNotMatchPTD: "true",
     };
 
     const expectedErrorrs = [
@@ -85,8 +85,8 @@ describe("NonCompliance Validation isGbCheck is True", () => {
     const payload = {
       mcNotMatchActual: "",
       spsOutcomeDetails: "",
+      mcNotFound: "true",
       isGBCheck: true,
-      vcNotMatchPTD: "true",
       passengerType: "2"
     };
 
@@ -107,8 +107,8 @@ describe("NonCompliance Validation isGbCheck is True", () => {
       mcNotMatchActual: "",
       spsOutcomeDetails: "",
       isGBCheck: true,
-      vcNotMatchPTD: "true",
       passengerType: "2",
+      mcNotFound: "true",
       gbRefersToDAERAOrSPS: "true"
     };
 
@@ -125,7 +125,6 @@ describe("NonCompliance Validation isGbCheck is True", () => {
       mcNotMatchActual: "",
       spsOutcomeDetails: "",
       isGBCheck: true,
-      vcNotMatchPTD: "true",
     };
 
     const expectedErrorrs = [
@@ -154,7 +153,6 @@ describe("NonCompliance Validation isGbCheck is True", () => {
       mcNotMatchActual: "12345678901234A",
       spsOutcomeDetails: "",
       isGBCheck: true,
-      vcNotMatchPTD: "true",
     };
 
     const expectedErrorrs = [
@@ -184,7 +182,6 @@ describe("NonCompliance Validation isGbCheck is True", () => {
       mcNotMatchActual: "12345678901234!",
       spsOutcomeDetails: "",
       isGBCheck: true,
-      vcNotMatchPTD: "true",
     };
 
     const expectedErrorrs = [
@@ -214,7 +211,6 @@ describe("NonCompliance Validation isGbCheck is True", () => {
       mcNotMatchActual: "12345678901234",
       spsOutcomeDetails: "",
       isGBCheck: true,
-      vcNotMatchPTD: "true",
     };
 
     const expectedErrorrs = [
@@ -243,7 +239,6 @@ describe("NonCompliance Validation isGbCheck is True", () => {
       mcNotMatchActual: "123456789012345",
       spsOutcomeDetails: "",
       isGBCheck: true,
-      vcNotMatchPTD: "true",
     };
 
     const expectedErrorrs = [
@@ -320,8 +315,8 @@ test("should validate required fields when noncompliance reason selected on UI",
     const payload = {
       mcNotMatchActual: "",
       spsOutcomeDetails: "",
+      mcNotFound: "true",
       isGBCheck: false,
-      vcNotMatchPTD: "true",
     };
 
     const expectedErrorrs = [
@@ -341,8 +336,8 @@ test("should validate required fields when noncompliance reason selected on UI",
       mcNotMatchActual: "",
       spsOutcomeDetails: "",
       isGBCheck: false,
-      vcNotMatchPTD: "true",
       passengerType: "2",
+      mcNotFound: "true",
     };
 
     const expectedErrorrs = []
@@ -358,7 +353,6 @@ test("should validate required fields when noncompliance reason selected on UI",
       mcNotMatchActual: "",
       spsOutcomeDetails: "",
       isGBCheck: false,
-      vcNotMatchPTD: "true",
     };
 
     const expectedErrorrs = [
@@ -383,7 +377,6 @@ test("should validate required fields when noncompliance reason selected on UI",
       mcNotMatchActual: "12345678901234A",
       spsOutcomeDetails: "",
       isGBCheck: false,
-      vcNotMatchPTD: "true",
     };
 
     const expectedErrorrs = [
@@ -409,7 +402,6 @@ test("should validate required fields when noncompliance reason selected on UI",
       mcNotMatchActual: "12345678901234!",
       spsOutcomeDetails: "",
       isGBCheck: false,
-      vcNotMatchPTD: "true",
     };
 
     const expectedErrorrs = [
@@ -434,7 +426,6 @@ test("should validate required fields when noncompliance reason selected on UI",
       mcNotMatchActual: "12345678901234",
       spsOutcomeDetails: "",
       isGBCheck: false,
-      vcNotMatchPTD: "true",
     };
 
     const expectedErrorrs = [
@@ -459,7 +450,6 @@ test("should validate required fields when noncompliance reason selected on UI",
       mcNotMatchActual: "123456789012345",
       spsOutcomeDetails: "",
       isGBCheck: false,
-      vcNotMatchPTD: "true",
     };
 
     const expectedErrorrs = [
@@ -480,7 +470,6 @@ test("should validate required fields when noncompliance reason selected on UI",
       mcNotMatchActual: "",
       spsOutcomeDetails: "",
       isGBCheck: false,
-      vcNotMatchPTD: "true"
     };
   
     const expectedErrors = [
@@ -505,7 +494,6 @@ test("should validate required fields when noncompliance reason selected on UI",
       mcNotMatchActual: "1234 5678 9012 345",
       spsOutcomeDetails: "",
       isGBCheck: false,
-      vcNotMatchPTD: "true",
     };
   
     const expectedErrors = [
@@ -530,7 +518,6 @@ test("should validate required fields when noncompliance reason selected on UI",
       mcNotMatchActual: "12345ABC789012345",
       spsOutcomeDetails: "",
       isGBCheck: false,
-      vcNotMatchPTD: "true",
     };
   
     const expectedErrors = [
@@ -555,7 +542,6 @@ test("should validate required fields when noncompliance reason selected on UI",
       mcNotMatchActual: "12345",
       spsOutcomeDetails: "",
       isGBCheck: false,
-      vcNotMatchPTD: "true",
     };
   
     const expectedErrors = [

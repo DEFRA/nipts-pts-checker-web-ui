@@ -82,7 +82,6 @@ const nonComplianceSchema = Joi.object({
   .or(
     "mcNotMatch",
     "mcNotFound",
-    "vcNotMatchPTD",
     "oiFailPotentialCommercial",
     "oiFailAuthTravellerNoConfirmation",
     "oiFailOther"

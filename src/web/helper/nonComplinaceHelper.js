@@ -100,7 +100,6 @@
             mcNotMatch: toBooleanOrNull(payload?.mcNotMatch, null),
             mcNotMatchActual: getPayloadValue(payload, "mcNotMatchActual"),
             mcNotFound: toBooleanOrNull(payload?.mcNotFound, null),
-            vcNotMatchPTD: toBooleanOrNull(payload?.vcNotMatchPTD),
             oiFailPotentialCommercial: toBooleanOrNull(payload?.oiFailPotentialCommercial, null),
             oiFailAuthTravellerNoConfirmation: toBooleanOrNull(payload?.oiFailAuthTravellerNoConfirmation, null),
             oiFailOther: toBooleanOrNull(payload?.oiFailOther, null),
