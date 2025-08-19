@@ -5,7 +5,6 @@ import errorMessages from "../../../../../web/component/checker/noncompliance/er
 import { validateNonCompliance } from '../../../../../web/component/checker/noncompliance/validate.js'; // Mock this
 
 const VIEW_PATH = "componentViews/checker/noncompliance/noncomplianceView";
-const relevantComments = "Relevant Comments";
 const viewresponse = 'view response';
 
 //jest.mock("../../../../../api/services/appSettingsService.js");
@@ -150,9 +149,6 @@ describe("postNonComplianceHandler", () => {
     const documentStatusColourMapping = statusColourMapping[applicationStatus] || applicationStatus;
 
     const payload = {
-      mcNotMatch: "true",
-      mcNotMatchActual: "invalid_microchip",
-      relevantComments: relevantComments,
       passengerTypeId: 1,
       isGBCheck: true,
     };
@@ -208,14 +204,9 @@ describe("postNonComplianceHandler", () => {
       "flightNumber": "AB3456",
       "isGBCheck": true,
       "mcNotFound": true,
-      "mcNotMatch": null,
-      "mcNotMatchActual": "123456789123456",
-      "vcNotMatchPTD": true,
-      "oiFailPotentialCommercial": true,
       "oiFailAuthTravellerNoConfirmation": true,
-      "oiFailOther": true,
+      "oiRefusedToSignDeclaration": true,
       "passengerTypeId": 1,
-      "relevantComments": relevantComments,
       "gbRefersToDAERAOrSPS": true,
       "gbAdviseNoTravel": true,
       "gbPassengerSaysNoTravel": true,
@@ -269,9 +260,6 @@ describe("postNonComplianceHandler", () => {
 
   it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true but api call return generic error", async () => {
     const payload = {
-      mcNotMatch: "true",
-      mcNotMatchActual: "123456789123456",
-      relevantComments: relevantComments,
     };
     validateNonCompliance.mockReturnValue({
       isValid: true,
@@ -311,8 +299,6 @@ describe("postNonComplianceHandler", () => {
       expect.objectContaining({
         applicationId: "testApplicationId",
         checkOutcome: "Fail",
-        mcNotMatchActual: "123456789123456",
-        relevantComments: relevantComments,
       }),
       request
     );
@@ -320,9 +306,6 @@ describe("postNonComplianceHandler", () => {
 
   it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true api call succeeds and isGBCheck", async () => {
     const payload = {
-      mcNotMatch: "true",
-      mcNotMatchActual: "123456789123456",
-      relevantComments: relevantComments,
     };
     validateNonCompliance.mockReturnValue({
       isValid: true,
@@ -362,8 +345,6 @@ describe("postNonComplianceHandler", () => {
       expect.objectContaining({
         applicationId: "testApplicationId",
         checkOutcome: "Fail",
-        mcNotMatchActual: "123456789123456",
-        relevantComments: relevantComments,
       }),
       request
     );
@@ -373,9 +354,6 @@ describe("postNonComplianceHandler", () => {
 
   it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true api call succeeds and isSpsCheck", async () => {
     const payload = {
-      mcNotMatch: "true",
-      mcNotMatchActual: "123456789123456",
-      relevantComments: relevantComments,
       spsOutcome: 'true',
       spsOutcomeDetails: "Sps Outcome details",
     };
@@ -422,8 +400,6 @@ describe("postNonComplianceHandler", () => {
       expect.objectContaining({
         applicationId: "testApplicationId",
         checkOutcome: "Fail",
-        mcNotMatchActual: "123456789123456",
-        relevantComments: relevantComments,
         routeId: 2,
         gBCheckId:  "1234567",
         checkerId: "123",
@@ -447,9 +423,6 @@ describe("postNonComplianceHandler", () => {
 
   it("should handle unexpected errors and render the error view with appropriate details", async () => {
     const payload = {
-      mcNotMatch: "true",
-      mcNotMatchActual: "123456789123456",
-      relevantComments: "Some relevant comments",
       isGBCheck: true,
     };
 

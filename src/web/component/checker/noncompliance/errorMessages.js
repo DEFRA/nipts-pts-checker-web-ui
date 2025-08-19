@@ -31,7 +31,4 @@ export default {
   spsOutcomeDetails: {
     length: "Outcome summary must be 500 characters or less"
   },
-  relevantComments: {
-    length: "Relevant comments must be 500 characters or less"
-  }
 };
