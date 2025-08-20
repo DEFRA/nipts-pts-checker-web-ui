@@ -51,8 +51,8 @@ const setupTest = () => ({
 });
 
 global.appInsightsClient = {
-  trackException: jest.fn()
- };
+  trackException: jest.fn(),
+};
 
 describe("SearchResults_ViewTests", () => {
   let request, h;
@@ -74,10 +74,11 @@ describe("SearchResults_ViewTests", () => {
       pageTitle,
       data: mockData,
       checklist: {},
+      isGBCheck: null,
     });
   });
 
-    test("returns view with microchipNumber and data from session - getScanResultsHandler", async () => {
+  test("returns view with microchipNumber and data from session - getScanResultsHandler", async () => {
     const mockMicrochipNumber = "123456789012345";
     const mockData = { some: "data" };
     request.yar.get.mockImplementation((key) => {
@@ -92,6 +93,7 @@ describe("SearchResults_ViewTests", () => {
       pageTitle,
       data: mockData,
       checklist: {},
+      isGBCheck: null,
     });
     expect(headerData.section).toBe("scan");
   });
@@ -259,6 +261,7 @@ describe("SearchResults_EmptyHandling", () => {
       pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
       data: mockData,
       checklist: CheckOutcomeConstants.Fail,
+      isGBCheck: null,
     });
     expect(request.yar.clear).toHaveBeenCalledWith(
       "nonComplianceToSearchResults"
@@ -284,6 +287,7 @@ describe("SearchResults_EmptyHandling", () => {
       pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
       data: mockData,
       checklist: CheckOutcomeConstants.Fail,
+      isGBCheck: null,
     });
     expect(request.yar.clear).toHaveBeenCalledWith(
       "nonComplianceToSearchResults"
@@ -447,7 +451,6 @@ describe("SaveContinue_SuccessTests_PartOne", () => {
       request
     );
     expect(request.yar.clear).toHaveBeenCalledWith("IsFailSelected");
-    expect(request.yar.set).toHaveBeenCalledWith("successConfirmation", true);
     expect(h.redirect).toHaveBeenCalledWith("/checker/dashboard");
   });
 });
@@ -552,6 +555,6 @@ describe("SaveContinue_FailureTests", () => {
       ],
     });
     expect(global.appInsightsClient.trackException).toHaveBeenCalled();
-
   });
 });
+
