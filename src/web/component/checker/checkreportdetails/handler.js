@@ -76,8 +76,11 @@ async function getCheckDetails(request, h) {
       checkSummaryId: checkSummaryId
     };
 
+    const isGBCheck = request.yar.get("isGBCheck");
+
     return h.view(VIEW_PATH, {
       checkDetails: formattedCheckDetails,
+      isGBCheck
     });
   } catch (error) {
     global.appInsightsClient.trackException({ exception: error });
