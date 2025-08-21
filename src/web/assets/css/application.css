@@ -2602,8 +2602,10 @@ p + .govuk-heading-s,
   font-weight: inherit;
 }
 
-
-
+.govuk-fieldset__heading.passenger-header {
+  font-size: 1.5rem !important;
+  line-height: 1.25 !important;
+}
 
 .govuk-checkboxes__item {
   display: flex;

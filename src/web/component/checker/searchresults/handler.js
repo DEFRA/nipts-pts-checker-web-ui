@@ -104,8 +104,6 @@ const saveAndContinueHandler = async (request, h) => {
   try {
     let { checklist } = request.payload;
     const data = request.yar.get("data");
-    const isGBCheck = request.yar.get("isGBCheck");
-
   
     if (
       data.documentState === "rejected" ||
