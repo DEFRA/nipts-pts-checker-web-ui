@@ -523,6 +523,19 @@ describe("SaveContinue_FailureTests", () => {
     expect(h.redirect).toHaveBeenCalledWith("/checker/non-compliance");
   });
 
+
+    test("redirects to non-compliance if checks refer to SPS", async () => {
+    request.payload.checklist = CheckOutcomeConstants.ReferToSPS;
+    const mockData = { documentState: "active", ptdNumber: "GB8262C39F9" };
+    request.yar.get.mockImplementation((key) => {
+      return { data: mockData }[key] || null;
+    });
+    validatePassOrFail.mockReturnValueOnce({ isValid: true });
+    await SearchResultsHandlers.saveAndContinueHandler(request, h);
+    expect(request.yar.set).toHaveBeenCalledWith("IsFailSelected", true);
+    expect(h.redirect).toHaveBeenCalledWith("/checker/non-compliance");
+  });
+
   test("forces Fail if documentState is rejected", async () => {
     request.payload.checklist = CheckOutcomeConstants.Pass;
     const mockData = { documentState: "rejected", ptdNumber: "GB8262C39F9" };
