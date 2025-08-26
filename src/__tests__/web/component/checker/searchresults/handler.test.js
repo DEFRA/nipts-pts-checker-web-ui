@@ -25,6 +25,7 @@ const VIEW_PATH = "componentViews/checker/searchresults/searchResultsView";
 const PTD_LENGTH = 11;
 const PTD_PREFIX_LENGTH = 5;
 const PTD_MID_LENGTH = 8;
+const navigationPath = "/checker/non-compliance";
 
 const formatPtdNumber = (ptdNumber) => {
   if (!ptdNumber) {
@@ -520,7 +521,7 @@ describe("SaveContinue_FailureTests", () => {
     validatePassOrFail.mockReturnValueOnce({ isValid: true });
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
     expect(request.yar.set).toHaveBeenCalledWith("IsFailSelected", true);
-    expect(h.redirect).toHaveBeenCalledWith("/checker/non-compliance");
+    expect(h.redirect).toHaveBeenCalledWith(navigationPath);
   });
 
 
@@ -533,7 +534,7 @@ describe("SaveContinue_FailureTests", () => {
     validatePassOrFail.mockReturnValueOnce({ isValid: true });
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
     expect(request.yar.set).toHaveBeenCalledWith("IsFailSelected", true);
-    expect(h.redirect).toHaveBeenCalledWith("/checker/non-compliance");
+    expect(h.redirect).toHaveBeenCalledWith(navigationPath);
   });
 
   test("forces Fail if documentState is rejected", async () => {
@@ -545,7 +546,7 @@ describe("SaveContinue_FailureTests", () => {
     validatePassOrFail.mockReturnValueOnce({ isValid: true });
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
     expect(request.yar.set).toHaveBeenCalledWith("IsFailSelected", true);
-    expect(h.redirect).toHaveBeenCalledWith("/checker/non-compliance");
+    expect(h.redirect).toHaveBeenCalledWith(navigationPath);
   });
 
   test("handles unexpected errors", async () => {
