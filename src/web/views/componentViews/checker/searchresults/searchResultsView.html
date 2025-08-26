@@ -326,7 +326,7 @@
     </div>
 
 
-{% if data['documentState'] !== "suspended" and data['isUserSuspended'] !== true %}
+{% if (data['documentState'] !== "suspended" and data['isUserSuspended'] !== true) and data['documentState'] !== "awaiting" and data['documentState'] !== "rejected" and data['documentState'] !== "revoked" %}
 <form id="searchResultForm" action="/checker/search-results" method="POST">
 
     {% if data['documentState'] === 'approved' %}
@@ -364,9 +364,6 @@
                         <label id="pass-label" class="govuk-label govuk-radios__label" for="checklist-pass">
                             Pass
                         </label>
-                        <div id="pass-hint" class="govuk-hint govuk-radios__hint">
-                            Passes all checks.
-                        </div>
                     </div>
 
                     <div class="govuk-radios__item" role="radio"
@@ -380,9 +377,6 @@
                             for="checklist-issue-suptd">
                             Issue SUPTD
                         </label>
-                        <div id="issue-suptd-hint" class="govuk-hint govuk-radios__hint">
-                            Issue a Short-term Universal Pet Travel Document.
-                        </div>
                     </div>
 
 
@@ -398,9 +392,6 @@
                         <label id="refer-sps-label" class="govuk-label govuk-radios__label" for="checklist-refer-sps">
                             Refer to SPS
                         </label>
-                        <div id="refer-sps-hint" class="govuk-hint govuk-radios__hint">
-                            Refer to State Veterinary Service for further assessment.
-                        </div>
                     </div>
                     {% else %}
                    
@@ -414,9 +405,6 @@
                         <label id="fail-label" class="govuk-label govuk-radios__label" for="checklist-fail">
                             Fail
                         </label>
-                        <div id="fail-hint" class="govuk-hint govuk-radios__hint">
-                            Fails at least one check.
-                        </div>
                     </div>
                     {% endif %}
                 </div>
@@ -436,6 +424,7 @@
             </button>
         </div>
     </div>
+
 </form>
 <div style="height: 2rem;"></div>
 {% endif %}

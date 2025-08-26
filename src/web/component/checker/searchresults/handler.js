@@ -159,6 +159,7 @@ const handlePassOutcome = async (request, h, data, checklist) => {
   }
 
   clearSessionAndRedirect(request);
+  request.yar.set("successConfirmation", true);
   return h.redirect("/checker/dashboard");
 };
 
