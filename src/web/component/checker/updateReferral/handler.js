@@ -81,11 +81,11 @@ const postUpdateReferralForm = async (request, h) => {
         data.isGBCheck = request.yar.get("isGBCheck");
 
         if (request.yar.get("IsFailSelected")) {
-          data.spsOutcome = false;
+          data.spsOutcome = "false";
         }
 
         else {
-          data.spsOutcome = true;
+          data.spsOutcome = "true";
         }
 
         await saveReportNonCompliance(payload, data);
