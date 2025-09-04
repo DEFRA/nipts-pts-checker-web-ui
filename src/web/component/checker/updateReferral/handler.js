@@ -1,7 +1,7 @@
 "use strict";
 import { validateUpdateReferralForm } from "./validate.js";
 import apiService from "../../../../api/services/apiService.js";
-import { getJourneyDetails, createCheckOutcome, updateNonComplianceYarSessions, formatPTDNumber } from "../../../helper/nonComplinaceHelper.js";
+import { getJourneyDetails, createCheckOutcome, updateNonComplianceYarSessions, formatPTDNumber } from "../../../helper/nonComplianceHelper.js";
 
 const VIEW_PATH = "componentViews/checker/updateReferral/updateReferralView";
 
@@ -39,7 +39,7 @@ const reference = request.yar.get("identifier");
   applicationData.status = statusMapping[applicationData.documentState];
 
   request.yar.set("data", applicationData);
-  request.yar.set("IsFailSelected", true);
+
   return h.view(VIEW_PATH, { 
     applicationData,     
     errors: {},
@@ -70,12 +70,26 @@ const postUpdateReferralForm = async (request, h) => {
         payload.passengerType =  request.yar.get("passengerTypeId");    
        
 
+
+        const data = request.yar.get("data"); 
+        
+        const travelUnderFramework = request.payload.travelUnderFramework;
+        const isFail = travelUnderFramework === 'no';
+        request.yar.set("IsFailSelected", isFail);
+   
+        data.ptdFormatted = formatPTDNumber(data.ptdNumber);
+        data.isGBCheck = request.yar.get("isGBCheck");
+
         if (request.yar.get("IsFailSelected")) {
-            const data = request.yar.get("data");    
-            data.ptdFormatted = formatPTDNumber(data.ptdNumber);
-            data.isGBCheck = request.yar.get("isGBCheck");
-            await saveReportNonCompliance(payload, data);
+          data.spsOutcome = false;
         }
+
+        else {
+          data.spsOutcome = true;
+        }
+
+        await saveReportNonCompliance(payload, data);
+
 
         updateNonComplianceYarSessions(request);
         request.yar.clear("passengerTypeId");
