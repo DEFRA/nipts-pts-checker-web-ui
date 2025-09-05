@@ -71,23 +71,6 @@
     </dd>
   </div>
   {% endif %}
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">Additional comments</dt>
-    <dd class="govuk-summary-list__value">
-      {% if checkDetails.additionalComments|length > 1 %}
-      <ul class="govuk-list govuk-list--bullet">
-        {% for comment in checkDetails.additionalComments %}
-        <li>{{ comment }}</li>
-        {% endfor %}
-      </ul>
-      {% else %}
-      <p class="govuk-body">
-        {{ checkDetails.additionalComments[0] if checkDetails.additionalComments else "None" }}
-      </p>
-      {% endif %}
-    </dd>
-  </div>
-
 
 </dl>
 
@@ -126,11 +109,13 @@
   </div>
 </dl>
 
+{% if not isGBCheck %}
 <form action="/checker/update-referral" method="GET">
   <button type="submit" class="govuk-button" data-module="govuk-button" data-govuk-button-init="">
     Update referral outcome
   </button>
 </form>
+{% endif %}
 
 
 <script>

@@ -2,70 +2,17 @@
 import Joi from "joi";
 import errorMessages from "./errorMessages.js";
 
-const microchipNumberLength = 15;
-
 const MAX_TEXTAREA_LENGTH = 500;
 
 const nonComplianceSchema = Joi.object({
-  mcNotMatch: Joi.any(),
-  mcNotMatchActual: Joi.when("mcNotMatch", {
-    is: "true",
-    then: Joi.string()
-      .custom((value, helpers) => {
-        const val = value || "";
-        if (!val.trim()) {
-          return helpers.message(errorMessages.microchipNumber.empty);
-        }
-        if (/\s/.test(val)) {
-          return helpers.message(
-            errorMessages.microchipNumber.specialCharacters
-          );
-        }
-        if (/[A-Za-z]/.test(val)) {
-          if (/[^0-9A-Za-z]/.test(val)) {
-            return helpers.message(
-              errorMessages.microchipNumber.specialCharacters
-            );
-          }
-          return helpers.message(errorMessages.microchipNumber.letters);
-        }
-        if (/\D/.test(val)) {
-          return helpers.message(
-            errorMessages.microchipNumber.specialCharacters
-          );
-        }
-        if (val.length !== microchipNumberLength) {
-          return helpers.message(errorMessages.microchipNumber.length);
-        }
-        return val;
-      })
-      .required()
-      .messages({
-        "string.empty": errorMessages.microchipNumber.empty,
-        "any.required": errorMessages.microchipNumber.empty,
-      }),
-    otherwise: Joi.optional(),
-  }),
   ptdProblem: Joi.any().optional(),
   passengerType: Joi.string().required().messages({
     "string.empty": errorMessages.passengerType.empty,
     "any.required": errorMessages.passengerType.empty,
   }),
-  spsOutcome: Joi.when("isGBCheck", {
-    is: true,
-    then: Joi.any().custom((_value, helpers) => {
-      return helpers.message(errorMessages.spsOutcome.incorrectSelection);
-    }),
-    otherwise: Joi.any().required().messages({
-      "any.required": errorMessages.spsOutcome.required,
-    }),
-  }),
   gbRefersToDAERAOrSPS: Joi.boolean().optional(),
   gbAdviseNoTravel: Joi.boolean().optional(),
   gbPassengerSaysNoTravel: Joi.boolean().optional(),
-  relevantComments: Joi.string().max(MAX_TEXTAREA_LENGTH).allow(null, "").optional().messages({
-    "string.max": errorMessages.relevantComments.length,
-  }),
   spsOutcomeDetails: Joi.string().max(MAX_TEXTAREA_LENGTH).allow(null, "").optional().messages({
     "string.max": errorMessages.spsOutcomeDetails.length,
   }),
@@ -92,12 +39,9 @@ const nonComplianceSchema = Joi.object({
   }),
 })
   .or(
-    "mcNotMatch",
     "mcNotFound",
-    "vcNotMatchPTD",
-    "oiFailPotentialCommercial",
     "oiFailAuthTravellerNoConfirmation",
-    "oiFailOther"
+    "oiRefusedToSignDeclaration",
   )
   .messages({
     "object.missing": errorMessages.missingReason.empty,

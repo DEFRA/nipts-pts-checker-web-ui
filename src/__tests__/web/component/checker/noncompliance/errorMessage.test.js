@@ -29,13 +29,6 @@ describe("errorMessages", () => {
     });
   });
 
-  test("should contain the correct error messages for SPS outcome", () => {
-    expect(errorMessages.spsOutcome).toEqual({
-      incorrectSelection: "You cannot select an SPS outcome",
-      required: "Select if travel is allowed or not allowed",
-    });
-  });
-
   test("should contain the correct error messages for GB outcome", () => {
     expect(errorMessages.gbOutcome).toEqual({
       incorrectSelection: "You cannot select a GB outcome",

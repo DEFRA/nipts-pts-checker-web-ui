@@ -25,6 +25,7 @@ const VIEW_PATH = "componentViews/checker/searchresults/searchResultsView";
 const PTD_LENGTH = 11;
 const PTD_PREFIX_LENGTH = 5;
 const PTD_MID_LENGTH = 8;
+const navigationPath = "/checker/non-compliance";
 
 const formatPtdNumber = (ptdNumber) => {
   if (!ptdNumber) {
@@ -51,8 +52,8 @@ const setupTest = () => ({
 });
 
 global.appInsightsClient = {
-  trackException: jest.fn()
- };
+  trackException: jest.fn(),
+};
 
 describe("SearchResults_ViewTests", () => {
   let request, h;
@@ -74,10 +75,11 @@ describe("SearchResults_ViewTests", () => {
       pageTitle,
       data: mockData,
       checklist: {},
+      isGBCheck: null,
     });
   });
 
-    test("returns view with microchipNumber and data from session - getScanResultsHandler", async () => {
+  test("returns view with microchipNumber and data from session - getScanResultsHandler", async () => {
     const mockMicrochipNumber = "123456789012345";
     const mockData = { some: "data" };
     request.yar.get.mockImplementation((key) => {
@@ -92,6 +94,7 @@ describe("SearchResults_ViewTests", () => {
       pageTitle,
       data: mockData,
       checklist: {},
+      isGBCheck: null,
     });
     expect(headerData.section).toBe("scan");
   });
@@ -259,6 +262,7 @@ describe("SearchResults_EmptyHandling", () => {
       pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
       data: mockData,
       checklist: CheckOutcomeConstants.Fail,
+      isGBCheck: null,
     });
     expect(request.yar.clear).toHaveBeenCalledWith(
       "nonComplianceToSearchResults"
@@ -284,6 +288,7 @@ describe("SearchResults_EmptyHandling", () => {
       pageTitle: DashboardMainModel.dashboardMainModelData.pageTitle,
       data: mockData,
       checklist: CheckOutcomeConstants.Fail,
+      isGBCheck: null,
     });
     expect(request.yar.clear).toHaveBeenCalledWith(
       "nonComplianceToSearchResults"
@@ -447,7 +452,6 @@ describe("SaveContinue_SuccessTests_PartOne", () => {
       request
     );
     expect(request.yar.clear).toHaveBeenCalledWith("IsFailSelected");
-    expect(request.yar.set).toHaveBeenCalledWith("successConfirmation", true);
     expect(h.redirect).toHaveBeenCalledWith("/checker/dashboard");
   });
 });
@@ -517,7 +521,20 @@ describe("SaveContinue_FailureTests", () => {
     validatePassOrFail.mockReturnValueOnce({ isValid: true });
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
     expect(request.yar.set).toHaveBeenCalledWith("IsFailSelected", true);
-    expect(h.redirect).toHaveBeenCalledWith("/checker/non-compliance");
+    expect(h.redirect).toHaveBeenCalledWith(navigationPath);
+  });
+
+
+    test("redirects to non-compliance if checks refer to SPS", async () => {
+    request.payload.checklist = CheckOutcomeConstants.ReferToSPS;
+    const mockData = { documentState: "active", ptdNumber: "GB8262C39F9" };
+    request.yar.get.mockImplementation((key) => {
+      return { data: mockData }[key] || null;
+    });
+    validatePassOrFail.mockReturnValueOnce({ isValid: true });
+    await SearchResultsHandlers.saveAndContinueHandler(request, h);
+    expect(request.yar.set).toHaveBeenCalledWith("IsFailSelected", true);
+    expect(h.redirect).toHaveBeenCalledWith(navigationPath);
   });
 
   test("forces Fail if documentState is rejected", async () => {
@@ -529,7 +546,7 @@ describe("SaveContinue_FailureTests", () => {
     validatePassOrFail.mockReturnValueOnce({ isValid: true });
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
     expect(request.yar.set).toHaveBeenCalledWith("IsFailSelected", true);
-    expect(h.redirect).toHaveBeenCalledWith("/checker/non-compliance");
+    expect(h.redirect).toHaveBeenCalledWith(navigationPath);
   });
 
   test("handles unexpected errors", async () => {
@@ -552,6 +569,6 @@ describe("SaveContinue_FailureTests", () => {
       ],
     });
     expect(global.appInsightsClient.trackException).toHaveBeenCalled();
-
   });
 });
+

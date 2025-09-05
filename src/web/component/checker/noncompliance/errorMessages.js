@@ -24,10 +24,6 @@ export default {
   serviceError: {
     message: "An unexpected error occurred while processing your request",
   },
-  spsOutcome: {
-    incorrectSelection: "You cannot select an SPS outcome",
-    required: "Select if travel is allowed or not allowed",
-  },
   gbOutcome: {
     incorrectSelection: "You cannot select a GB outcome",
     required: "Select at least one GB outcome",
@@ -35,7 +31,4 @@ export default {
   spsOutcomeDetails: {
     length: "Outcome summary must be 500 characters or less"
   },
-  relevantComments: {
-    length: "Relevant comments must be 500 characters or less"
-  }
 };

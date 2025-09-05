@@ -3,7 +3,7 @@
 import appSettingsService from "../../../../api/services/appSettingsService.js";
 import { validateNonCompliance } from "./validate.js";
 import apiService from "../../../../api/services/apiService.js";
-import { getJourneyDetails, createCheckOutcome, updateNonComplianceYarSessions, formatPTDNumber } from "../../../helper/nonComplinaceHelper.js";
+import { getJourneyDetails, createCheckOutcome, updateNonComplianceYarSessions, formatPTDNumber } from "../../../helper/nonComplianceHelper.js";
 
 
 const VIEW_PATH = "componentViews/checker/noncompliance/noncomplianceView";
@@ -25,7 +25,6 @@ const statusColourMapping = {
 const fieldIdSortOrdering = [ // add more fields if needed
   'missingReason',
   'passengerType',
-  'relevantComments',
   'spsOutcome',
   'isGBCheck',
   'spsOutcomeDetails',
@@ -37,6 +36,7 @@ const getPtdFormatted = (data) => {
 
 const getNonComplianceHandler = async (request, h) => {
   const data = request.yar.get("data");
+  const routeDetails =  request.yar.get("currentSailingSlot");
 
   data.ptdFormatted = getPtdFormatted(data);
   data.isGBCheck = request.yar.get("isGBCheck");
@@ -58,7 +58,7 @@ const getNonComplianceHandler = async (request, h) => {
     errors: {},
     errorSummary: [],
     formSubmitted: false,
-    payload: {},
+    payload: { isFlight: routeDetails.isFlight },
   });
 };
 
@@ -66,6 +66,12 @@ const postNonComplianceHandler = async (request, h) => {
   try {
     const payload = request.payload;
     payload.isGBCheck = request.yar.get("isGBCheck");
+    const routeDetails =  request.yar.get("currentSailingSlot");
+
+    if(routeDetails.isFlight) {
+      payload.passengerType = '3';
+    }
+    
     const validationResult = validateNonCompliance(payload);
     const appSettings = appSettingsService.getAppSettings();
     const model = { ...appSettings };

@@ -5,7 +5,6 @@ import errorMessages from "../../../../../web/component/checker/noncompliance/er
 import { validateNonCompliance } from '../../../../../web/component/checker/noncompliance/validate.js'; // Mock this
 
 const VIEW_PATH = "componentViews/checker/noncompliance/noncomplianceView";
-const relevantComments = "Relevant Comments";
 const viewresponse = 'view response';
 
 //jest.mock("../../../../../api/services/appSettingsService.js");
@@ -45,10 +44,15 @@ describe("getNonComplianceHandler", () => {
   });
 
   it("should render the view with the correct data", async () => {
-    const mockData = { some: "data", documentState: "awaiting", isGBCheck: true };
+    const mockData = { some: "data", documentState: "awaiting", isGBCheck: true};
     const mockAppSettings = { setting1: "value1" };
+    const mockRouteDetails = { isFlight: true };
 
-    request.yar.get.mockReturnValueOnce(mockData);
+    request.yar.get = jest.fn()
+      .mockImplementationOnce(() => mockData) 
+      .mockImplementationOnce(() => mockRouteDetails)
+      .mockImplementationOnce(() => mockData.isGBCheck);
+
     appSettingsService.getAppSettings.mockReturnValue(mockAppSettings);
 
     const statusMapping = {
@@ -83,7 +87,7 @@ describe("getNonComplianceHandler", () => {
         errors: {},
         errorSummary: [],
         formSubmitted: false,
-        payload: {},
+        payload: {isFlight: true},
       }
     );
   });
@@ -145,9 +149,6 @@ describe("postNonComplianceHandler", () => {
     const documentStatusColourMapping = statusColourMapping[applicationStatus] || applicationStatus;
 
     const payload = {
-      mcNotMatch: "true",
-      mcNotMatchActual: "invalid_microchip",
-      relevantComments: relevantComments,
       passengerTypeId: 1,
       isGBCheck: true,
     };
@@ -203,14 +204,9 @@ describe("postNonComplianceHandler", () => {
       "flightNumber": "AB3456",
       "isGBCheck": true,
       "mcNotFound": true,
-      "mcNotMatch": null,
-      "mcNotMatchActual": "123456789123456",
-      "vcNotMatchPTD": true,
-      "oiFailPotentialCommercial": true,
       "oiFailAuthTravellerNoConfirmation": true,
-      "oiFailOther": true,
+      "oiRefusedToSignDeclaration": true,
       "passengerTypeId": 1,
-      "relevantComments": relevantComments,
       "gbRefersToDAERAOrSPS": true,
       "gbAdviseNoTravel": true,
       "gbPassengerSaysNoTravel": true,
@@ -264,9 +260,6 @@ describe("postNonComplianceHandler", () => {
 
   it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true but api call return generic error", async () => {
     const payload = {
-      mcNotMatch: "true",
-      mcNotMatchActual: "123456789123456",
-      relevantComments: relevantComments,
     };
     validateNonCompliance.mockReturnValue({
       isValid: true,
@@ -306,8 +299,6 @@ describe("postNonComplianceHandler", () => {
       expect.objectContaining({
         applicationId: "testApplicationId",
         checkOutcome: "Fail",
-        mcNotMatchActual: "123456789123456",
-        relevantComments: relevantComments,
       }),
       request
     );
@@ -315,9 +306,6 @@ describe("postNonComplianceHandler", () => {
 
   it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true api call succeeds and isGBCheck", async () => {
     const payload = {
-      mcNotMatch: "true",
-      mcNotMatchActual: "123456789123456",
-      relevantComments: relevantComments,
     };
     validateNonCompliance.mockReturnValue({
       isValid: true,
@@ -357,8 +345,6 @@ describe("postNonComplianceHandler", () => {
       expect.objectContaining({
         applicationId: "testApplicationId",
         checkOutcome: "Fail",
-        mcNotMatchActual: "123456789123456",
-        relevantComments: relevantComments,
       }),
       request
     );
@@ -368,9 +354,6 @@ describe("postNonComplianceHandler", () => {
 
   it("should call reportNonCompliance with the correct data when validation passes and IsFailSelected is true api call succeeds and isSpsCheck", async () => {
     const payload = {
-      mcNotMatch: "true",
-      mcNotMatchActual: "123456789123456",
-      relevantComments: relevantComments,
       spsOutcome: 'true',
       spsOutcomeDetails: "Sps Outcome details",
     };
@@ -417,12 +400,10 @@ describe("postNonComplianceHandler", () => {
       expect.objectContaining({
         applicationId: "testApplicationId",
         checkOutcome: "Fail",
-        mcNotMatchActual: "123456789123456",
-        relevantComments: relevantComments,
         routeId: 2,
         gBCheckId:  "1234567",
         checkerId: "123",
-        spsOutcome: true,
+        spsOutcome: false,
         spsOutcomeDetails: "Sps Outcome details",
         sailingOption: '1',
         sailingTime: sailingTimeSPS,          
@@ -442,21 +423,19 @@ describe("postNonComplianceHandler", () => {
 
   it("should handle unexpected errors and render the error view with appropriate details", async () => {
     const payload = {
-      mcNotMatch: "true",
-      mcNotMatchActual: "123456789123456",
-      relevantComments: "Some relevant comments",
       isGBCheck: true,
     };
-  
+
     request.payload = payload;
-  
+
     request.yar.get.mockImplementation((key) => {
       const mockData = {
         data: { documentState: "awaiting", applicationId: "testApplicationId" },
+        currentSailingSlot: { isFlight: true },
       };
       return mockData[key] || null;
     });
-  
+
     const mockAppSettings = { setting1: "value1" };
     appSettingsService.getAppSettings.mockResolvedValue(mockAppSettings);
     console.error = jest.fn();
@@ -476,10 +455,10 @@ describe("postNonComplianceHandler", () => {
     };
     const documentStatus = statusMapping[applicationStatus] || applicationStatus;
     const documentStatusColourMapping = statusColourMapping[applicationStatus] || applicationStatus;
-  
+
     await NonComplianceHandlers.postNonComplianceHandler(request, h).catch((error) => {
       expect(console.error).toHaveBeenCalledWith("Unexpected Error:", error);
-  
+
       expect(h.view).toHaveBeenCalledWith(
         VIEW_PATH,
         expect.objectContaining({

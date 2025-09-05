@@ -345,6 +345,10 @@ a:focus, .govuk-link:focus {
   .govuk-heading-l {
     margin-bottom: 30px;
   }
+
+  .govuk-heading-l.no-margin-bottom {
+    margin-bottom: 0 !important;
+  }
 }
 
 .hmrc-timeline__event-title, .govuk-heading-m {
@@ -2598,8 +2602,10 @@ p + .govuk-heading-s,
   font-weight: inherit;
 }
 
-
-
+.govuk-fieldset__heading.passenger-header {
+  font-size: 1.5rem !important;
+  line-height: 1.25 !important;
+}
 
 .govuk-checkboxes__item {
   display: flex;

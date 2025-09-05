@@ -1,7 +1,7 @@
 <div id="spsOutcomeFormGroup" name="spsOutcomeFormGroup" class="govuk-form-group {% if errors['spsOutcome'] %}govuk-form-group--error{% endif %}"> 
   <fieldset class="govuk-fieldset" aria-describedby="spsOutcomeLegend">
     <legend id="spsOutcomeLegend" class="govuk-fieldset__legend govuk-fieldset__legend--l">
-      <h2 class="govuk-heading-l">Record outcome</h2>
+      <h2 class="govuk-heading-l no-margin-bottom">Record outcome</h2>
     </legend>
     <div>
       <!-- Display error message inline if the spsOutcome -->
@@ -11,23 +11,6 @@
         </span>
       {% endif %}
     </div>
-    <div class="govuk-radios" data-module="govuk-radios">
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="spsOutcome" name="spsOutcome" type="radio" value="true" aria-labelledby="allowed"
-        aria-label="Allowed to travel under Windsor Framework"
-        {% if  payload['spsOutcome']=="true" %}checked{% endif %}>
-        <label class="govuk-label govuk-radios__label" id="allowed" for="spsOutcome">
-          Allowed to travel under Windsor Framework
-        </label>
-      </div>
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="spsOutcome-Not-Allowed" name="spsOutcome" type="radio" value="false" aria-labelledby="notAllowed"
-        aria-label="Not allowed to travel under Windsor Framework"
-        {% if payload['spsOutcome']=="false" %}checked{% endif %}>
-        <label class="govuk-label govuk-radios__label" id="notAllowed" for="spsOutcome-Not-Allowed">
-          Not allowed to travel under Windsor Framework
-        </label>
-      </div>    
-    </div>
+    
   </fieldset>
 </div>
