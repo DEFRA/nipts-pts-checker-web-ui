@@ -10,6 +10,7 @@ const VIEW_PATH = "componentViews/checker/searchresults/searchResultsView";
 const PTD_LENGTH = 11;
 const PTD_PREFIX_LENGTH = 5;
 const PTD_MID_LENGTH = 8;
+const ERROR_VIEW = "errors/500Error";
 
 const formatPtdNumber = (ptdNumber) => {
   if (!ptdNumber) {
@@ -137,7 +138,7 @@ const saveAndContinueHandler = async (request, h) => {
     }
   } catch (error) {
     global.appInsightsClient.trackException({ exception: error });
-    return h.view(VIEW_PATH, {
+    return h.view(ERROR_VIEW, {
       error: "An error occurred while processing your request",
       errorSummary: [
         { fieldId: "general", message: "An unexpected error occurred" },
