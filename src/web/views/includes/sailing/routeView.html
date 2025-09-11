@@ -58,6 +58,7 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const errorClass = "govuk-form-group--error";
+    const hiddenClass = "govuk-radios__conditional--hidden";
   
     const ferryRadioButton = document.getElementById('routeOption');
     const flightRadioButton = document.getElementById('routeOption-2');
@@ -114,19 +115,19 @@
     if (selectRouteLink) {
         selectRouteLink.addEventListener('click', function(e) {
             e.preventDefault();
-            if (!conditionalContentFlight.classList.contains('govuk-radios__conditional--hidden')) {
-                conditionalContentFlight.classList.add('govuk-radios__conditional--hidden');
+            if (!conditionalContentFlight.classList.contains(hiddenClass)) {
+                conditionalContentFlight.classList.add(hiddenClass);
             }
         });
     }
 
-    window.addEventListener('pageshow', function(event) {
+    window.addEventListener('pageshow', function() {
         const hasError =
         document.querySelector('.govuk-error-message') !== null;
         if (!hasError) {
         document.querySelectorAll('[name="routeOption"]').forEach(el => el.checked = false);
         document.querySelectorAll('[name="routeRadio"]').forEach(el => el.checked = false);
-        document.querySelectorAll('.govuk-radios__conditional').forEach(el => el.classList.add('govuk-radios__conditional--hidden'));
+        document.querySelectorAll('.govuk-radios__conditional').forEach(el => el.classList.add(hiddenClass));
         // Clear other fields as needed
         }
     });
