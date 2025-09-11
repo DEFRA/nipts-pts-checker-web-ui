@@ -26,6 +26,7 @@ const PTD_LENGTH = 11;
 const PTD_PREFIX_LENGTH = 5;
 const PTD_MID_LENGTH = 8;
 const navigationPath = "/checker/non-compliance";
+const ERROR_VIEW = "errors/500Error";
 
 const formatPtdNumber = (ptdNumber) => {
   if (!ptdNumber) {
@@ -562,7 +563,7 @@ describe("SaveContinue_FailureTests", () => {
     });
     validatePassOrFail.mockReturnValueOnce({ isValid: true });
     await SearchResultsHandlers.saveAndContinueHandler(request, h);
-    expect(h.view).toHaveBeenCalledWith(VIEW_PATH, {
+    expect(h.view).toHaveBeenCalledWith(ERROR_VIEW, {
       error: "An error occurred while processing your request",
       errorSummary: [
         { fieldId: "general", message: "An unexpected error occurred" },
