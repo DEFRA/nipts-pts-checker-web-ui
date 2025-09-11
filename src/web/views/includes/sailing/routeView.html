@@ -119,6 +119,18 @@
             }
         });
     }
+
+    window.addEventListener('pageshow', function(event) {
+        const ferryError = document.getElementById('ferry-error');
+        const flightNoEmptyError = document.getElementById('flight-error');
+
+        if (ferryError || flightNoEmptyError) return; // need to rethink logic, potentially
+
+        ferryRadioButton.checked = false;
+        flightRadioButton.checked = false;
+        document.querySelectorAll('[name="routeRadio"]').forEach(element => element.checked = false);
+        document.querySelectorAll('.govuk-radios__conditional').forEach(element => element.classList.add('govuk-radios__conditional--hidden'));
+    })
   });
   </script>
   

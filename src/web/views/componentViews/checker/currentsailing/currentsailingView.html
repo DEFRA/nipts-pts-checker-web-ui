@@ -117,6 +117,16 @@
   if(window.history.replaceState) {
     window.history.replaceState(null, null, window.location.href);
   }
+  
+
+  window.addEventListener('pageshow', function(event) {
+      const timeError = document.getElementById('time-error');
+      if (timeError) return;  // need to rethink logic, potentially
+
+      document.getElementById('sailingHour').value = '';
+      document.getElementById('sailingMinutes').value = '';
+      
+  })
 </script>
 
 {% endblock %}
