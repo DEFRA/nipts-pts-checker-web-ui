@@ -1,4 +1,4 @@
-# nipts-pts-web
+# nipts-pts-checker-web-ui
 
 The Pet Travel Scheme Checker Web UI is a Node.js-based frontend application used by port officials to verify Pet Travel Documents for pets traveling from Great Britain to Northern Ireland.
 
