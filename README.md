@@ -1,50 +1,143 @@
-# nipts-pts-checker-web-ui
+# nipts-pts-web
+
+The Pet Travel Scheme Checker Web UI is a Node.js-based frontend application used by port officials to verify Pet Travel Documents for pets traveling from Great Britain to Northern Ireland.
+
+This application provides a secure and user-friendly interface for interacting with the Checker API.
+
+## Prerequisites
+To run this project locally, ensure you have:
+
+- Node.js (v18+ recommended)
+- Visual Studio Code (optional, for development)
+- Admin rights to install dependencies (if required)
+- Access to environment variables or .env configuration
 
 ## Setup
+1. Clone the repository:
+```
+git clone https://github.com/DEFRA/nipts-pts-checker-web-ui.git
+cd nipts-pts-checker-web-ui
+```
 
-1. Download and install Node.js from (https://nodejs.org/en/download). You may need admin privileges to install this, so please call or raise a service desk ticket if necessary.
+2. Install dependencies:
+```
+npm install
+```
 
-2. Download and install Visual Studio Code from (https://code.visualstudio.com/download). Again, you may need admin privileges to install this, so please call or raise a service desk ticket if necessary.
+3. Create environment config: Copy the sample environment file and update as needed:
+```
+cp env.sample.txt .env
+```
 
-3. Install the ESLint and Jest Runner extensions in Visual Studio Code.
+5. Configure env
+```
+PORT = 5000
+HOST = localhost
+ 
+BASE_API_URL = 
+OCP_APIM_SUBSCRIPTION_KEY =
+ 
+ACCOUNT_MANAGEMENT_URL = 
+ 
+# Yes/No
+MAGIC_PASSWORD_ENABLED = "No"
+MAGIC_PASSWORD =
+ 
+# Azure B2C / IDM2 Settings
+DEFRA_ID_TENANT =
+DEFRA_ID_POLICY =
+DEFRA_ID_REDIRECT_URI = 
+DEFRA_ID_CLIENT_ID = 
+DEFRA_ID_CLIENT_SECRET =
+DEFRA_ID_JWT_ISSUER_ID = 
+ 
+# CP Portal
+DEFRA_ID_SERVICE_ID = 
+ 
+# AP
+#DEFRA_ID_SERVICE_ID =
+ 
+DEFRA_ID_SIGNOUT_URI = 
+ 
+# KeyVault Settings
+DEFRA_KEYVAULT_NAME = 
+AZURE_TENANT_ID = 
+AZURE_CLIENT_ID =
+AZURE_CLIENT_SECRET = 
+ 
+ENABLE_CONFIGURATION_SERVER = 
+AZURE_CONFIGURATION_SERVER = 
+AZURE_CONFIGURATION_SERVER_ENDPOINT = 
+APPINSIGHTS_CONNECTION =
+```
 
-4. In the project root, create a `.env` file for project settings. You can start with the settings below, or copy `env.sample.txt` and rename it to `.env`.
+### Development
+To run the project locally:
+```
+npm run build
+npm run dev
+```
+Or use Visual Studio to start debugging via F5.
 
-   ```
-   PORT=5000
-   HOST=localhost
-   ```
+### Test
+Unit tests are located in the /test directory.
 
-5. Navigate to the project path and run `npm install`.
+To run tests:
+```
+npm run test
+```
 
-## Running the Project
+Ensure all dependencies are restored and the test project builds successfully.
 
-To start the project, use the command `npm run start`.
+To display coverage:
+```
+npn jest --coverage
+```
 
-For development, use `npm run dev`. You can then browse the application at http://localhost:4000/checker/home.
 
-## Testing
 
-To run tests, use `npm test -- checkerMainService.test.js`. Please replace `checkerMainService.test.js` with the path to your specific test file.
+## Running in development
+1. Ensure .env is configured.
+2. Start the development server
+3. Navigate to localhost port via browser
 
-For test coverage, use `npm run test:coverage`.
 
-## Project Structure
+## Running tests
+Run all tests using:
+```
+npm test
+```
 
-The current project structure is as follows:
-
-Current Project structure
-
+## Project structure 
 nipts-pts-checker-web-ui/
-├──src
-├── api/ To call backend
-├── public/assets/ For css, javascripts
-├── node_modules/
-├── helper/plugin.js --- Include all UI component here for web pages
-├── web/
-│ ├── component/checker/home --- UI components
-│ ├── views --- UI views for each component
-├── package.json
-├── server.js --- node js server to start
+├── src/
+│   ├── api/                  # API calls to backend
+│   ├── helper/               # UI plugins and utilities
+│   ├── web/
+│   │   ├── component/        # UI components
+│   │   ├── views/            # Nunjucks templates
+├── public/assets/           # Static assets (CSS, JS)
+├── server.js                # Node.js server entry point
+├── gulpfile.js              # Gulp build tasks
+├── package.json             # Project metadata and scripts
 
-This project is using node js, happi framework & nunjuks as template engine
+## Contributing to this project
+
+Please read the [contribution guidelines](/CONTRIBUTING.md) before submitting a pull request.
+
+## Licence
+
+THIS INFORMATION IS LICENSED UNDER THE CONDITIONS OF THE OPEN GOVERNMENT LICENCE found at:
+
+<http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3>
+
+The following attribution statement MUST be cited in your products and applications when using this information.
+
+>Contains public sector information licensed under the Open Government licence v3
+
+### About the licence
+
+The Open Government Licence (OGL) was developed by the Controller of Her Majesty's Stationery Office (HMSO) to enable information providers in the public sector to license the use and re-use of their information under a common open licence.
+
+It is designed to encourage use and re-use of information freely and flexibly, with only a few conditions.
+
