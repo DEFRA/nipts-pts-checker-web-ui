@@ -23,7 +23,7 @@ resources:
       name: DEFRA-TRD/Defra.TRD.Pipeline.Common
       type: git
       #ref: master
-      ref: aj/bnode_update
+      ref: aj/node_update
 
 variables:
   APIName: DEFRA_nipts-pts-checker-web-ui
