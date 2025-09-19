@@ -86,7 +86,6 @@
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/node_modules/jpeg-recompress-bin/",
       "/server.js",
       "/helper/configServer.js",
       "/auth/",
