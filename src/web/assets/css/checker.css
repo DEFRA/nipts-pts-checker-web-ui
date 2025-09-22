@@ -1798,6 +1798,7 @@ html {
   --ons-color-text: var(--ons-color-black);
   --ons-color-success: var(--ons-color-leaf-green);
   --ons-color-success-tint: var(--ons-color-leaf-green-tint);
+  scroll-padding-bottom: 80px;
 }
 
 .ons-panel {
