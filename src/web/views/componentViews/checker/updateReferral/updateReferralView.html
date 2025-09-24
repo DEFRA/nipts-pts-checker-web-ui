@@ -51,12 +51,13 @@
         {% include "./errors/displayErrorSummary.html" %}
       {% endif %}
     </div>
-
-    <h1 class="govuk-heading-xl">Update referral outcome</h1>
-
-
-
-    <details class="govuk-details">
+<fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+    <h1 class="govuk-heading-xl">
+   Update referral outcome
+    </h1>
+  </legend>
+  <details class="govuk-details">
         <summary class="govuk-details__summary">
           <span class="govuk-details__summary-text">
             Pet Travel Document details
@@ -110,11 +111,11 @@
           </dl>
 
         </div>
-    </details>
+  </details>
 
     
 
-<form action="/checker/update-referral" method="POST">
+  <form action="/checker/update-referral" method="POST">
   <div class="govuk-radios {% if validationResultRadioError %}govuk-form-group--error{% endif %}" data-module="govuk-radios" name="outcomeRadioFormGroup" id="outcomeRadioFormGroup" >
     <div>
       {% if validationResultRadioError %}
@@ -150,10 +151,7 @@
         Not allowed to travel under Windsor Framework 
       </label>
     </div>
-
   </div>
-
-
     <br>
 
         <div class="govuk-form-group {% if validationResultTextError %}govuk-form-group--error{% endif %}">
@@ -189,8 +187,8 @@
                 <button type="submit" class="govuk-button" data-module="govuk-button" data-govuk-button-init="">
                     Save 
                 </button>
-    </form>
-      
+  </form>
+</fieldset>      
 
 <!-- Spacing for bottom menu -->
   <br><br>
