@@ -70,6 +70,7 @@ const postNonComplianceHandler = async (request, h) => {
 
     if(routeDetails.isFlight) {
       payload.passengerType = '3';
+      payload.isFlight = routeDetails.isFlight;
     }
     
     const validationResult = validateNonCompliance(payload);

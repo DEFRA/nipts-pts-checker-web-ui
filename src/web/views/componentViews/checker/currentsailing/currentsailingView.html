@@ -65,7 +65,7 @@
           
             <input
               class="govuk-input govuk-input--width-2 {% if errorSailingHour or errorDateRangeTime %} govuk-input--error {% endif %}"
-              type="number"
+              type="text"
               inputmode="numeric"
               id="sailingHour"
               name="sailingHour"
@@ -86,7 +86,7 @@
           
             <input
               class="govuk-input govuk-input--width-2 {% if errorSailingMinutes or errorDateRangeTime %} govuk-input--error {% endif %}"
-              type="number"
+              type="text"
               inputmode="numeric"
               id="sailingMinutes"
               name="sailingMinutes"
@@ -117,6 +117,18 @@
   if(window.history.replaceState) {
     window.history.replaceState(null, null, window.location.href);
   }
+  
+
+  window.addEventListener('pageshow', function() {
+    // Only clear fields if there are NO error messages
+    const hasError =
+      document.querySelector('.govuk-error-message') !== null;
+    if (!hasError) {
+      document.getElementById('sailingHour').value = '';
+      document.getElementById('sailingMinutes').value = '';
+      // Clear other fields as needed
+    }
+  });
 </script>
 
 {% endblock %}
