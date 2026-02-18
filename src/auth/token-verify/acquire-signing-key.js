@@ -1,4 +1,4 @@
-import Wreck from "@hapi/wreck";
+﻿import Wreck from "@hapi/wreck";
 import config from "../../config/index.js";
 
 const acquireSigningKey = async () => {
@@ -19,7 +19,9 @@ const acquireSigningKey = async () => {
     }
     return response.payload.keys[0];
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.log(
       `${new Date().toISOString()} Error while acquiring the signing key data: ${
         error.message

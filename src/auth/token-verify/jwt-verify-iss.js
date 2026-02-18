@@ -1,18 +1,20 @@
-import config from "../../config/index.js";
+﻿import config from "../../config/index.js";
 
-const jwtTrustedIssuers = [
+const jwtTrustedIssuers = new Set([
   `https://${config.authConfig.defraId.tenantName}.b2clogin.com/${config.authConfig.defraId.jwtIssuerId}/v2.0/`,
-];
+]);
 
 const jwtVerifyIss = async (iss) => {
   console.log(`${new Date().toISOString()} Verifying the issuer`);
   try {
-    if (!jwtTrustedIssuers.includes(iss)) {
+    if (!jwtTrustedIssuers.has(iss)) {
       throw new Error(`Issuer not trusted: ${iss}`);
     }
     return true;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.log(
       `${new Date().toISOString()} Error while verifying the issuer: ${
         error.message

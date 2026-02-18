@@ -1,4 +1,4 @@
-import moment from "moment";
+﻿import moment from "moment";
 import spsReferralMainService from "../../../../api/services/spsReferralMainService.js";
 import apiService from "../../../../api/services/apiService.js";
 import { HttpStatusConstants } from "../../../../constants/httpMethod.js";
@@ -34,8 +34,8 @@ async function getCheckDetails(request, h) {
       return date ? moment(date).format("DD/MM/YYYY") : dateNotavailableText;
     };
 
-    const shouldDisplayMicrochip = checkDetails.reasonForReferral?.some(
-      (reason) => reason === "Microchip number does not match the PTD"
+    const shouldDisplayMicrochip = checkDetails.reasonForReferral?.includes(
+      "Microchip number does not match the PTD"
     );
 
     const hasValidComments = (comments) => {
@@ -83,7 +83,9 @@ async function getCheckDetails(request, h) {
       isGBCheck
     });
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Error in getCheckDetails:", error);
     throw error;
   }
@@ -128,7 +130,9 @@ async function conductSpsCheck(request, h) {
 
     return h.redirect("/checker/search-results");
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Error in conductSpsCheck:", error);
     throw error;
   }

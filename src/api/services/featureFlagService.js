@@ -1,4 +1,4 @@
-import { AppConfigurationClient } from "@azure/app-configuration";
+﻿import { AppConfigurationClient } from "@azure/app-configuration";
 import { DefaultAzureCredential } from "@azure/identity";
 
 const ENABLE_CONFIGURATION_SERVER = process.env.ENABLE_CONFIGURATION_SERVER === "true";
@@ -30,7 +30,9 @@ const initializeFeatureFlags = async () => {
 
     return featureFlags;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Error initializing feature flags:", error.message);
     throw error; 
   }
@@ -42,9 +44,11 @@ const isFeatureEnabled = async (featureName) => {
     const featureFlag = featureFlags.get(featureName);
 
     // Check if the feature flag exists and if it's enabled (assuming the value is 'true' or 'enabled')
-    return featureFlag && featureFlag.enabled === true;
+    return featureFlag?.enabled === true;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Error checking feature flag:", error.message);
     return false;
   }

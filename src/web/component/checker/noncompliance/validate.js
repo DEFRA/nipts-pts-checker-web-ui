@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 import Joi from "joi";
 import errorMessages from "./errorMessages.js";
 
@@ -77,7 +77,9 @@ const validateNonCompliance = (payload) => {
       errors,
     };
   } catch (err) {
-    global.appInsightsClient.trackException({ exception: err });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: err });
+    }
     console.error("Validation error:", err);
     return {
       isValid: false,

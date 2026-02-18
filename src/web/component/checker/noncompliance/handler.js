@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 import appSettingsService from "../../../../api/services/appSettingsService.js";
 import { validateNonCompliance } from "./validate.js";
@@ -132,7 +132,9 @@ const postNonComplianceHandler = async (request, h) => {
 
     return h.redirect("/checker/dashboard");
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Unexpected Error:", error);
     throw error;
   }
@@ -162,7 +164,9 @@ const postNonComplianceHandler = async (request, h) => {
 
     return responseData;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Error fetching data:", error.message);
 
     throw error;

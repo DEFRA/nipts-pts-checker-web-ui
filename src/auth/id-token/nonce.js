@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+﻿import { v4 as uuidv4 } from "uuid";
 import session from "../../session/index.js";
 import sessionKeys from "../../session/keys.js";
 
@@ -11,8 +11,8 @@ const generate = (request) => {
 const verify = (request, idToken) => {
   console.log(`${new Date().toISOString()} Verifying id_token nonce`);
   try {
-    if (typeof idToken === "undefined") {
-      throw new Error("Empty id_token");
+    if (idToken === undefined) {
+      throw new TypeError("Empty id_token");
     }
     const nonce = session.getToken(request, sessionKeys.tokens.nonce);
     if (!nonce) {
@@ -22,7 +22,9 @@ const verify = (request, idToken) => {
       throw new Error("Nonce mismatch");
     }
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.log(
       `${new Date().toISOString()} Error while verifying id_token nonce: ${
         error.message
