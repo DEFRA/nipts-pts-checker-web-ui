@@ -147,7 +147,9 @@ const saveAndContinueHandler = async (request, h) => {
     request.yar.set("IsFailSelected", true);
     return h.redirect("/checker/non-compliance");
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (global.appInsightsClient) {
+      global.appInsightsClient.trackException({ exception: error });
+    }
     return h.view(VIEW_PATH, {
       error: "An error occurred while processing your request",
       errorSummary: [

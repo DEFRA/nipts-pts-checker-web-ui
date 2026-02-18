@@ -47,7 +47,9 @@ const GetSpsReferrals = async (route, date, timeWindowInHours, request) => {
 
     return referralItems;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (global.appInsightsClient) {
+      global.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Error in getCheckOutcomes:", error);
     throw error;
   }
@@ -68,7 +70,9 @@ const GetCompleteCheckDetails = async (checkSummaryId, request) => {
 
     return response?.data || null;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (global.appInsightsClient) {
+      global.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Error in GetCompleteCheckDetails:", error);
     throw error;
   }

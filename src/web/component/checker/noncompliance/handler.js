@@ -166,7 +166,9 @@ const postNonComplianceHandler = async (request, h) => {
 
     return h.redirect("/checker/dashboard");
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (global.appInsightsClient) {
+      global.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Unexpected Error:", error);
 
     const data = request.yar.get("data");
@@ -218,7 +220,9 @@ const postNonComplianceHandler = async (request, h) => {
 
     return responseData;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (global.appInsightsClient) {
+      global.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Error fetching data:", error.message);
 
     // Check for specific error message and return a structured error

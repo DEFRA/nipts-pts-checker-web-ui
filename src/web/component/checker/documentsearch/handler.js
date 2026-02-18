@@ -234,7 +234,9 @@ function handleEmptyDocumentSearch(h) {
 }
 
 async function handleError(request, h, error) {
-  global.appInsightsClient.trackException({ exception: error });
+  if (global.appInsightsClient) {
+    global.appInsightsClient.trackException({ exception: error });
+  }
   console.log(error.message)
   // Handle unexpected errors
   const ptdNumberSearch = request.payload.ptdNumberSearch || "";

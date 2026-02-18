@@ -24,7 +24,9 @@ const getSecretValue = async (secretName) => {
     const secret = await client.getSecret(secretName);
     return secret.value;
   } catch (err) {
-    global.appInsightsClient.trackException({ exception: err });
+    if (global.appInsightsClient) {
+      global.appInsightsClient.trackException({ exception: err });
+    }
     console.error("KeyVault: Error retrieving secret:", err);
   }
 

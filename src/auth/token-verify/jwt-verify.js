@@ -19,7 +19,9 @@ const jwtVerify = async (token) => {
       throw new Error("The token has not been verified");
     }
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (global.appInsightsClient) {
+      global.appInsightsClient.trackException({ exception: error });
+    }
     console.log(
       `${new Date().toISOString()} Error while verifying JWT token: ${
         error.message

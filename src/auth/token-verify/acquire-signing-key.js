@@ -19,7 +19,9 @@ const acquireSigningKey = async () => {
     }
     return response.payload.keys[0];
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (global.appInsightsClient) {
+      global.appInsightsClient.trackException({ exception: error });
+    }
     console.log(
       `${new Date().toISOString()} Error while acquiring the signing key data: ${
         error.message

@@ -112,7 +112,9 @@ const validateTokenRoles = (token) => {
 
     return true;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (global.appInsightsClient) {
+      global.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Error validating token:", error);
     return false;
   }

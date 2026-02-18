@@ -11,7 +11,7 @@
     "dev": "nodemon server.js & browser-sync start --proxy sass --watch src/web/assets/sass:src/web/assets/css/ 'localhost:5000' --files '**/*'"
   },
   "engines": {
-    "node": ">=20.18.3"
+    "node": ">=24.0.0"
   },
   "keywords": [],
   "author": "",
@@ -48,7 +48,6 @@
     "gulp-eslint": "^6.0.0",
     "gulp-html": "^3.5.0",
     "gulp-htmlmin": "^5.0.1",
-    "gulp-image": "^6.3.0",
     "gulp-sass": "^5.0.0",
     "gulp-stylelint": "^13.0.0",
     "gulp-uglify": "^3.0.2",

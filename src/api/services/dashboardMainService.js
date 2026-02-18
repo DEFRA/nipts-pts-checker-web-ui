@@ -49,7 +49,9 @@ const getCheckOutcomes = async (startHour, endHour, request) => {
 
     return dashboardItems;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (global.appInsightsClient) {
+      global.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Error in getCheckOutcomes:", error);
     throw error;
   }

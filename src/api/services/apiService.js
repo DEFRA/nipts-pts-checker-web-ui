@@ -88,7 +88,9 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request) => {
 
     return transformedItem;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (global.appInsightsClient) {
+      global.appInsightsClient.trackException({ exception: error });
+    }
     console.error(errorText, error.message);
     return handleError(error);
   }
@@ -264,7 +266,9 @@ const getApplicationByApplicationNumber = async (
     return getMicrochipAppPtdMainModel({pet, application, travelDocument, petOwner, documentState, ptdNumber, formattedIssuedDate, formattedMicrochippedDate, formattedDateOfBirth});
      
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (global.appInsightsClient) {
+      global.appInsightsClient.trackException({ exception: error });
+    }
     console.error(errorText, error.message);
 
     if (error?.message) {
@@ -292,7 +296,9 @@ const recordOutCome = async (checkOutcome, request, urlSuffix) => {
 
     return item.checkSummaryId;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (global.appInsightsClient) {
+      global.appInsightsClient.trackException({ exception: error });
+    }
     console.error(errorText, error.message);
 
     // Check for specific error message and return a structured error
@@ -324,7 +330,9 @@ const saveCheckerUser = async (checker, request) => {
 
     return checkerId;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (global.appInsightsClient) {
+      global.appInsightsClient.trackException({ exception: error });
+    }
     console.error(errorText, error.message);
 
     // Check for specific error message and return a structured error
@@ -365,7 +373,9 @@ const getOrganisation = async (organisationId, request) => {
 
     return organisation;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (global.appInsightsClient) {
+      global.appInsightsClient.trackException({ exception: error });
+    }
     console.error(errorText, error.message);
 
     throw error;

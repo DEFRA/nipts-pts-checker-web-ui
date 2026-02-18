@@ -39,7 +39,9 @@ const getDashboard = async (request, h) => {
     }
 
   } else {
-    global.appInsightsClient.trackException({ exception: response.error.error });
+    if (global.appInsightsClient) {
+      global.appInsightsClient.trackException({ exception: response.error.error });
+    }
     console.error("Unexpected checks response: ", response.error.error);
   }
   
