@@ -162,6 +162,12 @@ class QRScanner {
         },
         body: JSON.stringify({ qrCodeData: decodedText }),
       });
+     
+      if (!response.ok) {
+        // Handle 500 or other server errors
+        window.location.href = "/checker/500Error"; // show a UI message
+        return;
+      }
 
       window.location.href = response.url;
     } catch (error) {

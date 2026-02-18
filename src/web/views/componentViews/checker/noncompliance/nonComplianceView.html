@@ -29,7 +29,7 @@
       {% endif %}
     </div>
 
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
+    <h1 class="govuk-heading-xl">
       Report non-compliance
     </h1>
 
@@ -47,7 +47,7 @@
               
               <div class="govuk-section-break--l">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                  <h2 class="govuk-fieldset__heading">
+                  <h2 class="govuk-heading-l">
                     Reasons
                   </h2>
                 </legend>
@@ -56,16 +56,6 @@
                 </div>
               </div>
 
-              {% if data['documentState'] !== "approved" %} 
-              <div class="govuk-section-break--l">
-                <span class="govuk-heading-s">Pet Travel Document</span>
-                <div class="govuk-checkboxes__item">
-                  <p class="govuk-body govuk-!-margin-bottom-0 pts-checker-check">
-                    PTD {{ documentStatus | lower }}
-                  </p>
-                </div>
-              </div>
-              {% endif %}
               <div class="govuk-form-group {% if errors['missingReason'] %}govuk-form-group--error{% endif %}">
                 <!-- Display error message inline if the non compliance reason is not selected -->
                 {% if errors['missingReason'] %}
@@ -77,18 +67,11 @@
                 <!-- Include Microchip Section -->
                 {% include "componentViews/checker/noncompliance/microchipSection.html" %}
 
-                <!-- Include Visual Check Section -->
-                {% include "componentViews/checker/noncompliance/visualCheckSection.html" %}
-
                 <!-- Include Other Issues Section -->
                 {% include "componentViews/checker/noncompliance/otherIssuesSection.html" %}
               </div>
 
-              {% include "componentViews/checker/noncompliance/petOwnerSection.html" %}
-
               {% include "componentViews/checker/noncompliance/passengerDetails.html" %}
-              
-              {% include "componentViews/checker/noncompliance/relevantComments.html" %}
 
               {% if data['isGBCheck'] %}
                 {% include "componentViews/checker/noncompliance/gbOutCome.html" %}

@@ -17,21 +17,36 @@ export const MONTH_CONSTANTS = {
   DECEMBER: 12,
 };
 
-const MONTHS_WITH_31_DAYS = [MONTH_CONSTANTS.JANUARY,
-      MONTH_CONSTANTS.MARCH,
-      MONTH_CONSTANTS.MAY,
-      MONTH_CONSTANTS.JULY,
-      MONTH_CONSTANTS.AUGUST,
-      MONTH_CONSTANTS.OCTOBER,
-      MONTH_CONSTANTS.DECEMBER].map(month => MONTH_CONSTANTS[Object.keys(MONTH_CONSTANTS).find(key => MONTH_CONSTANTS[key] === month)]);
-const MONTHS_WITH_30_DAYS = [MONTH_CONSTANTS.APRIL,
-      MONTH_CONSTANTS.JUNE,
-      MONTH_CONSTANTS.SEPTEMBER,
-      MONTH_CONSTANTS.NOVEMBER].map(month => MONTH_CONSTANTS[Object.keys(MONTH_CONSTANTS).find(key => MONTH_CONSTANTS[key] === month)]);
+const MONTHS_WITH_31_DAYS = [
+  MONTH_CONSTANTS.JANUARY,
+  MONTH_CONSTANTS.MARCH,
+  MONTH_CONSTANTS.MAY,
+  MONTH_CONSTANTS.JULY,
+  MONTH_CONSTANTS.AUGUST,
+  MONTH_CONSTANTS.OCTOBER,
+  MONTH_CONSTANTS.DECEMBER,
+].map(
+  (month) =>
+    MONTH_CONSTANTS[
+      Object.keys(MONTH_CONSTANTS).find((key) => MONTH_CONSTANTS[key] === month)
+    ]
+);
+const MONTHS_WITH_30_DAYS = [
+  MONTH_CONSTANTS.APRIL,
+  MONTH_CONSTANTS.JUNE,
+  MONTH_CONSTANTS.SEPTEMBER,
+  MONTH_CONSTANTS.NOVEMBER,
+].map(
+  (month) =>
+    MONTH_CONSTANTS[
+      Object.keys(MONTH_CONSTANTS).find((key) => MONTH_CONSTANTS[key] === month)
+    ]
+);
 
 const DATE_FORMAT_REGEX = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
-const TWO_DIGIT_REGEX = /^\d{2}$/;
 const FLIGHT_NUMBER_REGEX = /^(?=.{1,8}$)[A-Za-z0-9]+( [A-Za-z0-9]+)*$/;
+const TIME_24_HOUR_FORMAT = /^(?:[01]\d|2[0-3])$/;
+const TIME_59_MINUTE_FORMAT = /^[0-5]\d$/;
 const PAST_HOURS_LIMIT = 48;
 const FUTURE_HOURS_LIMIT = 24;
 const ZERO_HOUR_START = 0;
@@ -45,7 +60,6 @@ const ZERO_MS_END = 999;
 const MIN_MONTH = 1;
 const MAX_MONTH = 12;
 const MIN_DAY = 1;
-const FEBRUARY = 2;
 const LEAP_YEAR_DIVISOR_4 = 4;
 const LEAP_YEAR_DIVISOR_100 = 100;
 const LEAP_YEAR_DIVISOR_400 = 400;
@@ -84,8 +98,12 @@ const isLeapYear = (year) =>
   year % LEAP_YEAR_DIVISOR_400 === ZERO_HOUR_START;
 
 const getDaysInMonth = (month, year) => {
-  if (MONTHS_WITH_31_DAYS.includes(month)) {return DAYS_31;}
-  if (MONTHS_WITH_30_DAYS.includes(month)) {return DAYS_30;}
+  if (MONTHS_WITH_31_DAYS.includes(month)) {
+    return DAYS_31;
+  }
+  if (MONTHS_WITH_30_DAYS.includes(month)) {
+    return DAYS_30;
+  }
   return isLeapYear(year) ? FEBRUARY_LEAP_DAYS : FEBRUARY_NORMAL_DAYS;
 };
 
@@ -119,7 +137,7 @@ const flightSchema = Joi.string()
   });
 
 const sailingHourSchema = Joi.string()
-  .pattern(TWO_DIGIT_REGEX)
+  .pattern(TIME_24_HOUR_FORMAT)
   .required()
   .label(SCHEMA_LABELS.SAILING_HOUR)
   .messages({
@@ -129,7 +147,7 @@ const sailingHourSchema = Joi.string()
   });
 
 const sailingMinutesSchema = Joi.string()
-  .pattern(TWO_DIGIT_REGEX)
+  .pattern(TIME_59_MINUTE_FORMAT)
   .required()
   .label(SCHEMA_LABELS.SAILING_MINUTES)
   .messages({
@@ -143,17 +161,19 @@ const dateSchema = Joi.string()
   .custom((value, helpers) => {
     const parts = value.split(DATE_PARTS_SEPARATOR);
     const noDateProvided = parts.every((part) => part.trim() === "");
-    if (noDateProvided) {return helpers.error(ERROR_TYPES.DATE_REQUIRED);}
+    if (noDateProvided) {
+      return helpers.error(ERROR_TYPES.DATE_REQUIRED);
+    }
     const match = value.match(DATE_FORMAT_REGEX);
-    if (!match) {return helpers.error(ERROR_TYPES.DATE_FORMAT);}
+    if (!match) {
+      return helpers.error(ERROR_TYPES.DATE_FORMAT);
+    }
     const [, day, month, year] = match.map((part) => parseInt(part, 10));
-    if (month < MIN_MONTH || month > MAX_MONTH)
-    {
+    if (month < MIN_MONTH || month > MAX_MONTH) {
       return helpers.error(ERROR_TYPES.DATE_FORMAT);
     }
     const maxDays = getDaysInMonth(month, year);
-    if (day < MIN_DAY || day > maxDays)
-    {
+    if (day < MIN_DAY || day > maxDays) {
       return helpers.error(ERROR_TYPES.DATE_FORMAT);
     }
     return value;
@@ -222,7 +242,12 @@ const validateDateRange = (
   sailingHour = ZERO_HOUR_START,
   sailingMinutes = ZERO_MINUTES_START
 ) => {
-  const now = new Date();
+  const utcNow = new Date();
+  const ukTimeString = utcNow.toLocaleString("sv-SE", {
+    timeZone: "Europe/London",
+  });
+  const now = new Date(ukTimeString);
+
   const [day, month, year] = dateString.split(DATE_PARTS_SEPARATOR).map(Number);
   const sailingDate = new Date(year, month - MONTH_INDEX_OFFSET, day);
 
@@ -242,35 +267,44 @@ const validateDateRange = (
     );
   }
 
-  const lowerBound = new Date(now);
-  lowerBound.setHours(lowerBound.getHours() - PAST_HOURS_LIMIT);
+  const lowerBound = new Date(
+    now.getTime() - PAST_HOURS_LIMIT * 60 * 60 * 1000
+  );
+  const upperBound = new Date(
+    now.getTime() + FUTURE_HOURS_LIMIT * 60 * 60 * 1000
+  );
 
-  const upperBound = new Date(now);
-  upperBound.setHours(upperBound.getHours() + FUTURE_HOURS_LIMIT);
+  lowerBound.setSeconds(0, 0);
+  upperBound.setSeconds(0, 0);
 
   if (isZeroHour) {
-    lowerBound.setHours(
-      ZERO_HOUR_START,
-      ZERO_MINUTES_START,
-      ZERO_SECONDS_START,
-      ZERO_MS_START
-    );
-    upperBound.setHours(
+    const dayStart = new Date(sailingDate);
+    dayStart.setHours(0, 0, 0, 0);
+
+    const dayEnd = new Date(sailingDate);
+    dayEnd.setHours(
       ZERO_HOUR_END,
       ZERO_MINUTES_END,
       ZERO_SECONDS_END,
       ZERO_MS_END
     );
-  }
 
-  if (sailingDate < lowerBound || sailingDate > upperBound) {
+    if (dayEnd >= lowerBound && dayStart <= upperBound) {
+      return { isValid: true, error: null };
+    } else {
+      return {
+        isValid: false,
+        error: CurrentSailingMainModelErrors.timeOutOfBoundsError,
+      };
+    }
+  } else if (sailingDate >= lowerBound && sailingDate <= upperBound) {
+    return { isValid: true, error: null };
+  } else {
     return {
       isValid: false,
       error: CurrentSailingMainModelErrors.timeOutOfBoundsError,
     };
   }
-
-  return { isValid: true, error: null };
 };
 
 export {

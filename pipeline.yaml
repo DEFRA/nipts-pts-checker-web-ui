@@ -101,7 +101,7 @@ extends:
         -DEFRA_ID_REDIRECT_URI "https://check-a-pet-from-gb-to-ni.service.gov.uk/signin-oidc"
         -DEFRA_ID_SIGNOUT_URI "https://your-account.defra.gov.uk/idphub/b2c/b2c_1a_cui_signupsignin/signout"
         -DEFRA_KEYVAULT_NAME "$(environment)trd$(nc-function-infrastructure-lower)$(nc-resource-keyvault-lower)1001"
-        -MAGIC_PASSWORD_ENABLED "Yes"
+        -MAGIC_PASSWORD_ENABLED "No"
         -DASHBOARD_START_HOUR "-48"
         -DASHBOARD_END_HOUR "24"
         -ENABLE_CONFIGURATION_SERVER "true"

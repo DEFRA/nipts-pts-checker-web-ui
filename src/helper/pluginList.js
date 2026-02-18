@@ -6,6 +6,7 @@ import Home from "../web/component/checker/home/index.js";
 import CurrentSailing from "../web/component/checker/currentsailing/index.js";
 import Dashboard from "../web/component/checker/dashboard/index.js";
 import DocumentSearch from "../web/component/checker/documentsearch/index.js";
+import ErrorDetails from "../web/component/checker/error/index.js";
 import SearchResults from "../web/component/checker/searchresults/index.js";
 import NonCompliance from "../web/component/checker/noncompliance/index.js";
 import Referred from "../web/component/checker/referred/index.js";
@@ -20,6 +21,8 @@ import HeaderPlugin from "../plugins/header.js";
 import MagicPasswordPlugin from "../plugins/magic-password.js";
 import CurrentSailingSlotPlugin from "../plugins/currentsailingslot.js";
 import Scan from "../web/component/checker/scan/index.js";
+import Accessibility from "../web/component/checker/accessibility/index.js";
+import UpdateReferral from "../web/component/checker/updateReferral/index.js";
 
 import HealthCheck from "../web/component/checker/health/index.js";
 import config from "../config/index.js";
@@ -66,6 +69,9 @@ const pluginList = [
     plugin: HealthCheck,
   },
   {
+    plugin: Accessibility,
+  },
+  {
     plugin: Home,
   },
   {
@@ -76,6 +82,9 @@ const pluginList = [
   },
   {
     plugin: DocumentSearch,
+  },
+  {
+    plugin: ErrorDetails,
   },
   {
     plugin: SearchResults,
@@ -118,6 +127,9 @@ const pluginList = [
   },
   {
     plugin: Scan,
+  },
+    {
+    plugin: UpdateReferral,
   },
 ];
 

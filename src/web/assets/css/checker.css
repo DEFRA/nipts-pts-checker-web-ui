@@ -1624,6 +1624,10 @@ ul.language-toggle li:first-child {
   white-space: nowrap;
 }
 
+.pts-checker-header-nav li a:focus {
+  color: #0b0c0c;
+}
+
 /* Responsive Styles */
 @media only screen and (max-width: 650px) {
   .pts-checker-header {
@@ -1733,6 +1737,10 @@ body.pts-management {
   white-space: nowrap;
 }
 
+.pts-checker-navigation ul li a:focus {
+  color: #0b0c0c;
+}
+
 .pts-checker-navigation ul li a span {
   padding-top: 2px;
 }
@@ -1790,6 +1798,7 @@ html {
   --ons-color-text: var(--ons-color-black);
   --ons-color-success: var(--ons-color-leaf-green);
   --ons-color-success-tint: var(--ons-color-leaf-green-tint);
+  scroll-padding-bottom: 80px;
 }
 
 .ons-panel {

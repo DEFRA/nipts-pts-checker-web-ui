@@ -5,41 +5,34 @@
         </span>
     </summary>
     <div class="govuk-details__text">
-        <div id="document-microchip-card" class="govuk-summary-card">
-            <div class="govuk-summary-card__title-wrapper">
-                <h2 class="govuk-summary-card__title">Pet Travel Document (PTD)</h2>
+        <dl class="govuk-summary-list">
+
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    PTD number
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ data['ptdFormatted'] if data['ptdFormatted'] else ""}}
+                </dd>
             </div>
-            <div class="govuk-summary-card__content">
-                <dl class="govuk-summary-list">
 
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            PTD number
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            {{ data['ptdFormatted'] if data['ptdFormatted'] else ""}}
-                        </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Date
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            {{ data['issuedDate'] if data['issuedDate'] else "" }}
-                        </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Status
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            <strong class="{{documentStatusColourMapping}}">{{ documentStatus }}</strong>
-                        </dd>
-                    </div>
-                </dl>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Date
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ data['issuedDate'] if data['issuedDate'] else "" }}
+                </dd>
             </div>
-        </div>
+
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Status
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    <strong class="{{documentStatusColourMapping}}">{{ documentStatus }}</strong>
+                </dd>
+            </div>
+        </dl>
     </div>
 </details>

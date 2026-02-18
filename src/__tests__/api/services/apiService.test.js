@@ -20,6 +20,7 @@ const issuingAuthorityAddressLineThree = "Lowther Street";
 const agencyName = "Animal and Plant Health Agency";
 const signatoryName = "John Smith (APHA) (Signed digitally)";
 const additionalDetails = "Non-compliance details";
+const expectedApiError = "API Error: 403";
 
 const baseUrl =
   process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
@@ -35,6 +36,7 @@ const baseUrl =
   const unexpectedResponseStructureText = "Unexpected response structure";
   const unexpectedErrorText = "Unexpected error occurred";
   const notFoundText = "not_found";
+  const mockToken = "Bearer mockToken";
 
 
 global.appInsightsClient = {
@@ -42,20 +44,19 @@ global.appInsightsClient = {
  };
  
 
-describe("apiService", () => {
-  let request;
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-    request = {
-      // Mock request object
-      headers: {
-        authorization: "Bearer mockToken",
-      },
-    };
-  });
 
   describe("getApplicationByPTDNumber", () => {
+    let request;
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+      request = {
+        // Mock request object
+        headers: {
+          authorization: mockToken,
+        },
+      };
+    });
     it("should return transformed data when PTD number is valid", async () => {
       const mockResponse = {
         data: {
@@ -93,12 +94,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false
         }
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
       moment.mockImplementation((_date) => ({
         format: () => multiUseDate,
@@ -134,6 +139,117 @@ describe("apiService", () => {
         petOwnerName: petOwnerName,
         petOwnerEmail: petOwnerEmail,
         petOwnerTelephone: "07894465438",
+        isUserSuspended: false,
+        petOwnerAddress: 
+        {
+          addressLineOne: addressLineOne,
+          addressLineTwo: addressLineTwo,
+          townOrCity: "LONDON",
+          county: "",
+          postCode: "EC1N 2PB"
+        },
+        issuingAuthority:  {
+          address: {
+                  addressLineOne: issuingAuthorityAddressLineOne,
+                  addressLineThree: issuingAuthorityAddressLineThree,
+                  addressLineTwo: issuingAuthorityAddressLineTwo,
+                  county: "",
+                  postCode: "CA3 8DX",
+                  townOrCity: "Carlisle",
+                  },
+          name: agencyName,
+          signature: signatoryName,
+        },
+      });
+
+      expect(result).toEqual(expectedInstance);
+    });
+
+    it("should return transformed data when PTD number is valid and dopostCall - false", async () => {
+      const mockResponse = {
+        data: {
+          pet: {
+            petId: "1",
+            petName: "Buddy",
+            species: "Dog",
+            breedName: "Beagle",
+            microchipNumber: "123456789",
+            microchippedDate: "2022-01-01",
+            dateOfBirth: "2020-01-01",
+            sex: "Male",
+            colourName: "Brown",
+            significantFeatures: "None",
+          },
+          application: {
+            status: "authorised",
+            applicationId: "app123",
+            dateAuthorised: "2023-01-01",
+          },
+          travelDocument: {
+            travelDocumentReferenceNumber: "GB826TD123",
+            travelDocumentId: "td123",
+            dateOfIssue: dateOfIssue
+          },
+          petOwner: {
+            name: petOwnerName,
+            telephone: "07894465438",
+            email: petOwnerEmail,
+            address: {
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
+              townOrCity: "LONDON",
+              county: "",
+              postCode: "EC1N 2PB"
+            }
+          },
+          isUserSuspended: false
+        }
+      };
+
+      httpService.getAsync.mockResolvedValueOnce({
+        status: 200,
+        data: mockResponse.data,
+      });
+
+      httpService.postAsync.mockResolvedValueOnce({
+          status: 200,
+          data: false
+      });
+      moment.mockImplementation((_date) => ({
+        format: () => multiUseDate,
+      }));
+
+      const result = await apiService.getApplicationByPTDNumber(
+        "123456",
+        request,
+        { dopostCall: false }
+      );
+      expect(httpService.getAsync).toHaveBeenCalledWith(
+        `${baseUrl}/Checker/checkPTDNumber?ptdNumber=123456`,
+        request
+      );
+
+      const expectedInstance = new MicrochipAppPtdMainModel({
+        petId: "1",
+        petName: "Buddy",
+        petSpecies: "Dog",
+        petBreed: "Beagle",
+        documentState: "approved",
+        ptdNumber: "GB826TD123",
+        issuedDate: multiUseDate,
+        microchipNumber: "123456789",
+        microchipDate: multiUseDate,
+        petSex: "Male",
+        petDoB: multiUseDate,
+        petColour: "Brown",
+        petFeaturesDetail: "None",
+        applicationId: "app123",
+        travelDocumentId: "td123",
+        dateOfIssue: dateOfIssue,
+        petOwnerName: petOwnerName,
+        petOwnerEmail: petOwnerEmail,
+        petOwnerTelephone: "07894465438",
+        isUserSuspended: false,
         petOwnerAddress: 
         {
           addressLineOne: addressLineOne,
@@ -196,12 +312,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
       moment.mockImplementation((_date) => ({
         format: () => multiUseDate,
@@ -231,6 +351,7 @@ describe("apiService", () => {
         petColour: "Brown",
         petFeaturesDetail: "None",
         applicationId: "app123",
+        isUserSuspended: false,
         travelDocumentId: "td123",
         dateOfIssue: dateOfIssue,
         petOwnerName: petOwnerName,
@@ -298,12 +419,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false,
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
       moment.mockImplementation((_date) => ({
         format: () => multiUseDate,
@@ -332,6 +457,7 @@ describe("apiService", () => {
         petColour: "Brown",
         petFeaturesDetail: "None",
         applicationId: "app123",
+        isUserSuspended: false,
         travelDocumentId: "td123",
         dateOfIssue: dateOfIssue,
         petOwnerName: petOwnerName,
@@ -399,12 +525,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
       moment.mockImplementation((_date) => ({
         format: () => multiUseDate,
@@ -438,6 +568,7 @@ describe("apiService", () => {
         petOwnerName: petOwnerName,
         petOwnerTelephone: "07894465438",
         petOwnerEmail: petOwnerEmail,
+        isUserSuspended: false,
 		    petOwnerAddress: 
         {
           addressLineOne: addressLineOne,
@@ -463,7 +594,6 @@ describe("apiService", () => {
       expect(result).toEqual(expectedInstance);
     });
 
-
     it("should return error when PTD number is not found", async () => {
       httpService.postAsync.mockResolvedValue({
         status: 404,
@@ -479,13 +609,10 @@ describe("apiService", () => {
         { ptdNumber: "123459" },
         request
       );
-      expect(result).toEqual({ error: applicationNotFoundMessage });
-
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
-
+      expect(result).toEqual({ error: notFoundText });
     });
 
-    it("should return error when application is not found", async () => {
+    it("should throw error when application is not found", async () => {
       const mockResponse = {
         data: {
           pet: { petId: "1", petName: "Buddy" },
@@ -497,14 +624,16 @@ describe("apiService", () => {
         data: mockResponse.data,
       });
 
-      const result = await apiService.getApplicationByPTDNumber(
+      await expect(apiService.getApplicationByPTDNumber(
         "123456",
         request
-      );
-      expect(result).toEqual({ error: applicationNotFoundMessage });
+      )).rejects.toThrow(applicationNotFoundMessage);
+ 
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+
     });
 
-    it("should return error when pet is not found", async () => {
+    it("should throw error when pet is not found", async () => {
       const mockResponse = {
         data: {
         },
@@ -515,14 +644,15 @@ describe("apiService", () => {
         data: mockResponse.data,
       });
 
-      const result = await apiService.getApplicationByPTDNumber(
+      await expect(apiService.getApplicationByPTDNumber(
         "123456",
         request
-      );
-      expect(result).toEqual({ error: "Pet not found" });
+      )).rejects.toThrow("Pet not found");
+
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
-    it("should return error when traveldocument is not found", async () => {
+    it("should throw error when traveldocument is not found", async () => {
       const mockResponse = {
         data: {
           pet: { petId: "1", petName: "Buddy" },
@@ -535,54 +665,64 @@ describe("apiService", () => {
         data: mockResponse.data,
       });
 
-      const result = await apiService.getApplicationByPTDNumber(
+      await expect(apiService.getApplicationByPTDNumber(
         "123456",
         request
-      );
-      expect(result).toEqual({ error: "TravelDocument not found" });
+      )).rejects.toThrow("TravelDocument not found");
+
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
+    it("should throw unexpected error when an exception occurs", async () => {
 
-    it("should return unexpected error when an exception occurs", async () => {
       httpService.postAsync.mockRejectedValue(new Error(unexpectedErrorMessage));
 
-      const result = await apiService.getApplicationByPTDNumber(
+      await expect(apiService.getApplicationByPTDNumber(
         "123456",
         request
-      );
-      expect(result).toEqual({ error: unexpectedErrorMessage });
-    });
+      )).rejects.toThrow(unexpectedErrorMessage);
 
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+    });
     
-    it("should return unexpected response structure gracefully - getApplicationByPTDNumber", async () => {
-      httpService.postAsync.mockResolvedValue({ data: null });
-      const expectedError = { error: unexpectedResponseStructureText };
+    it("should throw API Error - getApplicationByPTDNumber", async () => {
+      httpService.postAsync.mockResolvedValue({ data: null, status: 403 });
 
-      const result = await apiService.getApplicationByPTDNumber(
+      await expect(apiService.getApplicationByPTDNumber(
         "123456",
         request
-      );
+      )).rejects.toThrow(expectedApiError);
 
-      expect(result).toEqual(expectedError);
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
-    it("should handle errors without a message and return unexpectedErrorText - getApplicationByPTDNumber", async () => {
+    it("should throw error - getApplicationByPTDNumber", async () => {
       const mockError = new Error();
       delete mockError.message; 
 
       httpService.postAsync.mockRejectedValue(mockError);
     
-      const result = await apiService.getApplicationByPTDNumber(
+      await expect(apiService.getApplicationByPTDNumber(
         "app123",
         request
-      );
+      )).rejects.toThrow(mockError.message);
       
-      expect(result).toEqual({ error: unexpectedErrorText });
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
   });
 
   describe("getApplicationByApplicationNumber", () => {
+    let request;
+    beforeEach(() => {
+      jest.clearAllMocks();
+      request = {
+        // Mock request object
+        headers: {
+          authorization: mockToken,
+        },
+      };
+    });
 
     it("should handle missing pet details gracefully", async () => {
       const mockResponse = {
@@ -610,13 +750,19 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
+
+      
 
       const mockMomentFormat = () => multiUseDate;
       moment.mockImplementation(() => ({ format: mockMomentFormat }));     
@@ -629,6 +775,7 @@ describe("apiService", () => {
         documentState: "approved",
         ptdNumber: "GB826TD123",
         issuedDate: multiUseDate,
+        isUserSuspended: false,
         microchipNumber: null,
         microchipDate: null,
         petSex: null,
@@ -720,12 +867,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: true
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: true
       });
 
 
@@ -752,6 +903,7 @@ describe("apiService", () => {
         petOwnerTelephone: "07894465438",
         petOwnerEmail: petOwnerEmail,
         issuedDate: null,
+        isUserSuspended: true,
         petOwnerAddress: 
             {
               addressLineOne: addressLineOne,
@@ -788,7 +940,6 @@ describe("apiService", () => {
       expect(result).toEqual(expectedInstance);
     });
 
-
     it("should return null for all values if item is empty", async () => {
       const mockResponse = {
         data: {
@@ -815,12 +966,16 @@ describe("apiService", () => {
               postCode: null
             }
           },
+          isUserSuspended: false
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
 
       const mockMomentFormat = () => multiUseDate;
@@ -842,6 +997,7 @@ describe("apiService", () => {
         petFeaturesDetail: null,
         applicationId: "app123",
         travelDocumentId: null,
+        isUserSuspended: false,
         dateOfIssue: dateOfIssue,
         petOwnerName: null,
         petOwnerTelephone: null,
@@ -908,12 +1064,16 @@ describe("apiService", () => {
               postCode: null
             }
           },
+          isUserSuspended: false
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
       
       const mockMomentFormat = () => multiUseDate;
@@ -932,6 +1092,7 @@ describe("apiService", () => {
         petSex: null,
         petDoB: null,
         petColour: null,
+        isUserSuspended: false,
         petFeaturesDetail: null,
         applicationId: null,
         travelDocumentId: null,
@@ -1013,12 +1174,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
 
       const mockMomentFormat = () => multiUseDate;
@@ -1032,6 +1197,7 @@ describe("apiService", () => {
         documentState: "approved",
         ptdNumber: "GB826TD123",
         issuedDate: multiUseDate,
+        isUserSuspended: false,
         microchipNumber: "123456789",
         microchipDate: multiUseDate,
         petSex: "Male",
@@ -1117,12 +1283,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
 
       const mockMomentFormat = () => multiUseDate;
@@ -1145,6 +1315,7 @@ describe("apiService", () => {
         applicationId: "app123",
         travelDocumentId: "td123",
         dateOfIssue: dateOfIssue,
+        isUserSuspended: false,
         petOwnerName: petOwnerName,
         petOwnerTelephone: "07894465438",
         petOwnerEmail: petOwnerEmail,
@@ -1221,12 +1392,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
 
       const mockMomentFormat = () => multiUseDate;
@@ -1262,6 +1437,7 @@ describe("apiService", () => {
         petOwnerTelephone: "07894465438",
         petOwnerEmail: petOwnerEmail,
         issuedDate: null,
+        isUserSuspended: false,
         petOwnerAddress: 
             {
               addressLineOne: addressLineOne,
@@ -1324,12 +1500,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false
         },
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
 
       const mockMomentFormat = () => multiUseDate;
@@ -1364,6 +1544,7 @@ describe("apiService", () => {
         petOwnerTelephone: "07894465438",
         petOwnerEmail: petOwnerEmail,
         issuedDate: null,
+        isUserSuspended: false,
         petOwnerAddress: 
             {
               addressLineOne: addressLineOne,
@@ -1426,12 +1607,16 @@ describe("apiService", () => {
               postCode: "EC1N 2PB"
             }
           },
+          isUserSuspended: false
         }
       };
 
-      httpService.postAsync.mockResolvedValue({
+      httpService.postAsync.mockResolvedValueOnce({
         status: 200,
         data: mockResponse.data,
+      }).mockResolvedValueOnce({
+          status: 200,
+          data: false
       });
     
       const mockMomentFormat = () => multiUseDate;
@@ -1466,6 +1651,7 @@ describe("apiService", () => {
         petOwnerTelephone: "07894465438",
         petOwnerEmail: petOwnerEmail,
         issuedDate: null,
+        isUserSuspended: false,
         petOwnerAddress: 
             {
               addressLineOne: addressLineOne,
@@ -1490,7 +1676,6 @@ describe("apiService", () => {
 
       expect(result).toEqual(expectedInstance);
     });
-
 
     it("should return error when application number is not found - getApplicationByApplicationNumber", async () => {
       httpService.postAsync.mockResolvedValue({
@@ -1562,46 +1747,49 @@ describe("apiService", () => {
       expect(result).toEqual({ error: applicationNotFoundMessage });
     });
 
-
-    it("should return unexpected error when an exception occurs", async () => {
+    it("should throw unexpected error when an exception occurs", async () => {
       httpService.postAsync.mockRejectedValue(new Error(unexpectedErrorMessage));
 
-      const result = await apiService.getApplicationByApplicationNumber(
+      await expect(apiService.getApplicationByApplicationNumber(
         "app123",
         request
-      );
-      expect(result).toEqual({ error: unexpectedErrorMessage });
+      )).rejects.toThrow(unexpectedErrorMessage);
+
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
-    it("should return unexpected response structure gracefully - getApplicationByApplicationNumber", async () => {
-      httpService.postAsync.mockResolvedValue({ data: null });
-      const expectedError = { error: unexpectedResponseStructureText };
+    it("should throw API Error  - getApplicationByApplicationNumber", async () => {
+      httpService.postAsync.mockResolvedValue({ data: null, status: 403 });
 
-      const result = await apiService.getApplicationByApplicationNumber(
+      await expect(apiService.getApplicationByApplicationNumber(
         "app123",
         request
-      );
+      )).rejects.toThrow(expectedApiError);
 
-      expect(result).toEqual(expectedError);
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
-    it("should handle errors without a message and return unexpectedErrorText - getApplicationByApplicationNumber", async () => {
+    it("should throw error  - getApplicationByApplicationNumber", async () => {
       const mockError = new Error();
       delete mockError.message; 
 
       httpService.postAsync.mockRejectedValue(mockError);
     
-      const result = await apiService.getApplicationByApplicationNumber(
+      await expect(apiService.getApplicationByApplicationNumber(
         "app123",
         request
-      );
+      )).rejects.toThrow(mockError.message);
       
-      expect(result).toEqual({ error: unexpectedErrorText });
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
-
   });
 
   describe("recordCheckOutCome", () => {
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
     it("should return the check summary id on success", async () => {
       const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
       const mockResponse = {
@@ -1619,27 +1807,26 @@ describe("apiService", () => {
       expect(result).toBe("summary1");
     });
 
-    it("should handle errors properly", async () => {
+    it("should throw errors properly", async () => {
       const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
       const mockError = new Error("Test error");
-      httpService.postAsync.mockResolvedValue(mockError);
+      httpService.postAsync.mockRejectedValue(mockError);
 
-      const result = await apiService.recordCheckOutCome(checkOutcome);
+      await expect(apiService.recordCheckOutCome(checkOutcome)).rejects.toThrow(mockError.message);
 
-      expect(result).toEqual({ error: unexpectedResponseStructureText });
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();    
     });
 
-    it("should return unexpected response structure gracefully - recordCheckOutCome", async () => {
+    it("should throw API Error - recordCheckOutCome", async () => {
       const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
-      httpService.postAsync.mockResolvedValue({ data: null });
-      const expectedError = { error: unexpectedResponseStructureText };
+      httpService.postAsync.mockResolvedValue({ data: null, status: 403 });
 
-      const result = await apiService.recordCheckOutCome(checkOutcome);
+      await expect(apiService.recordCheckOutCome(checkOutcome)).rejects.toThrow(expectedApiError);
 
-      expect(result).toEqual(expectedError);
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
-    it("should return error when application number is not found - recordCheckOutCome", async () => {
+    it("should throw error when application number is not found - recordCheckOutCome", async () => {
       const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
       
       httpService.postAsync.mockResolvedValue({
@@ -1647,12 +1834,12 @@ describe("apiService", () => {
         error: applicationNotFoundMessage,
       });
 
-      const result = await apiService.recordCheckOutCome(checkOutcome);
+      await expect(apiService.recordCheckOutCome(checkOutcome)).rejects.toThrow(applicationNotFoundMessage);
 
-      expect(result).toEqual({ error: notFoundText });
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
-    it("should handle errors without a message and return unexpectedErrorText - recordCheckOutCome", async () => {
+    it("should throw error without a message - recordCheckOutCome", async () => {
       const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
     
       const mockError = new Error();
@@ -1660,14 +1847,26 @@ describe("apiService", () => {
 
       httpService.postAsync.mockRejectedValue(mockError);
     
-      const result = await apiService.recordCheckOutCome(checkOutcome);
+      await expect(apiService.recordCheckOutCome(checkOutcome)).rejects.toThrow(mockError.message);
 
-      expect(result).toEqual({ error: unexpectedErrorText });
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      
     });
     
-  });
+ });
 
-  describe("saveCheckerUser", () => {
+   describe("saveCheckerUser", () => {
+    let request;
+    beforeEach(() => {
+      jest.clearAllMocks();
+      request = {
+        // Mock request object
+        headers: {
+          authorization: mockToken,
+        },
+      };
+    });
+
     it("should return the summary id on success", async () => {
       const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
       const mockResponse = {
@@ -1689,31 +1888,33 @@ describe("apiService", () => {
       const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
       const mockError = new Error("Test error");
       httpService.postAsync.mockResolvedValue(mockError);
+      const expectedError = {error: `function saveCheckerUser, Unexpected response structure, checkerId response: undefined, Input data: {"applicationId":"app1","checkOutcome":"pass"}`}
 
       const result = await apiService.saveCheckerUser(checkOutcome);
 
-      expect(result).toEqual({ error: unexpectedResponseStructureText });
+      expect(result.error).toEqual(expectedError.error)
     });
 
     it("should return unexpected response structure gracefully - saveCheckerUser", async () => {
       const checkOutcome = { applicationId: "app1", checkOutcome: "pass" };
       httpService.postAsync.mockResolvedValue({ data: null });
-      const expectedError = { error: unexpectedResponseStructureText };
+      const expectedError = { error: `function saveCheckerUser, Unexpected response structure, checkerId response: null, Input data: {"applicationId":"app1","checkOutcome":"pass"}` };
 
       const result = await apiService.saveCheckerUser(checkOutcome);
 
-      expect(result).toEqual(expectedError);
+      expect(result.error).toEqual(expectedError.error);
     });
 
     it("should handle applicationNotFoundErrorText and return 'not_found'", async () => {
       const mockCheckOutcome = { applicationId: "app1", checkOutcome: "pass" };
       const mockError = new Error(notFoundText);
+      mockError.status = 403;
+   
+      httpService.postAsync.mockResolvedValue(mockError);
     
-      httpService.postAsync.mockRejectedValue(mockError);
+      await expect(apiService.recordCheckOutCome(mockCheckOutcome, request)).rejects.toThrow(expectedApiError);
     
-      const result = await apiService.recordCheckOutCome(mockCheckOutcome, request);
-    
-      expect(result).toEqual({ error: notFoundText });
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should handle errors without a message and return unexpectedErrorText", async () => {
@@ -1729,9 +1930,19 @@ describe("apiService", () => {
       expect(result).toEqual({ error: unexpectedErrorText });
     });
 
-  });
+ });
 
-  describe("getOrganisation", () => {
+   describe("getOrganisation", () => {
+    let request;
+    beforeEach(() => {
+      jest.clearAllMocks();
+      request = {
+        // Mock request object
+        headers: {
+          authorization: mockToken,
+        },
+      };
+    });
 
     it("should fetch data and map it to OrganisationMainModel", async () => {
       const requestData =   { organisationId: organisationId };
@@ -1826,9 +2037,20 @@ describe("apiService", () => {
         request
       );
     });
-  });
+   });
 
   describe("reportNonCompliance", () => {
+    let request;
+    beforeEach(() => {
+      jest.clearAllMocks();
+      request = {
+        // Mock request object
+        headers: {
+          authorization: mockToken,
+        },
+      };
+    });
+
     it("should handle non-compliance reporting and return checkSummaryId", async () => {
       const mockCheckOutcome = { compliance: false, details: additionalDetails };
       const mockResponse = {
@@ -1857,56 +2079,58 @@ describe("apiService", () => {
     
       httpService.postAsync.mockResolvedValue(mockResponse);
     
-      const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
+      await expect(apiService.reportNonCompliance(mockCheckOutcome, request)).rejects.toThrow(applicationNotFoundMessage);
     
-      expect(result).toEqual({ error: notFoundText });
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
-    it("should handle unexpected errors and return a structured error with 'unexpectedErrorText'", async () => {
+    it("should throw error when data is not set - reportNonCompliance", async () => {
       const mockCheckOutcome = { compliance: false, details: "Some details" };
-      const mockError = new Error("Unexpected error occurred");
     
-      httpService.postAsync.mockRejectedValue(mockError);
+      httpService.postAsync.mockResolvedValue({ status: 403 });
     
-      const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
+      await expect(apiService.reportNonCompliance(mockCheckOutcome, request)).rejects.toThrow(expectedApiError);
     
-      expect(result).toEqual({ error: unexpectedErrorText });
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
     
     
-    it("should handle unexpected response structure and return structured error", async () => {
+    it("should throw error when data is null - reportNonCompliance", async () => {
       const mockCheckOutcome = { compliance: false, details: additionalDetails };
+      const expectedError = "API Error: 500";
       const mockResponse = {
-        status: 200,
+        status: 500,
         data: null,
       };
     
       httpService.postAsync.mockResolvedValue(mockResponse);
     
-      const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
+      await expect(apiService.reportNonCompliance(mockCheckOutcome, request)).rejects.toThrow(expectedError);
     
-      expect(result).toEqual({ error: unexpectedResponseStructureText });
+       expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
     
-    it("should handle unexpected errors and return structured error", async () => {
+    it("should throw unexpected error", async () => {
       const mockCheckOutcome = { compliance: false, details: additionalDetails };
       const mockError = new Error("Unexpected failure");
+      mockError.status = 500;
+      const expectedError = "API Error: 500";
+
+      httpService.postAsync.mockResolvedValue(mockError);
     
-      httpService.postAsync.mockRejectedValue(mockError);
+      await expect(apiService.reportNonCompliance(mockCheckOutcome, request)).rejects.toThrow(expectedError);
     
-      const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
-    
-      expect(result).toEqual({ error: "Unexpected failure" });
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
-    it("should return unexpected response structure gracefully - reportNonCompliance", async () => {
+    it("should throw error when data null - reportNonCompliance", async () => {
       const mockCheckOutcome = { compliance: false, details: additionalDetails };
       httpService.postAsync.mockResolvedValue({ data: null });
-      const expectedError = { error: unexpectedResponseStructureText };
+      const expectedError = "API Error: undefined";
 
-      const result = await apiService.reportNonCompliance(mockCheckOutcome, request);
+      await expect(apiService.reportNonCompliance(mockCheckOutcome, request)).rejects.toThrow(expectedError);
 
-      expect(result).toEqual(expectedError);
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should handle errors without a message and return unexpectedErrorText - reportNonCompliance", async () => {
@@ -1917,13 +2141,13 @@ describe("apiService", () => {
 
       httpService.postAsync.mockRejectedValue(mockError);
     
-      const result = await apiService.reportNonCompliance(checkOutcome, request);
-
-      expect(result).toEqual({ error: unexpectedErrorText });
+      await expect(apiService.reportNonCompliance(checkOutcome, request)).rejects.toThrow(mockError.message);
+      
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
     
   });
 
-});
+
 
 

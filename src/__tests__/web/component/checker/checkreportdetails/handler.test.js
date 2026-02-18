@@ -41,7 +41,7 @@ describe("CheckReportHandlers", () => {
         },
       };
 
-      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(null);
+      spsReferralMainService.getCompleteCheckDetails.mockResolvedValue(null);
 
       const h = {
         response: jest.fn().mockReturnThis(),
@@ -80,7 +80,7 @@ describe("CheckReportHandlers", () => {
         scheduledDepartureTime: "14:00:00",
       };
 
-      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+      spsReferralMainService.getCompleteCheckDetails.mockResolvedValue(
         mockCheckDetails
       );
 
@@ -102,6 +102,7 @@ describe("CheckReportHandlers", () => {
         route: "Route A",
         scheduledDepartureDate: "15/12/2024",
         scheduledDepartureTime: "14:00",
+        checkSummaryId: validGuid
       };
 
       expect(h.view).toHaveBeenCalledWith(reportDetailsView, {
@@ -133,7 +134,7 @@ describe("CheckReportHandlers", () => {
         scheduledDepartureTime: "14:00:00",
       };
 
-      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+      spsReferralMainService.getCompleteCheckDetails.mockResolvedValue(
         mockCheckDetails
       );
 
@@ -155,6 +156,7 @@ describe("CheckReportHandlers", () => {
         route: "Route A",
         scheduledDepartureDate: "15/12/2024",
         scheduledDepartureTime: "14:00",
+        checkSummaryId: validGuid
       };
 
       expect(h.view).toHaveBeenCalledWith(reportDetailsView, {
@@ -180,7 +182,7 @@ describe("CheckReportHandlers", () => {
         route: "Route A",
       };
 
-      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+      spsReferralMainService.getCompleteCheckDetails.mockResolvedValue(
         mockCheckDetails
       );
 
@@ -202,6 +204,7 @@ describe("CheckReportHandlers", () => {
         route: "Route A",
         scheduledDepartureDate: dateNotAvailable,
         scheduledDepartureTime: dateNotAvailable,
+        checkSummaryId: validGuid
       };
 
       expect(h.view).toHaveBeenCalledWith(reportDetailsView, {
@@ -209,7 +212,7 @@ describe("CheckReportHandlers", () => {
       });
     });
 
-    it("should return 500 when there is an error in GetCompleteCheckDetails", async () => {
+    it("should thorw 500 when there is an error in getCompleteCheckDetails", async () => {
       const mockRequest = {
         yar: {
           get: jest
@@ -219,7 +222,7 @@ describe("CheckReportHandlers", () => {
         },
       };
 
-      spsReferralMainService.GetCompleteCheckDetails.mockRejectedValue(
+      spsReferralMainService.getCompleteCheckDetails.mockRejectedValue(
         new Error(testError)
       );
 
@@ -228,15 +231,8 @@ describe("CheckReportHandlers", () => {
         code: jest.fn(),
       };
 
-      await CheckReportHandlers.getCheckDetails(mockRequest, h);
-
-      expect(h.response).toHaveBeenCalledWith({
-        error: internalServerError,
-        details: testError,
-      });
+      await expect(CheckReportHandlers.getCheckDetails(mockRequest, h)).rejects.toThrow(testError);
       
-      expect(h.code).toHaveBeenCalledWith(errorCode500);
-
       expect(global.appInsightsClient.trackException).toHaveBeenCalled();
     });
   });
@@ -386,13 +382,10 @@ describe("CheckReportHandlers", () => {
         code: jest.fn(),
       };
 
-      await CheckReportHandlers.conductSpsCheck(mockRequest, h);
+      await expect(CheckReportHandlers.conductSpsCheck(mockRequest, h)).rejects.toThrow(errorMessage);
+      
+      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
 
-      expect(h.response).toHaveBeenCalledWith({
-        error: "Internal Server Error",
-        details: errorMessage,
-      });
-      expect(h.code).toHaveBeenCalledWith(errorCode500);
     });
   });
 
@@ -417,7 +410,7 @@ describe("CheckReportHandlers", () => {
       const mockCheckDetails = {
         detailsComments: ["Some valid comment", "Another comment"],
       };
-      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+      spsReferralMainService.getCompleteCheckDetails.mockResolvedValue(
         mockCheckDetails
       );
       await CheckReportHandlers.getCheckDetails(mockRequest, h);
@@ -431,7 +424,7 @@ describe("CheckReportHandlers", () => {
       const mockCheckDetails = {
         detailsComments: [],
       };
-      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+      spsReferralMainService.getCompleteCheckDetails.mockResolvedValue(
         mockCheckDetails
       );
       await CheckReportHandlers.getCheckDetails(mockRequest, h);
@@ -464,7 +457,7 @@ describe("CheckReportHandlers", () => {
       const mockCheckDetails = {
         detailsComments: ["   ", ""],
       };
-      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+      spsReferralMainService.getCompleteCheckDetails.mockResolvedValue(
         mockCheckDetails
       );
       await CheckReportHandlers.getCheckDetails(mockRequest, h);
@@ -480,7 +473,7 @@ describe("CheckReportHandlers", () => {
         detailsComments: null,
       };
 
-      spsReferralMainService.GetCompleteCheckDetails.mockResolvedValue(
+      spsReferralMainService.getCompleteCheckDetails.mockResolvedValue(
         mockCheckDetails
       );
 

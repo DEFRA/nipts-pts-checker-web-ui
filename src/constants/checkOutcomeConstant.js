@@ -1,4 +1,6 @@
-export const CheckOutcomeConstants = Object.freeze({
-    Pass: "Pass",
-    Fail: "Fail",
-});
+export const CheckOutcomeConstants = {
+  Pass: "Pass",
+  Fail: "Fail",
+  IssueSUPTD: "IssueSUPTD",
+  ReferToSPS: "ReferToSPS",
+};

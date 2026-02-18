@@ -15,7 +15,7 @@ jest.mock("../../../../../constants/dashBoardConstant.js", () => ({
   },
 }));
 
-const SEARCH_RESULTS_PATH = "/checker/search-results";
+const SEARCH_RESULTS_PATH = "/checker/scan-results";
 const SCAN_VIEW_PATH = "componentViews/checker/scan/scanView";
 const NOT_FOUND_VIEW_PATH = "componentViews/checker/scan/scanNotFoundView";
 const ALLOW_CAMERA_PERMISSIONS = "componentViews/checker/scan/allowCameraPermissions";
@@ -182,7 +182,7 @@ describe("Scan Handlers", () => {
       );
     });
 
-    it("should handle API errors", async () => {
+    it("should thow API errors", async () => {
       const ptdNumber = "GB826ABCD12";
       const mockRequest = { payload: { qrCodeData: ptdNumber } };
       const mockH = { redirect: jest.fn((path) => ({ path })) };
@@ -190,12 +190,7 @@ describe("Scan Handlers", () => {
       apiService.getApplicationByPTDNumber.mockRejectedValue(
         new Error("API Error")
       );
-      const response = await ScanHandlers.postScan(mockRequest, mockH);
-
-      expect(response.path).toBe(
-        `/checker/scan/not-found?searchValue=${ptdNumber}`
-      );
-
+      await expect(ScanHandlers.postScan(mockRequest, mockH)).rejects.toThrow("API Error");
       expect(global.appInsightsClient.trackException).toHaveBeenCalled();
 
     });
