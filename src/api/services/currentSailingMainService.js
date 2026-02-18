@@ -1,4 +1,4 @@
-import { CurrentSailingMainModel } from "../models/currentSailingMainModel.js";
+﻿import { CurrentSailingMainModel } from "../models/currentSailingMainModel.js";
 import CurrentSailingModel from "../../constants/currentSailingConstant.js";
 import dotenv from "dotenv";
 import httpService from "./httpService.js";
@@ -13,7 +13,7 @@ const baseUrl =
     try {
       const response = await httpService.getAsync(`${baseUrl}/sailing-routes`, request);
   
-      if (!response || response.status !== HttpStatusConstants.OK || response.data === undefined) {
+if (!response?.status || response.status !== HttpStatusConstants.OK || !response?.data) {
         throw new Error(`API Error: ${response?.status}`);
       }
   
@@ -30,7 +30,9 @@ const baseUrl =
       );
   
     } catch (error) {
-      global.appInsightsClient.trackException({ exception: error });
+      if (globalThis.appInsightsClient) {
+        globalThis.appInsightsClient.trackException({ exception: error });
+      }
       console.error("Error fetching data:", error);
       throw error;
     }

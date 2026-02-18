@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+﻿import jwt from "jsonwebtoken";
 import jwktopem from "jwk-to-pem";
 import acquireSigningKey from "./acquire-signing-key.js";
 
@@ -19,7 +19,9 @@ const jwtVerify = async (token) => {
       throw new Error("The token has not been verified");
     }
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.log(
       `${new Date().toISOString()} Error while verifying JWT token: ${
         error.message

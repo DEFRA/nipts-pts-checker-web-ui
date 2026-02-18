@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 import documentSearchMainService from "../../../../api/services/documentSearchMainService.js";
 import { HttpStatusCode } from "axios";
@@ -40,6 +40,10 @@ const getDocumentSearch = async (_request, h) => {
       microchipNumber: "",
     });
   } catch (error) {
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
+    console.error("Failed to fetch document search data:", error);
     return h.view(VIEW_PATH, {
       error: "Failed to fetch document search data",
     });
@@ -196,7 +200,9 @@ function handleEmptyDocumentSearch(h) {
 }
 
 async function handleError(error) {
-  global.appInsightsClient.trackException({ exception: error });
+  if (globalThis.appInsightsClient) {
+    globalThis.appInsightsClient.trackException({ exception: error });
+  }
   console.log(error.message);
   throw error;
 }

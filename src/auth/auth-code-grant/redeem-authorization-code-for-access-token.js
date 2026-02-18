@@ -1,4 +1,4 @@
-import Wreck from "@hapi/wreck";
+﻿import Wreck from "@hapi/wreck";
 import FormData from "form-data";
 import config from "../../config/index.js";
 import session from "../../session/index.js";
@@ -48,7 +48,9 @@ const redeemAuthorizationCodeForAccessToken = async (request) => {
     }
     return response.payload;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.log(
       `${new Date().toISOString()} Error while requesting an access token: ${
         error.message

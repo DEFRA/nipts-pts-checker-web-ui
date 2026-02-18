@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 import headerData from "../../../../web/helper/constants.js";
 import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
 import apiService from "../../../../api/services/apiService.js";
@@ -137,7 +137,9 @@ const saveAndContinueHandler = async (request, h) => {
         throw new Error(`Unknown checklist outcome: ${checklist}`);
     }
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     return h.view(ERROR_VIEW, {
       error: "An error occurred while processing your request",
       errorSummary: [

@@ -1,4 +1,4 @@
-import { HttpStatusCode } from "axios";
+﻿import { HttpStatusCode } from "axios";
 import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js";
 import dotenv from "dotenv";
 import httpService from "./httpService.js";
@@ -49,7 +49,7 @@ const getMicrochipData = async (microchipNumber, request) => {
     }
 
     
-    if (!response || response.status !== HttpStatusCode.Ok || response.data === undefined) 
+    if (!response?.status || response.status !== HttpStatusCode.Ok || !response?.data) 
     {
       throw new Error(`API Error: ${response?.status}`);
     }
@@ -80,11 +80,22 @@ const getMicrochipData = async (microchipNumber, request) => {
     );
     const isUserSuspended = suspendedResponse?.data;
 
-    return getMicrochipAppPtdMainModel(item, documentState, ptdNumber, formattedIssuedDate, microchipNumber, formattedMicrochippedDate, formattedDateOfBirth, isUserSuspended);
+    return getMicrochipAppPtdMainModel({
+      item,
+      documentState,
+      ptdNumber,
+      formattedIssuedDate,
+      microchipNumber,
+      formattedMicrochippedDate,
+      formattedDateOfBirth,
+      isUserSuspended
+    });
 
 
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Error fetching data:", error.message);
     throw error;
   }
@@ -103,7 +114,9 @@ const checkMicrochipNumberExistWithPtd = async (microchipNumber, request) => {
 
     return { exists };
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Error checking microchip number existence:", error.message);
 
     // Handle specific errors if needed
@@ -123,7 +136,16 @@ export default {
   checkMicrochipNumberExistWithPtd,
 };
 
-function getMicrochipAppPtdMainModel(item, documentState, ptdNumber, formattedIssuedDate, microchipNumber, formattedMicrochippedDate, formattedDateOfBirth, isUserSuspended) {
+function getMicrochipAppPtdMainModel({ 
+  item, 
+  documentState, 
+  ptdNumber, 
+  formattedIssuedDate, 
+  microchipNumber, 
+  formattedMicrochippedDate, 
+  formattedDateOfBirth, 
+  isUserSuspended 
+}) {
   const getValue = (obj, key, fallback = null) => obj?.[key] ?? fallback;
 
   const pet = item.pet || {};

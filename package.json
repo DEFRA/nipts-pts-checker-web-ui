@@ -11,7 +11,7 @@
     "dev": "nodemon server.js & browser-sync start --proxy sass --watch src/web/assets/sass:src/web/assets/css/ 'localhost:5000' --files '**/*'"
   },
   "engines": {
-    "node": ">=20.18.3"
+    "node": ">=24.0.0"
   },
   "keywords": [],
   "author": "",

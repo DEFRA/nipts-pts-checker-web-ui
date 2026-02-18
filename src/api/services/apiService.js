@@ -1,4 +1,4 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+﻿process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 import { HttpStatusCode } from "axios";
 import { organisationMainModel } from "../models/organisationMainModel.js";
 import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js";
@@ -82,7 +82,9 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request, options 
 
     return transformedItem;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.error(errorText, error.message);
     throw error;
   }
@@ -249,7 +251,7 @@ const getApplicationByApplicationNumber = async (
       return handleNotFoundError(response.error, applicationNotFoundErrorText, petNotFoundErrorText);
     }
 
-    if (!response || response.status !== HttpStatusCode.Ok || response.data === undefined) {
+    if (!response?.status || response.status !== HttpStatusCode.Ok || response.data === undefined) {
       throw new Error(`API Error: ${response?.status}`);
     }
 
@@ -292,7 +294,7 @@ const getApplicationByApplicationNumber = async (
     });
 
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    globalThis.appInsightsClient.trackException({ exception: error });
     console.error(errorText, error.message);
     throw error;
   }
@@ -318,7 +320,7 @@ const recordOutCome = async (checkOutcome, request, urlSuffix) => {
 
     return item.checkSummaryId;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    globalThis.appInsightsClient.trackException({ exception: error });
     console.error(errorText, error.message);
     throw error;
   }
@@ -346,7 +348,9 @@ const saveCheckerUser = async (checker, request) => {
 
     return checkerId;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error, inputData: data, function: 'saveCheckerUser' });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error, inputData: data, function: 'saveCheckerUser' });
+    }
     console.error(errorText, error.message, data);
 
     // log input params,  indicate that we are in the catch block of saveCheckerUser
@@ -390,7 +394,9 @@ const getOrganisation = async (organisationId, request) => {
 
     return organisation;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error, inputData: data, function: 'getOrganisation' });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error, inputData: data, function: 'getOrganisation' });
+    }
     console.error(errorText, error.message, data);
 
     throw error;

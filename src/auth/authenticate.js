@@ -1,4 +1,4 @@
-import state from "./auth-code-grant/state.js";
+﻿import state from "./auth-code-grant/state.js";
 import redeemAuthorizationCodeForAccessToken from "./auth-code-grant/redeem-authorization-code-for-access-token.js";
 import jwtVerify from "./token-verify/jwt-verify.js";
 import decodeJwt from "./token-verify/jwt-decode.js";
@@ -89,7 +89,9 @@ const authenticate = async (request, sessionInstance) => {
     request.yar.set("isAuthorized", true);
     sessionInstance.setToken(request, sessionKeys.tokens.sso, "");
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Error during authentication:", error);
     throw error;
   }
