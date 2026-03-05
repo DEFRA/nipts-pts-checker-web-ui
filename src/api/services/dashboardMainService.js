@@ -1,4 +1,4 @@
-import { DashboardMainModel } from "../models/dashboardMainModel.js";
+﻿import { DashboardMainModel } from "../models/dashboardMainModel.js";
 import dotenv from "dotenv";
 import httpService from "./httpService.js";
 
@@ -27,7 +27,7 @@ const getCheckOutcomes = async (startHour, endHour, request) => {
     const items = response?.data;
 
     if (!Array.isArray(items)) {
-      throw new Error("Unexpected response structure");
+      throw new TypeError("Unexpected response structure");
     }
 
     // Map each item to DashboardMainModel
@@ -49,7 +49,9 @@ const getCheckOutcomes = async (startHour, endHour, request) => {
 
     return dashboardItems;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Error in getCheckOutcomes:", error);
     throw error;
   }

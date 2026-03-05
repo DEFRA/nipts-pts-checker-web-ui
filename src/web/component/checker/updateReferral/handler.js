@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 import { validateUpdateReferralForm } from "./validate.js";
 import apiService from "../../../../api/services/apiService.js";
 import { getJourneyDetails, createCheckOutcome, updateNonComplianceYarSessions, formatPTDNumber } from "../../../helper/nonComplianceHelper.js";
@@ -96,7 +96,9 @@ const postUpdateReferralForm = async (request, h) => {
 
         return h.redirect("/checker/dashboard");
       } catch (error) {
-        global.appInsightsClient.trackException({ exception: error });
+        if (globalThis.appInsightsClient) {
+          globalThis.appInsightsClient.trackException({ exception: error });
+        }
         console.error("Unexpected Error:", error);
         throw error;
       }
@@ -129,7 +131,9 @@ const postUpdateReferralForm = async (request, h) => {
     
         return responseData;
       } catch (error) {
-        global.appInsightsClient.trackException({ exception: error });
+        if (globalThis.appInsightsClient) {
+          globalThis.appInsightsClient.trackException({ exception: error });
+        }
         console.error("Error fetching data:", error.message);
     
         throw error;

@@ -1,4 +1,4 @@
-import config from "../config/index.js";
+﻿import config from "../config/index.js";
 import auth from "../auth/index.js";
 import session from "../session/index.js";
 import sessionKeys from "../session/keys.js";
@@ -24,7 +24,7 @@ const isSessionExpired = (sessionCreationCookie) => {
   }
 
   const currentTime = Date.now();
-  const sessionAge = currentTime - parseInt(sessionCreationCookie, 10);
+  const sessionAge = currentTime - Number.parseInt(sessionCreationCookie, 10);
 
   if (sessionAge > config.cookie.ttl) {
     console.log("Session expired due to TTL");
@@ -114,7 +114,9 @@ const validateTokenRoles = (token) => {
 
     return true;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Error validating token:", error);
     return false;
   }
@@ -162,12 +164,9 @@ const handleSessionTimeout = (request, h) => {
   const sessionCreationCookie = request.state.sessionCreationTime;
 
   if (!token) {
-    if (!sessionCreationCookie) {
-      console.log("New session, redirecting to login");
-      return h.redirect("/");
-    } else {
+    if (sessionCreationCookie) {
       const currentTime = Date.now();
-      const sessionAge = currentTime - parseInt(sessionCreationCookie, 10);
+      const sessionAge = currentTime - Number.parseInt(sessionCreationCookie, 10);
 
       if (sessionAge > config.cookie.ttl) {
         console.log("Session expired due to TTL, redirecting to /timeout");
@@ -175,6 +174,9 @@ const handleSessionTimeout = (request, h) => {
         h.unstate("sessionCreationTime");
         return h.redirect("/timeout").takeover();
       }
+    } else {
+      console.log("New session, redirecting to login");
+      return h.redirect("/");
     }
   }
 

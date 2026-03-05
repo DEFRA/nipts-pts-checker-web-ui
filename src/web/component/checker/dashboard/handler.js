@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 import dashboardMainService from "../../../../api/services/dashboardMainService.js";
 import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
 import headerData from "../../../../web/helper/constants.js";
@@ -39,7 +39,9 @@ const getDashboard = async (request, h) => {
     }
 
   } else {
-    global.appInsightsClient.trackException({ exception: response.error.error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: response.error.error });
+    }
     console.error("Unexpected checks response: ", response.error.error);
   }
   

@@ -1,4 +1,4 @@
-import { SpsReferralMainModel } from "../models/spsReferralMainModel.js";
+﻿import { SpsReferralMainModel } from "../models/spsReferralMainModel.js";
 import dotenv from "dotenv";
 import httpService from "./httpService.js";
 import moment from "moment";
@@ -30,7 +30,7 @@ const getSpsReferrals = async (route, date, timeWindowInHours, request) => {
     const items = response?.data;
 
     if (!Array.isArray(items)) {
-      throw new Error("Unexpected response structure");
+      throw new TypeError("Unexpected response structure");
     }
 
     // Map each item to SpsReferralMainModel
@@ -48,7 +48,9 @@ const getSpsReferrals = async (route, date, timeWindowInHours, request) => {
 
     return referralItems;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Error in getCheckOutcomes:", error);
     throw error;
   }
@@ -69,7 +71,9 @@ const getCompleteCheckDetails = async (checkSummaryId, request) => {
 
     return response?.data || null;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Error in getCompleteCheckDetails:", error);
     throw error;
   }
@@ -92,7 +96,9 @@ const updateCheckOutcomeSps = async (checkSummaryId, checkOutcome, checkOutcomeD
 
     return response?.data || null;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.error("Error in getCompleteCheckDetails:", error);
     throw error;
   }

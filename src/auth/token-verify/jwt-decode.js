@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+﻿import jwt from "jsonwebtoken";
 
 const decodeJwt = (token) => {
   console.log(
@@ -13,7 +13,9 @@ const decodeJwt = (token) => {
     }
     return decodedToken.payload;
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     console.log(
       `${new Date().toISOString()} Error while decoding JWT token: ${
         error.message

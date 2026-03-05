@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 import headerData from "../../../../web/helper/constants.js";
 import apiService from "../../../../api/services/apiService.js";
 import DashboardMainModel from "../../../../constants/dashBoardConstant.js";
@@ -73,7 +73,9 @@ const postScan = async (request, h) => {
       );
     }
   } catch (error) {
-    global.appInsightsClient.trackException({ exception: error });
+    if (globalThis.appInsightsClient) {
+      globalThis.appInsightsClient.trackException({ exception: error });
+    }
     throw error;    
   }
 };
