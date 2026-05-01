@@ -31,7 +31,7 @@ const documentNotFoundView =
   "componentViews/checker/documentsearch/documentNotFoundView";
 const errorOccureredText = "An error occurred while processing your request";
 
-global.appInsightsClient = {
+globalThis.appInsightsClient = {
   trackException: jest.fn()
  };
 
@@ -460,7 +460,7 @@ describe("DocumentSearchHandlers", () => {
       );
 
       await expect(DocumentSearchHandlers.submitSearch(request, h)).rejects.toThrow("Service failure");
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should handle microchip search with 'not_found' error", async () => {
@@ -519,7 +519,7 @@ describe("DocumentSearchHandlers", () => {
       microchipApi.getMicrochipData.mockResolvedValue({ error: "some_error" });
 
       await expect(DocumentSearchHandlers.submitSearch(request, h)).rejects.toThrow(unExpectedErrorText);
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should throw unexpected error - handleApplication", async () => {
@@ -541,7 +541,7 @@ describe("DocumentSearchHandlers", () => {
       });
 
       await expect(DocumentSearchHandlers.submitSearch(request, h)).rejects.toThrow(unExpectedErrorText);
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should throw unexpected error - handlePTD", async () => {
@@ -561,7 +561,7 @@ describe("DocumentSearchHandlers", () => {
 
       await expect(DocumentSearchHandlers.submitSearch(request, h)).rejects.toThrow(unExpectedErrorText);
 
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should handle invalid application number and return VIEW_PATH", async () => {

@@ -52,7 +52,7 @@ const setupTest = () => ({
   },
 });
 
-global.appInsightsClient = {
+globalThis.appInsightsClient = {
   trackException: jest.fn(),
 };
 
@@ -569,7 +569,7 @@ describe("SaveContinue_FailureTests", () => {
         { fieldId: "general", message: "An unexpected error occurred" },
       ],
     });
-    expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+    expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
   });
 });
 

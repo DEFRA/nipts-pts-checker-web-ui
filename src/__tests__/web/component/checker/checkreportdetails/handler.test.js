@@ -20,7 +20,7 @@ const dateNotAvailable = "Not available";
 const searchResultsPage = "/checker/search-results";
 const identifier = "GB826123456";
 
-global.appInsightsClient = {
+globalThis.appInsightsClient = {
   trackException: jest.fn()
  };
 
@@ -233,7 +233,7 @@ describe("CheckReportHandlers", () => {
 
       await expect(CheckReportHandlers.getCheckDetails(mockRequest, h)).rejects.toThrow(testError);
       
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
   });
 
@@ -384,7 +384,7 @@ describe("CheckReportHandlers", () => {
 
       await expect(CheckReportHandlers.conductSpsCheck(mockRequest, h)).rejects.toThrow(errorMessage);
       
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
 
     });
   });
