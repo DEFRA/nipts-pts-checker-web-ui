@@ -78,3 +78,4 @@ package-lock.json
 # Dist
 /dist
 /.env.localonly
+.node-version

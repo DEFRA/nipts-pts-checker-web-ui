@@ -20,7 +20,7 @@ const issedDate = "09/02/2024";
 
 const unexpectedErrorMessage = "Unexpected error occurred";
 
-global.appInsightsClient = {
+globalThis.appInsightsClient = {
   trackException: jest.fn()
  };
 
@@ -555,7 +555,7 @@ const validTravelDocumentData = {
 
     await expect(microchipApi.getMicrochipData(microchipNumber, request)).rejects.toThrow(mockError.message);
 
-    expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+    expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
   });
 
   it("should throw error - getMicrochipData", async () => {
@@ -567,7 +567,7 @@ const validTravelDocumentData = {
   
     await expect(microchipApi.getMicrochipData(microchipNumber, request)).rejects.toThrow(expectedError);
   
-    expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+    expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
   });
 
   it("should return 'not_found' for specific error messages", async () => {

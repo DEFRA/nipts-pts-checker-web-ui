@@ -1,9 +1,9 @@
-import { fileURLToPath } from "url";
-import Path, { dirname } from "path";
+import { fileURLToPath } from "node:url";
+import Path, { dirname } from "node:path";
 import Nunjucks from "nunjucks";
 import Joi from "joi";
 import headerData from "./web/helper/constants.js";
-import { promises as fs } from "fs";
+import { promises as fs } from "node:fs";
 
 const fileName = fileURLToPath(import.meta.url);
 const directoryName = dirname(fileName);

@@ -33,7 +33,7 @@ const getReferredChecks = async (request, h) => {
   assignClassColors(spsChecks);
   formatPTDNumbers(spsChecks);
 
-  const page = parseInt(request.query.page || request.query.nextPage || request.query.previousPage) || 1; // Get page number from query parameter, default to 1
+  const page = Number.parseInt(request.query.page || request.query.nextPage || request.query.previousPage) || 1; // Get page number from query parameter, default to 1
   // Implement pagination
   const { paginatedSpsChecks, currentPage, totalPages, pages } = paginateSpsChecks(page, spsChecks);
 
@@ -117,7 +117,7 @@ function paginateSpsChecks(page, spsChecks) {
   const totalRecords = spsChecks.length;
   const totalPages = Math.ceil(totalRecords / pageSize);
 
-  const currentPage = Math.min(Math.max(parseInt(page) || 1, 1), totalPages);
+  const currentPage = Math.min(Math.max(Number.parseInt(page) || 1, 1), totalPages);
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
 

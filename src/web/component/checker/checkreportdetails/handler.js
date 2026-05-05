@@ -6,6 +6,61 @@ import { HttpStatusConstants } from "../../../../constants/httpMethod.js";
 const VIEW_PATH = "componentViews/checker/checkReport/reportDetails";
 const dateNotavailableText = "Not available";
 
+function formatDateTime(dateTime) {
+  return dateTime
+    ? moment(dateTime, ["YYYY-MM-DD HH:mm:ss", "YYYY-MM-DD"]).format(
+        "DD/MM/YYYY HH:mm"
+      )
+    : dateNotavailableText;
+}
+
+function formatScheduledDate(date) {
+  return date ? moment(date).format("DD/MM/YYYY") : dateNotavailableText;
+}
+
+function hasValidComments(comments) {
+  if (!comments || !Array.isArray(comments)) {
+    return false;
+  }
+  return comments.some(
+    (comment) =>
+      comment && typeof comment === "string" && comment.trim() !== ""
+  );
+}
+
+function buildFormattedCheckDetails(checkDetails, ref, checkSummaryId) {
+  const shouldDisplayMicrochip = checkDetails.reasonForReferral?.includes(
+    "Microchip number does not match the PTD"
+  );
+
+  return {
+    reference: ref,
+    checkOutcome: checkDetails.checkOutcome || [],
+    reasonForReferral: checkDetails.reasonForReferral || [],
+    microchipNumber: shouldDisplayMicrochip
+      ? checkDetails.microchipNumber
+      : null,
+    additionalComments: hasValidComments(checkDetails.additionalComments)
+      ? checkDetails.additionalComments
+      : ["None"],
+    detailsComments: hasValidComments(checkDetails.detailsComments)
+      ? checkDetails.detailsComments
+      : ["None"],
+    gbCheckerName: checkDetails.gbCheckerName || "Unknown",
+    dateTimeChecked: formatDateTime(checkDetails.dateAndTimeChecked),
+    route: checkDetails.route || "Not specified",
+    scheduledDepartureDate: formatScheduledDate(
+      checkDetails.scheduledDepartureDate
+    ),
+    scheduledDepartureTime: checkDetails.scheduledDepartureTime
+      ? moment(checkDetails.scheduledDepartureTime, "HH:mm:ss").format(
+          "HH:mm"
+        )
+      : dateNotavailableText,
+    checkSummaryId: checkSummaryId
+  };
+}
+
 async function getCheckDetails(request, h) {
   try {
     const ref = request.yar.get("identifier");
@@ -22,59 +77,7 @@ async function getCheckDetails(request, h) {
         .code(HttpStatusConstants.NOT_FOUND);
     }
 
-    const formatDateTime = (dateTime) => {
-      return dateTime
-        ? moment(dateTime, ["YYYY-MM-DD HH:mm:ss", "YYYY-MM-DD"]).format(
-            "DD/MM/YYYY HH:mm"
-          )
-        : dateNotavailableText;
-    };
-
-    const formatScheduledDate = (date) => {
-      return date ? moment(date).format("DD/MM/YYYY") : dateNotavailableText;
-    };
-
-    const shouldDisplayMicrochip = checkDetails.reasonForReferral?.includes(
-      "Microchip number does not match the PTD"
-    );
-
-    const hasValidComments = (comments) => {
-      if (!comments || !Array.isArray(comments)) {
-        return false;
-      }
-
-      return comments.some(
-        (comment) =>
-          comment && typeof comment === "string" && comment.trim() !== ""
-      );
-    };
-
-    const formattedCheckDetails = {
-      reference: ref,
-      checkOutcome: checkDetails.checkOutcome || [],
-      reasonForReferral: checkDetails.reasonForReferral || [],
-      microchipNumber: shouldDisplayMicrochip
-        ? checkDetails.microchipNumber
-        : null,
-      additionalComments: hasValidComments(checkDetails.additionalComments)
-        ? checkDetails.additionalComments
-        : ["None"],
-      detailsComments: hasValidComments(checkDetails.detailsComments)
-        ? checkDetails.detailsComments
-        : ["None"],
-      gbCheckerName: checkDetails.gbCheckerName || "Unknown",
-      dateTimeChecked: formatDateTime(checkDetails.dateAndTimeChecked),
-      route: checkDetails.route || "Not specified",
-      scheduledDepartureDate: formatScheduledDate(
-        checkDetails.scheduledDepartureDate
-      ),
-      scheduledDepartureTime: checkDetails.scheduledDepartureTime
-        ? moment(checkDetails.scheduledDepartureTime, "HH:mm:ss").format(
-            "HH:mm"
-          )
-        : dateNotavailableText,
-      checkSummaryId: checkSummaryId
-    };
+    const formattedCheckDetails = buildFormattedCheckDetails(checkDetails, ref, checkSummaryId);
 
     const isGBCheck = request.yar.get("isGBCheck");
 

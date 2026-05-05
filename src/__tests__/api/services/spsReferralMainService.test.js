@@ -18,7 +18,7 @@ describe("getSpsReferrals", () => {
   const formattedDate = moment(date).toISOString();
   let request;
 
-  global.appInsightsClient = {
+  globalThis.appInsightsClient = {
     trackException: jest.fn()
   };
 
@@ -117,7 +117,7 @@ describe("getSpsReferrals", () => {
       request
     );
 
-    expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+    expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
   });
 
   it("should handle unexpected errors gracefully as expected", async () => {
@@ -236,7 +236,7 @@ describe("updateCheckOutcomeSps", () => {
   const checkOutcomeDetails = "Valid reason";
   let request;
 
-  global.appInsightsClient = {
+  globalThis.appInsightsClient = {
     trackException: jest.fn(),
   };
 
@@ -319,7 +319,7 @@ describe("updateCheckOutcomeSps", () => {
       )
     ).rejects.toThrow(unexpectedError);
 
-    expect(global.appInsightsClient.trackException).toHaveBeenCalledWith({
+    expect(globalThis.appInsightsClient.trackException).toHaveBeenCalledWith({
       exception: expect.any(Error),
     });
 

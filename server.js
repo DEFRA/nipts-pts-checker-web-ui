@@ -24,7 +24,7 @@ if (connectionString) {
   .start();
 const client = appInsights.defaultClient;
  // Make the client available globally
- global.appInsightsClient = client;
+ globalThis.appInsightsClient = client;
 } else {
  console.error('APPLICATIONINSIGHTS_CONNECTION_STRING is not set');
 }
