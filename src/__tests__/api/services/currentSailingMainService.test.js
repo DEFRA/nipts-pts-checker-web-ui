@@ -9,7 +9,7 @@ const baseUrl =
   process.env.BASE_API_URL || "https://devptswebaw1003.azurewebsites.net/api";
 
   
-global.appInsightsClient = {
+globalThis.appInsightsClient = {
    trackException: jest.fn()
   };
   
@@ -42,7 +42,7 @@ describe("currentSailingMainService", () => {
       request
     );
 
-    expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+    expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
 
   });
 

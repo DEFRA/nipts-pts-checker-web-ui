@@ -120,7 +120,7 @@ const testGetAllowCameraPermissions = async () => {
   });
 };
 
-global.appInsightsClient = {
+globalThis.appInsightsClient = {
   trackException: jest.fn()
  };
 
@@ -191,7 +191,7 @@ describe("Scan Handlers", () => {
         new Error("API Error")
       );
       await expect(ScanHandlers.postScan(mockRequest, mockH)).rejects.toThrow("API Error");
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
 
     });
   });

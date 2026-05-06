@@ -168,7 +168,7 @@ const dateSchema = Joi.string()
     if (!match) {
       return helpers.error(ERROR_TYPES.DATE_FORMAT);
     }
-    const [, day, month, year] = match.map((part) => parseInt(part, 10));
+    const [, day, month, year] = match.map((part) => Number.parseInt(part, 10));
     if (month < MIN_MONTH || month > MAX_MONTH) {
       return helpers.error(ERROR_TYPES.DATE_FORMAT);
     }

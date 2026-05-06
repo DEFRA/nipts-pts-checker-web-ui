@@ -6,7 +6,7 @@ import { HealthHandlers } from "../../../../../web/component/checker/health/hand
 
 jest.mock("../../../../../api/services/httpService.js");
 
-global.appInsightsClient = {
+globalThis.appInsightsClient = {
   trackException: jest.fn()
  };
 
@@ -125,6 +125,6 @@ describe("getHealthTwo", () => {
       })
     );
     expect(mockH.code).toHaveBeenCalledWith(HTTP_STATUS_INTERNAL_SERVER_ERROR);
-    expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+    expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
   });
 });

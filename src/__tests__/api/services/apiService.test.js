@@ -39,7 +39,7 @@ const baseUrl =
   const mockToken = "Bearer mockToken";
 
 
-global.appInsightsClient = {
+globalThis.appInsightsClient = {
   trackException: jest.fn()
  };
  
@@ -629,7 +629,7 @@ global.appInsightsClient = {
         request
       )).rejects.toThrow(applicationNotFoundMessage);
  
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
 
     });
 
@@ -649,7 +649,7 @@ global.appInsightsClient = {
         request
       )).rejects.toThrow("Pet not found");
 
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should throw error when traveldocument is not found", async () => {
@@ -670,7 +670,7 @@ global.appInsightsClient = {
         request
       )).rejects.toThrow("TravelDocument not found");
 
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should throw unexpected error when an exception occurs", async () => {
@@ -682,7 +682,7 @@ global.appInsightsClient = {
         request
       )).rejects.toThrow(unexpectedErrorMessage);
 
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
     
     it("should throw API Error - getApplicationByPTDNumber", async () => {
@@ -693,7 +693,7 @@ global.appInsightsClient = {
         request
       )).rejects.toThrow(expectedApiError);
 
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should throw error - getApplicationByPTDNumber", async () => {
@@ -707,7 +707,7 @@ global.appInsightsClient = {
         request
       )).rejects.toThrow(mockError.message);
       
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
   });
@@ -1755,7 +1755,7 @@ global.appInsightsClient = {
         request
       )).rejects.toThrow(unexpectedErrorMessage);
 
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should throw API Error  - getApplicationByApplicationNumber", async () => {
@@ -1766,7 +1766,7 @@ global.appInsightsClient = {
         request
       )).rejects.toThrow(expectedApiError);
 
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should throw error  - getApplicationByApplicationNumber", async () => {
@@ -1780,7 +1780,7 @@ global.appInsightsClient = {
         request
       )).rejects.toThrow(mockError.message);
       
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
   });
 
@@ -1814,7 +1814,7 @@ global.appInsightsClient = {
 
       await expect(apiService.recordCheckOutCome(checkOutcome)).rejects.toThrow(mockError.message);
 
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();    
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();    
     });
 
     it("should throw API Error - recordCheckOutCome", async () => {
@@ -1823,7 +1823,7 @@ global.appInsightsClient = {
 
       await expect(apiService.recordCheckOutCome(checkOutcome)).rejects.toThrow(expectedApiError);
 
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should throw error when application number is not found - recordCheckOutCome", async () => {
@@ -1836,7 +1836,7 @@ global.appInsightsClient = {
 
       await expect(apiService.recordCheckOutCome(checkOutcome)).rejects.toThrow(applicationNotFoundMessage);
 
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should throw error without a message - recordCheckOutCome", async () => {
@@ -1849,7 +1849,7 @@ global.appInsightsClient = {
     
       await expect(apiService.recordCheckOutCome(checkOutcome)).rejects.toThrow(mockError.message);
 
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
       
     });
     
@@ -1914,7 +1914,7 @@ global.appInsightsClient = {
     
       await expect(apiService.recordCheckOutCome(mockCheckOutcome, request)).rejects.toThrow(expectedApiError);
     
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should handle errors without a message and return unexpectedErrorText", async () => {
@@ -2081,7 +2081,7 @@ global.appInsightsClient = {
     
       await expect(apiService.reportNonCompliance(mockCheckOutcome, request)).rejects.toThrow(applicationNotFoundMessage);
     
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should throw error when data is not set - reportNonCompliance", async () => {
@@ -2091,7 +2091,7 @@ global.appInsightsClient = {
     
       await expect(apiService.reportNonCompliance(mockCheckOutcome, request)).rejects.toThrow(expectedApiError);
     
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
     
     
@@ -2107,7 +2107,7 @@ global.appInsightsClient = {
     
       await expect(apiService.reportNonCompliance(mockCheckOutcome, request)).rejects.toThrow(expectedError);
     
-       expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+       expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
     
     it("should throw unexpected error", async () => {
@@ -2120,7 +2120,7 @@ global.appInsightsClient = {
     
       await expect(apiService.reportNonCompliance(mockCheckOutcome, request)).rejects.toThrow(expectedError);
     
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should throw error when data null - reportNonCompliance", async () => {
@@ -2130,7 +2130,7 @@ global.appInsightsClient = {
 
       await expect(apiService.reportNonCompliance(mockCheckOutcome, request)).rejects.toThrow(expectedError);
 
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
 
     it("should handle errors without a message and return unexpectedErrorText - reportNonCompliance", async () => {
@@ -2143,7 +2143,7 @@ global.appInsightsClient = {
     
       await expect(apiService.reportNonCompliance(checkOutcome, request)).rejects.toThrow(mockError.message);
       
-      expect(global.appInsightsClient.trackException).toHaveBeenCalled();
+      expect(globalThis.appInsightsClient.trackException).toHaveBeenCalled();
     });
     
   });
