@@ -97,9 +97,9 @@ function checkAChipOut(httpRequest, data) {
       $("#divResultsCard").show();
 
       if (httpRequest.responseText != "ERROR") {
-        $("#divSearchResults").html(httpRequest.responseText);
+        $("#divSearchResults").text(httpRequest.responseText);
       } else {
-        $("#divSearchResults").html(httpRequest.responseText);
+        $("#divSearchResults").text(httpRequest.responseText);
         //error
       }
     }
@@ -220,12 +220,12 @@ function contactFormValidateOut(httpRequest, data) {
       //error making the request
     } else if (httpRequest.status == 200) {
       if (httpRequest.responseText != "ERROR") {
-        $("#divSuccess").html(httpRequest.responseText);
+        $("#divSuccess").text(httpRequest.responseText);
       } else {
         //error
         $("#modalContact").animate({ scrollTop: 0 }, "slow");
         $("#divError").show();
-        $("#divError").html(httpRequest.responseText);
+        $("#divError").text(httpRequest.responseText);
       }
     }
   }
@@ -328,12 +328,12 @@ function overseasRegValidateOut(httpRequest, data) {
       //error making the request
     } else if (httpRequest.status == 200) {
       if (httpRequest.responseText != "ERROR") {
-        $("#divOverseasSuccess").html(httpRequest.responseText);
+        $("#divOverseasSuccess").text(httpRequest.responseText);
       } else {
         //error
         $("modalOverseasReg").animate({ scrollTop: 0 }, "slow");
         $("divOverseasError").show();
-        $("divOverseasError").html(httpRequest.responseText);
+        $("divOverseasError").text(httpRequest.responseText);
       }
     }
   }

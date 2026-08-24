@@ -7,6 +7,10 @@ import appHelper from "../../../../helper/app-helper.js";
 
 const VIEW_PATH = "componentViews/checker/magicPassword/view";
 
+// Guards against open redirects: only allow internal, relative paths.
+const isSafeInternalPath = (url) =>
+  typeof url === "string" && url.startsWith("/") && !url.startsWith("//");
+
 const getMagicPassword = async (request, h) => {
   headerData.section = "MagicPassword";
 
@@ -32,7 +36,7 @@ const submitMagicPassword = async (request, h) => {
 
   session.setToken(request, sessionKeys.tokens.magicPassword, "confirmed");
 
-  if (request.payload.returnURL && request.payload.returnURL.length > 0) {
+  if (isSafeInternalPath(request.payload.returnURL)) {
     return h.redirect(request.payload.returnURL);
   }
 

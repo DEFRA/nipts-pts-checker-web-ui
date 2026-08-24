@@ -1,5 +1,4 @@
-﻿process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-import { HttpStatusCode } from "axios";
+﻿import { HttpStatusCode } from "axios";
 import { organisationMainModel } from "../models/organisationMainModel.js";
 import { MicrochipAppPtdMainModel } from "../models/microchipAppPtdMainModel.js";
 import httpService from "./httpService.js";
@@ -65,7 +64,7 @@ const getApplicationByPTDNumber = async (ptdNumberFromPayLoad, request, options 
         return handleNotFoundError(response.error, applicationNotFoundErrorText, petNotFoundErrorText);
     }
 
-    if (!response || response.status !== HttpStatusCode.Ok || response.data === undefined) 
+    if (response?.status !== HttpStatusCode.Ok || response?.data === undefined) 
     {
       throw new Error(`API Error: ${response?.status}`);
     }
@@ -311,7 +310,7 @@ const recordOutCome = async (checkOutcome, request, urlSuffix) => {
       throw new Error(response.error);
     }
 
-    if (!response || response.status !== HttpStatusCode.Ok || response.data === undefined) 
+    if (response?.status !== HttpStatusCode.Ok || response?.data === undefined) 
     {
       throw new Error(`API Error: ${response?.status}`);
     }
