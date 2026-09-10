@@ -1,0 +1,6 @@
+# Snyk (https://snyk.io) policy file
+version: v1.25.0
+# Exclude vendored/third-party bundles we do not maintain from Snyk analysis.
+exclude:
+  global:
+    - src/web/assets/hmrc-frontend/hmrc-design-system.js
