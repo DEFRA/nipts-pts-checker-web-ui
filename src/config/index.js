@@ -65,12 +65,16 @@ if (result.error) {
 }
 
 const value = result.value;
-authConfig.getAuthConfig()
-  .then(cfg => {
-    value.authConfig = cfg;
-  })
-  .catch(error => {
-    throw new Error(`The server config is invalid. ${error}`);
-  });
+
+// Top-level await is not used here because Jest/Babel transpiles these ESM
+// modules to CommonJS, which does not support top-level await. The async IIFE
+// preserves the original non-blocking module-load behaviour.
+void (async () => { // NOSONAR
+  try {
+    value.authConfig = await authConfig.getAuthConfig();
+  } catch (error) {
+    console.error(`The server config is invalid. ${error}`);
+  }
+})();
 
 export default value;

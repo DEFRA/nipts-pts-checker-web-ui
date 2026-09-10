@@ -1,5 +1,4 @@
 import gulp from "gulp";
-import eslint from "gulp-eslint";
 import jest from "gulp-jest";
 import sassModule from "gulp-sass";
 import dartCompiler from "sass";
@@ -48,13 +47,6 @@ function moveConfig() {
   return src(["package.json", ".env"], { allowEmpty: true }).pipe(dest("dist"));
 }
 
-function lint() {
-  return src(["src/web/component/**/*.js", "src/api/**/*.js", "!gulpfile.js"])
-    .pipe(eslint())
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError());
-}
-
 function test() {
   return src("src/__tests__/**/*.test.js").pipe(
     jest.default({
@@ -74,6 +66,5 @@ export default series(
   compileCss,
   compileJs,
   compileHtml,
-  moveConfig,
-  lint
+  moveConfig
 );

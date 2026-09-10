@@ -49,6 +49,110 @@ const getCurrentSailings = async (request, h) => {
 };
 
 
+const collectRouteOptionErrors = (
+  validationRouteOptionRadioResult,
+  { routeOption, routeRadio, routeFlight },
+  currentSailingMainModelData
+) => {
+  let validationRouteRadioResult = null;
+  let validateFlightNumberResult = null;
+  const errorSummary = [];
+
+  if (!validationRouteOptionRadioResult.isValid) {
+    errorSummary.push({
+      fieldId: "routeOption",
+      message: validationRouteOptionRadioResult.error,
+    });
+    return {
+      errorSummary,
+      validationRouteRadioResult,
+      validateFlightNumberResult,
+    };
+  }
+
+  if (routeOption === currentSailingMainModelData.routeOptions[0].id) {
+    validationRouteRadioResult = validateRouteRadio(routeRadio);
+    if (!validationRouteRadioResult.isValid) {
+      errorSummary.push({
+        fieldId: "routeRadio",
+        message: validationRouteRadioResult.error,
+      });
+    }
+  }
+
+  if (routeOption === currentSailingMainModelData.routeOptions[1].id) {
+    validateFlightNumberResult = validateFlightNumber(routeFlight);
+    if (!validateFlightNumberResult.isValid) {
+      errorSummary.push({
+        fieldId: "routeFlight",
+        message: validateFlightNumberResult.error,
+      });
+    }
+  }
+
+  return { errorSummary, validationRouteRadioResult, validateFlightNumberResult };
+};
+
+const collectDateTimeErrors = ({
+  validateDepartureDateResult,
+  validateDepartureDateRangeZeroHourResult,
+  validateDepartureDateRangeActualHourResult,
+  validateSailingHourResult,
+  validateSailingMinutesResult,
+}) => {
+  const errorSummary = [];
+  let shouldSkipFurtherChecks = false;
+
+  if (!validateDepartureDateResult.isValid) {
+    errorSummary.push({
+      fieldId: "departureDateDay",
+      message: validateDepartureDateResult.error,
+    });
+    shouldSkipFurtherChecks = true;
+    validateDepartureDateRangeActualHourResult.error = null;
+    validateDepartureDateRangeZeroHourResult.error = null;
+  }
+
+  if (!validateDepartureDateRangeZeroHourResult.isValid) {
+    errorSummary.push({
+      fieldId: "departureDateDay",
+      message: validateDepartureDateRangeZeroHourResult.error,
+    });
+    validateDepartureDateRangeActualHourResult.error = null;
+    shouldSkipFurtherChecks = true;
+  }
+
+  if (
+    !validateSailingHourResult.isValid ||
+    !validateSailingMinutesResult.isValid
+  ) {
+    if (!validateSailingHourResult.isValid) {
+      errorSummary.push({
+        fieldId: "sailingHour",
+        message: validateSailingHourResult.error,
+      });
+    } else {
+      errorSummary.push({
+        fieldId: "sailingMinutes",
+        message: validateSailingMinutesResult.error,
+      });
+    }
+    shouldSkipFurtherChecks = true;
+  }
+
+  if (
+    !shouldSkipFurtherChecks &&
+    !validateDepartureDateRangeActualHourResult.isValid
+  ) {
+    errorSummary.push({
+      fieldId: "sailingHour",
+      message: validateDepartureDateRangeActualHourResult.error,
+    });
+  }
+
+  return errorSummary;
+};
+
 const submitCurrentSailingSlot = async (request, h) => {
   const {
     routeOption,
@@ -62,8 +166,6 @@ const submitCurrentSailingSlot = async (request, h) => {
   } = request.payload;
   const validationRouteOptionRadioResult =
     validateRouteOptionRadio(routeOption);
-  let validationRouteRadioResult;
-  let validateFlightNumberResult;
   const validateSailingHourResult = validateSailingHour(sailingHour);
   const validateSailingMinutesResult = validateSailingMinutes(sailingMinutes);
 
@@ -77,115 +179,45 @@ const submitCurrentSailingSlot = async (request, h) => {
   const departureDate = `${departureDateDayPadded.trim()}/${departureDateMonthPadded.trim()}/${departureDateYear.trim()}`;
   const validateDepartureDateResult = validateDate(departureDate);
 
-  
   const validateDepartureDateRangeZeroHourResult = validateDateRange(
     departureDate,
     true
   );
 
-
-const validateDepartureDateRangeActualHourResult = validateDateRange(
-  departureDate,
-  false,
-  Number.parseInt(sailingHour, 10),
-  Number.parseInt(sailingMinutes, 10)
-);
+  const validateDepartureDateRangeActualHourResult = validateDateRange(
+    departureDate,
+    false,
+    Number.parseInt(sailingHour, 10),
+    Number.parseInt(sailingMinutes, 10)
+  );
 
   const currentSailingMainModelData = request.yar.get("CurrentSailingModel");
 
-  const errorSummary = [];
-  let isValid = true;
-  if (!validationRouteOptionRadioResult.isValid) {
-    errorSummary.push({
-      fieldId: "routeOption",
-      message: validationRouteOptionRadioResult.error,
-    });
-    isValid = false;
-  }
+  const {
+    errorSummary: routeErrorSummary,
+    validationRouteRadioResult,
+    validateFlightNumberResult,
+  } = collectRouteOptionErrors(
+    validationRouteOptionRadioResult,
+    { routeOption, routeRadio, routeFlight },
+    currentSailingMainModelData
+  );
 
-  if (validationRouteOptionRadioResult.isValid) {
-    if (routeOption === currentSailingMainModelData.routeOptions[0].id) {
-      validationRouteRadioResult = validateRouteRadio(routeRadio);
-      if (!validationRouteRadioResult.isValid) {
-        errorSummary.push({
-          fieldId: "routeRadio",
-          message: validationRouteRadioResult.error,
-        });
-        isValid = false;
-      }
-    }
+  const dateTimeErrorSummary = collectDateTimeErrors({
+    validateDepartureDateResult,
+    validateDepartureDateRangeZeroHourResult,
+    validateDepartureDateRangeActualHourResult,
+    validateSailingHourResult,
+    validateSailingMinutesResult,
+  });
 
-    if (routeOption === currentSailingMainModelData.routeOptions[1].id) {
-      validateFlightNumberResult = validateFlightNumber(routeFlight);
-      if (!validateFlightNumberResult.isValid) {
-        errorSummary.push({
-          fieldId: "routeFlight",
-          message: validateFlightNumberResult.error,
-        });
-        isValid = false;
-      }
-    }
-  }
+  const errorSummary = [...routeErrorSummary, ...dateTimeErrorSummary];
 
-  let shouldSkipFurtherChecks = false;
-
-  if (!validateDepartureDateResult.isValid) {
-    errorSummary.push({
-      fieldId: "departureDateDay",
-      message: validateDepartureDateResult.error,
-    });
-    isValid = false;
-    shouldSkipFurtherChecks = true;
-    validateDepartureDateRangeActualHourResult.error = null;
-    validateDepartureDateRangeZeroHourResult.error = null;
-  }
-
-    if (!validateDepartureDateRangeZeroHourResult.isValid) {
-    const errorSummaryMessage = validateDepartureDateRangeZeroHourResult.error;
-    errorSummary.push({
-      fieldId: "departureDateDay",
-      message: errorSummaryMessage,
-    });
-    isValid = false;
-    validateDepartureDateRangeActualHourResult.error = null;
-    shouldSkipFurtherChecks = true;
-  }
-
-  if (!validateSailingHourResult.isValid || !validateSailingMinutesResult.isValid) {
-    let errorSummaryMessage;
-    if (!validateSailingHourResult.isValid) {
-      errorSummaryMessage = validateSailingHourResult.error;
-      errorSummary.push({
-        fieldId: "sailingHour",
-        message: errorSummaryMessage,
-      });
-    } else {
-      errorSummaryMessage = validateSailingMinutesResult.error;
-      errorSummary.push({
-        fieldId: "sailingMinutes",
-        message: errorSummaryMessage,
-      });
-    }
-    isValid = false;
-    shouldSkipFurtherChecks = true;
-  }
-
-  if (!shouldSkipFurtherChecks && !validateDepartureDateRangeActualHourResult.isValid) {
-    const errorSummaryMessage =
-      validateDepartureDateRangeActualHourResult.error;
-    errorSummary.push({ fieldId: "sailingHour", message: errorSummaryMessage });
-    isValid = false;
-  }
-
-  if (!isValid) {
+  if (errorSummary.length > 0) {
     return h.view(VIEW_PATH, {
       errorRouteOptionRadio: validationRouteOptionRadioResult.error,
-      errorRouteRadio: validationRouteRadioResult
-        ? validationRouteRadioResult.error
-        : null,
-      errorFlight: validateFlightNumberResult
-        ? validateFlightNumberResult.error
-        : null,
+      errorRouteRadio: validationRouteRadioResult?.error ?? null,
+      errorFlight: validateFlightNumberResult?.error ?? null,
       errorDepartureDate: validateDepartureDateResult.error,
       errorSailingHour: validateSailingHourResult.error,
       errorSailingMinutes: validateSailingMinutesResult.error,

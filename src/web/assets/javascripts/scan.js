@@ -169,7 +169,14 @@ class QRScanner {
         return;
       }
 
-      window.location.href = response.url;
+      // Only follow same-origin redirects to avoid an open redirect.
+      const redirectUrl = new URL(response.url, window.location.origin);
+      if (redirectUrl.origin === window.location.origin) {
+        window.location.href =
+          redirectUrl.pathname + redirectUrl.search + redirectUrl.hash;
+      } else {
+        window.location.href = "/checker/scan";
+      }
     } catch (error) {
       window.location.href = "/checker/scan";
     }

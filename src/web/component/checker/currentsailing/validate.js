@@ -17,7 +17,7 @@ export const MONTH_CONSTANTS = {
   DECEMBER: 12,
 };
 
-const MONTHS_WITH_31_DAYS = [
+const MONTHS_WITH_31_DAYS = new Set([
   MONTH_CONSTANTS.JANUARY,
   MONTH_CONSTANTS.MARCH,
   MONTH_CONSTANTS.MAY,
@@ -25,23 +25,13 @@ const MONTHS_WITH_31_DAYS = [
   MONTH_CONSTANTS.AUGUST,
   MONTH_CONSTANTS.OCTOBER,
   MONTH_CONSTANTS.DECEMBER,
-].map(
-  (month) =>
-    MONTH_CONSTANTS[
-      Object.keys(MONTH_CONSTANTS).find((key) => MONTH_CONSTANTS[key] === month)
-    ]
-);
-const MONTHS_WITH_30_DAYS = [
+]);
+const MONTHS_WITH_30_DAYS = new Set([
   MONTH_CONSTANTS.APRIL,
   MONTH_CONSTANTS.JUNE,
   MONTH_CONSTANTS.SEPTEMBER,
   MONTH_CONSTANTS.NOVEMBER,
-].map(
-  (month) =>
-    MONTH_CONSTANTS[
-      Object.keys(MONTH_CONSTANTS).find((key) => MONTH_CONSTANTS[key] === month)
-    ]
-);
+]);
 
 const DATE_FORMAT_REGEX = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
 const FLIGHT_NUMBER_REGEX = /^(?=.{1,8}$)[A-Za-z0-9]+( [A-Za-z0-9]+)*$/;
@@ -98,10 +88,10 @@ const isLeapYear = (year) =>
   year % LEAP_YEAR_DIVISOR_400 === ZERO_HOUR_START;
 
 const getDaysInMonth = (month, year) => {
-  if (MONTHS_WITH_31_DAYS.includes(month)) {
+  if (MONTHS_WITH_31_DAYS.has(month)) {
     return DAYS_31;
   }
-  if (MONTHS_WITH_30_DAYS.includes(month)) {
+  if (MONTHS_WITH_30_DAYS.has(month)) {
     return DAYS_30;
   }
   return isLeapYear(year) ? FEBRUARY_LEAP_DAYS : FEBRUARY_NORMAL_DAYS;
