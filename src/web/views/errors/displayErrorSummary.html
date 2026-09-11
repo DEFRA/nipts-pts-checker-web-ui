@@ -31,7 +31,7 @@
                 if (targetElement.type === 'radio' || targetElement.type === 'checkbox') {
 
                     // Ensure the conditional content is shown
-                    const ariaControls = targetElement.getAttribute('data-aria-controls');
+                    const ariaControls = targetElement.dataset.ariaControls;
                     if (ariaControls) {
                         document.getElementById(ariaControls).classList.remove('govuk-radios__conditional--hidden');
                     }
