@@ -7,7 +7,7 @@ This application provides a secure and user-friendly interface for interacting w
 ## Prerequisites
 To run this project locally, ensure you have:
 
-- Node.js (v18+ recommended)
+- Node.js (v26+ recommended)
 - Visual Studio Code (optional, for development)
 - Admin rights to install dependencies (if required)
 - Access to environment variables or .env configuration
