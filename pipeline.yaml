@@ -16,6 +16,12 @@ parameters:
       - SND
       - PRE
       - PRD
+  - name: nodeVersionSpec
+    type: string
+    default: '26.x'
+  - name: runtimeStack
+    type: string
+    default: 'NODE|26'
 
 resources:
   repositories:
@@ -107,5 +113,7 @@ extends:
         -ENABLE_CONFIGURATION_SERVER "true"
         -AZURE_CONFIGURATION_SERVER "https://$(environment)trd$(nc-function-infrastructure-lower)ac1001.azconfig.io"
     runSonarScan: true
+    nodeVersionSpec: ${{ parameters.nodeVersionSpec }}
+    runtimeStack: ${{ parameters.runtimeStack }}
     #runVulnerabilityScan: true
     #skipOwaspScan: false
