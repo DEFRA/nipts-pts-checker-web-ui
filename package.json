@@ -79,6 +79,13 @@
     "transform": {
       "^.+\\.js$": "babel-jest"
     },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(?:https-proxy-agent|agent-base)/)",
+      "\\.pnp\\.[^\\\\/]+$"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/dist/"
+    ],
     "testMatch": [
       "<rootDir>/src/__tests__/**/*.test.js"
     ],
