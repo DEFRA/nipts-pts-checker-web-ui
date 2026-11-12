@@ -69,12 +69,6 @@ typings/
 .vscode
 *.sw*
 
-# package-lock.json
-package-lock.json
-
-# package-lock.json
-package-lock.json
-
 # Dist
 /dist
 /.env.localonly
